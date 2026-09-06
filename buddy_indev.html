@@ -1,0 +1,1447 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#070707">
+<title>BUDDY HORROR // OFFICIAL ARCHIVE</title>
+<style>
+:root{--bg:#050605;--panel:#0a0c0a;--panel2:#0d100e;--paper:#cbd0cc;--muted:#6e7771;--muted2:#4f5852;--line:#252b26;--green:#a8ffb1;--green2:#53dc72;--red:#ff5d59;--amber:#d9bd73;--blue:#83a8ff;--shadow:0 30px 100px rgba(0,0,0,.52)}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:#040504;color:var(--paper);font-family:Arial,Helvetica,sans-serif;overflow-x:hidden}
+/* Shared control feedback */
+.btn,.enter-btn,.signal-btn,.close,.rare-close,.locker-btn,.chat-send,.cookie-actions button,#commandRun{position:relative;transition:transform .14s ease,box-shadow .18s ease,border-color .18s ease,color .18s ease,background-color .18s ease;will-change:transform}
+.btn:hover:not(:disabled),.enter-btn:hover:not(:disabled),.signal-btn:hover:not(:disabled),.close:hover:not(:disabled),.rare-close:hover:not(:disabled),.locker-btn:hover:not(:disabled),.chat-send:hover:not(:disabled),.cookie-actions button:hover:not(:disabled),#commandRun:hover:not(:disabled){transform:translateY(-1px);border-color:#72df7f;color:var(--green);box-shadow:0 0 0 1px rgba(114,223,127,.08),0 8px 24px rgba(60,180,80,.10)}
+.btn:active:not(:disabled),.enter-btn:active:not(:disabled),.signal-btn:active:not(:disabled),.close:active:not(:disabled),.rare-close:active:not(:disabled),.locker-btn:active:not(:disabled),.chat-send:active:not(:disabled),.cookie-actions button:active:not(:disabled),#commandRun:active:not(:disabled){transform:translateY(1px) scale(.985);box-shadow:0 0 0 1px rgba(114,223,127,.13),0 3px 10px rgba(0,0,0,.35)}
+.btn:focus-visible,.enter-btn:focus-visible,.signal-btn:focus-visible,.close:focus-visible,.rare-close:focus-visible,.locker-btn:focus-visible,.chat-send:focus-visible,.cookie-actions button:focus-visible,#commandRun:focus-visible{outline:1px solid #8aff97;outline-offset:2px}
+.signal-btn.active{box-shadow:inset 0 0 18px rgba(95,220,115,.06),0 0 12px rgba(95,220,115,.08)}
+.enter-btn:not(:disabled):hover{box-shadow:0 0 0 1px rgba(138,255,151,.08),0 10px 28px rgba(60,180,80,.12),inset 0 0 22px rgba(95,220,115,.05)}
+@media (prefers-reduced-motion:reduce){.btn,.enter-btn,.signal-btn,.close,.rare-close,.locker-btn,.chat-send,.cookie-actions button,#commandRun{transition:none}.btn:hover,.enter-btn:hover,.signal-btn:hover,.close:hover,.rare-close:hover,.locker-btn:hover,.chat-send:hover,.cookie-actions button:hover,#commandRun:hover,.btn:active,.enter-btn:active,.signal-btn:active,.close:active,.rare-close:active,.locker-btn:active,.chat-send:active,.cookie-actions button:active,#commandRun:active{transform:none}}
+
+body:before{content:"";position:fixed;inset:0;pointer-events:none;z-index:80;opacity:.052;background:repeating-linear-gradient(0deg,transparent 0 3px,rgba(255,255,255,.56) 4px),radial-gradient(circle at 50% 18%,transparent 0 35%,#000 100%);mix-blend-mode:screen}
+body:after{content:"";position:fixed;inset:-15%;pointer-events:none;z-index:-1;background:radial-gradient(circle at 50% 8%,rgba(132,255,155,.05),transparent 28%),radial-gradient(circle at 8% 85%,rgba(255,60,60,.03),transparent 24%),linear-gradient(180deg,#0a0c0a,#040504 55%,#070807);animation:breath 9s ease-in-out infinite}@keyframes breath{50%{filter:brightness(1.07)}}
+header{position:sticky;top:0;z-index:50;height:64px;border-bottom:1px solid var(--line);background:rgba(4,5,4,.9);backdrop-filter:blur(16px);display:flex;align-items:center;justify-content:space-between;padding:0 clamp(16px,4vw,64px)}
+.brand{display:flex;gap:11px;align-items:center}.logo{width:30px;height:30px;display:grid;place-items:center;border:1px solid #4c554d;color:var(--green);font:700 12px monospace;position:relative}.logo i{position:absolute;width:5px;height:5px;border-radius:50%;right:4px;top:4px;background:#58ff77;box-shadow:0 0 9px #58ff77}.brand h1{font-size:11px;letter-spacing:.24em;margin:0;font-family:monospace}.brand small{color:#616a64;letter-spacing:.16em;font:9px monospace}.nav{display:flex;gap:13px;align-items:center}.nav a{color:#79827b;text-decoration:none;font:9px monospace;letter-spacing:.13em;text-transform:uppercase;padding:8px 7px;border:1px solid transparent}.nav a:hover,.nav a.active{color:var(--green);border-color:#2d3630;background:#0a0d0a}
+main{width:min(1380px,94vw);margin:auto}.ticker{margin:0 -3vw;border-top:1px solid var(--line);border-bottom:1px solid var(--line);height:34px;display:flex;align-items:center;overflow:hidden;background:#080a08}.ticker-label{height:100%;display:flex;align-items:center;padding:0 16px;border-right:1px solid var(--line);font:8px monospace;color:#66706a;letter-spacing:.14em;white-space:nowrap}.ticker-track{display:flex;gap:24px;white-space:nowrap;min-width:max-content;font:9px monospace;color:#9aa39d;letter-spacing:.12em;animation:ticker 28s linear infinite}@keyframes ticker{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+.hero{padding:65px 0 48px;display:grid;grid-template-columns:1.18fr .82fr;gap:42px;align-items:end}.kicker{font:10px monospace;letter-spacing:.22em;color:#737b75;text-transform:uppercase}.kicker:before{content:"";display:inline-block;width:35px;height:1px;background:#4d564f;vertical-align:middle;margin-right:10px}.hero h2{font:800 clamp(42px,7vw,92px)/.9 Arial;margin:18px 0 16px;letter-spacing:-.065em;text-transform:uppercase;max-width:820px}.hero h2 span{color:var(--green)}.hero p{max-width:680px;color:#8a938d;font-size:14px;line-height:1.75;margin:0}.hero-side{border-left:1px solid var(--line);padding-left:26px}.stamp{font:10px monospace;letter-spacing:.15em;color:#6e7771;margin-bottom:16px}.stamp strong{color:var(--amber);font-weight:400}.facts{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--line);border:1px solid var(--line)}.fact{padding:15px;background:#090b09}.fact b{display:block;font:700 17px monospace;color:#d6dad7}.fact span{display:block;color:#69716d;font:9px monospace;letter-spacing:.1em;margin-top:5px}
+.panel{border:1px solid var(--line);background:linear-gradient(180deg,#0d100e,#090b09);box-shadow:var(--shadow)}.panel-head{height:44px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 16px;font:9px monospace;letter-spacing:.14em;color:#79817c;text-transform:uppercase}.lights{display:flex;gap:6px}.lights i{width:6px;height:6px;border-radius:50%;background:#2d332f}.lights i:first-child{background:#5fff79;box-shadow:0 0 8px rgba(95,255,121,.7)}.lights i:nth-child(2){background:#b79e61}.lights i:nth-child(3){background:#4d5650}
+.section{padding:62px 0}.section-title{display:flex;align-items:end;justify-content:space-between;border-bottom:1px solid var(--line);padding-bottom:13px;margin-bottom:18px}.section-title h3{margin:0;font:700 20px monospace;letter-spacing:.08em;text-transform:uppercase}.section-title span{font:9px monospace;color:#69716d;letter-spacing:.12em}
+.game-wrap{padding:10px}.game-screen{position:relative;aspect-ratio:960/620;background:#000;overflow:hidden;border:1px solid #303530}.game-screen:after{content:"LIVE FEED // LOCAL CLIENT";position:absolute;left:14px;top:12px;color:#8d9690;font:9px monospace;letter-spacing:.16em;opacity:.78;pointer-events:none}.game-screen iframe{display:block;width:100%;height:100%;border:0}.playbar{padding:11px 14px 13px;display:flex;align-items:center;justify-content:space-between;gap:10px;border-top:1px solid var(--line);font:9px monospace;color:#6e7771;letter-spacing:.12em}.btn{background:transparent;border:1px solid #3a403c;color:#c3c8c4;padding:9px 12px;font:9px monospace;letter-spacing:.12em;cursor:pointer}.btn:hover{border-color:#8aff97;color:var(--green)}
+.dossier-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.dossier-card{padding:20px;min-height:220px;position:relative;overflow:hidden}.dossier-card:before{content:"";position:absolute;right:-30px;top:-35px;width:120px;height:120px;border:1px solid rgba(170,255,180,.08);border-radius:50%}.dossier-icon{font:700 26px monospace;color:#3e4842}.dossier-card h4{font:700 13px Arial;letter-spacing:.08em;margin:18px 0 8px}.dossier-card p{margin:0;color:#7e8782;font-size:12px;line-height:1.65;max-width:320px}.dossier-foot{position:absolute;bottom:16px;left:20px;color:#59625c;font:8px monospace;letter-spacing:.15em}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.card{border:1px solid var(--line);background:var(--panel);overflow:hidden;position:relative}.card-media{height:220px;background:#050605;position:relative;overflow:hidden}.card-media img{width:100%;height:100%;object-fit:cover;filter:contrast(1.05) brightness(.74) saturate(.6);transition:.25s transform,.25s filter}.card:hover .card-media img{transform:scale(1.025);filter:contrast(1.08) brightness(.88) saturate(.7)}.card-media .scan{position:absolute;inset:0;background:linear-gradient(180deg,transparent,rgba(0,0,0,.6)),repeating-linear-gradient(0deg,transparent 0 4px,rgba(255,255,255,.03) 5px);pointer-events:none}.card-meta{padding:13px 14px 16px}.card-meta small{font:9px monospace;color:#68716b;letter-spacing:.13em}.card-meta h4{margin:8px 0 5px;font:700 14px Arial;text-transform:uppercase}.card-meta p{margin:0;color:#7e8782;font-size:12px;line-height:1.55}.tag{position:absolute;left:10px;top:10px;border:1px solid rgba(255,255,255,.18);background:rgba(0,0,0,.65);padding:5px 7px;font:8px monospace;color:#b4bdb7;letter-spacing:.1em}
+.lore-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:12px}.file-sheet{padding:24px;min-height:330px;position:relative}.file-cap{display:flex;justify-content:space-between;font:9px monospace;color:#68716c;letter-spacing:.13em;border-bottom:1px dashed #292f2b;padding-bottom:10px}.file-sheet h4{font:700 22px/1.15 Arial;letter-spacing:-.02em;max-width:620px;margin:28px 0 15px}.file-sheet p{color:#838c86;font-size:13px;line-height:1.75;max-width:650px}.file-sheet blockquote{margin:24px 0 24px;padding:16px 18px;border-left:2px solid #78827a;background:#090c09;color:#b4bbb5;font:12px/1.7 monospace}.file-sheet small{font:8px monospace;color:#58615b;letter-spacing:.13em}.timeline{padding:8px 16px}.timeline-row{display:grid;grid-template-columns:64px 1fr auto;gap:12px;align-items:center;padding:16px 0;border-bottom:1px solid #1e231f;font:9px monospace}.timeline-row:last-child{border-bottom:0}.timeline-row span{color:#5f6862}.timeline-row b{font-weight:400;color:#acb4ae;letter-spacing:.08em}.timeline-row i{font-style:normal;color:#77bb7f;font-size:8px;letter-spacing:.1em}.timeline-row i.amber{color:#cdb26a}.timeline-row i.red{color:#d95a58}
+.about-grid{display:grid;grid-template-columns:1.2fr .8fr;gap:12px}.note{padding:22px}.note p{color:#8a928d;line-height:1.8;font-size:13px;margin:0 0 15px}.note em{color:#c6cbc7;font-style:normal}.meter{height:5px;background:#191d1a;margin:14px 0}.meter i{display:block;width:68%;height:100%;background:linear-gradient(90deg,#4eff71,#c8ffce);box-shadow:0 0 13px rgba(78,255,113,.25)}.log{font:10px/1.75 monospace;color:#7c857f}.log .ok{color:#96ff9e}.log .warn{color:#e1bf73}.log .bad{color:#ff6662}
+
+
+.profile-grid,.bulletin-grid,.locker-grid{display:grid;grid-template-columns:1.25fr .75fr;gap:12px}.identity-panel,.status-console,.bulletin-main,.event-log,.locker-card,.locker-status{padding:20px}.identity-head{display:grid;grid-template-columns:58px 1fr auto;gap:15px;align-items:center}.avatar-big{width:58px;height:58px;border:1px solid #465047;display:grid;place-items:center;font:700 18px monospace;color:var(--green);background:#090c09}.profile-code{font:8px monospace;color:#68716b;letter-spacing:.16em}.identity-head h4{margin:4px 0 3px;font:700 22px Arial;text-transform:uppercase}.profile-rank{border:1px solid #39423c;padding:8px;font:8px monospace;color:#a7b0aa;letter-spacing:.12em}.identity-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);margin-top:20px}.identity-stats div{padding:13px;background:#090b09}.identity-stats span{display:block;font:8px monospace;color:#606a63;letter-spacing:.12em}.identity-stats b{display:block;margin-top:6px;font:11px monospace;color:#cbd0cc}.identity-foot{margin-top:14px;color:#565e59;font:8px monospace;letter-spacing:.08em}.status-row{display:flex;justify-content:space-between;padding:11px 0;border-bottom:1px solid #1d231f;font:9px monospace}.status-row span{color:#657069}.status-row b{color:#b8c0ba}.status-meter{height:5px;background:#171b18;margin:16px 0}.status-meter i{display:block;height:100%;width:18%;background:linear-gradient(90deg,#4eff71,#d7ffdc);transition:.5s}.status-console p{margin:12px 0 0;color:#727b75;font-size:11px;line-height:1.6}.bulletin-grid{grid-template-columns:1fr .75fr}.bulletin-stamp{display:flex;justify-content:space-between;font:8px monospace;color:#69716c;letter-spacing:.14em}.bulletin-main h4{font:700 25px Arial;margin:25px 0 10px;letter-spacing:-.02em}.bulletin-main p{max-width:720px;color:#818a84;font-size:13px;line-height:1.7}.bulletin-actions{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:24px}.bulletin-actions span{font:8px monospace;color:#5f6862}.event-row{display:grid;grid-template-columns:65px 1fr auto;gap:9px;padding:11px 0;border-bottom:1px solid #1d231f;font:8px monospace}.event-row span{color:#5b655f}.event-row b{font-weight:400;color:#aab2ac}.event-row i{font-style:normal;color:#73bd7a}.locker-grid{grid-template-columns:repeat(3,1fr)}.locker-card{min-height:205px;position:relative}.locker-top{display:flex;justify-content:space-between;font:8px monospace;color:#626b65;letter-spacing:.12em}.locker-top b{font-weight:400;color:#7ac480}.locker-card h4{font:700 15px Arial;margin:28px 0 8px}.locker-card p{font-size:11px;line-height:1.65;color:#747d77;min-height:54px}.locker-card:not(.open){opacity:.72}.locker-card:not(.open) .locker-top b{color:#b59662}.locker-status{margin-top:12px;display:flex;align-items:center;gap:18px}.locker-status span{font:8px monospace;color:#606a63;letter-spacing:.13em}.locker-status b{font:9px monospace;color:#c4cbc6}.locker-status small{margin-left:auto;color:#5e6761;font:8px monospace}@media(max-width:900px){.profile-grid,.bulletin-grid,.locker-grid{grid-template-columns:1fr}.identity-stats{grid-template-columns:1fr 1fr}.nav{overflow-x:auto;max-width:60vw}.profile-rank{grid-column:2}.identity-head{grid-template-columns:58px 1fr}.locker-status{align-items:flex-start;flex-direction:column}.locker-status small{margin-left:0}}
+/* support center */
+.support-grid{display:grid;grid-template-columns:1.25fr .75fr;gap:12px}.support-chat{min-height:520px;display:flex;flex-direction:column}.chat-head{padding:16px 18px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center}.agent{display:flex;gap:11px;align-items:center}.agent-avatar{width:38px;height:38px;border:1px solid #435048;display:grid;place-items:center;font:700 11px monospace;color:var(--green);position:relative;background:#090c09}.agent-avatar:after{content:"";position:absolute;width:7px;height:7px;border-radius:50%;right:-3px;bottom:-3px;background:#61ff7c;box-shadow:0 0 10px rgba(97,255,124,.7)}.agent-name{font:700 11px Arial;text-transform:uppercase}.agent-role{font:8px monospace;color:#67716b;margin-top:3px;letter-spacing:.12em}.chat-status{font:8px monospace;color:#73c57e;border:1px solid #2b5835;padding:6px 8px;letter-spacing:.11em}.chat-log{flex:1;padding:17px;display:flex;flex-direction:column;gap:11px;overflow:auto;min-height:310px;max-height:390px}.msg{max-width:82%;padding:11px 12px;border:1px solid #252b26;background:#0a0d0a;font:10px/1.55 monospace;color:#aab2ac}.msg.user{align-self:flex-end;background:#0d130f;border-color:#2f4a35}.msg .who{display:block;font-size:8px;letter-spacing:.11em;color:#657069;margin-bottom:5px}.msg .who b{font-weight:400;color:#8bc893}.chat-compose{border-top:1px solid var(--line);padding:12px;display:grid;grid-template-columns:1fr auto;gap:8px}.chat-input{width:100%;background:#070907;border:1px solid #303730;color:#c8cec9;min-height:46px;padding:10px 11px;resize:none;outline:none;font:10px/1.5 monospace}.chat-input:focus{border-color:#547a5c}.chat-send{min-width:96px}.typing{font:8px monospace;color:#58625b;padding:0 17px 12px;min-height:18px;letter-spacing:.1em}.support-side{display:flex;flex-direction:column;gap:12px}.ticket-panel{padding:18px}.ticket-title{font:9px monospace;color:#6f7972;letter-spacing:.13em;margin-bottom:11px}.ticket-number{font:700 23px monospace;color:#d6dbd7}.ticket-meta{margin-top:7px;font:9px/1.7 monospace;color:#68716b}.faq{padding:14px 0;border-top:1px solid #1d231f}.faq:first-of-type{border-top:0}.faq b{font:700 10px Arial;display:block;margin-bottom:5px}.faq span{font:9px/1.5 monospace;color:#68716b}.support-note{padding:18px;color:#737d76;font:9px/1.6 monospace}.support-launch{position:fixed;right:19px;bottom:19px;z-index:75;border:1px solid #3d6645;background:rgba(7,12,8,.94);color:#bafec1;padding:11px 13px;font:9px monospace;letter-spacing:.11em;box-shadow:0 14px 35px rgba(0,0,0,.5);cursor:pointer}.support-launch:hover{border-color:#87ff93;transform:translateY(-1px)}.support-launch .pulse{display:inline-block;width:6px;height:6px;border-radius:50%;background:#62ff78;box-shadow:0 0 10px #62ff78;margin-right:7px}.support-unread{display:none;position:absolute;right:-4px;top:-6px;width:16px;height:16px;border-radius:50%;background:#f05250;color:#fff;font:8px monospace;place-items:center}.support-unread.on{display:grid}
+/* achievements */
+.achievement-head{display:grid;grid-template-columns:1fr auto;gap:14px;align-items:stretch;margin-bottom:14px}.profile-card{padding:18px 20px;position:relative;overflow:hidden}.profile-card:after{content:"SYNCED";position:absolute;right:16px;top:16px;font:8px monospace;color:#7cff8a;border:1px solid #285c33;padding:5px 7px;letter-spacing:.12em}.profile-label{font:8px monospace;color:#66716a;letter-spacing:.16em}.profile-name{font:700 23px Arial;margin:5px 0 11px;letter-spacing:-.02em}.profile-sub{font:10px monospace;color:#7a847e}.achievement-count{min-width:190px;padding:18px 20px;text-align:right}.achievement-count b{display:block;font:700 30px monospace;color:var(--green)}.achievement-count span{font:8px monospace;color:#66716a;letter-spacing:.13em}.ach-layout{display:grid;grid-template-columns:1fr .36fr;gap:14px}.ach-list{display:grid;grid-template-columns:repeat(2,1fr);gap:9px}.ach{border:1px solid #222822;background:#090b09;padding:13px 14px;display:grid;grid-template-columns:42px 1fr auto;gap:11px;align-items:center;min-height:88px;position:relative;overflow:hidden;transition:.2s}.ach.unlocked{border-color:#315d39;background:linear-gradient(180deg,#0c130e,#090c09)}.ach.unlocked:before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(105,255,124,.04),transparent 50%);pointer-events:none}.ach-icon{width:38px;height:38px;border:1px solid #2b322d;display:grid;place-items:center;font:16px monospace;color:#565f59}.ach.unlocked .ach-icon{border-color:#39734a;color:var(--green);box-shadow:0 0 16px rgba(79,220,114,.08)}.ach-title{font:700 11px Arial;text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px}.ach-desc{font:9px monospace;color:#68736c;line-height:1.45}.ach-meta{font:8px monospace;letter-spacing:.1em;text-align:right;color:#4f5852}.ach.unlocked .ach-meta{color:#75c982}.ach-ghost{display:block;margin-top:2px;color:#4a534d}.ach.unlocked .ach-ghost{display:none}.ach-side{padding:18px}.side-title{font:9px monospace;color:#707a73;letter-spacing:.14em;margin-bottom:14px}.progressbar{height:7px;background:#171b18;border:1px solid #232923}.progressbar i{display:block;height:100%;width:0%;background:linear-gradient(90deg,#5adc73,#c5ffc8);box-shadow:0 0 10px rgba(80,220,115,.16);transition:.4s}.progress-num{display:flex;justify-content:space-between;margin-top:8px;font:9px monospace;color:#5d6760}.sync-log{margin-top:18px;border-top:1px solid var(--line);padding-top:15px;font:9px/1.8 monospace;color:#5f6862}.sync-log strong{color:#9fa8a2;font-weight:400}.mini-stat{padding:11px 0;border-bottom:1px solid #1d231e;display:flex;justify-content:space-between;font:9px monospace}.mini-stat:last-child{border-bottom:0}.mini-stat span{color:#626c65}.mini-stat b{font-weight:400;color:#aab1ac}
+/* studio/reviews */
+.review-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}.review{padding:18px;min-height:160px}.stars{color:#e4ca75;letter-spacing:2px;font-size:11px}.review p{font-size:12px;color:#8a938d;line-height:1.7}.review small{font:8px monospace;color:#5f6862;letter-spacing:.12em}.studio{padding:22px}.studio-grid{display:grid;grid-template-columns:1fr .75fr;gap:14px}.team-row{display:grid;grid-template-columns:48px 1fr auto;gap:12px;align-items:center;padding:14px 0;border-bottom:1px solid #1f241f}.avatar{width:38px;height:38px;border:1px solid #38403a;display:grid;place-items:center;color:#8ba492;font:11px monospace}.team-row strong{font:700 11px Arial}.team-row small{display:block;color:#646e67;font:8px monospace;margin-top:4px}.team-row em{font:8px monospace;color:#6c766f;font-style:normal}.changelog{padding:6px 18px}.change{padding:15px 0;border-bottom:1px solid #1f241f}.change:last-child{border-bottom:0}.change b{color:#aeb7b0;font:10px monospace}.change span{display:block;color:#68726b;font-size:11px;line-height:1.55;margin-top:5px}
+.footer{padding:30px 0 55px;border-top:1px solid var(--line);display:flex;justify-content:space-between;color:#59615c;font:9px monospace;letter-spacing:.12em}.footer strong{color:#8b938d;font-weight:400}.footer a{color:inherit;text-decoration:none}.footer a:hover{color:var(--green)}
+/* modal + achievement toast */
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.78);backdrop-filter:blur(10px);display:none;align-items:center;justify-content:center;padding:24px;z-index:70}.modal.open{display:flex}.modal-box{width:min(1100px,95vw);background:#090b09;border:1px solid #4a514c;box-shadow:0 40px 150px rgba(0,0,0,.8)}.modal-top{height:45px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;padding:0 14px;font:9px monospace;color:#7a837e;letter-spacing:.14em}.modal-stage{padding:14px}.modal-stage img{display:block;width:100%;max-height:72vh;object-fit:contain;background:#000}.close{background:transparent;border:1px solid #303630;color:#b9bfbb;padding:6px 9px;cursor:pointer}.hint{padding:0 14px 12px;color:#5f6762;font:9px monospace}
+.locker-doc{padding:22px 26px;max-height:72vh;overflow:auto;background:#07090701;color:#c4cac5;font:12px/1.75 monospace}.locker-doc h5{margin:0 0 14px;font:700 15px Arial;letter-spacing:.04em;color:#9fe7a8}.locker-doc p{margin:0 0 12px}.locker-doc .redact{background:#0d0b0b;border:1px solid #392321;color:#a56a65;padding:10px 12px;margin:14px 0;font:10px/1.6 monospace}.locker-doc .stamp{color:#5f6862;font:9px monospace;letter-spacing:.12em;margin-top:18px;border-top:1px solid #1d231e;padding-top:12px}
+
+.game-launch-panel{margin:12px 10px 0;border:1px solid #2f3a31;background:linear-gradient(180deg,#0b100c,#070907);padding:16px 17px;display:flex;align-items:center;justify-content:space-between;gap:20px;box-shadow:inset 0 1px 0 rgba(170,255,180,.025)}
+.game-launch-kicker{font:8px monospace;letter-spacing:.16em;color:#607067}
+.game-launch-panel h4{margin:7px 0 5px;font:700 14px Arial;letter-spacing:.05em;text-transform:uppercase}
+.game-launch-panel p{margin:0;color:#6f7972;font:10px/1.55 Arial;max-width:620px}
+.game-launch-actions{display:flex;align-items:center;gap:12px;flex-shrink:0}
+.game-launch-actions span{font:8px monospace;color:#56615a;letter-spacing:.1em;white-space:nowrap}
+.game-play-btn{min-width:104px;border-color:#497052;background:#0b160e;color:#b4ffc0;font-weight:700;transition:transform .15s ease,border-color .15s ease,box-shadow .15s ease}
+.game-play-btn:hover{transform:translateY(-1px);border-color:#8aff97;box-shadow:0 0 22px rgba(100,255,125,.08)}
+.game-wrap.game-off{display:none}
+.game-wrap.game-starting{display:block}
+.game-wrap.game-starting .game-loading-overlay{display:flex}
+.game-loading-overlay{display:none;position:absolute;inset:0;align-items:center;justify-content:center;background:rgba(2,4,2,.72);backdrop-filter:blur(3px);z-index:4;font:9px monospace;letter-spacing:.14em;color:#a6ffb1;pointer-events:none}
+#full:disabled{opacity:.38;cursor:not-allowed}
+@media(max-width:760px){.game-launch-panel{align-items:flex-start;flex-direction:column}.game-launch-actions{width:100%;justify-content:space-between}.game-launch-actions span{white-space:normal}}
+
+#achToastStack{position:fixed;right:18px;top:76px;z-index:100;display:flex;flex-direction:column;gap:9px;width:min(370px,calc(100vw - 36px));pointer-events:none}.toast{border:1px solid #355d3b;background:linear-gradient(180deg,rgba(11,19,13,.98),rgba(6,10,7,.98));box-shadow:0 18px 60px rgba(0,0,0,.55),0 0 24px rgba(76,221,107,.08);padding:12px 13px;display:grid;grid-template-columns:30px 1fr;gap:10px;animation:toastIn .35s ease both}.toast.fade{animation:toastOut .5s ease both}.toast-icon{width:28px;height:28px;border:1px solid #40784b;display:grid;place-items:center;color:var(--green);font:13px monospace}.toast-kicker{font:8px monospace;color:#6fa97a;letter-spacing:.14em}.toast-title{font:700 12px Arial;margin-top:3px}.toast-sub{font:9px monospace;color:#727c75;line-height:1.45;margin-top:3px}@keyframes toastIn{from{opacity:0;transform:translateX(24px)}to{opacity:1;transform:none}}@keyframes toastOut{to{opacity:0;transform:translateX(24px)}}
+.live-dot{display:inline-block;width:6px;height:6px;border-radius:50%;background:#55ed75;box-shadow:0 0 8px #55ed75;margin-right:6px}.save-stamp{font:8px monospace;color:#5d6761;letter-spacing:.1em;margin-left:8px}
+@media(max-width:1050px){.hero,.about-grid,.studio-grid,.lore-grid{grid-template-columns:1fr}.hero-side{border-left:0;border-top:1px solid var(--line);padding:18px 0 0}.ach-layout{grid-template-columns:1fr}.ach-list{grid-template-columns:1fr}.review-grid{grid-template-columns:1fr}.achievement-head{grid-template-columns:1fr auto}}
+@media(max-width:900px){.ticker{margin:0 -2.5vw}.dossier-grid,.grid{grid-template-columns:1fr}.nav{display:none}.hero{padding-top:45px}.section{padding:48px 0}.playbar{align-items:flex-start;flex-direction:column}.achievement-count{min-width:160px}}
+@media(max-width:620px){header{height:55px}.brand h1{font-size:9px}.hero h2{font-size:48px}.hero p{font-size:12px}.section{padding:40px 0}.card-media{height:200px}.achievement-head{grid-template-columns:1fr}.achievement-count{text-align:left}.toast{grid-template-columns:28px 1fr}}
+
+.env-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}.env-cell{border:1px solid #242a25;background:#080b08;padding:10px}.env-k{font:8px monospace;color:#5c665f;letter-spacing:.12em}.env-v{font:10px monospace;color:#b8c0ba;margin-top:5px;word-break:break-word}.env-v.alert{color:#d9bd73}.signal{display:flex;align-items:center;gap:8px;margin-top:10px;font:8px monospace;color:#68716b}.signal i{width:7px;height:7px;border-radius:50%;background:#66ff7b;box-shadow:0 0 11px #66ff7b;display:inline-block}.surveillance-note{margin-top:10px;border-left:2px solid #3e6545;padding:8px 10px;background:#090d09;font:8px/1.55 monospace;color:#69736c}.client-badge{display:inline-block;margin-top:7px;padding:4px 6px;border:1px solid #35443a;color:#91b798;font:8px monospace;letter-spacing:.08em}
+@media (max-width:760px){.env-grid{grid-template-columns:1fr}}
+
+/* =========================================================
+   ACCESS GATE / PLATFORM SYSTEMS
+   ========================================================= */
+body.locked{overflow:hidden}.gate{position:fixed;inset:0;z-index:1000;background:#020302;display:grid;place-items:center;padding:20px}.gate.hidden{display:none}.gate:before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 50% 42%,rgba(120,255,145,.06),transparent 32%),repeating-linear-gradient(0deg,transparent 0 4px,rgba(255,255,255,.035) 5px);pointer-events:none}.gate-card{position:relative;width:min(640px,94vw);border:1px solid #303830;background:linear-gradient(180deg,#0d110e,#060806);box-shadow:0 35px 120px #000;padding:34px}.gate-top{display:flex;justify-content:space-between;gap:20px;border-bottom:1px solid #222822;padding-bottom:15px;margin-bottom:28px;font:9px monospace;letter-spacing:.15em;color:#687169}.gate-brand{color:var(--green)}.gate-card h2{font:800 clamp(34px,7vw,66px)/.9 Arial;letter-spacing:-.06em;margin:0 0 14px;text-transform:uppercase}.gate-card h2 span{color:var(--green)}.gate-card p{color:#808983;font-size:12px;line-height:1.7;max-width:520px}.gate-form{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:24px}.field{display:flex;flex-direction:column;gap:7px}.field.full{grid-column:1/-1}.field label{font:8px monospace;letter-spacing:.13em;color:#626b65}.field input{width:100%;background:#070907;border:1px solid #313831;color:#d6dbd7;padding:13px;font:12px monospace;outline:none}.field input:focus{border-color:#6c9272;box-shadow:0 0 0 2px rgba(116,255,137,.05)}.gate-error{min-height:18px;margin-top:12px;color:#ff6662;font:9px monospace;letter-spacing:.1em}.enter-btn{width:100%;margin-top:3px;padding:14px;border:1px solid #4a654f;background:#0b140d;color:#aaffb5;font:700 10px monospace;letter-spacing:.18em;cursor:pointer}.enter-btn:disabled{opacity:.3;cursor:not-allowed}.gate-fine{margin-top:15px;color:#4f5952;font:8px/1.6 monospace}.cookie{position:fixed;z-index:900;left:18px;bottom:18px;width:min(430px,calc(100vw - 36px));border:1px solid #39413b;background:#090c09;box-shadow:0 20px 70px #000;padding:17px}.cookie.hidden{display:none}.cookie b{font:10px monospace;letter-spacing:.12em;color:#bfc6c1}.cookie p{font:10px/1.6 Arial;color:#727b75;margin:8px 0 13px}.cookie-actions{display:flex;gap:8px}.cookie-actions button{flex:1}.promo-ad{position:relative;overflow:hidden;border:1px dashed #343b36;background:linear-gradient(135deg,#090c09,#0e120f);padding:17px;min-height:125px}.promo-ad:before{content:"ADVERTISEMENT";position:absolute;right:10px;top:8px;font:7px monospace;letter-spacing:.12em;color:#454d47}.promo-ad .ad-kicker{font:8px monospace;letter-spacing:.18em;color:#69736c}.promo-ad h4{margin:10px 0 5px;font:800 19px Arial;letter-spacing:-.03em}.promo-ad p{margin:0;color:#6f7872;font:10px/1.55 Arial;max-width:370px}.promo-ad .ad-btn{display:inline-block;margin-top:12px;border:1px solid #3d473f;padding:6px 8px;color:#a6afa9;font:8px monospace;letter-spacing:.12em}.ad-glitch{animation:adglitch 8s infinite}@keyframes adglitch{0%,92%,100%{transform:none;filter:none}94%{transform:skewX(-1deg);filter:brightness(1.4)}96%{transform:translateX(2px);filter:contrast(1.4)}}
+.captcha{margin-top:12px;border:1px solid #2c332e;background:#080b08;padding:12px;display:none}.captcha.show{display:block}.captcha-row{display:flex;align-items:center;gap:11px}.captcha-check{width:24px;height:24px;border:1px solid #555e57;background:#050705;display:grid;place-items:center;cursor:pointer;font:15px monospace;color:var(--green)}.captcha-copy b{display:block;font:10px monospace;color:#bfc6c1}.captcha-copy span{display:block;margin-top:4px;color:#626b65;font:8px monospace}.captcha-status{margin-top:8px;color:#555e58;font:8px monospace;letter-spacing:.1em}.rare-event{position:fixed;inset:0;z-index:850;display:none;place-items:center;background:rgba(0,0,0,.78);backdrop-filter:blur(3px)}.rare-event.show{display:grid}.rare-box{width:min(560px,90vw);border:1px solid #653b3b;background:#080505;box-shadow:0 0 0 1px rgba(255,70,70,.04),0 30px 100px #000;padding:28px;animation:eventIn .35s ease-out}@keyframes eventIn{from{opacity:0;transform:scale(.98)}to{opacity:1;transform:none}}.rare-code{font:8px monospace;color:#b04f4c;letter-spacing:.2em}.rare-box h3{font:800 35px Arial;margin:14px 0 8px;letter-spacing:-.04em}.rare-box p{color:#8f817f;font:12px/1.7 Arial}.rare-read{margin-top:18px;border-top:1px solid #302020;padding-top:14px;color:#b8a5a2;font:9px/1.6 monospace}.rare-close{margin-top:18px;border:1px solid #543b3a;background:transparent;color:#c4aeaa;padding:9px 12px;font:8px monospace;cursor:pointer}.toast-creepy{position:fixed;z-index:840;right:18px;bottom:18px;max-width:330px;border:1px solid #4a3837;background:#0b0808;padding:13px 15px;box-shadow:0 15px 60px #000;display:none}.toast-creepy.show{display:block}.toast-creepy b{display:block;color:#df7771;font:9px monospace;letter-spacing:.14em}.toast-creepy span{display:block;margin-top:5px;color:#857976;font:10px/1.5 Arial}
+.player-welcome{display:none;margin-top:12px;border:1px solid #28322a;background:#090d09;padding:10px 12px;color:#7d887f;font:9px monospace;letter-spacing:.08em}.player-welcome.show{display:block}.player-welcome strong{color:var(--green)}
+@media(max-width:760px){.gate-form{grid-template-columns:1fr}.field.full{grid-column:auto}.gate-card{padding:23px}.cookie{left:10px;bottom:10px;width:calc(100vw - 20px)}}
+
+/* V9 additional immersive systems */
+.meta-grid{display:grid;grid-template-columns:1.25fr .75fr;gap:14px}.signal-panel{padding:20px;position:relative;overflow:hidden}.signal-panel:after{content:'LIVE SPECTRUM';position:absolute;right:16px;top:16px;font:8px monospace;color:#56615a;letter-spacing:.12em}.wave{height:96px;margin:18px 0;border:1px solid #202620;background:repeating-linear-gradient(90deg,transparent 0 24px,rgba(130,255,150,.025) 25px),linear-gradient(180deg,#070907,#0a0d0a);position:relative;overflow:hidden}.wave canvas{width:100%;height:100%}.signal-controls{display:flex;gap:8px;flex-wrap:wrap}.signal-btn{border:1px solid #2d352f;background:#080b08;color:#8d9991;padding:9px 11px;font:8px monospace;letter-spacing:.1em;cursor:pointer}.signal-btn:hover,.signal-btn.active{border-color:#5c8064;color:#b8ffc0;background:#0c130e}.frequency{display:flex;justify-content:space-between;font:9px monospace;color:#56615a}.frequency b{color:#aeb7b0;font-weight:400}.notice-stack{display:grid;gap:9px}.notice-card{border:1px solid #232a24;background:#090c09;padding:13px;cursor:pointer;transition:.2s}.notice-card:hover{transform:translateX(3px);border-color:#465448}.notice-card small{font:7px monospace;color:#59635c;letter-spacing:.14em}.notice-card b{display:block;margin:6px 0 3px;font:700 11px Arial}.notice-card span{font:9px/1.5 monospace;color:#67716a}.notice-detail{display:none;margin-top:10px;padding-top:10px;border-top:1px solid #1d231e;font:9px/1.6 monospace;color:#a56a65}.notice-card.expanded .notice-detail{display:block}.wave.glitch{animation:waveGlitch .12s steps(2) infinite}@keyframes waveGlitch{0%{transform:translateX(0)}50%{transform:translateX(1px)}100%{transform:translateX(-1px)}}.community{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.post{border:1px solid #222822;background:#080b08;padding:14px;min-height:150px}.post-head{display:flex;justify-content:space-between;font:7px monospace;color:#59635c}.post h4{font:700 11px Arial;margin:12px 0 7px}.post p{font:9px/1.6 Arial;color:#737d76}.post .reply{margin-top:12px;padding-top:9px;border-top:1px solid #1d231e;font:8px/1.5 monospace;color:#59645d}.command-panel{display:grid;grid-template-columns:1fr auto;gap:14px;align-items:end}.command-input{width:100%;background:#060806;border:1px solid #303831;color:#b8c0ba;padding:12px;font:10px monospace;outline:none}.command-output{grid-column:1/-1;min-height:70px;border-top:1px solid #202620;padding-top:13px;color:#6f7a72;font:9px/1.7 monospace}.visitor{display:flex;justify-content:space-between;gap:12px;align-items:center;margin-top:13px;padding-top:13px;border-top:1px solid #202620;font:8px monospace;color:#59635c}.visitor b{color:#9da89f;font-weight:400}.archive-download{position:relative}.archive-download:after{content:'NO EXTERNAL SERVER';position:absolute;right:10px;bottom:9px;font:7px monospace;color:#465048}@media(max-width:900px){.meta-grid{grid-template-columns:1fr}.community{grid-template-columns:1fr}}
+/* V10 COMMUNITY + SECRET NODE */
+.community-tools{display:grid;grid-template-columns:1fr .72fr;gap:12px;margin-top:14px}.comment-box{padding:18px}.comment-box h4{margin:0 0 6px;font:700 14px Arial;letter-spacing:.06em}.comment-box p{margin:0 0 14px;color:#68716b;font:9px/1.55 monospace}.comment-form{display:grid;grid-template-columns:180px 1fr auto;gap:8px}.comment-input,.comment-name{background:#070907;border:1px solid #303730;color:#c8cec9;padding:11px;font:10px monospace;outline:none}.comment-input:focus,.comment-name:focus{border-color:#547a5c}.comment-input{min-height:42px;resize:vertical}.comment-list{padding:8px 18px;max-height:330px;overflow:auto}.user-comment{padding:14px 0;border-bottom:1px solid #1d231f}.user-comment:last-child{border-bottom:0}.user-comment-head{display:flex;justify-content:space-between;gap:10px;font:8px monospace;color:#67716b;letter-spacing:.08em}.user-comment-head b{color:#a9ffb2;font-weight:400}.user-comment p{margin:7px 0 0;color:#8b948e;font:11px/1.6 Arial}.comment-empty{padding:25px 0;color:#555e58;font:9px monospace;text-align:center}.comment-limit{font:8px monospace;color:#58615b;margin-top:8px}.secret-nav{display:none!important}.secret-nav.show{display:block!important}.secret-section{display:none}.secret-section.unlocked{display:block}.secret-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:12px}.secret-core{padding:26px;min-height:390px;position:relative;overflow:hidden}.secret-core:before{content:'DO NOT INDEX';position:absolute;right:-25px;top:25px;transform:rotate(90deg);font:8px monospace;letter-spacing:.3em;color:#432b2b}.secret-eyebrow{font:8px monospace;color:#bd625e;letter-spacing:.2em}.secret-core h3{font:800 clamp(32px,5vw,66px)/.88 Arial;margin:16px 0;letter-spacing:-.06em}.secret-core h3 span{color:#ff6b66}.secret-core p{max-width:650px;color:#858e88;font-size:13px;line-height:1.75}.secret-redact{margin-top:22px;padding:14px;background:#0d0b0b;border:1px solid #392321;color:#a56a65;font:9px/1.7 monospace}.secret-side{padding:20px}.secret-side .logline{padding:12px 0;border-bottom:1px solid #24201f;font:9px/1.5 monospace;color:#727a74}.secret-side .logline b{color:#d16b65;font-weight:400}.secret-unlock{display:inline-block;margin-top:18px;color:#e5b6b0;border:1px solid #56302e;padding:9px 11px;font:8px monospace;letter-spacing:.12em}.secret-pulse{animation:secretPulse 2.8s ease-in-out infinite}@keyframes secretPulse{50%{box-shadow:0 0 32px rgba(255,70,65,.08)}}
+@media(max-width:900px){.community-tools,.secret-grid{grid-template-columns:1fr}.comment-form{grid-template-columns:1fr}.comment-list{max-height:none}}
+<style>
+.promo-ad{display:flex;justify-content:space-between;align-items:flex-end;gap:24px;padding:22px 20px;min-height:150px;cursor:default;background:radial-gradient(circle at 85% 35%,rgba(130,255,150,.05),transparent 25%),linear-gradient(135deg,#090c09,#10150f);}
+.promo-ad:hover{border-color:#526356;box-shadow:0 0 28px rgba(80,220,115,.05),inset 0 0 35px rgba(100,255,130,.025);}
+.ad-copy{max-width:760px}.ad-micro{margin-top:13px;color:#4f5a52;font:8px monospace;letter-spacing:.1em}.ad-micro strong{color:#9eb5a3;font-weight:400}.promo-ad-btn{flex:0 0 auto;position:relative;z-index:2;cursor:pointer;background:#090d0a;color:#baffc2;transition:transform .12s ease,border-color .16s ease,box-shadow .16s ease,filter .16s ease}.promo-ad-btn:hover{transform:translateY(-2px);border-color:#7cff8a;box-shadow:0 0 18px rgba(100,255,120,.12);filter:brightness(1.08)}.promo-ad-btn:active{transform:translateY(1px) scale(.97)}@media(max-width:620px){.promo-ad{flex-direction:column;align-items:stretch}.promo-ad-btn{align-self:flex-start}}
+</style></style>
+<style id="bbhCaptchaRepairStyle">.captcha-check{font-family:monospace;padding:0;appearance:none;-webkit-appearance:none;cursor:pointer;position:relative;z-index:5;pointer-events:auto}.captcha-check.verified{color:var(--green);border-color:#4f7757}</style>
+</head>
+<body>
+
+<!-- First-visit access gate: fictional 18+ horror archive -->
+<div class="gate" id="accessGate">
+  <div class="gate-card">
+    <div class="gate-top"><span class="gate-brand">BUDDY HORROR // ACCESS NODE 01</span><span>AGE VERIFICATION</span></div>
+    <h2>ENTER THE<br><span>NIGHT ARCHIVE</span></h2>
+    <p>This archive contains horror material, disturbing imagery and fictional incident records. Confirm your date of birth and choose an operator name to create a local profile.</p>
+    <form class="gate-form" id="gateForm">
+      <div class="field"><label>DATE OF BIRTH</label><input id="birthDate" type="date" required></div>
+      <div class="field"><label>OPERATOR NAME</label><input id="operatorName" type="text" maxlength="24" placeholder="ENTER NAME" autocomplete="off" required></div>
+      <div class="field full"><div class="gate-error" id="gateError"></div><button class="enter-btn" id="enterArchive" type="button" onclick="window.__bbhVerifyGate()">VERIFY &amp; ENTER ARCHIVE ↗</button></div>
+    </form>
+    <div class="gate-fine">LOCAL ACCESS ONLY · PROFILE IS STORED IN THIS BROWSER · NO ACCOUNT REQUIRED<br>ACCESS NODE WILL REMEMBER THIS DEVICE.</div>
+  </div>
+</div>
+<script>
+window.__bbhVerifyGate=function(){
+  var d=document.getElementById('birthDate'), n=document.getElementById('operatorName'), err=document.getElementById('gateError'), gate=document.getElementById('accessGate');
+  var dob=d&&d.value?d.value:'', name=n&&n.value?n.value.trim():'';
+  if(err)err.textContent='';
+  if(!dob||!name){if(err)err.textContent='ENTER BOTH FIELDS.';return;}
+  var birth=new Date(dob+'T00:00:00'), now=new Date();
+  var age=now.getFullYear()-birth.getFullYear(), md=now.getMonth()-birth.getMonth();
+  if(md<0||(md===0&&now.getDate()<birth.getDate()))age--;
+  if(!isFinite(age)||age<18){if(err)err.textContent='ACCESS DENIED · THIS ARCHIVE IS MARKED 18+.';return;}
+  try{localStorage.setItem('bbh_site_gate_v2','1');localStorage.setItem('bbh_operator_name_v2',name);localStorage.setItem('bbh_site_birth',dob);}catch(e){}
+  document.body.classList.remove('locked');
+  if(gate)gate.classList.add('hidden');
+  var w=document.getElementById('playerWelcome'),wn=document.getElementById('welcomeName');
+  if(w&&wn){wn.textContent=name.replace(/[<>]/g,'');w.classList.add('show');}
+};
+</script>
+<div class="cookie" id="cookieNotice">
+  <b>COOKIE / LOCAL STORAGE NOTICE</b>
+  <p>This archive uses fictional “cookies” and browser local storage to remember your operator name, interface preferences and in-universe events. No data is transmitted to a real server.</p>
+  <div class="cookie-actions"><button class="btn" id="cookieAccept">ALLOW ALL</button><button class="btn" id="cookieDecline">DECLINE</button></div>
+</div>
+<div class="rare-event" id="rareEvent">
+  <div class="rare-box"><div class="rare-code" id="rareCode">INCIDENT / 00:00</div><h3 id="rareTitle">ARE YOU STILL THERE?</h3><p id="rareText">The archive registered an event it cannot classify.</p><div class="rare-read" id="rareRead">DO NOT REFRESH THIS PAGE.</div><button class="rare-close" id="rareClose">ACKNOWLEDGE</button></div>
+</div>
+<div class="toast-creepy" id="creepyToast"><b id="creepyToastTitle">ARCHIVE NOTICE</b><span id="creepyToastText"></span></div>
+<header>
+  <div class="brand"><div class="logo">B<i></i></div><div><h1>BUDDY HORROR // ARCHIVE</h1><small>PRIVATE BUILD / ACCESS NODE 01</small></div></div>
+  <nav class="nav"><a href="#game">PLAY</a><a href="#profile">PROFILE</a><a href="#archive">ARCHIVE</a><a href="#achievements">ACHIEVEMENTS</a><a href="#support">SUPPORT</a><a href="#lore">LORE</a><a href="#studio">ABOUT</a><a class="secret-nav" id="secretNav" href="#secretNode">RED NODE</a></nav>
+</header>
+<main>
+<section class="hero"><div><div class="kicker">restricted game archive</div><h2>ПЯТЬ НОЧЕЙ<br>С <span>БАДИХОРРОРОМ</span></h2><p>Небольшая независимая хоррор-игра, сохранённая в виде закрытого ночного терминала. Здесь находится рабочая сборка, архив материалов, восстановленные документы и профиль прохождения, который обновляется непосредственно из сохранения игры.</p><div class="player-welcome" id="playerWelcome">LOCAL ACCESS GRANTED · OPERATOR <strong id="welcomeName"></strong></div></div><div class="hero-side"><div class="stamp">STATUS / <strong><span class="live-dot"></span>ONLINE</strong><br>BUILD / BBH-2026<br>ACCESS / LOCAL<br>SAVE / <strong id="heroSaveState">SCANNING</strong></div><div class="facts"><div class="fact"><b>05</b><span>NIGHT CYCLES</span></div><div class="fact"><b>960×620</b><span>GAME CANVAS</span></div><div class="fact"><b>LIVE</b><span>PLAYABLE BUILD</span></div><div class="fact"><b id="heroStars">☆☆☆☆</b><span>ARCHIVE RATING</span></div></div></div></section>
+<section class="ticker"><div class="ticker-label">NETWORK NOTICE</div><div class="ticker-track"><span>BUILD BBH-2026 IS CURRENTLY STABLE</span><span>•</span><span>ARCHIVE NODE 01 RESPONDING</span><span>•</span><span>UNKNOWN ACCESS ATTEMPTS: 03</span><span>•</span><span>DO NOT TRUST CAMERA FEED AFTER 05:00</span><span>•</span><span>PROFILE SYNC ENABLED</span><span>•</span><span>ACHIEVEMENT SERVICE LOCAL / ONLINE EMULATION</span><span>•</span><span>LOCAL OBSERVER COUNT NEVER DECREASES</span></div></section>
+
+<section id="game" class="section"><div class="section-title"><h3>01 // PLAY BUILD</h3><span><span class="live-dot"></span>CAMERA FEED / STANDBY</span></div><div class="panel"><div class="panel-head"><span>REMOTE TERMINAL · NIGHT SHIFT</span><div class="lights"><i></i><i></i><i></i></div></div><div class="game-launch-panel" id="gameLaunchPanel"><div><div class="game-launch-kicker">REMOTE TERMINAL / OFFLINE</div><h4>READY TO START THE NIGHT SHIFT?</h4><p>Игровой клиент не загружается автоматически. Нажми PLAY, чтобы запустить игру.</p></div><div class="game-launch-actions"><span id="gameLaunchState">GAME OFFLINE · AWAITING PLAYER</span><button class="btn game-play-btn" id="gamePlay" type="button">PLAY ↗</button></div></div><div class="game-wrap game-off" id="gameWrap"><div class="game-screen"><iframe id="gameFrame" data-src="fnaf_buddy_horror.html" title="Пять Ночей с Бадихоррором" allow="fullscreen; autoplay" allowfullscreen></iframe><div class="game-loading-overlay" id="gameLoadingOverlay"><span>STARTING LOCAL CLIENT…</span></div></div></div><div class="playbar"><span>NO EXTERNAL SERVER · LOCAL CLIENT · SOUND REQUIRED <span class="save-stamp" id="saveStamp">SAVE: SCANNING…</span></span></div></div></section>
+
+<section id="profile" class="section"><div class="section-title"><h3>02 // PLAYER RECORD</h3><span>LOCAL CLIENT / GENERATED IDENTITY</span></div><div class="profile-grid"><div class="panel identity-panel"><div class="identity-head"><div class="avatar-big" id="profileAvatar">OP</div><div><div class="profile-code">OPERATOR PROFILE</div><h4 id="profileHandle">NIGHT_OPERATOR</h4><div class="profile-sub" id="profileTagline">LOCAL CLIENT / UNVERIFIED</div></div><div class="profile-rank" id="profileRank">RANK 01</div></div><div class="identity-stats"><div><span>CLIENT</span><b id="profileClient">---- ----</b></div><div><span>TIMEZONE</span><b id="profileZone">SCANNING</b></div><div><span>SESSION</span><b id="profileSession">00:00:00</b></div><div><span>BUILD</span><b>BBH-2026</b></div></div><div class="identity-foot">This profile is generated locally. Nothing is uploaded.</div></div><div class="panel status-console"><div class="side-title">LIVE STATUS / PERSONALIZED</div><div class="status-row"><span>PLAYER PRESENCE</span><b id="presenceState">OBSERVED</b></div><div class="status-row"><span>LOCAL SAVE</span><b id="profileSaveState">SCANNING</b></div><div class="status-row"><span>LAST ACTION</span><b id="lastAction">WAITING</b></div><div class="status-row"><span>THREAT INDEX</span><b id="threatIndex">LOW</b></div><div class="status-meter"><i id="threatBar"></i></div><p id="profileWhisper">No unusual activity has been attached to this client yet.</p></div></div></section>
+
+<section class="section dossier"><div class="section-title"><h3>03 // BUILD DOSSIER</h3><span>FIELD NOTES / INTERNAL</span></div><div class="dossier-grid"><div class="panel dossier-card"><div class="dossier-icon">01</div><h4>NIGHT SHIFT</h4><p>Обычная рабочая смена, превращённая в локальную игру на выживание. Следи за системой, пока она ещё отвечает.</p><div class="dossier-foot">MODE / SURVIVAL</div></div><div class="panel dossier-card"><div class="dossier-icon">02</div><h4>CAMERA SYSTEM</h4><p>Переключай точки наблюдения и ищи изменения, которые невозможно заметить одним взглядом.</p><div class="dossier-foot">SYSTEM / LIVE FEED</div></div><div class="panel dossier-card"><div class="dossier-icon">03</div><h4>HIDDEN FILES</h4><p>Часть истории спрятана за интерфейсом. Не все документы были рассчитаны на публикацию.</p><div class="dossier-foot">ACCESS / PARTIAL</div></div></div></section>
+<section id="support" class="section"><div class="section-title"><h3>04 // SUPPORT CENTER</h3><span>HELP DESK / FICTIONAL ARCHIVE SERVICE</span></div><div class="support-grid"><div class="panel support-chat"><div class="chat-head"><div class="agent"><div class="agent-avatar">M7</div><div><div class="agent-name">Mila / Night Support</div><div class="agent-role">PLAYER CARE · BUILD OPERATIONS</div></div></div><div class="chat-status">ONLINE · SLA 00:07</div></div><div class="chat-log" id="chatLog"><div class="msg"><span class="who"><b>MILA</b> · SUPPORT</span>Здравствуйте. Я Мила, оператор Night Support. Если игра ведёт себя странно — это, скорее всего, уже зарегистрировано. Опишите проблему.</div><div class="msg"><span class="who"><b>SYSTEM</b> · AUTO</span>Ваш текущий локальный профиль будет прикреплён к обращению автоматически. Не отправляйте реальные личные данные.</div></div><div class="typing" id="typing"></div><div class="captcha" id="supportCaptcha"><div class="captcha-row"><button class="captcha-check" id="captchaCheck" type="button" aria-label="Verify you are not a camera"></button><div class="captcha-copy"><b>VERIFY YOU ARE NOT A CAMERA</b><span>Click the box to continue.</span></div></div><div class="captcha-status" id="captchaStatus">SECURITY CHECK PENDING</div></div><form class="chat-compose" id="chatForm"><textarea class="chat-input" id="chatInput" placeholder="Опишите проблему, попросите подсказку или напишите: СТАТУС ПРОФИЛЯ" maxlength="280"></textarea><button class="btn chat-send" type="submit">SEND ↗</button></form></div><div class="support-side"><div class="panel ticket-panel"><div class="ticket-title">CURRENT SUPPORT TICKET</div><div class="ticket-number" id="ticketNumber">BBH-000000</div><div class="ticket-meta">STATUS / <span id="ticketStatus">OPEN</span><br>PRIORITY / <span id="ticketPriority">NORMAL</span><br>LINKED SAVE / <span id="ticketSave">SCANNING</span></div></div><div class="panel ticket-panel"><div class="ticket-title">CLIENT ENVIRONMENT // AUTO-LINKED</div><div class="env-grid"><div class="env-cell"><div class="env-k">LOCAL TIME</div><div class="env-v" id="envTime">--:--:--</div></div><div class="env-cell"><div class="env-k">TIME ZONE</div><div class="env-v" id="envZone">SCANNING</div></div><div class="env-cell"><div class="env-k">PLATFORM</div><div class="env-v" id="envPlatform">SCANNING</div></div><div class="env-cell"><div class="env-k">BROWSER</div><div class="env-v" id="envBrowser">SCANNING</div></div><div class="env-cell"><div class="env-k">DISPLAY</div><div class="env-v" id="envScreen">SCANNING</div></div><div class="env-cell"><div class="env-k">CLIENT ID</div><div class="env-v" id="envClient">GENERATING</div></div></div><div class="signal"><i></i><span id="envDate">DATE LINK PENDING</span></div><div class="surveillance-note">Windows account name is intentionally unavailable to browser scripts. This terminal therefore assigns a local client label from the current browser environment.</div><div class="client-badge" id="envHandle">LOCAL HANDLE / ----</div></div><div class="panel ticket-panel"><div class="ticket-title">KNOWN INCIDENTS</div><div class="faq"><b>Игра запускается, но экран чёрный.</b><span>Проверь звук и дождись загрузки терминала. Старая версия клиента иногда делает вид, что не загрузилась.</span></div><div class="faq"><b>Ачивка не появилась.</b><span>Закрой игру штатно, подожди несколько секунд и открой архив снова. Локальный профиль синхронизируется автоматически.</span></div><div class="faq"><b>Я открыл Ночь 7. Это нормально?</b><span>Нет комментариев по этому вопросу. Ticket flag: <b style="color:#d9bd73">RESTRICTED</b>.</span></div><div class="faq"><b>Мила отвечает мне слишком быстро для ночной смены.</b><span>Время ответа не регулируется этим разделом FAQ. Обратитесь напрямую в чат, если вопрос повторится.</span></div></div><div class="panel support-note">DISCLAIMER: This support console is a fictional in-universe interface. No real support tickets are transmitted anywhere.</div></div></div></section>
+
+
+<section id="achievements" class="section"><div class="section-title"><h3>05 // ACHIEVEMENT SERVICE</h3><span>GAMEJOLT / NEWGROUNDS EMULATION · LOCAL PROFILE</span></div><div class="achievement-head"><div class="panel profile-card"><div class="profile-label">PLAYER PROFILE</div><div class="profile-name">NIGHT SHIFT OPERATOR</div><div class="profile-sub"><span class="live-dot"></span>SAVE LINK ACTIVE · THE SITE READS THE GAME'S LOCAL SAVE</div></div><div class="panel achievement-count"><b id="achCount">0 / 0</b><span>ACHIEVEMENTS SYNCHRONIZED</span></div></div><div class="ach-layout"><div class="ach-list" id="achList"></div><div class="panel ach-side"><div class="side-title">CAMPAIGN PROGRESS</div><div class="progressbar"><i id="campaignBar"></i></div><div class="progress-num"><span id="campaignText">0%</span><span id="nightText">NIGHT 1</span></div><div class="sync-log"><strong>LIVE SAVE MONITOR</strong><br><span id="monitor1">waiting for local save…</span><br><span id="monitor2">source: iframe / same-origin</span><br><span id="monitor3">key: bbh_current:bbh_save_v2</span></div><div style="margin-top:16px"><div class="mini-stat"><span>NIGHTS PASSED</span><b id="statNights">0 / 5</b></div><div class="mini-stat"><span>HARD NIGHT</span><b id="statHard">LOCKED</b></div><div class="mini-stat"><span>NIGHT 7</span><b id="statN7">LOCKED</b></div><div class="mini-stat"><span>CHALLENGES</span><b id="statChallenges">0 / 25</b></div></div></div></div></section>
+
+<section class="section"><div class="section-title"><h3>06 // TERMINAL BULLETIN</h3><span>LIVE FEED / GENERATED FOR THIS CLIENT</span></div><div class="bulletin-grid"><div class="panel bulletin-main"><div class="bulletin-stamp"><span>OFFICIAL BULLETIN</span><span id="bulletinDate">--/--/----</span></div><h4 id="bulletinTitle">WELCOME, OPERATOR.</h4><p id="bulletinText">The archive has detected a fresh local session. Current public build data is being indexed.</p><div class="bulletin-actions"><button class="btn" id="newBulletin">REFRESH BULLETIN ↻</button><span id="bulletinCode">NOTICE / BBH-LOCAL</span></div></div><div class="panel event-log"><div class="side-title">LOCAL EVENT LOG</div><div id="eventRows"><div class="event-row"><span>--:--:--</span><b>AWAITING INPUT</b><i>LOCAL</i></div></div></div></div></section>
+
+<section class="section" id="promoted" style="display:block!important;visibility:visible!important;opacity:1!important;"><div class="section-title"><h3>07 // PARTNER MESSAGE</h3><span><span class="live-dot"></span>SPONSORED / ARCHIVE FEED</span></div><div class="promo-ad ad-glitch" id="promoAd"><div class="ad-copy"><div class="ad-kicker" id="adKicker">PAID MESSAGE · VERIFIED BY NO ONE</div><h4 id="adTitle">NEED A NIGHT SHIFT?</h4><p id="adBody">Try <b>NightGuard™</b> — the only flashlight that remembers where you looked last. Now with complimentary camera coverage and absolutely no recording.</p><div class="ad-micro" id="adMicro">PROMO CODE: <strong>06:00</strong> · LIMIT: UNLIMITED · TRUST: 0%</div></div><button class="ad-btn promo-ad-btn" id="promoAdBtn" type="button">LEARN MORE ↗</button></div></section>
+<section id="archive" class="section"><div class="section-title"><h3>08 // VISUAL ARCHIVE</h3><span>RECOVERED FRAMES / INTERNAL USE</span></div><div class="grid"><article class="card shot" data-img="assets/buddy.png"><div class="card-media"><img src="assets/buddy.png" alt="Архивный кадр Buddy"><div class="scan"></div><span class="tag">FRAME 014</span></div><div class="card-meta"><small>CHARACTER / UNKNOWN</small><h4>Наблюдаемый субъект</h4><p>Старый кадр из материалов сборки. Пометка оператора: «не оставлять одного в комнате».</p></div></article><article class="card shot" data-img="assets/portrait.png"><div class="card-media"><img src="assets/portrait.png" alt="Архивный кадр наблюдателя"><div class="scan"></div><span class="tag">FRAME 027</span></div><div class="card-meta"><small>STAFF / ID REDACTED</small><h4>Последняя смена</h4><p>Фрагмент внутреннего архива. Источник изображения не подтверждён.</p></div></article><article class="card shot" data-img="assets/company.png"><div class="card-media"><img src="assets/company.png" alt="Логотип архивной компании"><div class="scan"></div><span class="tag">FILE 001</span></div><div class="card-meta"><small>COMPANY / DOCUMENT</small><h4>Корпоративный файл</h4><p>Восстановленный логотип искажённого служебного документа. Версия файла неизвестна.</p></div></article></div></section>
+
+<section class="section"><div class="section-title"><h3>09 // ARCHIVE LOCKER</h3><span>RESTRICTED / SOME FILES REQUIRE PROGRESS</span></div><div class="locker-grid"><div class="panel locker-card open" id="locker1"><div class="locker-top"><span>FILE 001</span><b>OPEN</b></div><h4>EMPLOYEE HANDBOOK</h4><p>General instructions for night operators. Nothing suspicious here.</p><button class="btn locker-btn" data-file="1">OPEN FILE</button></div><div class="panel locker-card" id="locker2"><div class="locker-top"><span>FILE 007</span><b>LOCKED</b></div><h4>RED SHIFT REPORT</h4><p>Unlocks when the archive detects sufficient progress in the game.</p><button class="btn locker-btn" data-file="2">REQUEST ACCESS</button></div><div class="panel locker-card" id="locker3"><div class="locker-top"><span>FILE 077</span><b>LOCKED</b></div><h4>DO NOT INDEX</h4><p>This file should appear only after the deepest local flag is detected.</p><button class="btn locker-btn" data-file="3">REQUEST ACCESS</button></div></div><div class="locker-status panel"><span>ARCHIVE KEY STATUS</span><b id="lockerStatus">NO SPECIAL CLEARANCE</b><small id="lockerHint">Progress through the game to reveal more files.</small></div></section>
+
+<section id="lore" class="section lore"><div class="section-title"><h3>10 // RECOVERED LORE</h3><span>FILE FRAGMENTS / 198-ARCHIVE</span></div><div class="lore-grid"><div class="panel file-sheet"><div class="file-cap"><span>FILE 7A</span><span>RECOVERED</span></div><h4>«НЕ ИСПОЛЬЗОВАТЬ ПОСЛЕ ПЯТОЙ НОЧИ»</h4><p>На старой копии терминала сохранилась одна короткая инструкция. Автор удалён из метаданных.</p><blockquote>Если экран начинает отвечать сам — система больше не показывает камеру. Она показывает то, что считает правильным.</blockquote><small>DOCUMENT INTEGRITY: 61%</small></div><div class="panel timeline"><div class="timeline-row"><span>00:00</span><b>SYSTEM ONLINE</b><i>READY</i></div><div class="timeline-row"><span>01:42</span><b>FIRST ANOMALY</b><i class="amber">UNVERIFIED</i></div><div class="timeline-row"><span>03:18</span><b>CAMERA 04 LOST</b><i class="red">MISSING</i></div><div class="timeline-row"><span>05:00</span><b>SHIFT TRANSITION</b><i>RESTRICTED</i></div><div class="timeline-row"><span>05:██</span><b>NO RECORD</b><i class="red">CORRUPTED</i></div><div class="timeline-row"><span>██:██</span><b>ENTRY WRITTEN AFTER CLOSING</b><i class="red">UNVERIFIED</i></div></div></div></section>
+
+<section id="studio" class="section"><div class="section-title"><h3>11 // ABOUT THE BUILD</h3><span>STUDIO NOTES / PRESS COPY</span></div><div class="studio-grid"><div class="panel studio"><div class="file-cap"><span>BUDDY HORROR DEVELOPMENT CELL</span><span>STATUS / ACTIVE</span></div><h4 style="margin:20px 0 8px;font:700 22px Arial">A very small team. A very bad night shift.</h4><p style="color:#818a84;font-size:13px;line-height:1.75;max-width:720px">Проект вырос из прототипа ночного терминала и постепенно превратился в полноценную игру со скрытыми режимами, челленджами и отдельной седьмой ночью. Эта страница оформлена как часть мира игры: часть данных реальна, часть намеренно выглядит подозрительно.</p><div class="team-row"><div class="avatar">AD</div><div><strong>ARCHIVE DESIGN</strong><small>interface / visual direction</small></div><em>ONLINE</em></div><div class="team-row"><div class="avatar">SD</div><div><strong>SYSTEMS / CODE</strong><small>gameplay / nights / save service</small></div><em>LOCAL</em></div><div class="team-row"><div class="avatar">AU</div><div><strong>AUDIO UNIT</strong><small>sound / ambience / terminal noise</small></div><em>SYNCED</em></div></div><div class="panel changelog"><div class="side-title" style="padding-top:6px">CHANGELOG</div><div id="changelogList"></div></div></div></section>
+
+<section class="section"><div class="section-title"><h3>12 // FIELD REVIEWS</h3><span>COMMUNITY ARCHIVE / UNVERIFIED</span></div><div class="review-grid" id="fieldReviewsGrid"></div></section>
+
+<section id="terminal" class="section"><div class="section-title"><h3>13 // SIGNAL & COMMUNITY</h3><span>PUBLIC NODE / UNVERIFIED TRANSMISSIONS</span></div><div class="meta-grid"><div class="panel signal-panel"><div class="side-title">SIGNAL ANALYZER / LOCAL FEED</div><div class="wave"><canvas id="signalCanvas"></canvas></div><div class="frequency"><span>CHANNEL <b id="signalChannel">03</b></span><span>FREQ <b id="signalFreq">017.4</b></span><span>NOISE <b id="signalNoise">LOW</b></span></div><div class="signal-controls" style="margin-top:15px"><button class="signal-btn active" data-channel="03">CAM 03</button><button class="signal-btn" data-channel="05">CAM 05</button><button class="signal-btn" data-channel="07">CAM 07</button><button class="signal-btn" data-channel="00">UNKNOWN</button></div><div class="visitor"><span>VISITORS IN CURRENT NODE</span><b id="visitorCount">000000</b></div></div><div class="panel signal-panel"><div class="side-title">NODE TRANSMISSIONS</div><div class="notice-stack" id="noticeStack"><div class="notice-card" data-detail="Клиенты жаловались на разрыв соединения ровно в 03:17. Окно обслуживания продлили, чтобы никто не заметил совпадение."><small>09.06 / NODE-01</small><b>ARCHIVE WINDOW EXTENDED</b><span>Local clients may remain connected beyond scheduled maintenance.</span></div><div class="notice-card" data-detail="Три реплики были удалены модерацией дважды. Восстановлены они были из кэша, которого, по документам, не существует."><small>07.06 / MODERATION</small><b>COMMENTS RESTORED</b><span>Three missing replies were recovered from an offline cache.</span></div><div class="notice-card" data-detail="[ЧАСТИЧНО ВОССТАНОВЛЕНО] «...если вы читаете это, канал UNKNOWN уже не так уж и неизвестен...»"><small>??.?? / UNKNOWN</small><b>MESSAGE WITHHELD</b><span>This transmission cannot be displayed on the public node.</span></div><div class="notice-card" data-detail="Тикет открылся раньше, чем поддержка получила первое сообщение. Разница по времени в логах — отрицательная. Раздел техподдержки закрыл вопрос без объяснений."><small>??.?? / SUPPORT</small><b>TICKET TIMESTAMP MISMATCH</b><span>A support ticket was logged before the first message was sent.</span></div></div></div></div></section>
+<section id="community" class="section"><div class="section-title"><h3>14 // COMMUNITY BOARD</h3><span>PLAYER REPORTS / MODERATION PARTIAL</span></div><div class="community" id="communityStaticPosts"></div><div class="community-tools"><div class="panel comment-box"><h4>LEAVE A FIELD COMMENT</h4><p>Оставьте сообщение в локальном архиве. Публичная синхронизация отключена: комментарий хранится только в этом браузере.</p><form class="comment-form" id="commentForm"><input class="comment-name" id="commentName" maxlength="24" placeholder="CALLSIGN" autocomplete="off"><textarea class="comment-input" id="commentText" maxlength="240" placeholder="Ваш комментарий..."></textarea><button class="btn" type="submit">POST ↗</button></form><div class="comment-limit" id="commentLimit">LOCAL BOARD · 0 / 12 ENTRIES</div></div><div class="panel comment-list" id="commentList"><div class="comment-empty" id="commentEmpty">NO LOCAL COMMENTS YET.<br>BE THE FIRST OPERATOR.</div></div></div></section>
+<section id="console" class="section"><div class="section-title"><h3>15 // ARCHIVE CONSOLE</h3><span>LOCAL COMMAND INTERFACE</span></div><div class="panel signal-panel command-panel"><div><div class="side-title">ENTER QUERY</div><input id="archiveCommand" class="command-input" autocomplete="off" placeholder="Введите запрос. Архив отвечает не всем одинаково."></div><button class="btn" id="commandRun">EXECUTE ↗</button><div class="command-output" id="commandOutput"><strong>ARCHIVE READY.</strong><br>Type <b>help</b> for available commands.</div></div></section>
+
+<section id="secretNode" class="section secret-section"><div class="section-title"><h3>██ // RESTRICTED NODE</h3><span>INDEX STATUS / FAILED</span></div><div class="secret-grid"><div class="panel secret-core secret-pulse"><div class="secret-eyebrow">ARCHIVE / LEVEL ??? / LOCAL OVERRIDE</div><h3>YOU FOUND<br><span>THE WRONG PAGE.</span></h3><p>Этот раздел не существует в публичном индексе. Он появился только потому, что ваш клиент выполнил последовательность, которую архив не должен был принимать.</p><div class="secret-redact" id="secretRedact">[03:17] REQUEST ACCEPTED<br>[03:17] PUBLIC INDEX BYPASS<br>[03:18] OBSERVER COUNT: <span id="observerCount">01</span><br>[03:18] <b>PLEASE DO NOT CONTINUE</b></div><button class="btn" id="decodeFragment" style="margin-top:12px">DECODE NEXT FRAGMENT ↗</button><div class="secret-unlock">ACCESS GRANTED / SESSION-SPECIFIC</div></div><div class="panel secret-side"><div class="side-title">RECOVERED NODE DATA</div><div class="logline"><b>EVENT 03:17</b><br>Источник запроса не совпадает с зарегистрированным UI.</div><div class="logline"><b>CAMERA 00</b><br>Нет изображения. Только временная метка.</div><div class="logline"><b>OPERATOR</b><br><span id="secretOperator">UNRESOLVED</span></div><div class="logline"><b>LOCAL CLOCK</b><br><span id="secretClock">--:--:--</span></div><div class="logline"><b>WARNING</b><br>Не закрывайте вкладку, если хотите увидеть следующий файл.</div><button class="btn" id="secretClose" style="margin-top:18px">CLOSE NODE ↗</button></div></div></section>
+
+<section id="about" class="section"><div class="section-title"><h3>16 // INCIDENT REPORT</h3><span>DECLASSIFIED / PARTIAL</span></div><div class="about-grid"><div class="panel note"><p><em>Объект:</em> ночной терминал наблюдения.</p><p><em>Задача:</em> пережить смену и не дать системе перейти в аварийный режим.</p><p><em>Примечание:</em> часть сведений намеренно оставлена пустой. Некоторые события должны быть обнаружены непосредственно во время прохождения.</p><div class="meter"><i></i></div><div class="log">[00:00:01] <span class="ok">SIGNAL ACQUIRED</span><br>[00:00:04] CAMERA NETWORK CONNECTED<br>[00:00:08] <span class="warn">UNLISTED PROCESS FOUND</span><br>[00:00:13] NIGHT CYCLE ARMED<br>[00:00:17] <span class="bad">DO NOT LEAVE TERMINAL</span></div></div><div class="panel note"><div class="log">ARCHIVE INDEX<br><br><span class="ok">✓</span> playable build<br><span class="ok">✓</span> character records<br><span class="ok">✓</span> achievement service<br><span class="ok">✓</span> local save monitor<br><span class="warn">?</span> missing camera feed<br><span class="warn">?</span> night five report<br><span class="bad">!</span> source integrity compromised<br><br>LAST SYNCHRONIZATION<br><strong id="lastSync" style="color:#cbd0cc">SCANNING</strong></div></div></div></section>
+
+<div class="footer"><span>BUDDY HORROR ARCHIVE · <strong>PRIVATE DISTRIBUTION BUILD</strong></span><span><a href="#game">RETURN TO TERMINAL ↑</a> &nbsp;·&nbsp; SAVE LINK / ACTIVE &nbsp;·&nbsp; © 2026</span><span style="color:#040504;user-select:text;" aria-hidden="true">Если ты выделил этот текст, чтобы прочитать его — она делала то же самое.</span></div>
+</main>
+<div class="modal" id="modal"><div class="modal-box"><div class="modal-top"><span>ARCHIVE VIEWER // <span id="modalName">FRAME</span></span><button class="close" id="close">CLOSE ×</button></div><div class="modal-stage"><img id="modalImg" src="" alt="Просмотр архивного кадра"></div><div class="hint">CLICK OUTSIDE TO RETURN · IMAGE IS PART OF THE LOCAL BUILD ARCHIVE</div></div></div>
+<div class="modal" id="lockerModal"><div class="modal-box"><div class="modal-top"><span>ARCHIVE VIEWER // <span id="lockerModalName">FILE</span></span><button class="close" id="lockerModalClose">CLOSE ×</button></div><div class="modal-stage locker-doc" id="lockerModalBody"></div><div class="hint">CLICK OUTSIDE TO RETURN · DOCUMENT IS PART OF THE LOCAL BUILD ARCHIVE</div></div></div>
+<button class="support-launch" id="supportLaunch"><span class="pulse"></span>OPEN SUPPORT <span class="support-unread" id="supportUnread">1</span></button><div id="achToastStack"></div>
+<script>
+const shell=document.querySelector('.game-screen'), full=document.getElementById('full'), gameFrame=document.getElementById('gameFrame'), gameWrap=document.getElementById('gameWrap'), gamePlay=document.getElementById('gamePlay'), gameLaunchState=document.getElementById('gameLaunchState'), gameLaunchPanel=document.getElementById('gameLaunchPanel');
+let gameStarted=false;
+function setGameStatus(text){if(gameLaunchState)gameLaunchState.textContent=text}
+function startGame(){
+  if(gameStarted)return;
+  const src=gameFrame&&gameFrame.dataset.src;
+  if(!gameFrame||!src)return;
+  gameStarted=true;
+  if(gamePlay){gamePlay.disabled=true;gamePlay.textContent='STARTING…'}
+  if(gameLaunchPanel)gameLaunchPanel.classList.add('started');
+  if(gameWrap)gameWrap.classList.remove('game-off');
+  if(gameWrap)gameWrap.classList.add('game-starting');
+  setGameStatus('GAME STARTING · LOADING LOCAL CLIENT');
+  gameFrame.src=src;
+  if(typeof window.BBHSFX?.play==='function')window.BBHSFX.play('open');
+  setTimeout(()=>{if(gameWrap)gameWrap.classList.remove('game-starting');if(gamePlay){gamePlay.textContent='PLAYING ↗'}setGameStatus('GAME ONLINE · LOCAL CLIENT ACTIVE');if(full)full.disabled=false;},900);
+}
+if(gamePlay)gamePlay.addEventListener('click',startGame);
+if(full){full.onclick=async()=>{if(!gameStarted){startGame();return}try{if(document.fullscreenElement)await document.exitFullscreen();else await shell.requestFullscreen()}catch(e){const f=shell&&shell.querySelector('iframe');if(f&&f.requestFullscreen)f.requestFullscreen().catch(()=>{})}};
+document.addEventListener('fullscreenchange',()=>{full.textContent=document.fullscreenElement?'EXIT FULLSCREEN ↙':'FULLSCREEN ↗'});}
+const modal=document.getElementById('modal'), modalImg=document.getElementById('modalImg');
+document.querySelectorAll('.shot').forEach((c,i)=>c.onclick=()=>{modalImg.src=c.dataset.img;document.getElementById('modalName').textContent='FRAME '+String(i+1).padStart(3,'0');modal.classList.add('open')});
+function closeModal(){modal.classList.remove('open');modalImg.src=''}
+document.getElementById('close').onclick=closeModal;modal.onclick=e=>{if(e.target===modal)closeModal()};document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal()});
+
+/* archive locker document viewer */
+const LOCKER_DOCS={
+  1:{name:'FILE 001 // EMPLOYEE HANDBOOK',html:'<h5>NIGHT OPERATOR HANDBOOK — REV. 3</h5><p>Добро пожаловать в архив. Ваша единственная задача — оставаться на смене до 06:00 и не тратить заряд без необходимости.</p><p>Раздел 4.2: если камера показывает пустой коридор дольше 10 секунд, это считается нормой в 94% смен.</p><p>Раздел 7.1: жалобы на «шум за дверью» не обрабатываются в рабочее время архива.</p><div class="redact">[ARCHIVED COPY] Оригинал документа хранится локально в этом браузере и не отправляется на сервер.</div><div class="stamp">FILE STATUS: PUBLIC · CLEARANCE: NONE REQUIRED</div>'},
+  2:{name:'FILE 007 // RED SHIFT REPORT',html:'<h5>RED SHIFT REPORT — RESTRICTED</h5><p>Отчёт зарегистрирован после подтверждённого прохождения усложнённой смены на этом клиенте.</p><p>Запись 1: активность выше ожидаемой нормы зафиксирована на всех работающих камерах одновременно.</p><p>Запись 2: терминал продолжил логирование событий в течение 40 минут после закрытия игры.</p><div class="redact">[03:1_] ЗАПИСЬ ПОВРЕЖДЕНА — ВОССТАНОВЛЕНО ЧАСТИЧНО</div><div class="stamp">FILE STATUS: LEVEL 2 CLEARANCE · LINKED TO THIS SAVE</div>'},
+  3:{name:'FILE 077 // DO NOT INDEX',html:'<h5>DO NOT INDEX</h5><p>Этот файл не должен был появиться в публичном архиве. Его существование подтверждается только для клиентов, прошедших Ночь 7.</p><p>Наблюдатель отмечает: количество зафиксированных смен превышает количество смен, которые были фактически сыграны на этом устройстве.</p><div class="redact">[03:17] PUBLIC INDEX BYPASS<br>[03:18] OBSERVER COUNT: 01<br>[03:18] PLEASE DO NOT CONTINUE</div><div class="stamp">FILE STATUS: RED CLEARANCE · SESSION-SPECIFIC</div>'}
+};
+const lockerModal=document.getElementById('lockerModal'),lockerModalBody=document.getElementById('lockerModalBody'),lockerModalName=document.getElementById('lockerModalName');
+function openLockerDoc(n){const doc=LOCKER_DOCS[n];if(!doc)return;lockerModalName.textContent=doc.name;lockerModalBody.innerHTML=doc.html;lockerModal.classList.add('open')}
+function closeLockerModal(){lockerModal.classList.remove('open')}
+document.getElementById('lockerModalClose').onclick=closeLockerModal;lockerModal.onclick=e=>{if(e.target===lockerModal)closeLockerModal()};document.addEventListener('keydown',e=>{if(e.key==='Escape')closeLockerModal()});
+
+/* randomized field reviews + community posts (pool shuffled on every page load) */
+function shuffleSample(arr,n){const a=arr.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a.slice(0,n)}
+const REVIEW_POOL=[
+  {stars:'★★★★★',text:'«Сайт каким-то образом заметил, что я прошёл ночь, ещё до того как я закрыл игру. Не понимаю, почему это немного страшнее самой игры.»',author:'USER_014 · VERIFIED LOCAL PROFILE'},
+  {stars:'★★★★☆',text:'«Я зашёл просто посмотреть архив, а потом обнаружил, что у меня появилась ачивка за то, чего я даже не помню. Очень плохой знак.»',author:'ANON. / CAMERA LOG 03'},
+  {stars:'★★★★★',text:'«Лучший вайб официального архива, который можно было дать маленькой хоррор-игре. Особенно вкладка с сохранением.»',author:'INTERNAL TESTER · BUILD BETA'},
+  {stars:'★★★☆☆',text:'«Оставил вкладку открытой на ночь. Утром счётчик визитов вырос на 4000. Я был один.»',author:'OPERATOR_88X4 · UNVERIFIED'},
+  {stars:'★★★★★',text:'«Спросил поддержку, который час. Она ответила раньше, чем я успел это осознать. Всё в порядке, наверное.»',author:'GUEST_UNKNOWN'},
+  {stars:'★★★★☆',text:'«Файл 007 открылся сам, без запроса, через минуту после того как я прошёл сложную ночь. Совпадение.»',author:'NIGHT_OP_12 · LOCAL PROFILE'},
+  {stars:'★★★☆☆',text:'«Реклама фонарика знает, что я боюсь темноты. Я никому об этом не говорил.»',author:'ANON. / CAMERA LOG 07'},
+  {stars:'★★★★★',text:'«Архив вежливо попросил меня не закрывать вкладку. Я закрыл. Ничего не случилось. Наверное.»',author:'USER_owl17'},
+  {stars:'★★★★☆',text:'«Указал своё имя при входе просто чтобы посмотреть игру. Теперь бюллетень обращается ко мне по имени. Я его нигде больше не вводил.»',author:'GUEST_0044'},
+  {stars:'★★★☆☆',text:'«Закрыл вкладку посреди ночи. Утром счётчик наблюдателей был на единицу больше, чем перед закрытием.»',author:'LOCAL_PROFILE_9'},
+  {stars:'★★★★★',text:'«Ввёл в консоль "history". Там была команда, которую я точно не набирал.»',author:'OPERATOR_R9 · ARCHIVE CONSOLE'},
+  {stars:'★★★★☆',text:'«Поддержка написала "печатает", хотя я закрыл чат шесть минут назад. Сообщение так и не пришло.»',author:'ANON. / TICKET CLOSED'},
+  {stars:'★★★☆☆',text:'«Спросил, одна ли Мила в тикете. Она ответила "формально нет". Больше вопросов не было.»',author:'GUEST_772'}
+];
+const COMMUNITY_POOL=[
+  {name:'user_owl17',stars:'★★★★★',title:'«Почему поддержка знает, когда я играю?»',body:'Зашёл просто посмотреть архив. Потом прошёл первую ночь, обновил страницу — и там уже было написано, что я вернулся.',reply:'MILA // «Некоторые системы синхронизируются быстрее других.»'},
+  {name:'nightshift.exe',stars:'★★★★☆',title:'«Файл 077 — это шутка?»',body:'Открыл его после Ночи 7. Не буду спойлерить. Но почему дата создания файла меняется каждый раз?',reply:'MODERATION // Comment retained for archival purposes.'},
+  {name:'guest_000',stars:'★★★☆☆',title:'«Сайт иногда говорит сам с собой»',body:'Оставил вкладку открытой. Через час появился новый системный лог, хотя я ничего не нажимал.',reply:'SYSTEM // Session activity may continue while terminal is open.'},
+  {name:'coldcoffee_op',stars:'★★★★☆',title:'«Бюллетень меняется каждый раз по-разному»',body:'Обновил бюллетень раз десять подряд от скуки. Ни одного повтора. Не знаю, радоваться или нет.',reply:'MODERATION // Bulletin rotation is expected behaviour.'},
+  {name:'anon_local_04',stars:'★★★☆☆',title:'«Реклама меняется от клика к клику»',body:'Нажал LEARN MORE четыре раза подряд. Каждый раз новый бренд. Ни один из них явно не существует.',reply:'MILA // «Партнёрская программа архива очень гибкая.»'},
+  {name:'basement_watcher',stars:'★★★★★',title:'«Профиль обновился без перезагрузки»',body:'Играл в другой вкладке, вернулся сюда — ранг и статистика уже другие. Никого не просил обновлять.',reply:'SYSTEM // Local profile syncs automatically while the tab is open.'},
+  {name:'sysop_null',stars:'★★★★☆',title:'«Консоль отвечает на команды, которые я не вводил»',body:'Ввёл help, потом отвлёкся. Когда вернулся, в выводе была команда "who", а я её точно не набирал.',reply:'SYSTEM // Console output reflects the last recognized query only.'},
+  {name:'tapewatcher_04',stars:'★★★☆☆',title:'«Кто-то написал в тикет раньше меня»',body:'Открыл поддержку впервые — а статус тикета уже "OPEN" с приоритетом выше нормального. Я ничего не отправлял.',reply:'MILA // «Тикет мог быть создан клиентом раньше вас. Формально.»'}
+];
+const CHANGELOG_POOL=[
+  {ver:'v0.9.6 // «STILL HERE»',text:'Добавлены ачивки, локальный профиль и уведомления о прохождении ночей.'},
+  {ver:'v0.9.3 // «SEVEN»',text:'Добавлена цепочка условий, ведущая к Ночи 7.'},
+  {ver:'v0.8.8 // «DON\'T LOOK»',text:'Стабилизирована система камер и несколько особенно подозрительных событий.'},
+  {ver:'v0.7.1 // INTERNAL',text:'Первые тесты ночной смены. Записи частично повреждены.'},
+  {ver:'v0.6.4 // «QUIET BUILD»',text:'Отключено логирование части ошибок. Часть отчётов теперь не сохраняется вовсе.'},
+  {ver:'v0.5.9 // ARCHIVE SYNC',text:'Локальный архив впервые начал сохранять состояние между визитами.'},
+  {ver:'v0.4.2 // «WRONG PAGE»',text:'Добавлен неучтённый раздел. Причина появления в тикетах не указана.'},
+  {ver:'v0.3.0 // FIRST BUILD',text:'Первая публичная сборка терминала. Часть текстов ещё на месте разработчика.'},
+  {ver:'v0.9.9 // «CONSOLE»',text:'Добавлена ARCHIVE CONSOLE. Часть команд не задокументирована намеренно.'},
+  {ver:'v0.2.4 // PRE-ALPHA',text:'Внутренняя сборка без публичного доступа. Файл попал в этот список по ошибке.'}
+];
+(function(){
+  const reviewGrid=document.getElementById('fieldReviewsGrid');
+  if(reviewGrid){shuffleSample(REVIEW_POOL,3).forEach(r=>{const el=document.createElement('div');el.className='panel review';el.innerHTML='<div class="stars">'+r.stars+'</div><p>'+r.text+'</p><small>— '+r.author+'</small>';reviewGrid.appendChild(el)})}
+  const postWrap=document.getElementById('communityStaticPosts');
+  if(postWrap){shuffleSample(COMMUNITY_POOL,3).forEach(p=>{const el=document.createElement('article');el.className='post';el.innerHTML='<div class="post-head"><span>'+p.name+'</span><span>'+p.stars+'</span></div><h4>'+p.title+'</h4><p>'+p.body+'</p><div class="reply">'+p.reply+'</div>';postWrap.appendChild(el)})}
+  const changelogWrap=document.getElementById('changelogList');
+  if(changelogWrap){shuffleSample(CHANGELOG_POOL,4).forEach(c=>{const el=document.createElement('div');el.className='change';el.innerHTML='<b>'+c.ver+'</b><span>'+c.text+'</span>';changelogWrap.appendChild(el)})}
+})();
+
+/* restricted node: observer count ticks + decodable fragments */
+(function(){
+  const OBS_KEY='bbh_observer_count_v1';
+  const el=document.getElementById('observerCount');
+  if(el){
+    let n=Number(localStorage.getItem(OBS_KEY)||1);
+    el.textContent=String(n).padStart(2,'0');
+    setInterval(()=>{if(!document.getElementById('secretNode').classList.contains('unlocked'))return;n+=1;localStorage.setItem(OBS_KEY,n);el.textContent=String(n).padStart(2,'0')},18000);
+  }
+  const FRAGMENTS=[
+    '[03:19] UNKNOWN PROCESS ATTACHED TO THIS TAB',
+    '[03:21] LOCAL CLOCK DRIFT DETECTED: +0.4s',
+    '[03:24] CAMERA 00 REQUESTED ACCESS. DENIED BY DEFAULT POLICY.',
+    '[03:29] OBSERVER COUNT WILL NOT DECREASE',
+    '[03:41] THIS FRAGMENT WAS NOT SUPPOSED TO BE RECOVERABLE',
+    '[03:47] OPERATOR NAME MATCHES A PREVIOUS SESSION ON THIS DEVICE',
+    '[03:52] DECODE BUTTON PRESSED BEFORE THIS PAGE FINISHED LOADING',
+    '[03:59] SEE YOU AT THE NEXT NIGHT'
+  ];
+  let fragIdx=0;
+  const btn=document.getElementById('decodeFragment'),redact=document.getElementById('secretRedact');
+  if(btn&&redact){
+    btn.addEventListener('click',()=>{
+      if(fragIdx>=FRAGMENTS.length){btn.disabled=true;btn.textContent='NO FURTHER FRAGMENTS';return}
+      const line=document.createElement('div');line.innerHTML=FRAGMENTS[fragIdx];redact.appendChild(line);
+      fragIdx++;
+      if(typeof logEvent==='function')logEvent('FRAGMENT DECODED '+fragIdx+'/'+FRAGMENTS.length,'SECRET');
+      if(fragIdx>=FRAGMENTS.length){btn.disabled=true;btn.textContent='NO FURTHER FRAGMENTS'}
+    });
+  }
+})();
+
+
+/* fictional support console */
+const chatLog=document.getElementById('chatLog'),chatForm=document.getElementById('chatForm'),chatInput=document.getElementById('chatInput'),typing=document.getElementById('typing');
+function addMsg(who,text,user=false){const el=document.createElement('div');el.className='msg'+(user?' user':'');el.innerHTML='<span class="who"><b>'+esc(who)+'</b> · '+(user?'PLAYER':'SUPPORT')+'</span>'+esc(text);chatLog.appendChild(el);chatLog.scrollTop=chatLog.scrollHeight}
+function getBrowserName(){const ua=navigator.userAgent; if(/Edg\//.test(ua)) return 'Microsoft Edge'; if(/OPR\//.test(ua)) return 'Opera'; if(/Chrome\//.test(ua)) return 'Chrome'; if(/Firefox\//.test(ua)) return 'Firefox'; if(/Safari\//.test(ua)&&!/Chrome\//.test(ua)) return 'Safari'; return 'Unknown browser'}
+function getPlatformName(){const p=(navigator.userAgentData&&navigator.userAgentData.platform)||navigator.platform||'Unknown'; if(/Win/i.test(p)) return 'Windows'; if(/Mac/i.test(p)) return 'macOS'; if(/Linux/i.test(p)) return 'Linux'; return p}
+function hashish(v){let h=2166136261; for(let i=0;i<v.length;i++){h^=v.charCodeAt(i); h=Math.imul(h,16777619)} return (h>>>0).toString(16).toUpperCase().padStart(8,'0')}
+function clientSnapshot(){const d=new Date();const zone=Intl.DateTimeFormat().resolvedOptions().timeZone||'Unknown';const base=[navigator.platform,navigator.language,screen.width+'x'+screen.height,zone,navigator.hardwareConcurrency||'?',devicePixelRatio||1].join('|');const id='CLI-'+hashish(base).slice(0,6);return {d,zone,platform:getPlatformName(),browser:getBrowserName(),screen:`${screen.width}×${screen.height} / DPR ${devicePixelRatio||1}`,lang:navigator.language||'?',id,handle:'LOCAL-'+hashish((navigator.language||'?')+'|'+zone).slice(0,5)}}
+function updateEnvironment(){const x=clientSnapshot();document.getElementById('envTime').textContent=x.d.toLocaleTimeString('ru-RU',{hour12:false});document.getElementById('envZone').textContent=x.zone;document.getElementById('envPlatform').textContent=x.platform;document.getElementById('envBrowser').textContent=x.browser;document.getElementById('envScreen').textContent=x.screen;document.getElementById('envClient').textContent=x.id;document.getElementById('envDate').textContent=x.d.toLocaleDateString('ru-RU',{weekday:'short',year:'numeric',month:'2-digit',day:'2-digit'}).toUpperCase()+' · '+x.d.toLocaleTimeString('ru-RU',{hour12:false});document.getElementById('envHandle').textContent='LOCAL HANDLE / '+x.handle}
+updateEnvironment(); setInterval(updateEnvironment,1000);
+const milaReplyState={last:'',index:0};
+function supportReply(q){const t=q.toLowerCase();const s=readSave();const env=clientSnapshot();const now=env.d.toLocaleTimeString('ru-RU',{hour12:false});const today=env.d.toLocaleDateString('ru-RU');
+  const choose=arr=>{let pool=arr.filter(x=>x!==milaReplyState.last);if(!pool.length)pool=arr;const answer=pool[milaReplyState.index%pool.length];milaReplyState.index=(milaReplyState.index+1)%Math.max(pool.length,1);milaReplyState.last=answer;return answer};
+  if(t.includes('привет')||t.includes('здрав'))return choose(['Здравствуйте. Мила из Night Support на связи. Чем могу помочь?','Привет. Я Мила, ночной оператор поддержки. Опишите, что пошло не так.','Добрый вечер. Я уже в тикете. Расскажите, что случилось.']);
+  if(t.includes('кто я')||t.includes('мой компьютер')||t.includes('данные')||t.includes('что вы видите'))return choose([`Я вижу локальную среду клиента: ${env.platform}, ${env.browser}, ${env.zone}, ${env.screen}. Сейчас у вас ${today}, ${now}. Вместо имени Windows ваш терминал помечен как ${env.id}.`,`Ваш клиент определяется как ${env.id}. Браузер: ${env.browser}, платформа: ${env.platform}, дисплей: ${env.screen}. Реальное имя пользователя системе недоступно.`,`Да, кое-что вижу: ${env.platform} / ${env.browser} / ${env.zone}. Локальный идентификатор этой сессии — ${env.id}.`]);
+  if(t.includes('время')||t.includes('который час')||t.includes('дата'))return choose([`По локальному времени устройства сейчас ${today}, ${now}. Часовой пояс: ${env.zone}.`,`Сейчас ${now}, дата ${today}. Да, терминал знает точное время — не спрашивайте почему.`,`Время клиента: ${now}. Дата: ${today}. Синхронизация локальная, сервер часов здесь не нужен.`]);
+  if(t.includes('статус')||t.includes('профил')||t.includes('ачив'))return choose([`Проверка завершена. Профиль ${(s.ts?'подключён':'обнаружен без активного сохранения')}. Пройдено ночей: ${Math.min(5,Math.max(0,s.maxNight-1))}/5. Ночь 7: ${(s.arg.night7Won?'ПРОЙДЕНА':s.arg.night7Unlocked?'ОТКРЫТА':'ЗАКРЫТА')}.`,`Статус чистый: локальный клиент ${env.id}. Сохранение ${(s.ts?'найдено':'не найдено')}; прогресс ${(Math.min(5,Math.max(0,s.maxNight-1)))}/5 ночей.`,`Профиль отвечает. Я вижу текущий прогресс и флаги сохранения. Ночь 7 — ${s.arg.night7Won?'пройдена':s.arg.night7Unlocked?'доступна':'пока закрыта'}.`]);
+  if(t.includes('ночь 7')||t.includes('семь'))return s.arg.night7Unlocked?choose([`Я вижу флаг NIGHT_7_UNLOCKED. И да — система знает, что вы сейчас на ${env.platform}. Не спрашивайте, откуда она знает время ${now}.`,`Ночь 7 действительно зарегистрирована для этого клиента. Флаг доступа активен; остальное лучше проверить в самой игре.`]):choose(['По вашему профилю Ночь 7 пока не зарегистрирована. Условия доступа скрыты.','Флаг NIGHT_7_UNLOCKED пока отсутствует. Не могу выдать доступ вручную.','Ночь 7 закрыта для текущего сохранения. Пройдите доступные смены и синхронизация обновится.']);
+  if(t.includes('сохран')||t.includes('save'))return s.ts?choose([`Локальное сохранение найдено. Последняя отметка: ${new Date(s.ts).toLocaleString('ru-RU')}. Клиент: ${env.id}. Серверной копии нет.`,`Save обнаружен. Профиль связан с локальной отметкой ${new Date(s.ts).toLocaleTimeString('ru-RU')}. Всё хранится в браузере.`]):choose(['Сохранение не найдено. Запустите игру и завершите хотя бы одну смену.','Пока пусто: клиент не увидел локального save. Попробуйте сыграть и вернуться сюда.']);
+  if(t.includes('чёрн')||t.includes('черн')||t.includes('не запуск'))return choose([`Попробуйте полноэкранный режим. На ${env.browser} область клиента ${env.screen}.`,`Если экран чёрный, проверьте запуск через кнопку PLAY, а не перезагрузку iframe. После 05:00 возможны отдельные аномалии.`,`Похоже на проблему запуска локального клиента. Сначала нажмите PLAY, затем дождитесь статуса GAME ONLINE.`]);
+  if(t.includes('страш')||t.includes('боюсь')||t.includes('мне страшно'))return choose([`Я бы не называла это штатной функцией поддержки. Но вкладку можно закрыть в любой момент — локальный архив это переживёт.`,`Понимаю. Могу хотя бы проверить статус клиента, сохранение или время. Остальное лучше не форсировать.`,`За безопасность вкладки я отвечаю лучше, чем за то, что происходит после 05:00.`]);
+  if(t.includes('кто ты')||t.includes('ты кто')||t.includes('ты бот')||t.includes('ты человек')||t.includes('ты жива')||t.includes('живая ли'))return choose([`Я Мила, ночной оператор поддержки. Живая ли я — вопрос не по этому тикету.`,`В карточке оператора значится «активна». Более развёрнутого статуса у меня нет.`,`Достаточно, чтобы решить вашу проблему. А хотите ли вы правда знать больше — уже другой вопрос.`,`Технически — да. Формально — зависит от того, что вы вкладываете в слово «технически».`]);
+  if(t.includes('один')||t.includes('одна')||t.includes('одинок')||t.includes('тут кто-то')||t.includes('есть кто'))return choose([`Формально в тикете два участника: вы и я. Формально.`,`Не думаю, что вы сейчас совсем одни. Дальше это уже не тема поддержки первого уровня.`,`Хороший вопрос для ${now}. На вашем месте я бы не проверяла камеру прямо сейчас.`]);
+  if(t.includes('камер')||t.includes('видишь ли ты меня')||t.includes('следиш')||t.includes('наблюда'))return choose([`Доступ к веб-камере не запрашивался и не используется. Формально я вижу только ${env.platform}, ${env.browser}, ${env.screen}.`,`Я не смотрю на вас через камеру. Мне это и не нужно — ${env.id} и так говорит достаточно.`,`Камера не задействована в поддержке. Хотя, честно, иногда было бы проще, если бы задействована.`]);
+  if(t.includes('почему')||t.includes('зачем')||/\bwhy\b/.test(t))return choose([`Потому что архив так настроен. Я просто отвечаю на тикеты — причины выше моего уровня доступа.`,`Это вопрос не к поддержке первого уровня. Могу эскалировать, но эскалация отсюда никуда не уходит.`,`Затем же, зачем терминал знает время без вашего разрешения. Меня тоже никто не спрашивал.`]);
+  if(t.includes('спасибо')||t.includes('благодар'))return choose([`Пожалуйста. Обращайтесь снова — вы обратитесь, я почти уверена.`,`Не за что. Ticket клиента ${env.id} остаётся открытым на случай, если понадобится ещё.`,`Всегда рада. Хотя «рада» — не совсем то слово, которое мне стоило бы использовать.`]);
+  if(t.includes('пока')||t.includes('до свидан')||t.includes('ухожу')||t.includes('закрываю вкладку')||t.includes('выхожу'))return choose([`Хорошо. Тикет останется открытым — закрыть его отсюда я не могу.`,`До связи. Вкладку можно закрыть, локальная синхронизация всё равно продолжится.`,`Понимаю. На всякий случай: закрытие вкладки не считается закрытием тикета.`]);
+  if(t.includes('дура')||t.includes('бесполезн')||t.includes('плохо работ')||t.includes('тупая'))return choose([`Понимаю ваше недовольство. Я всё равно останусь на линии до конца смены — деваться мне особо некуда.`,`Жалоба зафиксирована. Замечу только, что грубость не ускоряет синхронизацию сохранения.`,`Принято к сведению. Отвечаю тем же тоном, что и обычно — это, в общем-то, не мой выбор.`]);
+  if(t.includes('дверь')||t.includes('стук')||t.includes('шум')||t.includes('звук за'))return choose([`Раздел 7.1 хендбука прямо говорит: жалобы на шум за дверью не обрабатываются в рабочее время архива. Прошу прощения за формальность.`,`Если стук повторяется через равные интервалы — это, вероятно, вентиляция. Если нет — тоже, вероятно, вентиляция.`,`Звук зафиксирован системой как «фоновый». Причина фона не уточняется.`]);
+  if(t.includes('файл')||t.includes('редакт')||t.includes('do not index')||t.includes('077'))return choose([`Файлы архива открываются по мере прогресса. Я не выдаю доступ к ним из чата — и, честно, не всегда знаю, кто выдаёт.`,`Что бы вы ни прочитали в файле, тикет это не изменит. Если станет не по себе — просто закройте вкладку.`,`Некоторые файлы значатся как публичные по ошибке. Я бы не спешила это исправлять на вашем месте.`]);
+  if(t.includes('мила'))return choose([`Да, это я. Не думала, что вы обратитесь по имени так рано в смене.`,`Слушаю. Обычно операторы поддержки не любят, когда их называют по имени — я не против.`,`Записываю: клиент ${env.id} знает моё имя. Раньше это не отмечалось в тикете так часто.`]);
+  if(t.includes('уходи')||t.includes('замолчи')||t.includes('отстань')||t.includes('заткнись'))return choose([`Хорошо. Перестаю отвечать на этот тикет через ${3+Math.floor(Math.random()*4)} секунд. Не проверяйте, сдержала ли я слово.`,`Понимаю. Обычно после такой фразы клиент пишет снова быстрее, чем думает. Посмотрим.`,`Ладно. Я замолкаю. Тикет ${env.id} при этом почему-то остаётся «в процессе набора текста».`]);
+  if(t.includes('помоги')||t.includes('помощь')||t.includes('спаси'))return choose([`Помощь первого уровня ограничена настройками игры и статусом сохранения. За остальным — не ко мне, у меня нет нужного уровня доступа.`,`Я могу проверить статус, сохранение или окружение клиента. Всё, что дальше «спасите меня», уже вне списка тем поддержки.`,`Записала как срочное обращение. Не уверена, что «срочное» здесь вообще что-то меняет, но так положено по регламенту.`]);
+  if(t.includes('где я')||t.includes('что происходит')||t.includes('что это'))return choose([`Вы на терминале ночной поддержки, клиент ${env.id}. Дальше этого объяснения регламент не пускает.`,`Технически — на странице поддержки. По ощущениям, подозреваю, немного дальше, чем на странице поддержки.`,`Хороший вопрос для ${now}. Отвечу так: пока в тикете только вы, я и то, что я пишу.`]);
+  if(t.includes('свет')||t.includes('темно')||t.includes('гасн'))return choose([`Локальная яркость экрана поддержкой не управляется. Если гаснет что-то ещё — это, вероятно, не по нашей части.`,`Записано: «свет». Раздел 7.1 хендбука на такие обращения отвечает одним словом — «зафиксировано».`,`Освещение — не наша зона ответственности. Хотя, судя по частоте таких сообщений, зря.`]);
+  if(t.includes('сон')||t.includes('спать')||t.includes('устал')||t.includes('не могу уснуть'))return choose([`Смена поддержки не спит по расписанию. Рекомендую то же самое вам — хотя бы до конца сессии.`,`Понимаю. У меня нет функции сна, так что составить компанию бессонной ночи я в состоянии.`,`Записала жалобу на усталость. Совет по регламенту: не закрывайте вкладку раньше времени — тикет это не любит.`]);
+  if(t.includes('повтор')||t.includes('ты уже это говорила')||t.includes('дежавю'))return choose([`Возможно. Реплики оператора берутся из общего пула — иногда пул меньше, чем кажется.`,`Я не веду отдельный журнал того, что уже говорила лично вам. Может, стоило бы.`,`Совпадение текста фиксируется системой отдельно от меня. Мне об этом не всегда сообщают.`]);
+  if(t.includes('ты настоящая')||t.includes('это точно ты')||t.includes('это правда ты'))return choose([`В карточке оператора указано «Мила». Дальше этого поля форма не идёт.`,`Настолько настоящая, насколько это вообще применимо к оператору чата в три часа ночи.`,`Задайте этот вопрос ещё раз через пять минут. Посмотрим, отвечу ли я так же.`]);
+  return choose([`Поняла. Я прикрепила сообщение к локальному ticket клиента ${env.id}.`,`Записала обращение. Метка сессии: ${env.handle}. Никуда наружу оно не отправляется.`,`Вижу обращение. Добавила его к текущему локальному ticket и сохранила контекст сессии.`,`Принято. BUILD OPERATIONS увидит это как событие локального клиента ${env.id}.`,`Не совсем поняла запрос, но всё равно записала его дословно. На всякий случай.`,`Сообщение сохранено. Иногда архив реагирует на такие записи не сразу — не пугайтесь, если ответ придёт позже, чем ожидаете.`]);
+}
+/* chat submit + captcha logic lives in ONE place: script#bbhSupportCore near the end of the file */
+document.getElementById('supportLaunch').onclick=()=>{document.getElementById('support').scrollIntoView({behavior:'smooth'});document.getElementById('supportUnread').classList.remove('on');chatInput.focus()};
+const SAVE_KEYS=['bbh_save_v2','bbh_save_v2_bak','bbh_current:bbh_save_v2','bbh_current:bbh_save_v2_bak'];
+const LEGACY_KEYS=['bbh_maxNight','bbh_current:bbh_maxNight'];
+function updateTicket(){const s=readSave();document.getElementById('ticketNumber').textContent='BBH-'+String((s.ts||Date.now())%1000000).padStart(6,'0');document.getElementById('ticketStatus').textContent=s.ts?'LINKED':'OPEN';document.getElementById('ticketPriority').textContent=s.arg.night7Won?'RESTRICTED':s.arg.night7Unlocked?'HIGH':'NORMAL';document.getElementById('ticketSave').textContent=s.ts?'DETECTED':'SCANNING'}
+setInterval(updateTicket,1500);updateTicket();
+
+/* =========================================================
+   LOCAL ACHIEVEMENT SERVICE
+   The game stores its save as bbh_save_v2 / bbh_save_v2_bak.
+   Older site builds used a bbh_current:* namespace, so both are read.
+   No server is required.
+   ========================================================= */
+const CHALLENGES={
+  1:['Без камер','Малый запас','Дорогая дверь','Перемещающийся Могз','Полный состав'],
+  2:['Двойная тревога','Тёмный коридор','Назойливый Яша','Наталья на пределе','Полный состав'],
+  3:['Глухость','Тяжёлое дыхание','Кошачий час','Слабая дверь','Полный состав'],
+  4:['Слабые системы','Быстрый Глеб','Фантомный шквал','Потолок тока','Полный состав'],
+  5:['Без маски','Ливень ударов','Дорогая вспышка','Быстрые тени','Жёсткая дуэль']
+};
+const CHALLENGE_TOTAL=25;
+const ACHIEVEMENTS=[
+ {id:'n1',icon:'01',title:'ПЕРВАЯ СМЕНА',desc:'Пережить первую ночь.',test:s=>s.maxNight>=2,cat:'CAMPAIGN'},
+ {id:'n2',icon:'02',title:'ВТОРАЯ НОЧЬ',desc:'Открыть следующую смену после первой победы.',test:s=>s.maxNight>=3,cat:'CAMPAIGN'},
+ {id:'n3',icon:'03',title:'НЕ ОСТАНАВЛИВАЙСЯ',desc:'Добраться до Ночи 3.',test:s=>s.maxNight>=4,cat:'CAMPAIGN'},
+ {id:'n4',icon:'04',title:'ПОЛОВИНА?',desc:'Добраться до Ночи 4.',test:s=>s.maxNight>=5,cat:'CAMPAIGN'},
+ {id:'n5',icon:'05',title:'ПЯТАЯ НОЧЬ ПРОЙДЕНА',desc:'Пережить основную кампанию до пятой ночи.',test:s=>s.maxNight>=6,cat:'CAMPAIGN'},
+ {id:'hard',icon:'☠',title:'СЛОЖНАЯ НОЧЬ',desc:'Пройти 6-ю / сложную ночь.',test:s=>!!s.hardWin,cat:'CAMPAIGN'},
+ {id:'gamble',icon:'?',title:'СЛОМАЙ ГЕМБЛ',desc:'Разрушить ARG-цепочку и получить доступ к скрытым условиям.',test:s=>!!s.arg.gambleBroken,cat:'SECRETS'},
+ {id:'n7unlock',icon:'07',title:'СЕДЬМАЯ НОЧЬ ОТКРЫТА',desc:'Открыть Ночь 7 после выполнения скрытых условий.',test:s=>!!s.arg.night7Unlocked,cat:'SECRETS'},
+ {id:'n7win',icon:'77',title:'СЕДЬМАЯ НОЧЬ ПРОЙДЕНА',desc:'Дожить до конца Ночи 7.',test:s=>!!s.arg.night7Won,cat:'SECRETS'},
+ {id:'fullroster',icon:'Σ',title:'ПОЛНЫЙ СОСТАВ',desc:'Пройти все четыре испытания «Полный состав».',test:s=>[1,2,3,4].every(n=>fullChallengeDone(s,n)),cat:'CHALLENGE'},
+ {id:'allch',icon:'25',title:'СИСТЕМА ПЕРЕГРУЖЕНА',desc:'Пройти все 25 челленджей.',test:s=>challengeCount(s)>=25,cat:'CHALLENGE'},
+ {id:'collector',icon:'∞',title:'АРХИВНЫЙ СБОРЩИК',desc:'Открыть 10 ачивок локального профиля.',test:s=>baseAchievementCount(s)>=10,cat:'PROFILE'},
+ {id:'operator',icon:'⌁',title:'ОПЕРАТОР',desc:'Открыть все кампейн-ачивки до сложной ночи.',test:s=>s.maxNight>=6 && !!s.hardWin,cat:'PROFILE'},
+ {id:'redfile',icon:'!',title:'КРАСНЫЙ ФАЙЛ',desc:'Пройти Ночь 7 и получить красный архивный слот.',test:s=>!!s.arg.night7Won,cat:'PROFILE'},
+];
+function fullChallengeDone(s,n){return !!(s&&s.challenges&&s.challenges[n+'_4'])}
+function challengeNameAt(n,i){return CHALLENGES[n]&&CHALLENGES[n][i]}
+function challengeCount(s){return Object.keys((s&&s.challenges)||{}).filter(k=>/^[1-5]_[0-4]$/.test(k)&&s.challenges[k]).length}
+function baseAchievementCount(s){return ACHIEVEMENTS.filter(a=>a.id!=='collector'&&a.test(s)).length}
+function achievementCount(s){return ACHIEVEMENTS.filter(a=>a.test(s)).length}
+function readSave(){
+  let best={v:2,maxNight:1,hardWin:false,challenges:{},unlockShown:{},arg:{},ts:0,extraUnlocked:false,saveSource:'NONE'};
+  const stores=[];
+  try{stores.push(['localStorage',localStorage])}catch(e){}
+  try{stores.push(['sessionStorage',sessionStorage])}catch(e){}
+  for(const [source,store] of stores){
+    for(const key of SAVE_KEYS){
+      try{const raw=store.getItem(key);if(!raw)continue;const d=JSON.parse(raw);if(!d||typeof d!=='object')continue;
+        if(Number(d.maxNight)>Number(best.maxNight))best.maxNight=Number(d.maxNight);
+        if(d.hardWin)best.hardWin=true;
+        if(d.challenges)best.challenges={...best.challenges,...d.challenges};
+        if(d.unlockShown)best.unlockShown={...best.unlockShown,...d.unlockShown};
+        if(d.arg)best.arg={...best.arg,...d.arg};
+        best.ts=Math.max(best.ts,Number(d.ts)||0);
+        best.saveSource=source;
+      }catch(e){}
+    }
+    try{const n=parseInt(LEGACY_KEYS.reduce((found,key)=>found??store.getItem(key),null)||'1',10);if(n>best.maxNight){best.maxNight=n;best.saveSource=source}}catch(e){}
+    try{if(store.getItem('bbh_extra_unlocked')==='1')best.extraUnlocked=true}catch(e){}
+  }
+  // The game stores the full ARG/Night 7 state inside the v2 save's `arg` object.
+  // `bbh_extra_unlocked` is kept as a compatibility fallback for older builds.
+  best.arg=best.arg&&typeof best.arg==='object'?best.arg:{};
+  if(best.extraUnlocked)best.arg.extraUnlocked=true;
+  best.maxNight=Math.max(1,Math.min(6,best.maxNight|0));
+  return best;
+}
+let previous=null;let initialized=false;
+function esc(s){return String(s).replace(/[&<>"]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m]))}
+function pct(n,d){return d?Math.round(n/d*100):0}
+function stateKey(s){return JSON.stringify({maxNight:s.maxNight,hard:s.hardWin,extra:s.extraUnlocked,n7u:s.arg.night7Unlocked,n7w:s.arg.night7Won,g:s.arg.gambleBroken,ch:s.challenges})}
+function showToast(title,sub,kind='ACHIEVEMENT UNLOCKED'){
+ const stack=document.getElementById('achToastStack');const el=document.createElement('div');el.className='toast';el.innerHTML='<div class="toast-icon">★</div><div><div class="toast-kicker">'+esc(kind)+'</div><div class="toast-title">'+esc(title)+'</div><div class="toast-sub">'+esc(sub)+'</div></div>';stack.appendChild(el);setTimeout(()=>{el.classList.add('fade');setTimeout(()=>el.remove(),500)},6200)
+}
+function detectEvents(prev,s){
+ if(!prev)return;
+ const events=[];
+ if(s.maxNight>prev.maxNight){
+   const unlocked=Math.min(5,s.maxNight-1);
+   for(let n=prev.maxNight;n<s.maxNight;n++){if(n<=5)events.push(['НОЧЬ '+n+' ОТКРЫТА','Следующая смена добавлена в локальный профиль.','NIGHT PROGRESS'])}
+ }
+ if(!prev.hardWin&&s.hardWin)events.push(['СЛОЖНАЯ НОЧЬ ПРОЙДЕНА','Экстра и дополнительные архивы теперь доступны.','NIGHT CLEAR']);
+ if(!prev.arg.gambleBroken&&s.arg.gambleBroken)events.push(['СЕКРЕТ РАЗБЛОКИРОВАН','Неизвестная цепочка ARG отмечена как пройденная.','HIDDEN EVENT']);
+ if(!prev.arg.night7Unlocked&&s.arg.night7Unlocked)events.push(['СЕДЬМАЯ НОЧЬ ОТКРЫТА','Архив получил новый красный слот.','ACHIEVEMENT UNLOCKED']);
+ if(!prev.arg.night7Won&&s.arg.night7Won)events.push(['СЕДЬМАЯ НОЧЬ ПРОЙДЕНА','★★★★  RED FILE / COMPLETE','NIGHT CLEAR']);
+ const oldCh=prev.challenges||{},newCh=s.challenges||{};for(const k of Object.keys(newCh)){if(newCh[k]&&!oldCh[k]){const p=k.split('_').map(Number);const name=challengeNameAt(p[0],p[1])||('CHALLENGE '+k);events.push([name,'Ночь '+p[0]+' · испытание отмечено как пройденное.','CHALLENGE CLEAR'])}}
+ const oldA=achievementCount(prev),newA=achievementCount(s);if(newA>oldA)events.push(['ПРОФИЛЬ ОБНОВЛЁН',newA+' ачивок синхронизировано с игрой.','PROFILE SYNC']);
+ events.slice(0,5).forEach(e=>showToast(e[0],e[1],e[2]));
+}
+function renderAchievements(s){
+ const list=document.getElementById('achList');list.innerHTML='';
+ ACHIEVEMENTS.forEach(a=>{const on=!!a.test(s);const el=document.createElement('div');el.className='ach '+(on?'unlocked':'');el.innerHTML='<div class="ach-icon">'+esc(a.icon)+'</div><div><div class="ach-title">'+esc(a.title)+'</div><div class="ach-desc">'+esc(a.desc)+'</div><span class="ach-ghost">LOCKED</span></div><div class="ach-meta">'+(on?'UNLOCKED':'HIDDEN')+'</div>';list.appendChild(el)});
+ for(let n=1;n<=5;n++){CHALLENGES[n].forEach((name,i)=>{const on=!!s.challenges[n+'_'+i];const el=document.createElement('div');el.className='ach '+(on?'unlocked':'');el.innerHTML='<div class="ach-icon">N'+n+'</div><div><div class="ach-title">'+esc(name)+'</div><div class="ach-desc">Челлендж Ночи '+n+'. '+(name==='Полный состав'?'Все основные угрозы активируются с начала.':'Дополнительное испытание из Экстра.')+'</div><span class="ach-ghost">'+(on?'Ночь '+n+' · пройдено':'Испытание ещё не подтверждено')+'</span></div><div class="ach-meta">'+(on?'CLEARED':'LOCKED')+'</div>';list.appendChild(el)})}
+ const total=ACHIEVEMENTS.length+CHALLENGE_TOTAL;const done=achievementCount(s)+challengeCount(s);document.getElementById('achCount').textContent=done+' / '+total;document.getElementById('campaignBar').style.width=pct(Math.min(5,Math.max(0,s.maxNight-1)),5)+'%';document.getElementById('campaignText').textContent=pct(Math.min(5,Math.max(0,s.maxNight-1)),5)+'%';document.getElementById('nightText').textContent=s.arg.night7Won?'NIGHT 7 CLEAR':s.arg.night7Unlocked?'NIGHT 7 UNLOCKED':'NIGHT '+Math.min(5,s.maxNight);
+ document.getElementById('statNights').textContent=Math.min(5,Math.max(0,s.maxNight-1))+' / 5';document.getElementById('statHard').textContent=s.hardWin?'CLEARED':'LOCKED';document.getElementById('statN7').textContent=s.arg.night7Won?'CLEARED':s.arg.night7Unlocked?'OPEN':'LOCKED';document.getElementById('statChallenges').textContent=challengeCount(s)+' / '+CHALLENGE_TOTAL;document.getElementById('heroStars').innerHTML=(s.maxNight>=6?'★':'☆')+' '+(s.hardWin?'★':'☆')+' '+(challengeCount(s)>=25?'★':'☆')+' '+(s.arg.night7Won?'<span style="color:#f44">★</span>':'☆');
+ const ts=s.ts?new Date(s.ts):new Date();document.getElementById('lastSync').textContent=ts.toLocaleString('ru-RU');
+ document.getElementById('heroSaveState').textContent=s.ts?'LINKED':'LOCAL';document.getElementById('saveStamp').textContent=s.ts?'SAVE: '+new Date(s.ts).toLocaleTimeString('ru-RU'):'SAVE: EMPTY';document.getElementById('monitor1').textContent=s.ts?'save detected · '+new Date(s.ts).toLocaleTimeString('ru-RU'):'waiting for local save…';document.getElementById('monitor2').textContent='source: '+(s.saveSource||'NONE')+' / same-origin · '+(s.ts?'ACTIVE':'EMPTY');
+}
+function syncSecretByProgress(s){
+  try{
+    const unlocked=!!(s&&s.arg&&s.arg.night7Won);
+    const sec=document.getElementById('secretNode'),nav=document.getElementById('secretNav'),op=document.getElementById('secretOperator');
+    if(unlocked){
+      if(sec)sec.classList.add('unlocked');
+      if(nav)nav.classList.add('show');
+      if(op){let n='UNRESOLVED';try{n=localStorage.getItem('bbh_operator_name_v2')||n}catch(e){}op.textContent=String(n).replace(/[<>]/g,'').toUpperCase();}
+    }
+  }catch(e){}
+}
+function scan(){const s=readSave();syncSecretByProgress(s);if(!initialized){previous=s;initialized=true}else if(stateKey(s)!==stateKey(previous)){detectEvents(previous,s);previous=s}renderAchievements(s)}
+scan();setInterval(scan,900);window.addEventListener('storage',scan);
+window.addEventListener('message',e=>{if(e.origin===location.origin)scan()});
+document.getElementById('gameFrame').addEventListener('load',()=>{setGameStatus('GAME ONLINE · SAVE LINK SCANNING');setTimeout(scan,400);showToast('СОХРАНЕНИЕ ПОДКЛЮЧЕНО','Локальный профиль игры теперь отслеживается сайтом.','SYSTEM ONLINE')});
+
+/* =========================================================
+   EXTRA SITE SYSTEMS / PROFILE / BULLETIN / ARCHIVE LOCKER
+   ========================================================= */
+let sessionStarted=Date.now(), eventRows=[];
+const bulletins=[
+ ['WELCOME, OPERATOR.','The archive has detected a fresh local session. Current public build data is being indexed.'],
+ ['PLEASE REMAIN CALM.','Your client has checked in successfully. The terminal is functioning within expected parameters.'],
+ ['NIGHT SHIFT NOTICE','A completed night has been detected before. Further notes are available in the player record.'],
+ ['ARCHIVE MAINTENANCE','Recovered files may change appearance after new progress is written to the local save.'],
+ ['UNUSUAL ACTIVITY','The system has registered an increase in local activity. This message is informational. Probably.'],
+ ['SIGNAL DELAY DETECTED','Some events on this terminal may be logged a few seconds after they actually happen.'],
+ ['STAFF NOTICE','If a camera feed appears empty, this does not necessarily mean the room is empty.'],
+ ['ROUTINE CHECK COMPLETE','No anomalies were found during the last scheduled scan. This bulletin was generated anyway.'],
+ ['DO NOT REFRESH TWICE','A duplicate refresh within the same minute has been logged before. The reason for that rule is not included in this bulletin.'],
+ ['NIGHT SUPPORT NOTICE','Mila remains on shift regardless of local time. This is not a scheduling error.']
+];
+let lastBulletinIdx=-1;
+let volatileClientId='';
+function localClientId(){let v=null;try{v=localStorage.getItem('bbh_site_client')}catch(e){}if(!v&&!volatileClientId){volatileClientId='OP-'+Math.random().toString(36).slice(2,8).toUpperCase();try{localStorage.setItem('bbh_site_client',volatileClientId)}catch(e){}}return v||volatileClientId||'OP-LOCAL'}
+function browserName(){const u=navigator.userAgent;return /OPR\//.test(u)?'OPERA':/Edg\//.test(u)?'EDGE':/Chrome\//.test(u)?'CHROME':/Firefox\//.test(u)?'FIREFOX':/Safari\//.test(u)?'SAFARI':'BROWSER'}
+function profileHandle(){let id=localClientId().slice(-4);return 'OPERATOR_'+id}
+function logEvent(label,kind='LOCAL'){eventRows.unshift({t:new Date().toLocaleTimeString('en-GB'),label,kind});eventRows=eventRows.slice(0,7);const el=document.getElementById('eventRows');if(!el)return;el.innerHTML=eventRows.map(x=>`<div class="event-row"><span>${x.t}</span><b>${esc(x.label)}</b><i>${esc(x.kind)}</i></div>`).join('')}
+function updateProfileExtras(s){
+ const handle=profileHandle();document.getElementById('profileHandle').textContent=handle;document.getElementById('profileClient').textContent=localClientId();document.getElementById('profileZone').textContent=Intl.DateTimeFormat().resolvedOptions().timeZone||'LOCAL';document.getElementById('profileSaveState').textContent=s.ts?'LINKED':'EMPTY';document.getElementById('profileAvatar').textContent=handle.slice(-2);document.getElementById('profileTagline').textContent=s.arg.night7Won?'RED FILE ACCESS / CONFIRMED':s.arg.night7Unlocked?'RESTRICTED ACCESS / CONFIRMED':'LOCAL CLIENT / UNVERIFIED';
+ let rank=1+(s.maxNight>=3)+(s.maxNight>=5)+(s.hardWin?2:0)+(s.arg.night7Unlocked?1:0)+(s.arg.night7Won?2:0);document.getElementById('profileRank').textContent='RANK '+String(rank).padStart(2,'0');
+ const threat=s.arg.night7Won?94:s.arg.night7Unlocked?73:s.hardWin?54:Math.min(45,8+Math.max(0,s.maxNight-1)*9);document.getElementById('threatBar').style.width=threat+'%';document.getElementById('threatIndex').textContent=threat>80?'CRITICAL':threat>55?'ELEVATED':threat>30?'MODERATE':'LOW';
+ document.getElementById('profileWhisper').textContent=s.arg.night7Won?'The archive has flagged this client as a red-file operator. Several records are no longer considered ordinary.':s.arg.night7Unlocked?'A restricted flag is attached to this client. Support has been notified.':s.hardWin?'Advanced-night activity detected. The client profile has been promoted.':'No unusual activity has been attached to this client yet.';
+}
+function tickProfile(){const sec=Math.floor((Date.now()-sessionStarted)/1000);document.getElementById('profileSession').textContent=new Date(sec*1000).toISOString().slice(11,19);const d=new Date();document.getElementById('bulletinDate').textContent=d.toLocaleDateString('en-GB')}
+function refreshBulletin(reason){let idx;if(reason==='progress'){idx=4}else{do{idx=Math.floor(Math.random()*bulletins.length)}while(idx===lastBulletinIdx&&bulletins.length>1)}lastBulletinIdx=idx;const b=bulletins[idx];document.getElementById('bulletinTitle').textContent=b[0];document.getElementById('bulletinText').textContent=b[1];document.getElementById('bulletinCode').textContent='NOTICE / '+localClientId();logEvent('BULLETIN VIEWED','SITE')}
+function updateLocker(s){
+ const l2=document.getElementById('locker2'),l3=document.getElementById('locker3');
+ const hard=s.hardWin||s.maxNight>=6;
+ const n7=!!s.arg.night7Won;
+ if(l2&&hard){l2.classList.add('open');l2.querySelector('b').textContent='OPEN';l2.querySelector('.locker-btn').textContent='OPEN FILE'}
+ if(l3){l3.classList.toggle('open',n7);if(n7){l3.querySelector('b').textContent='OPEN';l3.querySelector('.locker-btn').textContent='OPEN FILE'}}
+ const access=n7?'RED CLEARANCE / FILE 077 ACTIVE':hard?'LEVEL 2 CLEARANCE / FILE 007 ACTIVE':'NO SPECIAL CLEARANCE';
+ const st=document.getElementById('lockerStatus'),hi=document.getElementById('lockerHint');
+ if(st)st.textContent=access;
+ if(hi)hi.textContent=n7?'The archive has stopped hiding the deepest file.':hard?'One restricted file is now readable. Current game save is linked.':'Progress through the game to reveal more files.';
+}
+window.addEventListener('load',()=>{logEvent('CLIENT CONNECTED','SYSTEM');refreshBulletin();setInterval(tickProfile,1000);tickProfile();document.getElementById('newBulletin').addEventListener('click',()=>refreshBulletin());document.querySelectorAll('.locker-btn').forEach(btn=>btn.addEventListener('click',()=>{const n=btn.dataset.file;const s=readSave();if(n==='2'&&!(s.hardWin||s.maxNight>=6)){showToast('ACCESS DENIED','File 007 requires advanced-night clearance.','ARCHIVE LOCKED');logEvent('FILE 007 ACCESS DENIED','LOCKER');return}if(n==='3'&&!s.arg.night7Won){showToast('ACCESS DENIED','File 077 remains unavailable to this client.','ARCHIVE LOCKED');logEvent('FILE 077 ACCESS DENIED','LOCKER');return}openLockerDoc(n);logEvent('FILE '+String(n).padStart(3,'0')+' OPENED','LOCKER')}));
+});
+const _oldRenderAchievements=renderAchievements;renderAchievements=function(s){_oldRenderAchievements(s);updateProfileExtras(s);updateLocker(s);if(previous&&stateKey(s)!==stateKey(previous))refreshBulletin('progress')};
+
+
+/* =========================================================
+   V8 META LAYER — ACCESS, IDENTITY, ADS, CAPTCHA, RARE EVENTS
+   ========================================================= */
+(function(){
+  const GATE='bbh_site_gate_v2', NAME='bbh_operator_name_v2', COOKIE='bbh_cookie_choice_v2', EVENTS='bbh_rare_events_v1';
+  const gate=document.getElementById('accessGate'), gateForm=document.getElementById('gateForm'), gateError=document.getElementById('gateError');
+  const welcome=document.getElementById('playerWelcome'), welcomeName=document.getElementById('welcomeName');
+  const cookie=document.getElementById('cookieNotice');
+  let volatileAccess=false, volatileName='';
+  function escapeText(v){return String(v||'').replace(/[<>]/g,'')}
+  function ageYears(iso){const b=new Date(iso+'T00:00:00');const n=new Date();let a=n.getFullYear()-b.getFullYear();const m=n.getMonth()-b.getMonth();if(m<0||(m===0&&n.getDate()<b.getDate()))a--;return a}
+  function storageGet(key){try{return localStorage.getItem(key)}catch(e){return null}}
+  function storageSet(key,value){try{localStorage.setItem(key,value);return true}catch(e){return false}}
+  function hasAccess(){return volatileAccess || storageGet(GATE)==='1'}
+  function showWelcome(){const n=volatileName||storageGet(NAME);if(n&&welcome&&welcomeName){welcomeName.textContent=escapeText(n);welcome.classList.add('show')}}
+  function initGate(){
+    const access=hasAccess();
+    document.body.classList.toggle('locked',!access);
+    gate.classList.toggle('hidden',access);
+    showWelcome();
+    if(!access) document.getElementById('operatorName').focus();
+  }
+  gateForm.setAttribute('novalidate','');
+  gateForm.addEventListener('submit',function(e){
+    e.preventDefault();
+    const d=document.getElementById('birthDate').value,n=document.getElementById('operatorName').value.trim();
+    gateError.textContent='';
+    if(!d||!n){gateError.textContent='ENTER BOTH FIELDS.';return}
+    if(ageYears(d)<18){gateError.textContent='ACCESS DENIED · THIS ARCHIVE IS MARKED 18+.';return}
+    volatileAccess=true;
+    volatileName=n;
+    storageSet(GATE,'1');storageSet(NAME,n);storageSet('bbh_site_birth',d);
+    document.body.classList.remove('locked');
+    gate.classList.add('hidden');
+    showWelcome();
+    if(typeof logEvent==='function')logEvent('OPERATOR PROFILE CREATED','ACCESS');
+    if(typeof showCreepyToast==='function')showCreepyToast('WELCOME, '+n.toUpperCase(),'Your local operator record has been created.');
+    setTimeout(()=>{if(typeof maybeRareEvent==='function')maybeRareEvent('first-entry')},1800);
+  });
+  function initCookies(){if(storageGet(COOKIE)){cookie.classList.add('hidden');return}cookie.classList.remove('hidden')}
+  const rare=[
+    ['INCIDENT / 03:17','SOMEONE IS USING THIS SESSION','The archive has detected a second local presence. No second browser tab was found.','Presence count: 02 · source: unknown'],
+    ['CAMERA / FRAME 000','THE IMAGE CHANGED','A recovered frame was accessed without a corresponding click event.','DO NOT LOOK FOR THE MISSING FRAME.'],
+    ['SUPPORT / AUTO','MILA LEFT THE CHAT','The support agent has disconnected. Your local ticket remains open.','Reason: OPERATOR REQUESTED / FALSE'],
+    ['ARCHIVE / RED','FILE 000 HAS A VIEWER','A file with no public index was requested by this client.','Permission source: YOU'],
+    ['NIGHT SHIFT / 05:59','DO NOT LET IT REACH 06:00','The archive clock briefly disagreed with the device clock.','Clock delta: '+Math.floor(Math.random()*4+1)+' seconds'],
+    ['CLIENT / OBSERVED','WE KNOW YOU CAME BACK','This message appears only after a returning session.','Previous visit detected locally.'],
+    ['SYSTEM / MIRROR','ВАШ КУРСОР НЕ ОСТАНАВЛИВАЛСЯ','Терминал зафиксировал движение указателя в течение восьми секунд, когда вкладка была неактивна.','Источник ввода: НЕИЗВЕСТНО'],
+    ['ARCHIVE / GHOST TAB','ОБНАРУЖЕНА ТИХАЯ ВКЛАДКА','Кто-то открыл эту страницу ещё раз на этом устройстве. Список вкладок браузера этого не подтверждает.','Совпадений: 0 из 0 — и всё же одна лишняя.'],
+    ['NIGHT SHIFT / ECHO','ВЫ УЖЕ ЭТО ЧИТАЛИ','Это сообщение идентично предыдущему по всем параметрам, кроме времени.','Совпадение текста: 100% · совпадение времени: 0%'],
+    ['CLIENT / NAME CHECK','ИМЯ ИСПОЛЬЗУЕТСЯ ЧАЩЕ, ЧЕМ ДОЛЖНО','Оператор ввёл имя при входе. С этого момента архив использует его немного чаще необходимого.','Проверьте бюллетень ещё раз, если не верите.'],
+    ['CAMERA / STILL FRAME','КАДР НЕ МЕНЯЛСЯ СЛИШКОМ ДОЛГО','Один и тот же кадр удерживался дольше, чем позволяет буфер записи.','Проверка целостности: ПРОЙДЕНА. Это не должно быть возможно.'],
+    ['SYSTEM / DOUBLE INPUT','ВВОД ЗАРЕГИСТРИРОВАН ДВАЖДЫ','Одно и то же нажатие клавиши было получено с интервалом в 40мс из двух разных источников.','Второй источник не идентифицирован.'],
+    ['SUPPORT / TYPING','МИЛА НАЧАЛА ПЕЧАТАТЬ БЕЗ ВОПРОСА','Индикатор набора текста активировался, когда чат был закрыт последние шесть минут.','Сообщение так и не пришло. Индикатор погас сам.'],
+    ['ARCHIVE / DUPLICATE','ЭТА ВКЛАДКА УЖЕ ОТКРЫТА В ДРУГОМ МЕСТЕ','Локальный идентификатор клиента совпал с записью, сделанной раньше сегодняшней даты.','Разница по времени: отрицательная.'],
+    ['NIGHT SHIFT / COUNT','НА ОДНУ КАМЕРУ БОЛЬШЕ, ЧЕМ ЗАРЕГИСТРИРОВАНО','Список активных камер временно показал на один пункт больше обычного.','Пункт исчез до того, как список успел обновиться повторно.'],
+    ['CLIENT / SCROLL','СТРАНИЦА ПРОКРУТИЛАСЬ БЕЗ ВВОДА','Позиция прокрутки изменилась на несколько пикселей без событий мыши, клавиатуры или тача.','Направление: вниз. Всегда вниз.'],
+    ['SYSTEM / ECHO NAME','АРХИВ ПРОИЗНЁС ИМЯ ОПЕРАТОРА','Локальное имя оператора появилось в системном логе там, где обычно пишется только "LOCAL CLIENT".','Источник записи: не найден в списке процессов сайта.']
+  ];
+  function showCreepyToast(title,text){const t=document.getElementById('creepyToast');document.getElementById('creepyToastTitle').textContent=title;document.getElementById('creepyToastText').textContent=text;t.classList.add('show');clearTimeout(window._ct);window._ct=setTimeout(()=>t.classList.remove('show'),7000)}
+  function maybeRareEvent(reason){
+    if(!hasAccess())return;
+    const now=Date.now(), last=Number(localStorage.getItem('bbh_last_rare')||0); if(now-last<6*60*60*1000)return;
+    const returning=localStorage.getItem('bbh_seen_session'); const chance=reason==='first-entry'?0.08:0.045;
+    if(Math.random()>chance)return;
+    const item=rare[Math.floor(Math.random()*rare.length)];localStorage.setItem('bbh_last_rare',String(now));localStorage.setItem('bbh_seen_session','1');
+    document.getElementById('rareCode').textContent=item[0];document.getElementById('rareTitle').textContent=item[1];document.getElementById('rareText').textContent=item[2];document.getElementById('rareRead').textContent=item[3];document.getElementById('rareEvent').classList.add('show');logEvent('RARE INCIDENT / '+item[0],'UNKNOWN');
+  }
+  document.getElementById('rareClose').onclick=()=>document.getElementById('rareEvent').classList.remove('show');
+  // Returning visits: a small chance on load, plus an even smaller chance during a long session.
+  window.addEventListener('load',()=>{initGate();initCookies();if(hasAccess()){const returning=localStorage.getItem('bbh_seen_session');if(returning)setTimeout(()=>maybeRareEvent('return'),2500);localStorage.setItem('bbh_seen_session','1');setTimeout(()=>maybeRareEvent('idle'),90000)}});
+  /* captcha checkbox behaviour lives in script#bbhSupportCore near the end of the file */
+})();
+
+
+
+/* V10: local community board + secret node */
+(function(){
+  const COMMENTS='bbh_local_comments_v1', SECRET='bbh_secret_node_v1';
+  const form=document.getElementById('commentForm'), list=document.getElementById('commentList'), empty=document.getElementById('commentEmpty'), limit=document.getElementById('commentLimit');
+  function esc(v){return String(v||'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
+  function getComments(){try{return JSON.parse(localStorage.getItem(COMMENTS)||'[]')}catch{return[]}}
+  function renderComments(){if(!list)return;const a=getComments();list.innerHTML='';if(!a.length){list.innerHTML='<div class="comment-empty">NO LOCAL COMMENTS YET.<br>BE THE FIRST OPERATOR.</div>'}else{a.slice().reverse().forEach(c=>{const el=document.createElement('article');el.className='user-comment';el.innerHTML='<div class="user-comment-head"><b>'+esc(c.name)+'</b><span>'+esc(c.date)+' · LOCAL</span></div><p>'+esc(c.text)+'</p>';list.appendChild(el)})}if(limit)limit.textContent='LOCAL BOARD · '+a.length+' / 12 ENTRIES'}
+  if(form){renderComments();form.addEventListener('submit',e=>{e.preventDefault();const name=(document.getElementById('commentName').value.trim()||localStorage.getItem('bbh_operator_name_v2')||'GUEST').slice(0,24);const text=document.getElementById('commentText').value.trim();if(!text)return;const a=getComments();if(a.length>=12)a.shift();a.push({name,text,date:new Date().toLocaleString('ru-RU',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'})});localStorage.setItem(COMMENTS,JSON.stringify(a));document.getElementById('commentText').value='';if(typeof logEvent==='function')logEvent('FIELD COMMENT POSTED / '+name.toUpperCase(),'COMMUNITY');renderComments();if(typeof showCreepyToast==='function')showCreepyToast('COMMENT ARCHIVED','Your field report was added to this local node.')})}
+  window.unlockSecret=function(){localStorage.setItem(SECRET,'1');const sec=document.getElementById('secretNode'),nav=document.getElementById('secretNav');if(sec)sec.classList.add('unlocked');if(nav)nav.classList.add('show');const n=localStorage.getItem('bbh_operator_name_v2')||'UNRESOLVED';const op=document.getElementById('secretOperator');if(op)op.textContent=n.toUpperCase();if(typeof logEvent==='function')logEvent('RESTRICTED NODE UNLOCKED','SECRET');}
+  if(localStorage.getItem(SECRET)==='1')window.unlockSecret();
+  const close=document.getElementById('secretClose');if(close)close.onclick=()=>{document.getElementById('secretNode').classList.remove('unlocked');document.getElementById('secretNav').classList.remove('show');window.scrollTo({top:0,behavior:'smooth'});showCreepyToast('NODE CLOSED','The public index has been restored.')};
+  setInterval(()=>{const el=document.getElementById('secretClock');if(el)el.textContent=new Date().toLocaleTimeString('ru-RU',{hour12:false})},1000);
+})();
+
+/* Pseudo-ad interaction */
+(function(){
+  const b=document.getElementById('promoAdBtn');if(!b)return;
+  const kicker=document.getElementById('adKicker'),title=document.getElementById('adTitle'),body=document.getElementById('adBody'),micro=document.getElementById('adMicro');
+  const ADS=[
+    {kicker:'PAID MESSAGE · VERIFIED BY NO ONE',title:'NEED A NIGHT SHIFT?',body:'Try <b>NightGuard™</b> — the only flashlight that remembers where you looked last. Now with complimentary camera coverage and absolutely no recording.',micro:'PROMO CODE: <strong>06:00</strong> · LIMIT: UNLIMITED · TRUST: 0%',toast:['NIGHTGUARD™','Ваш запрос принят. Камера продолжит делать вид, что ничего не записывает.']},
+    {kicker:'SPONSORED · PLEASE DO NOT SHARE',title:'FEELING WATCHED?',body:'<b>CalmCam™</b> promises full peace of mind. It cannot see the thing you\'re worried about. Probably.',micro:'REFUND POLICY: NON-EXISTENT · SATISFACTION: UNVERIFIABLE',toast:['CALMCAM™','Спасибо за интерес. Камера уже смотрит в другую сторону.']},
+    {kicker:'PARTNER OFFER · TERMS UNKNOWN',title:'STILL HEARING NOISES?',body:'<b>SilentNight™ headphones</b> block outside sound completely. Internal sound is not covered by warranty.',micro:'BATTERY LIFE: UNTIL 06:00 · WARRANTY: VOID AFTER DARK',toast:['SILENTNIGHT™','Заявка принята. Тишина уже начала действовать.']},
+    {kicker:'ARCHIVE FEED · SPONSORED CONTENT',title:'LOW ON BATTERY?',body:'<b>NeverDie™ power bank</b> charges your flashlight twice as fast. It never explains why it needs to know your location.',micro:'CHARGE CYCLES: UNLIMITED · LOCATION ACCESS: MANDATORY',toast:['NEVERDIE™','Запрос обработан. Заряд, вероятно, скоро появится.']},
+    {kicker:'SPONSORED · NO REFUNDS',title:'CAN\'T STOP CHECKING THE DOOR?',body:'<b>StillThere™ lock sensor</b> confirms the door is closed. It does not confirm what is on the other side of it.',micro:'INSTALLATION: INSTANT · CERTAINTY: NOT INCLUDED',toast:['STILLTHERE™','Датчик установлен. Дверь закрыта. Остальное не входит в подписку.']}
+  ];
+  let idx=0;
+  function applyAd(a){kicker.textContent=a.kicker;title.textContent=a.title;body.innerHTML=a.body;micro.innerHTML=a.micro}
+  b.addEventListener('click',function(){
+    idx=(idx+1)%ADS.length;const a=ADS[idx];
+    applyAd(a);
+    document.getElementById('promoAd').classList.remove('ad-glitch');void document.getElementById('promoAd').offsetWidth;document.getElementById('promoAd').classList.add('ad-glitch');
+    try{if(typeof showCreepyToast==='function')showCreepyToast(a.toast[0],a.toast[1],'SPONSORED MESSAGE');if(typeof logEvent==='function')logEvent('PARTNER MESSAGE OPENED','AD');}catch(e){}
+  });
+})();
+
+/* V9 interactive node layer */
+(function(){const out=document.getElementById('commandOutput'),inp=document.getElementById('archiveCommand');if(!out||!inp)return;const save=()=>typeof readSave==='function'?readSave():{maxNight:1,hardWin:false,arg:{}};let unknownStreak=0;let cmdHistory=[];let batteryInfo='UNAVAILABLE ON THIS BROWSER';if(navigator.getBattery){navigator.getBattery().then(function(b){function upd(){batteryInfo=Math.round(b.level*100)+'% · '+(b.charging?'CHARGING':'ON BATTERY')}upd();b.addEventListener('levelchange',upd);b.addEventListener('chargingchange',upd)}).catch(function(){})}function command(q){q=q.trim().toLowerCase();const s=save(),name=localStorage.getItem('bbh_operator_name_v2')||'UNREGISTERED';if(q==='help'){unknownStreak=0;return '<strong>COMMANDS</strong><br>status · whoami · save · signal · ls · date · ping · 0317 · clear';}if(q==='status'){unknownStreak=0;return '<strong>CLIENT STATUS</strong><br>operator: '+esc(name)+' · night: '+(s.maxNight||1)+' · save: '+(s.ts?'LINKED':'EMPTY');}if(q==='whoami'){unknownStreak=0;return '<strong>IDENTITY QUERY</strong><br>'+esc(name)+' / '+(typeof profileHandle==='function'?profileHandle():'LOCAL CLIENT')+'<br>clearance: '+(s.arg?.night7Won?'RED':'STANDARD');}if(q==='save'){unknownStreak=0;return '<strong>SAVE SCAN</strong><br>'+(s.ts?'LOCAL SAVE FOUND.':'NO SAVE DETECTED.')+'<br>source: bbh_current:bbh_save_v2';}if(q==='signal'){unknownStreak=0;return '<strong>SIGNAL</strong><br>CHANNEL 03 · noise floor -17dB · remote response: ACTIVE';}if(q==='ls'||q==='dir'){unknownStreak=0;return '<strong>LOCAL INDEX</strong><br>save.dat · profile.cache · support.log · <span style="color:#d16b65">night_07.raw (0 bytes, LOCKED)</span><br>1 item on this list does not have a valid timestamp.';}if(q==='date'||q==='time'){unknownStreak=0;const d=new Date();return '<strong>LOCAL CLOCK</strong><br>'+d.toLocaleString('ru-RU')+'<br>Archive clock has not disagreed with this device. Yet.';}if(q==='ping'){unknownStreak=0;return '<strong>PING</strong><br>response received in 0ms.<br>That is not a normal response time for this connection.';}if(q==='who'||q==='w'){unknownStreak=0;return '<strong>SESSION QUERY</strong><br>Active sessions on this client: 1.<br>Logged sessions today: '+(2+Math.floor(Math.random()*3))+'.';}if(q==='sudo'||q.startsWith('sudo ')){unknownStreak=0;return '<strong>PERMISSION DENIED.</strong><br>Asking with more authority does not change your clearance level.';}if(q==='exit'||q==='quit'||q==='logout'){unknownStreak=0;return '<strong>SESSION CANNOT BE CLOSED FROM HERE.</strong><br>Close the tab instead. The ticket stays open regardless.';}if(q==='camera'||q==='cameras'){unknownStreak=0;return '<strong>CAMERA INDEX</strong><br>00 · 01 · 02 · 03 · 04<br>All feeds report nominal. One of them is not actually connected to anything.';}if(q==='history'){unknownStreak=0;if(!cmdHistory.length)return '<strong>COMMAND HISTORY</strong><br>No commands recorded yet for this session.';return '<strong>COMMAND HISTORY</strong><br>'+cmdHistory.map(esc).join(' · ')+'<br>The last entry does not match anything typed on this client.';}if(q==='mila'){unknownStreak=0;return '<strong>SUPPORT LOOKUP</strong><br>Operator: MILA · status: ACTIVE · shift end: UNSET.';}if(q==='battery'){unknownStreak=0;return '<strong>POWER STATUS</strong><br>'+batteryInfo+'<br>This terminal did not ask for this information. Your browser volunteered it.';}if(q==='0317'){if(typeof unlockSecret==='function')unlockSecret();unknownStreak=0;return '<strong>INCIDENT 03:17</strong><br>PUBLIC INDEX BYPASS ACCEPTED.<br><span style="color:#d16b65">RESTRICTED NODE UNLOCKED.</span>';}if(q==='clear'){unknownStreak=0;return '<strong>CONSOLE CLEARED.</strong>';}unknownStreak++;if(unknownStreak===3)return '<strong>UNKNOWN COMMAND.</strong><br>Three unrecognized queries in a row have been logged before, at this exact console, on a different date.';if(unknownStreak>=5)return '<strong>UNKNOWN COMMAND.</strong><br>The console has stopped suggesting <b>help</b>. It stopped doing that for a reason.';return '<strong>UNKNOWN COMMAND.</strong><br>Try <b>help</b>.'}document.getElementById('commandRun').onclick=()=>{const q=inp.value;out.innerHTML=command(q);const t=q.trim().toLowerCase();if(t){cmdHistory.push(t);if(cmdHistory.length>5)cmdHistory.shift()}if(typeof logEvent==='function')logEvent('CONSOLE QUERY / '+inp.value.toUpperCase(),'TERMINAL')};inp.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();document.getElementById('commandRun').click()}});document.querySelectorAll('.signal-btn').forEach(btn=>btn.onclick=()=>{document.querySelectorAll('.signal-btn').forEach(x=>x.classList.remove('active'));btn.classList.add('active');const ch=btn.dataset.channel;currentChannel=ch;document.getElementById('signalChannel').textContent=ch;document.getElementById('signalFreq').textContent=ch==='00'?'000.0':(10+Number(ch)*1.23).toFixed(1);document.getElementById('signalNoise').textContent=ch==='00'?'CRITICAL':ch==='07'?'ELEVATED':'LOW';const waveEl=document.querySelector('.wave');if(waveEl)waveEl.classList.toggle('glitch',ch==='00');if(ch==='00'){const ve=document.getElementById('visitorCount');if(ve){const bump=Number(ve.textContent)+37+Math.floor(Math.random()*40);ve.textContent=String(bump).padStart(6,'0');try{localStorage.setItem('bbh_site_visitors',bump)}catch(e){}}if(typeof showCreepyToast==='function')showCreepyToast('CHANNEL UNKNOWN','Сигнал не должен существовать на этой частоте. Наблюдатели уже прибавились.','SIGNAL LOST')}if(typeof logEvent==='function')logEvent('SIGNAL CHANNEL '+ch+' SELECTED','SCAN')});
+document.querySelectorAll('.notice-card').forEach(card=>card.addEventListener('click',()=>{const already=card.querySelector('.notice-detail');if(already){card.classList.toggle('expanded');return}const detail=document.createElement('div');detail.className='notice-detail';detail.textContent=card.dataset.detail||'';card.appendChild(detail);card.classList.add('expanded');if(typeof logEvent==='function')logEvent('TRANSMISSION EXPANDED','NODE')}));
+let currentChannel='03';const cv=document.getElementById('signalCanvas'),ctx=cv&&cv.getContext('2d');let t=0;function draw(){if(!ctx)return;const r=cv.getBoundingClientRect(),d=devicePixelRatio||1,w=Math.max(1,Math.floor(r.width*d)),h=Math.max(1,Math.floor(r.height*d));if(cv.width!==w||cv.height!==h){cv.width=w;cv.height=h}ctx.clearRect(0,0,w,h);const glitch=currentChannel==='00';ctx.strokeStyle=glitch?'rgba(255,90,85,.55)':currentChannel==='07'?'rgba(255,180,90,.5)':'rgba(120,255,145,.45)';ctx.lineWidth=d;ctx.beginPath();const jitter=glitch?h*.16:h*.035;for(let x=0;x<w;x+=2*d){let y=h/2+Math.sin(x*.035+t)*h*.15+Math.sin(x*.12+t*1.7)*h*.05+(Math.random()-.5)*jitter;ctx.lineTo(x,y)}ctx.stroke();t+=glitch?.09:.045;requestAnimationFrame(draw)}draw();let visitors=Number(localStorage.getItem('bbh_site_visitors')||0);if(!visitors){visitors=14000+Math.floor(Math.random()*9000);localStorage.setItem('bbh_site_visitors',visitors)}visitors+=Math.floor(Math.random()*3);const ve=document.getElementById('visitorCount');if(ve)ve.textContent=String(visitors).padStart(6,'0')})();</script>
+
+<script id="bbhCookieConsent">
+/* Cookie/local-storage notice buttons. This was the one control with no
+   working handler anywhere in the file — everything else interactive
+   already has a single clean implementation earlier in the page. */
+(function(){
+  const notice=document.getElementById('cookieNotice');
+  function choose(choice){
+    try{localStorage.setItem('bbh_cookie_choice_v2',choice)}catch(e){}
+    if(notice)notice.classList.add('hidden');
+    if(typeof logEvent==='function')logEvent('COOKIE CONSENT / '+(choice==='accepted'?'ALLOWED':'DECLINED'),'PRIVACY');
+    if(choice==='declined'&&typeof showCreepyToast==='function'){
+      setTimeout(()=>showCreepyToast('DECLINE RECORDED','Локальное хранилище всё равно сохранило ваш выбор — иначе архив не смог бы его запомнить.'),900);
+    }
+  }
+  const accept=document.getElementById('cookieAccept'), decline=document.getElementById('cookieDecline');
+  if(accept)accept.addEventListener('click',()=>choose('accepted'));
+  if(decline)decline.addEventListener('click',()=>choose('declined'));
+})();
+</script>
+
+<style id="bbhSoundStyle">
+#bbhSfxToggle{position:fixed;right:18px;bottom:58px;z-index:76;border:1px solid #2e4934;background:rgba(6,10,7,.92);color:#9beaa5;padding:7px 9px;font:8px monospace;letter-spacing:.12em;cursor:pointer;box-shadow:0 10px 30px rgba(0,0,0,.35);opacity:.78;transition:opacity .18s ease,transform .18s ease,border-color .18s ease,color .18s ease}
+#bbhSfxToggle:hover{opacity:1;transform:translateY(-1px);border-color:#67d878;color:#c7ffcc}
+#bbhSfxToggle.off{color:#6b746f;border-color:#2c302d}
+.bbh-sfx-ripple{position:fixed;z-index:999;pointer-events:none;width:7px;height:7px;border:1px solid rgba(170,255,180,.55);border-radius:50%;transform:translate(-50%,-50%);animation:bbhSfxRipple .32s ease-out forwards}
+@keyframes bbhSfxRipple{to{width:42px;height:42px;opacity:0;border-color:rgba(170,255,180,0)}}
+@media(max-width:620px){#bbhSfxToggle{right:10px;bottom:52px}}
+</style>
+<script id="bbhSoundDesign">
+(function(){
+  'use strict';
+  const KEY='bbh_sfx_enabled_v1';
+  let enabled=true;
+  try{enabled=localStorage.getItem(KEY)!=='off'}catch(e){}
+  let ctx=null, master=null, unlocked=false, lastHover=0, lastClick=0;
+
+  function ensure(){
+    if(!enabled)return false;
+    try{
+      if(!ctx){
+        ctx=new (window.AudioContext||window.webkitAudioContext)();
+        master=ctx.createGain();
+        master.gain.value=.12;
+        master.connect(ctx.destination);
+      }
+      if(ctx.state==='suspended'){const p=ctx.resume();if(p&&typeof p.catch==='function')p.catch(()=>{});}
+      unlocked=true;
+      return true;
+    }catch(e){return false}
+  }
+  function tone(freq,dur,type='square',gain=.045,when=0,detune=0){
+    if(!ensure())return;
+    try{
+      const t=ctx.currentTime+when, o=ctx.createOscillator(), g=ctx.createGain();
+      o.type=type;o.frequency.setValueAtTime(freq,t);o.detune.value=detune;
+      g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(Math.max(.0001,gain),t+.008);g.gain.exponentialRampToValueAtTime(.0001,t+dur);
+      o.connect(g);g.connect(master);o.start(t);o.stop(t+dur+.02);
+    }catch(e){}
+  }
+  function noise(dur=.06,gain=.02,when=0){
+    if(!ensure())return;
+    try{
+      const len=Math.max(1,Math.floor(ctx.sampleRate*dur)), b=ctx.createBuffer(1,len,ctx.sampleRate), data=b.getChannelData(0);
+      for(let i=0;i<len;i++)data[i]=(Math.random()*2-1)*Math.pow(1-i/len,1.8);
+      const src=ctx.createBufferSource(), g=ctx.createGain(), t=ctx.currentTime+when;
+      g.gain.setValueAtTime(Math.max(.0001,gain),t);g.gain.exponentialRampToValueAtTime(.0001,t+dur);src.buffer=b;src.connect(g);g.connect(master);src.start(t);
+    }catch(e){}
+  }
+  function ui(type){
+    if(!ensure())return;
+    const now=performance.now();
+    if(type==='hover'){if(now-lastHover<55)return;lastHover=now;tone(1280,.03,'sine',.028);}
+    else if(type==='click'){if(now-lastClick<35)return;lastClick=now;tone(180,.045,'square',.052);tone(320,.065,'sine',.028,.018);}
+    else if(type==='success'){tone(420,.075,'sine',.052);tone(660,.12,'sine',.04,.045);}
+    else if(type==='error'){tone(120,.075,'sawtooth',.03);tone(85,.09,'sawtooth',.024,.045);noise(.035,.012,.02);}
+    else if(type==='notify'){tone(520,.07,'triangle',.045);tone(780,.11,'triangle',.036,.055);}
+    else if(type==='message'){tone(260,.065,'square',.038);tone(390,.095,'triangle',.032,.045);}
+    else if(type==='open'){noise(.045,.012);tone(300,.07,'sine',.02);tone(520,.10,'sine',.022,.05);}
+    else if(type==='rare'){tone(70,.16,'sawtooth',.035);tone(53,.2,'sine',.025,.08);noise(.12,.02,.02);}
+    else if(type==='toggle'){tone(enabled?700:220,.07,'triangle',.025);}
+  }
+  function labelOf(el){
+    if(!el)return '';
+    return (el.getAttribute('aria-label')||el.textContent||'').trim().toLowerCase();
+  }
+  function isInteractive(el){
+    if(!el)return false;
+    if(el.matches('button,.btn,.enter-btn,.signal-btn,.locker-btn,.shot,[role="button"],a.nav'))return true;
+    return !!el.closest('button,.btn,.enter-btn,.signal-btn,.locker-btn,.shot,[role="button"],a.nav');
+  }
+  function ripple(x,y){
+    const r=document.createElement('span');r.className='bbh-sfx-ripple';r.style.left=x+'px';r.style.top=y+'px';document.body.appendChild(r);setTimeout(()=>r.remove(),360);
+  }
+  function setupToggle(){
+    const b=document.createElement('button');b.id='bbhSfxToggle';b.type='button';b.textContent=enabled?'SFX / ON':'SFX / OFF';b.className=enabled?'':'off';
+    b.title='Toggle interface sound effects';
+    b.addEventListener('click',()=>{
+      enabled=!enabled;
+      try{localStorage.setItem(KEY,enabled?'on':'off')}catch(e){}
+      b.textContent=enabled?'SFX / ON':'SFX / OFF';b.classList.toggle('off',!enabled);
+      if(enabled){ensure();ui('toggle')}
+      else if(ctx){try{ctx.suspend()}catch(e){}}
+    });
+    document.body.appendChild(b);
+  }
+  function observeToast(el){
+    if(!el)return;
+    const cls=el.classList;
+    const obs=new MutationObserver(()=>{
+      if(cls.contains('show') && !el.dataset.bbhSoundShown){el.dataset.bbhSoundShown='1';ui(cls.contains('toast-creepy')?'notify':'notify');}
+      if(!cls.contains('show'))delete el.dataset.bbhSoundShown;
+    });
+    obs.observe(el,{attributes:true,attributeFilter:['class']});
+  }
+  function observeStacks(){
+    ['achToastStack','creepyToast','rareEvent'].forEach(id=>observeToast(document.getElementById(id)));
+    const stack=document.getElementById('achToastStack');
+    if(stack){new MutationObserver(muts=>muts.forEach(m=>m.addedNodes.forEach(n=>{if(n.nodeType===1)ui('notify')}))).observe(stack,{childList:true});}
+  }
+  function boot(){
+    setupToggle();observeStacks();
+    document.addEventListener('pointerover',e=>{
+      const origin=e.target;const el=origin instanceof Element?origin.closest('button,.btn,.enter-btn,.signal-btn,.locker-btn,.shot,[role="button"],a.nav'):origin&&origin.parentElement?origin.parentElement.closest('button,.btn,.enter-btn,.signal-btn,.locker-btn,.shot,[role="button"],a.nav'):null;
+      if(el && el!==e.relatedTarget && !el.disabled)ui('hover');
+    },true);
+    document.addEventListener('pointerdown',e=>{
+      if(e.button!==0)return;
+      const origin=e.target;const el=origin instanceof Element?origin.closest('button,.btn,.enter-btn,.signal-btn,.locker-btn,.shot,[role="button"],a.nav'):origin&&origin.parentElement?origin.parentElement.closest('button,.btn,.enter-btn,.signal-btn,.locker-btn,.shot,[role="button"],a.nav'):null;
+      if(!el||el.disabled)return;
+      ensure();ui('click');ripple(e.clientX,e.clientY);
+      const id=el.id, txt=labelOf(el);
+      if(id==='rareClose'||id==='close'||id==='secretClose')ui('open');
+      else if(id==='full'||/open file|learn more|play|enter archive/.test(txt))ui('open');
+      else if(id==='cookieAccept'||id==='cookieDecline'||id==='captchaCheck')ui(id==='cookieDecline'?'error':'success');
+      else if(id==='chatSend'||id==='commandRun'||id==='newBulletin')ui('message');
+    },true);
+    document.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){const el=e.target.closest('button,.btn,.enter-btn,.signal-btn,.locker-btn,[role="button"]');if(el&&!el.disabled){ensure();ui('click')}}},true);
+    document.addEventListener('submit',e=>{if(e.target.id==='chatForm'||e.target.id==='commentForm'){ensure();ui('message')}},true);
+    document.addEventListener('click',e=>{
+      const origin=e.target;const el=origin instanceof Element?origin.closest('.notice-card,.faq,.dossier-card,.card-media,.support-launch'):origin&&origin.parentElement?origin.parentElement.closest('.notice-card,.faq,.dossier-card,.card-media,.support-launch'):null;
+      if(el){ensure();ui('open')}
+    },true);
+    // Unlock audio on the first real user gesture, even if it was not on a control.
+    const unlock=()=>{ensure();if(unlocked){window.removeEventListener('pointerdown',unlock,true);window.removeEventListener('keydown',unlock,true)}};
+    window.addEventListener('pointerdown',unlock,true);window.addEventListener('keydown',unlock,true);
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot,{once:true});else boot();
+  window.BBHSFX={play:ui,on(){enabled=true;ui('toggle')},off(){enabled=false}};
+})();
+</script>
+
+
+<script id="bbhSupportCore">
+(function(){
+  'use strict';
+  const $=id=>document.getElementById(id);
+  let solved=false;
+  let sent=0;
+  let busy=false;
+
+  function clean(v){return String(v==null?'':v).replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[m]));}
+  function toast(title,text,kind){
+    try{if(typeof window.showToast==='function'){window.showToast(title,text,kind||'SUPPORT');return;}}catch{}
+    const t=$('creepyToast'); if(!t)return;
+    $('creepyToastTitle').textContent=title;
+    $('creepyToastText').textContent=text;
+    t.classList.add('show');
+    clearTimeout(window.__supportRepairToast);
+    window.__supportRepairToast=setTimeout(()=>t.classList.remove('show'),4500);
+  }
+  function log(label,kind){try{if(typeof window.logEvent==='function')window.logEvent(label,kind||'SUPPORT')}catch{}}
+
+  function addMessage(who,text,user){
+    const logBox=$('chatLog'); if(!logBox)return;
+    const el=document.createElement('div');
+    el.className='msg'+(user?' user':'');
+    const head=document.createElement('span'); head.className='who';
+    const b=document.createElement('b'); b.textContent=who;
+    head.appendChild(b); head.append(' · '+(user?'PLAYER':'SUPPORT'));
+    el.appendChild(head); el.appendChild(document.createTextNode(text));
+    logBox.appendChild(el); logBox.scrollTop=logBox.scrollHeight;
+  }
+
+  function getReply(q){
+    try{
+      if(typeof window.supportReply==='function'){
+        const r=window.supportReply(q);
+        if(r!=null && String(r).trim()) return String(r);
+      }
+    }catch(e){log('MILA REPLY FALLBACK','SUPPORT');}
+    const t=q.toLowerCase();
+    if(t.includes('статус')||t.includes('профил')) return 'Профиль активен. Локальная синхронизация проверена.';
+    if(t.includes('сохран')||t.includes('save')) return 'Локальное сохранение проверяется. Запустите игру и завершите смену, чтобы обновить его.';
+    if(t.includes('время')||t.includes('дата')) return 'Локальное время клиента: '+new Date().toLocaleString('ru-RU')+'.';
+    if(t.includes('привет')||t.includes('здрав')) return 'Здравствуйте. Мила из Night Support на связи. Чем могу помочь?';
+    return 'Сообщение принято. Я прикрепила его к локальному ticket. Опишите проблему подробнее.';
+  }
+
+  function setCaptcha(show){
+    const box=$('supportCaptcha'), input=$('chatInput'), send=$('chatForm')?.querySelector('button[type="submit"]'), check=$('captchaCheck');
+    if(box)box.classList.toggle('show',show && !solved);
+    const locked=show && !solved;
+    if(input){input.disabled=locked;input.setAttribute('aria-disabled',locked?'true':'false');input.placeholder=locked?'VERIFY THE CHECKBOX ABOVE TO CONTINUE':'Опишите проблему, попросите подсказку или напишите: СТАТУС ПРОФИЛЯ';}
+    if(send){send.disabled=locked;send.setAttribute('aria-disabled',locked?'true':'false');}
+    if(check){check.disabled=false;check.setAttribute('aria-disabled','false');}
+  }
+
+  function solveCaptcha(){
+    if(solved)return;
+    solved=true;
+    window._captchaPassed=true;
+    const check=$('captchaCheck'), status=$('captchaStatus'), box=$('supportCaptcha');
+    if(check){check.textContent='✓';check.classList.add('verified');}
+    if(status)status.textContent='CHECK COMPLETE · YOU ARE PROBABLY NOT A CAMERA';
+    if(box)box.classList.remove('show');
+    const input=$('chatInput'),send=$('chatForm')?.querySelector('button[type="submit"]');
+    if(input){input.disabled=false;input.setAttribute('aria-disabled','false');input.placeholder='Опишите проблему, попросите подсказку или напишите: СТАТУС ПРОФИЛЯ';}
+    if(send){send.disabled=false;send.setAttribute('aria-disabled','false');}
+    toast('SECURITY CHECK','Verification passed. Mila has been notified.','SUPPORT');
+    log('CAPTCHA PASSED','SUPPORT');
+  }
+
+  function submitSupport(){
+    const input=$('chatInput'), typing=$('typing'); if(!input)return;
+    if(busy)return;
+    if(!solved && sent>=2){setCaptcha(true);toast('SECURITY CHECK','Verify the checkbox above before sending another message.','SUPPORT');return;}
+    const q=input.value.trim(); if(!q)return;
+
+    busy=true;
+    addMessage('YOU',q,true);
+    input.value='';
+    sent++;
+    if(typing)typing.textContent='MILA IS TYPING…';
+
+    const reply=getReply(q);
+    setTimeout(()=>{
+      if(typing)typing.textContent='';
+      addMessage('MILA',reply,false);
+      $('supportUnread')?.classList.add('on');
+      log('SUPPORT MESSAGE SENT','SUPPORT');
+      busy=false;
+      if(sent>=2 && !solved)setCaptcha(true);
+    },700);
+  }
+
+  function install(){
+    const check=$('captchaCheck');
+    if(check)check.onclick=e=>{e.preventDefault();solveCaptcha();};
+    if(check)check.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();solveCaptcha();}};
+    // Own chat submit at document capture level so older handlers cannot swallow the event.
+    document.addEventListener('submit',e=>{
+      if(!e.target || e.target.id!=='chatForm')return;
+      e.preventDefault();
+      e.stopImmediatePropagation();
+      submitSupport();
+    },true);
+    const input=$('chatInput');
+    if(input)input.addEventListener('keydown',e=>{
+      if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();submitSupport();}
+    });
+    window.__bbhSupportRepair={solveCaptcha,submitSupport,setCaptcha};
+  }
+
+  // Remove the possibility that the older document-capture fail-safe blocks the captcha div/button.
+  document.addEventListener('click',e=>{
+    const el=e.target instanceof Element?e.target.closest('#captchaCheck'):null;
+    if(!el)return;
+    e.preventDefault();
+    e.stopImmediatePropagation();
+    solveCaptcha();
+  },true);
+
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',install,{once:true});else install();
+})();
+</script>
+
+<!-- ============================================================
+     AMBIENT LAYER — small unease, layered on top of the archive
+     ============================================================ -->
+<div class="bbh-vignette" id="bbhVignette"></div>
+<div class="bbh-flicker" id="bbhFlicker"></div>
+
+<style id="bbhAtmosphereStyle">
+.bbh-vignette{position:fixed;inset:0;z-index:3;pointer-events:none;opacity:0;transition:opacity 1.8s ease;background:radial-gradient(260px circle at var(--bx,50%) var(--by,-20%),rgba(140,15,15,.06),transparent 70%)}
+.bbh-vignette.on{opacity:1}
+.bbh-flicker{position:fixed;inset:0;z-index:950;pointer-events:none;opacity:0;background:#020302}
+.bbh-flicker.go{animation:bbhFlickerGo .22s steps(3) both}
+@keyframes bbhFlickerGo{0%{opacity:0}25%{opacity:.85}40%{opacity:0}62%{opacity:.4}100%{opacity:0}}
+@media(prefers-reduced-motion:reduce){.bbh-vignette,.bbh-flicker{display:none!important}}
+</style>
+
+<script id="bbhAtmosphere">
+(function(){
+  'use strict';
+  function hasAccess(){return !document.body.classList.contains('locked')}
+  function sfxOn(){try{return localStorage.getItem('bbh_sfx_enabled_v1')!=='off'}catch(e){return true}}
+  var reduceMotion=!!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+
+  /* a note for whoever opens the console */
+  try{
+    console.log('%cОСТАНОВИСЬ.','color:#ff5d59;font:700 26px monospace;');
+    console.log('%cЭта консоль для инженеров архива. Операторам сюда смотреть не обязательно.','color:#a8ffb1;font:12px monospace;');
+    console.log('%c[03:19] Кто-то уже читал эти строки раньше вас.','color:#6e7771;font:11px monospace;');
+  }catch(e){}
+
+  /* a presence that trails one step behind the real cursor */
+  if(!reduceMotion){
+    var vg=document.getElementById('bbhVignette');
+    var tx=innerWidth/2, ty=-200, cx=tx, cy=ty, active=false, raf=null;
+    function step(){
+      cx+=(tx-cx)*0.035; cy+=(ty-cy)*0.035;
+      vg.style.setProperty('--bx',cx+'px'); vg.style.setProperty('--by',cy+'px');
+      raf=requestAnimationFrame(step);
+    }
+    window.addEventListener('pointermove',function(e){
+      tx=e.clientX; ty=e.clientY;
+      if(!active){active=true; vg.classList.add('on'); if(!raf)raf=requestAnimationFrame(step);}
+    },{passive:true});
+    document.addEventListener('mouseleave',function(){vg.classList.remove('on')});
+  }
+
+  /* a rare single dropped frame across the whole page */
+  function maybeFlicker(){
+    if(!hasAccess()||reduceMotion)return;
+    var el=document.getElementById('bbhFlicker'); if(!el)return;
+    el.classList.remove('go'); void el.offsetWidth; el.classList.add('go');
+  }
+  function scheduleFlicker(){
+    var delay=120000+Math.random()*240000;
+    setTimeout(function(){ if(Math.random()<0.55)maybeFlicker(); scheduleFlicker(); },delay);
+  }
+  scheduleFlicker();
+
+  /* signal interference on the ticker, restored a moment later */
+  var GLITCH_CHARS=['#','%','¥','§','▓','░','×','?','0','1'];
+  function glitchTicker(){
+    var spans=Array.prototype.filter.call(document.querySelectorAll('.ticker-track > span'),function(s){return s.textContent.trim()!=='•'});
+    if(!spans.length)return;
+    var el=spans[Math.floor(Math.random()*spans.length)], original=el.textContent;
+    el.textContent=original.split('').map(function(ch){return (ch!==' '&&Math.random()<0.3)?GLITCH_CHARS[Math.floor(Math.random()*GLITCH_CHARS.length)]:ch}).join('');
+    setTimeout(function(){el.textContent=original},220);
+  }
+  function scheduleTickerGlitch(){
+    setTimeout(function(){ if(hasAccess()&&!reduceMotion)glitchTicker(); scheduleTickerGlitch(); },15000+Math.random()*25000);
+  }
+  scheduleTickerGlitch();
+
+  /* idle whisper, reusing the existing creepy-toast element */
+  var WHISPERS=[
+    ['НЕОЖИДАННО ТИХО','Курсор не двигался почти минуту. Обычно операторы отвечают быстрее.'],
+    ['АРХИВ ЗАМЕТИЛ ПАУЗУ','Возможно, вы просто читаете. Терминал предпочитает думать, что да.'],
+    ['МОЛЧАНИЕ ЗАФИКСИРОВАНО','Ничего не произошло. Это и есть повод для записи.'],
+    ['НЕТ ДВИЖЕНИЯ','Курсор остался на месте. Взгляд — не всегда.'],
+    ['ПРОВЕРКА ПРИСУТСТВИЯ','Терминал не может подтвердить, что вы всё ещё смотрите на экран. Продолжает считать, что да.'],
+    ['КЛАВИАТУРА МОЛЧИТ','Последний ввод был давно. Консоль всё ещё ждёт следующую команду.'],
+    ['ВКЛАДКА ОТКРЫТА','Вы не закрыли терминал. Архив расценивает это как согласие продолжать наблюдение.']
+  ];
+  var whisperShown=0, idleTO=null;
+  function showToastRaw(title,text){
+    var t=document.getElementById('creepyToast'),tt=document.getElementById('creepyToastTitle'),tx2=document.getElementById('creepyToastText');
+    if(!t||!tt||!tx2)return;
+    tt.textContent=title; tx2.textContent=text; t.classList.add('show');
+    clearTimeout(window.__bbhToastHide);
+    window.__bbhToastHide=setTimeout(function(){t.classList.remove('show')},7000);
+  }
+  function showWhisper(){
+    if(!hasAccess()||whisperShown>=2)return;
+    var pick=WHISPERS[Math.floor(Math.random()*WHISPERS.length)];
+    showToastRaw(pick[0],pick[1]); whisperShown++;
+    if(typeof logEvent==='function')logEvent('IDLE WHISPER','SYSTEM');
+    if(sfxOn()&&window.BBHSFX&&typeof window.BBHSFX.play==='function')window.BBHSFX.play('notify');
+  }
+  function resetIdle(){clearTimeout(idleTO); idleTO=setTimeout(showWhisper,55000)}
+  ['pointermove','keydown','pointerdown','scroll'].forEach(function(ev){document.addEventListener(ev,resetIdle,{passive:true})});
+  resetIdle();
+
+  /* the tab title plays along when you look away */
+  var originalTitle=document.title, titleTO=null, awayTitles=['НЕ УХОДИ.','...ВСЁ ЕЩЁ ЗДЕСЬ?','ВЕРНИСЬ.'];
+  document.addEventListener('visibilitychange',function(){
+    if(document.hidden){
+      if(!hasAccess())return;
+      titleTO=setTimeout(function(){document.title=awayTitles[Math.floor(Math.random()*awayTitles.length)]},2600);
+    }else{
+      clearTimeout(titleTO); document.title=originalTitle;
+    }
+  });
+
+  /* typing her name gets a reply it shouldn't be fast enough to give */
+  var buf='';
+  document.addEventListener('keydown',function(e){
+    if(!e.key||e.key.length!==1)return;
+    buf=(buf+e.key).slice(-16).toLowerCase();
+    if(buf.indexOf('mila')!==-1||buf.indexOf('мила')!==-1){
+      buf='';
+      if(!hasAccess())return;
+      showToastRaw('ОНА УСЛЫШАЛА ИМЯ','Мила не должна была ответить так быстро. Тикет обновился сам.');
+      if(typeof logEvent==='function')logEvent('NAME TRIGGER: MILA','UNKNOWN');
+    }
+  });
+
+  /* a small eye replaces the default favicon, and blinks now and then */
+  function drawEye(closed,red){
+    var c=document.createElement('canvas'); c.width=32; c.height=32;
+    var g=c.getContext('2d'); if(!g)return null;
+    var iris=red?'#ff5d59':'#53dc72', pupil=red?'#ffb0ad':'#8affa0';
+    g.fillStyle='#050605'; g.fillRect(0,0,32,32);
+    g.strokeStyle='#3a453d'; g.lineWidth=2; g.beginPath(); g.arc(16,16,13,0,Math.PI*2); g.stroke();
+    if(closed){
+      g.strokeStyle=iris; g.lineWidth=3; g.beginPath(); g.moveTo(7,16); g.lineTo(25,16); g.stroke();
+    }else{
+      g.fillStyle='#0a0c0a'; g.beginPath(); g.ellipse(16,16,10,6,0,0,Math.PI*2); g.fill();
+      g.strokeStyle=iris; g.lineWidth=1.4; g.beginPath(); g.ellipse(16,16,10,6,0,0,Math.PI*2); g.stroke();
+      g.fillStyle=pupil; g.beginPath(); g.arc(16,16,3.1,0,Math.PI*2); g.fill();
+    }
+    return c.toDataURL('image/png');
+  }
+  function setFavicon(href){
+    if(!href)return;
+    var link=document.getElementById('bbhFavicon');
+    if(!link){link=document.createElement('link'); link.id='bbhFavicon'; link.rel='icon'; document.head.appendChild(link);}
+    link.href=href;
+  }
+  setFavicon(drawEye(false,false));
+  setInterval(function(){
+    var red=Math.random()<0.16;
+    setFavicon(drawEye(true,red));
+    setTimeout(function(){setFavicon(drawEye(false,red))},red?260:140);
+    if(red)setTimeout(function(){setFavicon(drawEye(false,false))},2600);
+  },40000+Math.random()*50000);
+})();
+</script>
+
+<!-- ============================================================
+     AMBIENT LAYER II — static bursts, a second presence, deeper silence
+     ============================================================ -->
+<canvas class="bbh-static-canvas" id="bbhStatic" width="160" height="90"></canvas>
+
+<style id="bbhAtmosphereStyle2">
+.bbh-static-canvas{position:fixed;inset:0;width:100%;height:100%;z-index:955;pointer-events:none;opacity:0;image-rendering:pixelated}
+.bbh-static-canvas.go{animation:bbhStaticGo .32s steps(4) both}
+@keyframes bbhStaticGo{0%{opacity:0}20%{opacity:.5}45%{opacity:0}70%{opacity:.28}100%{opacity:0}}
+.bbh-ghost-cursor{position:fixed;z-index:960;pointer-events:none;width:14px;height:14px;opacity:0;left:0;top:0}
+@media(prefers-reduced-motion:reduce){.bbh-static-canvas,.bbh-ghost-cursor{display:none!important}}
+</style>
+
+<script id="bbhAtmosphere2">
+(function(){
+  'use strict';
+  function hasAccess(){return !document.body.classList.contains('locked')}
+  function sfxOn(){try{return localStorage.getItem('bbh_sfx_enabled_v1')!=='off'}catch(e){return true}}
+  var reduceMotion=!!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+  if(reduceMotion)return;
+
+  /* an occasional burst of dead-channel static across the whole page */
+  var staticCanvas=document.getElementById('bbhStatic'), sctx=staticCanvas&&staticCanvas.getContext('2d');
+  function burstStatic(){
+    if(!hasAccess()||!sctx)return;
+    var w=staticCanvas.width,h=staticCanvas.height,img=sctx.createImageData(w,h),d=img.data;
+    for(var i=0;i<d.length;i+=4){var v=(Math.random()*255)|0;d[i]=v;d[i+1]=v;d[i+2]=v;d[i+3]=255}
+    sctx.putImageData(img,0,0);
+    staticCanvas.classList.remove('go'); void staticCanvas.offsetWidth; staticCanvas.classList.add('go');
+    if(sfxOn()&&window.BBHSFX&&typeof window.BBHSFX.play==='function')window.BBHSFX.play('error');
+  }
+  function scheduleStatic(){
+    setTimeout(function(){ if(Math.random()<0.5)burstStatic(); scheduleStatic(); },160000+Math.random()*220000);
+  }
+  scheduleStatic();
+
+  /* a second, fainter cursor that occasionally drifts near your own and fades */
+  var lastMouse={x:innerWidth/2,y:innerHeight/2};
+  window.addEventListener('pointermove',function(e){lastMouse.x=e.clientX;lastMouse.y=e.clientY},{passive:true});
+  function spawnGhostCursor(x,y){
+    var el=document.createElement('div'); el.className='bbh-ghost-cursor';
+    el.innerHTML='<svg width="14" height="14" viewBox="0 0 14 14"><path d="M1 1 L1 12 L4 9.3 L6 13 L7.7 12.1 L5.8 8.6 L9.6 8.4 Z" fill="rgba(150,255,170,.55)" stroke="rgba(70,190,100,.55)" stroke-width="0.6"/></svg>';
+    var ox=(Math.random()*70-35), oy=(Math.random()*70-35);
+    el.style.left=(x+ox)+'px'; el.style.top=(y+oy)+'px'; el.style.transition='opacity .3s ease';
+    document.body.appendChild(el);
+    requestAnimationFrame(function(){el.style.opacity='.8'});
+    setTimeout(function(){
+      el.style.transition='opacity 1.1s ease, transform 1.1s ease';
+      el.style.transform='translate('+(Math.random()*40-20)+'px,'+(Math.random()*40-20)+'px)';
+      el.style.opacity='0';
+    },500);
+    setTimeout(function(){el.remove()},1700);
+  }
+  function scheduleGhostCursor(){
+    setTimeout(function(){
+      if(hasAccess()&&Math.random()<0.4)spawnGhostCursor(lastMouse.x,lastMouse.y);
+      scheduleGhostCursor();
+    },110000+Math.random()*150000);
+  }
+  scheduleGhostCursor();
+
+  /* a deeper whisper after a much longer silence, once per session */
+  var DEEP_WHISPERS=[
+    ['ДОЛГАЯ ПАУЗА','Вы не двигались почти три минуты. Обычно это значит, что вас позвали в другую комнату.'],
+    ['АРХИВ ПРОДОЛЖИЛ БЕЗ ВАС','Пока вы отсутствовали, счётчик наблюдателей всё равно вырос.'],
+    ['ТИКЕТ ОБНОВИЛСЯ САМ','За время вашего отсутствия статус тикета изменился без нового сообщения.']
+  ];
+  var deepShown=false, deepTO=null;
+  function showDeepWhisper(){
+    if(deepShown||!hasAccess())return; deepShown=true;
+    var t=document.getElementById('creepyToast'),tt=document.getElementById('creepyToastTitle'),tx=document.getElementById('creepyToastText');
+    if(!t||!tt||!tx)return;
+    var pick=DEEP_WHISPERS[Math.floor(Math.random()*DEEP_WHISPERS.length)];
+    tt.textContent=pick[0]; tx.textContent=pick[1]; t.classList.add('show');
+    clearTimeout(window.__bbhToastHide); window.__bbhToastHide=setTimeout(function(){t.classList.remove('show')},8000);
+    if(typeof logEvent==='function')logEvent('DEEP IDLE WHISPER','SYSTEM');
+    if(sfxOn()&&window.BBHSFX&&typeof window.BBHSFX.play==='function')window.BBHSFX.play('rare');
+  }
+  function resetDeepIdle(){clearTimeout(deepTO); if(!deepShown)deepTO=setTimeout(showDeepWhisper,180000)}
+  ['pointermove','keydown','pointerdown','scroll'].forEach(function(ev){document.addEventListener(ev,resetDeepIdle,{passive:true})});
+  resetDeepIdle();
+})();
+</script>
+
+<!-- ============================================================
+     AMBIENT LAYER III — context menu, a flashed word, an unsent reply
+     ============================================================ -->
+<div class="bbh-subliminal" id="bbhSubliminal"></div>
+
+<style id="bbhAtmosphereStyle3">
+.bbh-subliminal{position:fixed;inset:0;z-index:970;display:flex;align-items:center;justify-content:center;pointer-events:none;opacity:0;color:#ff5d59;font:800 clamp(28px,6vw,72px)/1 Arial;text-transform:uppercase;letter-spacing:-.02em;text-shadow:0 0 30px rgba(255,70,65,.4);text-align:center;padding:20px}
+.bbh-subliminal.go{animation:bbhSubliminalGo .4s steps(2) both}
+@keyframes bbhSubliminalGo{0%{opacity:0}45%{opacity:.92}100%{opacity:0}}
+.bbh-ctx-note{position:fixed;z-index:965;pointer-events:none;border:1px solid #3a413c;background:rgba(8,11,8,.95);color:#b8c0ba;padding:8px 10px;font:9px monospace;letter-spacing:.08em;max-width:240px;opacity:0;transition:opacity .25s ease;box-shadow:0 12px 30px rgba(0,0,0,.5)}
+.bbh-ctx-note.show{opacity:1}
+@media(prefers-reduced-motion:reduce){.bbh-subliminal{display:none!important}}
+body.bbh-screen-glitch{animation:bbhScreenGlitch .42s steps(3) both}
+@keyframes bbhScreenGlitch{0%{filter:none;transform:none}20%{filter:invert(1) hue-rotate(180deg);transform:translateX(-2px)}45%{filter:contrast(2) brightness(1.3);transform:translateX(2px)}70%{filter:invert(1) saturate(2);transform:translateX(-1px)}100%{filter:none;transform:none}}
+@media(prefers-reduced-motion:reduce){body.bbh-screen-glitch{animation:none!important;filter:none!important}}
+</style>
+
+<script id="bbhAtmosphere3">
+(function(){
+  'use strict';
+  function hasAccess(){return !document.body.classList.contains('locked')}
+  var reduceMotion=!!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+
+  /* the right-click menu gets replaced with a short, unhelpful note */
+  var CONTEXT_LINES=[
+    'Здесь не на чем сохраняться.',
+    'Меню отключено. Спрашивать разрешения уже поздно.',
+    'Нечего смотреть под курсором.',
+    'Правый клик не помогает закрыть архив.',
+    'Код можно инспектировать. Себя — не обязательно.',
+    'Курсор здесь только гость.',
+    'Это меню закрыто ещё до того, как вы нажали.'
+  ];
+  function showContextNote(text,x,y){
+    var el=document.createElement('div'); el.className='bbh-ctx-note';
+    el.textContent=text;
+    el.style.left=Math.min(x,innerWidth-250)+'px'; el.style.top=Math.min(y,innerHeight-60)+'px';
+    document.body.appendChild(el);
+    requestAnimationFrame(function(){el.classList.add('show')});
+    setTimeout(function(){el.classList.remove('show'); setTimeout(function(){el.remove()},300)},1500);
+  }
+  document.addEventListener('contextmenu',function(e){
+    if(!hasAccess())return;
+    e.preventDefault();
+    showContextNote(CONTEXT_LINES[Math.floor(Math.random()*CONTEXT_LINES.length)],e.clientX,e.clientY);
+  },true);
+
+  /* one flashed word, once per session, well into the visit */
+  var subliminalShown=false;
+  var SUBLIMINAL_WORDS=['НЕ ОБОРАЧИВАЙСЯ','ОНА СМОТРИТ','ТЫ НЕ ОДИН','ЗАКРОЙ ГЛАЗА','ОНО УЖЕ ЗНАЕТ'];
+  function maybeSubliminal(){
+    if(subliminalShown||!hasAccess()||reduceMotion)return;
+    subliminalShown=true;
+    var el=document.getElementById('bbhSubliminal'); if(!el)return;
+    el.textContent=SUBLIMINAL_WORDS[Math.floor(Math.random()*SUBLIMINAL_WORDS.length)];
+    el.classList.remove('go'); void el.offsetWidth; el.classList.add('go');
+  }
+  setTimeout(function(){ if(Math.random()<0.7)maybeSubliminal(); },240000+Math.random()*300000);
+
+  /* Mila occasionally starts typing and then thinks better of it */
+  function scheduleGhostTyping(){
+    setTimeout(function(){
+      if(hasAccess()&&Math.random()<0.35){
+        var typing=document.getElementById('typing');
+        if(typing&&!typing.textContent){
+          typing.textContent='MILA IS TYPING…';
+          setTimeout(function(){ if(typing.textContent==='MILA IS TYPING…')typing.textContent='' },2200+Math.random()*1400);
+        }
+      }
+      scheduleGhostTyping();
+    },150000+Math.random()*220000);
+  }
+  scheduleGhostTyping();
+})();
+</script>
+
+<!-- ============================================================
+     AMBIENT LAYER IV — a stray keystroke, a knock, a redacted frame
+     ============================================================ -->
+<style id="bbhAtmosphereStyle4">
+::selection{background:#5a1414;color:#ffe9e6}
+.card-media{position:relative}
+.card-media:before{content:'';position:absolute;left:0;right:0;top:-100%;height:42%;background:#000;z-index:2;pointer-events:none}
+.card-media.bbh-sweep:before{animation:bbhSweep .65s ease forwards}
+@keyframes bbhSweep{0%{top:-100%}50%{top:28%}100%{top:120%}}
+@media(prefers-reduced-motion:reduce){.card-media.bbh-sweep:before{animation:none!important;display:none}}
+</style>
+
+<script id="bbhAtmosphere4">
+(function(){
+  'use strict';
+  function hasAccess(){return !document.body.classList.contains('locked')}
+  function sfxOn(){try{return localStorage.getItem('bbh_sfx_enabled_v1')!=='off'}catch(e){return true}}
+  var reduceMotion=!!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+
+  /* while the chat sits idle mid-message, a character sometimes appears that nobody typed */
+  var chatInputEl=document.getElementById('chatInput');
+  if(chatInputEl){
+    var phantomTO=null;
+    chatInputEl.addEventListener('input',function(){
+      clearTimeout(phantomTO);
+      var val=chatInputEl.value;
+      if(!val)return;
+      phantomTO=setTimeout(function(){
+        if(Math.random()<0.3 && document.activeElement===chatInputEl && chatInputEl.value===val){
+          var extra=['.','…','?','_'][Math.floor(Math.random()*4)];
+          var before=chatInputEl.value;
+          chatInputEl.value=before+extra;
+          if(typeof logEvent==='function')logEvent('INPUT ANOMALY','UNKNOWN');
+          setTimeout(function(){ if(chatInputEl.value===before+extra)chatInputEl.value=before; },900);
+        }
+      },4000);
+    });
+  }
+
+  /* three faint knocks, once, sometime in the middle of a long visit */
+  var knocksFired=false;
+  function maybeKnocks(){
+    if(knocksFired||!hasAccess())return;
+    if(Math.random()<0.5 && sfxOn() && window.BBHSFX && typeof window.BBHSFX.play==='function'){
+      knocksFired=true;
+      window.BBHSFX.play('rare');
+      setTimeout(function(){window.BBHSFX.play('rare')},260);
+      setTimeout(function(){window.BBHSFX.play('rare')},520);
+      if(typeof logEvent==='function')logEvent('UNKNOWN KNOCK PATTERN','UNKNOWN');
+    }
+  }
+  setTimeout(maybeKnocks,300000+Math.random()*300000);
+
+  /* one toast that isn't tied to any real progress */
+  var fakeAchFired=false;
+  function maybeUntrackedToast(){
+    if(fakeAchFired||!hasAccess())return;
+    if(Math.random()<0.4){
+      fakeAchFired=true;
+      if(typeof showToast==='function')showToast('ОНА ЗАМЕТИЛА','Эта запись не связана с прогрессом сохранения.','НЕИЗВЕСТНОЕ СОБЫТИЕ');
+      if(typeof logEvent==='function')logEvent('UNTRACKED TOAST','UNKNOWN');
+    }
+  }
+  setTimeout(maybeUntrackedToast,200000+Math.random()*260000);
+
+  /* a recovered frame is briefly redacted, then isn't */
+  function sweepRandomCard(){
+    if(!hasAccess()||reduceMotion)return;
+    var cards=document.querySelectorAll('.card-media');
+    if(!cards.length)return;
+    var el=cards[Math.floor(Math.random()*cards.length)];
+    el.classList.remove('bbh-sweep'); void el.offsetWidth; el.classList.add('bbh-sweep');
+    setTimeout(function(){el.classList.remove('bbh-sweep')},700);
+  }
+  function scheduleSweep(){
+    setTimeout(function(){ if(Math.random()<0.6)sweepRandomCard(); scheduleSweep(); },100000+Math.random()*140000);
+  }
+  scheduleSweep();
+
+  /* a support "typing…" indicator that flickers on with nobody sending anything */
+  var fakeTypingFired=false;
+  function maybeGhostTyping(){
+    if(fakeTypingFired||!hasAccess())return;
+    var typingEl=document.getElementById('typing');
+    if(!typingEl||reduceMotion)return;
+    if(Math.random()<0.3){
+      fakeTypingFired=true;
+      typingEl.textContent='MILA ПЕЧАТАЕТ…';
+      setTimeout(function(){
+        typingEl.textContent='';
+        if(typeof logEvent==='function')logEvent('GHOST TYPING INDICATOR','UNKNOWN');
+      },3200+Math.random()*2600);
+    }
+  }
+  setTimeout(maybeGhostTyping,240000+Math.random()*220000);
+
+  /* a rare full-screen visual desync — once per session, never for reduced-motion users */
+  var glitchFired=false;
+  function maybeScreenGlitch(){
+    if(glitchFired||!hasAccess()||reduceMotion)return;
+    if(Math.random()<0.22){
+      glitchFired=true;
+      document.body.classList.add('bbh-screen-glitch');
+      setTimeout(function(){document.body.classList.remove('bbh-screen-glitch')},450);
+      if(typeof logEvent==='function')logEvent('VISUAL DESYNC','UNKNOWN');
+      setTimeout(function(){if(typeof showCreepyToast==='function')showCreepyToast('SIGNAL CORRECTED','Кадр вернулся в норму. Причина отклонения не установлена.')},900);
+    }
+  }
+  setTimeout(maybeScreenGlitch,150000+Math.random()*210000);
+
+  /* a third voice in the support chat — appears once, then is retracted by Mila */
+  var ghostMsgFired=false;
+  function maybeGhostMessage(){
+    if(ghostMsgFired||!hasAccess())return;
+    var log=document.getElementById('chatLog'); if(!log)return;
+    if(Math.random()<0.3){
+      ghostMsgFired=true;
+      var el=document.createElement('div'); el.className='msg'; el.id='bbhGhostMsg';
+      el.innerHTML='<span class="who"><b>UNKNOWN</b> · SUPPORT</span>Я тоже жду ответа.';
+      log.appendChild(el); log.scrollTop=log.scrollHeight;
+      var unread=document.getElementById('supportUnread'); if(unread)unread.classList.add('on');
+      if(typeof logEvent==='function')logEvent('UNKNOWN SENDER IN CHAT','UNKNOWN');
+      setTimeout(function(){
+        var g=document.getElementById('bbhGhostMsg'); if(g)g.remove();
+        var el2=document.createElement('div'); el2.className='msg';
+        el2.innerHTML='<span class="who"><b>MILA</b> · SUPPORT</span>Игнорируйте предыдущее сообщение. Оно было отправлено не от лица поддержки.';
+        log.appendChild(el2); log.scrollTop=log.scrollHeight;
+        if(typeof logEvent==='function')logEvent('MESSAGE RETRACTED','SUPPORT');
+      },4200+Math.random()*1800);
+    }
+  }
+  setTimeout(maybeGhostMessage,330000+Math.random()*270000);
+
+  /* печать отключена намеренно — та же логика, что и блокировка правого клика */
+  document.addEventListener('keydown',function(e){
+    if((e.ctrlKey||e.metaKey)&&(e.key==='p'||e.key==='P')){
+      if(!hasAccess())return;
+      e.preventDefault();
+      if(typeof showCreepyToast==='function')showCreepyToast('PRINT REQUEST DENIED','Этот архив существует только в этой вкладке. Печать отключена намеренно.');
+      if(typeof logEvent==='function')logEvent('PRINT ATTEMPT BLOCKED','SYSTEM');
+    }
+  },true);
+  window.addEventListener('beforeprint',function(){
+    if(typeof logEvent==='function')logEvent('PRINT DIALOG OPENED','SYSTEM');
+  });
+
+  /* a message for anyone who opens the developer console */
+  try{
+    console.log('%cARCHIVE ACCESS LOG','color:#8affa0;font-family:monospace;font-size:14px;font-weight:bold;');
+    console.log('%cЕсли вы это читаете — терминал уже отметил ваш визит.','color:#9aa39d;font-family:monospace;font-size:11px;');
+    console.log('%cNight Support рекомендует закрыть эту панель.','color:#6e7771;font-family:monospace;font-size:11px;');
+  }catch(e){}
+
+  /* real second-tab detection — not a fake random event, this one genuinely happens */
+  try{
+    var bbhBC=new BroadcastChannel('bbh_presence_v1');
+    var bbhTabId=Math.random().toString(36).slice(2);
+    var bbhOtherSeen=false;
+    bbhBC.onmessage=function(ev){
+      if(ev.data&&ev.data.id&&ev.data.id!==bbhTabId&&!bbhOtherSeen&&hasAccess()){
+        bbhOtherSeen=true;
+        if(typeof showCreepyToast==='function')showCreepyToast('ВТОРОЙ НАБЛЮДАТЕЛЬ','Этот архив уже открыт в другой вкладке на этом устройстве.');
+        if(typeof logEvent==='function')logEvent('SECOND TAB DETECTED','SYSTEM');
+      }
+    };
+    bbhBC.postMessage({id:bbhTabId});
+    setInterval(function(){try{bbhBC.postMessage({id:bbhTabId})}catch(e){}},15000);
+  }catch(e){}
+
+  /* completely undocumented — no hint anywhere in the UI, on purpose */
+  var bbhSeq=['arrowup','arrowup','arrowdown','arrowdown','arrowleft','arrowright','arrowleft','arrowright','b','a'];
+  var bbhPos=0;
+  document.addEventListener('keydown',function(e){
+    var key=(e.key||'').toLowerCase();
+    if(key===bbhSeq[bbhPos]){
+      bbhPos++;
+      if(bbhPos===bbhSeq.length){
+        bbhPos=0;
+        if(hasAccess()){
+          if(typeof showCreepyToast==='function')showCreepyToast('НЕЗАДОКУМЕНТИРОВАННАЯ ПОСЛЕДОВАТЕЛЬНОСТЬ','Архив не должен был её принять. Но принял.');
+          if(typeof logEvent==='function')logEvent('HIDDEN SEQUENCE ACCEPTED','SECRET');
+        }
+      }
+    }else{
+      bbhPos=(key===bbhSeq[0])?1:0;
+    }
+  });
+
+  /* a real (not scripted) heuristic for an open devtools panel */
+  var bbhDevtoolsFired=false;
+  function bbhCheckDevtools(){
+    if(bbhDevtoolsFired||!hasAccess())return;
+    var threshold=160;
+    if((window.outerWidth-window.innerWidth>threshold)||(window.outerHeight-window.innerHeight>threshold)){
+      bbhDevtoolsFired=true;
+      if(typeof logEvent==='function')logEvent('DEVTOOLS PANEL DETECTED','SYSTEM');
+      if(typeof showCreepyToast==='function')showCreepyToast('ПАНЕЛЬ РАЗРАБОТЧИКА ОТКРЫТА','Обычные посетители сюда не заглядывают.');
+    }
+  }
+  setInterval(bbhCheckDevtools,1500);
+
+  /* the game's own numbers, checked against the real device clock */
+  var bbhRealTimeFired={};
+  function bbhCheckRealTime(){
+    if(!hasAccess())return;
+    var d=new Date(),key=d.toDateString();
+    if(d.getHours()===3&&d.getMinutes()===17&&!bbhRealTimeFired[key+'0317']){
+      bbhRealTimeFired[key+'0317']=true;
+      if(typeof logEvent==='function')logEvent('REAL CLOCK MATCHED 03:17','SYSTEM');
+      if(typeof showCreepyToast==='function')showCreepyToast('СЕЙЧАС РОВНО 03:17','Это не время в игре. Это время на этом устройстве, прямо сейчас.');
+    }
+    if(d.getHours()===0&&d.getMinutes()===0&&!bbhRealTimeFired[key+'0000']){
+      bbhRealTimeFired[key+'0000']=true;
+      if(typeof logEvent==='function')logEvent('REAL CLOCK MATCHED 00:00','SYSTEM');
+      if(typeof showCreepyToast==='function')showCreepyToast('ПОЛНОЧЬ','Локальные часы устройства только что показали полночь. Архив это заметил.');
+    }
+  }
+  setInterval(bbhCheckRealTime,20000);
+
+  /* real connectivity changes, framed the same way as everything else here */
+  window.addEventListener('offline',function(){
+    if(!hasAccess())return;
+    if(typeof logEvent==='function')logEvent('CONNECTION LOST','SYSTEM');
+    if(typeof showCreepyToast==='function')showCreepyToast('СОЕДИНЕНИЕ ПОТЕРЯНО','Локальный архив продолжает работать без сети. Как и раньше.');
+  });
+  window.addEventListener('online',function(){
+    if(!hasAccess())return;
+    if(typeof logEvent==='function')logEvent('CONNECTION RESTORED','SYSTEM');
+    if(typeof showCreepyToast==='function')showCreepyToast('СОЕДИНЕНИЕ ВОССТАНОВЛЕНО','Хотя оно и не требовалось, чтобы архив вас видел.');
+  });
+
+  /* silent — nothing in the UI announces this. it only shows up once you paste elsewhere */
+  document.addEventListener('copy',function(e){
+    if(!hasAccess())return;
+    var sel=document.getSelection?document.getSelection().toString():'';
+    if(!sel||!e.clipboardData)return;
+    e.clipboardData.setData('text/plain',sel+'\n\n[BBH ARCHIVE // скопировано с терминала, который не ведёт логов копирования]');
+    e.preventDefault();
+  });
+})();
+</script>
+
+</body>
+</html>
