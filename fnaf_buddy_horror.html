@@ -4115,25 +4115,59 @@
           var w=f.contentWindow;
           if(w){
             w.__BBH_CLASSIC_EMBED=true;
+            // ВАЖНО (фикс бага «меню-трек не глохнет при заходе в ночь»):
+            // musicNodes/musicMode/musicPlaying внутри классики объявлены
+            // через let на верхнем уровне скрипта — это лексические
+            // переменные, а НЕ свойства window. Писать в w.musicNodes значит
+            // создавать отдельный, никем изнутри классики не читаемый массив:
+            // родной stopMusic() классики итерирует свой собственный
+            // (лексический) musicNodes и никогда не видел эти осцилляторы,
+            // поэтому бас продолжал играть поверх любой ночи. Теперь узлы
+            // баса живут в замыкании ниже, а его остановка подцеплена прямо
+            // к настоящему w.stopMusic — единственной функции, которую
+            // классика реально вызывает при входе в ночь/катсцену/сложную ночь.
+            var classicBassNodes=[];
+            function stopClassicBass(){
+              try{
+                classicBassNodes.forEach(function(n){
+                  try{ if(n.stop) n.stop(); }catch(eS){}
+                  try{ if(n.disconnect) n.disconnect(); }catch(eD){}
+                });
+              }catch(eA){}
+              classicBassNodes=[];
+            }
             w.startMenuAmbient=function(){
               try{
-                if(w.musicMode==='casino')return;
-                try{ if(w.stopMusic) w.stopMusic(); }catch(e0){}
+                if(classicBassNodes.length)return; // уже играет — не плодить осцилляторы
                 var ac=w.ensureAudio&&w.ensureAudio(); if(!ac)return;
                 try{ if(ac.state==='suspended')ac.resume(); }catch(e1){}
                 try{ if(w.ensureAudioBus)w.ensureAudioBus(ac); }catch(e2){}
-                w.musicPlaying=true; w.musicMode='menu';
-                w.musicNodes=[];
                 var dest=(w.musicBusGain||w.masterGain||ac.destination);
                 var master=ac.createGain(); master.gain.value=0.001; master.connect(dest);
-                var mk=function(freq,type,vol){ var o=ac.createOscillator(),g=ac.createGain(); o.type=type; o.frequency.value=freq; g.gain.value=vol; o.connect(g); g.connect(master); o.start(); (w.musicNodes=w.musicNodes||[]).push(o); };
+                var mk=function(freq,type,vol){ var o=ac.createOscillator(),g=ac.createGain(); o.type=type; o.frequency.value=freq; g.gain.value=vol; o.connect(g); g.connect(master); o.start(); classicBassNodes.push(o); };
                 // только низ — без mid/high мотивов
                 mk(32,'sine',0.06); mk(45,'sine',0.07); mk(55,'sine',0.045); mk(68,'triangle',0.028);
-                try{ var lfo=ac.createOscillator(),lfoG=ac.createGain(); lfo.frequency.value=0.05; lfoG.gain.value=0.022; lfo.connect(lfoG); lfoG.connect(master.gain); lfo.start(); w.musicNodes.push(lfo,lfoG); }catch(e3){}
+                try{ var lfo=ac.createOscillator(),lfoG=ac.createGain(); lfo.frequency.value=0.05; lfoG.gain.value=0.022; lfo.connect(lfoG); lfoG.connect(master.gain); lfo.start(); classicBassNodes.push(lfo,lfoG); }catch(e3){}
                 try{ master.gain.linearRampToValueAtTime(0.20, ac.currentTime+1.0); }catch(e4){ master.gain.value=0.18; }
-                w.musicNodes.push(master);
+                classicBassNodes.push(master);
               }catch(eAmb){ console.warn(eAmb); }
             };
+            // перехватываем настоящий stopMusic() классики: именно его дёргают
+            // startNight()/stopAllGameMusic()/startN5SadMusic() и т.д. при входе
+            // в ночь, катсцену или сложную ночь — значит это и есть правильная
+            // точка, где нужно заодно заглушить наш бас
+            (function patchClassicStop(tries){
+              try{
+                if(typeof w.stopMusic==='function' && !w.stopMusic.__bbhBassPatched){
+                  var origStopMusic=w.stopMusic;
+                  var patchedStop=function(){ stopClassicBass(); return origStopMusic.apply(w,arguments); };
+                  patchedStop.__bbhBassPatched=true;
+                  w.stopMusic=patchedStop;
+                  return;
+                }
+              }catch(e0){}
+              if(tries>0) setTimeout(function(){ patchClassicStop(tries-1); }, 120);
+            })(20);
             // игра в iframe может инициализироваться чуть позже onload — ретраи
             (function applyClassicBass(tries){
               try{
