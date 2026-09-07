@@ -17,7 +17,11 @@
 .enter-btn:not(:disabled):hover{box-shadow:0 0 0 1px rgba(138,255,151,.08),0 10px 28px rgba(60,180,80,.12),inset 0 0 22px rgba(95,220,115,.05)}
 @media (prefers-reduced-motion:reduce){.btn,.enter-btn,.signal-btn,.close,.rare-close,.locker-btn,.chat-send,.cookie-actions button,#commandRun{transition:none}.btn:hover,.enter-btn:hover,.signal-btn:hover,.close:hover,.rare-close:hover,.locker-btn:hover,.chat-send:hover,.cookie-actions button:hover,#commandRun:hover,.btn:active,.enter-btn:active,.signal-btn:active,.close:active,.rare-close:active,.locker-btn:active,.chat-send:active,.cookie-actions button:active,#commandRun:active{transform:none}}
 
-body:before{content:"";position:fixed;inset:0;pointer-events:none;z-index:80;opacity:.052;background:repeating-linear-gradient(0deg,transparent 0 3px,rgba(255,255,255,.56) 4px),radial-gradient(circle at 50% 18%,transparent 0 35%,#000 100%);mix-blend-mode:screen}
+body:before{content:"";position:fixed;inset:0;pointer-events:none;z-index:8;opacity:.052;transition:opacity .6s ease;background:repeating-linear-gradient(0deg,transparent 0 3px,rgba(255,255,255,.56) 4px),radial-gradient(circle at 50% 18%,transparent 0 35%,#000 100%);mix-blend-mode:screen}
+/* while the game is actually on screen, every ambient/creepy overlay effect is fully suppressed — no lag, no visual overlap with the iframe */
+body.game-active .bbh-flicker,body.game-active .bbh-static-canvas,body.game-active .bbh-subliminal,body.game-active .bbh-ghost-cursor,body.game-active .bbh-ctx-note,body.game-active #bbhBlackout,body.game-active .rare-event,body.game-active .toast-creepy{display:none!important;opacity:0!important}
+body.game-active{animation:none!important}
+body.game-active:after{animation:none!important}
 body:after{content:"";position:fixed;inset:-15%;pointer-events:none;z-index:-1;background:radial-gradient(circle at 50% 8%,rgba(132,255,155,.05),transparent 28%),radial-gradient(circle at 8% 85%,rgba(255,60,60,.03),transparent 24%),linear-gradient(180deg,#0a0c0a,#040504 55%,#070807);animation:breath 9s ease-in-out infinite}@keyframes breath{50%{filter:brightness(1.07)}}
 header{position:sticky;top:0;z-index:50;height:64px;border-bottom:1px solid var(--line);background:rgba(4,5,4,.9);backdrop-filter:blur(16px);display:flex;align-items:center;justify-content:space-between;padding:0 clamp(16px,4vw,64px)}
 .brand{display:flex;gap:11px;align-items:center}.logo{width:30px;height:30px;display:grid;place-items:center;border:1px solid #4c554d;color:var(--green);font:700 12px monospace;position:relative}.logo i{position:absolute;width:5px;height:5px;border-radius:50%;right:4px;top:4px;background:#58ff77;box-shadow:0 0 9px #58ff77}.brand h1{font-size:11px;letter-spacing:.24em;margin:0;font-family:monospace}.brand small{color:#616a64;letter-spacing:.16em;font:9px monospace}.nav{display:flex;gap:13px;align-items:center}.nav a{color:#79827b;text-decoration:none;font:9px monospace;letter-spacing:.13em;text-transform:uppercase;padding:8px 7px;border:1px solid transparent}.nav a:hover,.nav a.active{color:var(--green);border-color:#2d3630;background:#0a0d0a}
@@ -25,7 +29,7 @@ main{width:min(1380px,94vw);margin:auto}.ticker{margin:0 -3vw;border-top:1px sol
 .hero{padding:65px 0 48px;display:grid;grid-template-columns:1.18fr .82fr;gap:42px;align-items:end}.kicker{font:10px monospace;letter-spacing:.22em;color:#737b75;text-transform:uppercase}.kicker:before{content:"";display:inline-block;width:35px;height:1px;background:#4d564f;vertical-align:middle;margin-right:10px}.hero h2{font:800 clamp(42px,7vw,92px)/.9 Arial;margin:18px 0 16px;letter-spacing:-.065em;text-transform:uppercase;max-width:820px}.hero h2 span{color:var(--green)}.hero p{max-width:680px;color:#8a938d;font-size:14px;line-height:1.75;margin:0}.hero-side{border-left:1px solid var(--line);padding-left:26px}.stamp{font:10px monospace;letter-spacing:.15em;color:#6e7771;margin-bottom:16px}.stamp strong{color:var(--amber);font-weight:400}.facts{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--line);border:1px solid var(--line)}.fact{padding:15px;background:#090b09}.fact b{display:block;font:700 17px monospace;color:#d6dad7}.fact span{display:block;color:#69716d;font:9px monospace;letter-spacing:.1em;margin-top:5px}
 .panel{border:1px solid var(--line);background:linear-gradient(180deg,#0d100e,#090b09);box-shadow:var(--shadow)}.panel-head{height:44px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 16px;font:9px monospace;letter-spacing:.14em;color:#79817c;text-transform:uppercase}.lights{display:flex;gap:6px}.lights i{width:6px;height:6px;border-radius:50%;background:#2d332f}.lights i:first-child{background:#5fff79;box-shadow:0 0 8px rgba(95,255,121,.7)}.lights i:nth-child(2){background:#b79e61}.lights i:nth-child(3){background:#4d5650}
 .section{padding:62px 0}.section-title{display:flex;align-items:end;justify-content:space-between;border-bottom:1px solid var(--line);padding-bottom:13px;margin-bottom:18px}.section-title h3{margin:0;font:700 20px monospace;letter-spacing:.08em;text-transform:uppercase}.section-title span{font:9px monospace;color:#69716d;letter-spacing:.12em}
-.game-wrap{padding:10px}.game-screen{position:relative;aspect-ratio:960/620;background:#000;overflow:hidden;border:1px solid #303530}.game-screen:after{content:"LIVE FEED // LOCAL CLIENT";position:absolute;left:14px;top:12px;color:#8d9690;font:9px monospace;letter-spacing:.16em;opacity:.78;pointer-events:none}.game-screen iframe{display:block;width:100%;height:100%;border:0}.playbar{padding:11px 14px 13px;display:flex;align-items:center;justify-content:space-between;gap:10px;border-top:1px solid var(--line);font:9px monospace;color:#6e7771;letter-spacing:.12em}.btn{background:transparent;border:1px solid #3a403c;color:#c3c8c4;padding:9px 12px;font:9px monospace;letter-spacing:.12em;cursor:pointer}.btn:hover{border-color:#8aff97;color:var(--green)}
+.game-wrap{padding:10px}.game-screen{position:relative;z-index:9;aspect-ratio:960/620;background:#000;overflow:hidden;border:1px solid #303530}.game-screen:after{content:"LIVE FEED // LOCAL CLIENT";position:absolute;left:14px;top:12px;color:#8d9690;font:9px monospace;letter-spacing:.16em;opacity:.78;pointer-events:none}.game-screen iframe{display:block;width:100%;height:100%;border:0}.playbar{padding:11px 14px 13px;display:flex;align-items:center;justify-content:space-between;gap:10px;border-top:1px solid var(--line);font:9px monospace;color:#6e7771;letter-spacing:.12em}.btn{background:transparent;border:1px solid #3a403c;color:#c3c8c4;padding:9px 12px;font:9px monospace;letter-spacing:.12em;cursor:pointer}.btn:hover{border-color:#8aff97;color:var(--green)}
 .dossier-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.dossier-card{padding:20px;min-height:220px;position:relative;overflow:hidden}.dossier-card:before{content:"";position:absolute;right:-30px;top:-35px;width:120px;height:120px;border:1px solid rgba(170,255,180,.08);border-radius:50%}.dossier-icon{font:700 26px monospace;color:#3e4842}.dossier-card h4{font:700 13px Arial;letter-spacing:.08em;margin:18px 0 8px}.dossier-card p{margin:0;color:#7e8782;font-size:12px;line-height:1.65;max-width:320px}.dossier-foot{position:absolute;bottom:16px;left:20px;color:#59625c;font:8px monospace;letter-spacing:.15em}
 .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.card{border:1px solid var(--line);background:var(--panel);overflow:hidden;position:relative}.card-media{height:220px;background:#050605;position:relative;overflow:hidden}.card-media img{width:100%;height:100%;object-fit:cover;filter:contrast(1.05) brightness(.74) saturate(.6);transition:.25s transform,.25s filter}.card:hover .card-media img{transform:scale(1.025);filter:contrast(1.08) brightness(.88) saturate(.7)}.card-media .scan{position:absolute;inset:0;background:linear-gradient(180deg,transparent,rgba(0,0,0,.6)),repeating-linear-gradient(0deg,transparent 0 4px,rgba(255,255,255,.03) 5px);pointer-events:none}.card-meta{padding:13px 14px 16px}.card-meta small{font:9px monospace;color:#68716b;letter-spacing:.13em}.card-meta h4{margin:8px 0 5px;font:700 14px Arial;text-transform:uppercase}.card-meta p{margin:0;color:#7e8782;font-size:12px;line-height:1.55}.tag{position:absolute;left:10px;top:10px;border:1px solid rgba(255,255,255,.18);background:rgba(0,0,0,.65);padding:5px 7px;font:8px monospace;color:#b4bdb7;letter-spacing:.1em}
 .lore-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:12px}.file-sheet{padding:24px;min-height:330px;position:relative}.file-cap{display:flex;justify-content:space-between;font:9px monospace;color:#68716c;letter-spacing:.13em;border-bottom:1px dashed #292f2b;padding-bottom:10px}.file-sheet h4{font:700 22px/1.15 Arial;letter-spacing:-.02em;max-width:620px;margin:28px 0 15px}.file-sheet p{color:#838c86;font-size:13px;line-height:1.75;max-width:650px}.file-sheet blockquote{margin:24px 0 24px;padding:16px 18px;border-left:2px solid #78827a;background:#090c09;color:#b4bbb5;font:12px/1.7 monospace}.file-sheet small{font:8px monospace;color:#58615b;letter-spacing:.13em}.timeline{padding:8px 16px}.timeline-row{display:grid;grid-template-columns:64px 1fr auto;gap:12px;align-items:center;padding:16px 0;border-bottom:1px solid #1e231f;font:9px monospace}.timeline-row:last-child{border-bottom:0}.timeline-row span{color:#5f6862}.timeline-row b{font-weight:400;color:#acb4ae;letter-spacing:.08em}.timeline-row i{font-style:normal;color:#77bb7f;font-size:8px;letter-spacing:.1em}.timeline-row i.amber{color:#cdb26a}.timeline-row i.red{color:#d95a58}
@@ -34,14 +38,15 @@ main{width:min(1380px,94vw);margin:auto}.ticker{margin:0 -3vw;border-top:1px sol
 
 .profile-grid,.bulletin-grid,.locker-grid{display:grid;grid-template-columns:1.25fr .75fr;gap:12px}.identity-panel,.status-console,.bulletin-main,.event-log,.locker-card,.locker-status{padding:20px}.identity-head{display:grid;grid-template-columns:58px 1fr auto;gap:15px;align-items:center}.avatar-big{width:58px;height:58px;border:1px solid #465047;display:grid;place-items:center;font:700 18px monospace;color:var(--green);background:#090c09}.profile-code{font:8px monospace;color:#68716b;letter-spacing:.16em}.identity-head h4{margin:4px 0 3px;font:700 22px Arial;text-transform:uppercase}.profile-rank{border:1px solid #39423c;padding:8px;font:8px monospace;color:#a7b0aa;letter-spacing:.12em}.identity-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);margin-top:20px}.identity-stats div{padding:13px;background:#090b09}.identity-stats span{display:block;font:8px monospace;color:#606a63;letter-spacing:.12em}.identity-stats b{display:block;margin-top:6px;font:11px monospace;color:#cbd0cc}.identity-foot{margin-top:14px;color:#565e59;font:8px monospace;letter-spacing:.08em}.status-row{display:flex;justify-content:space-between;padding:11px 0;border-bottom:1px solid #1d231f;font:9px monospace}.status-row span{color:#657069}.status-row b{color:#b8c0ba}.status-meter{height:5px;background:#171b18;margin:16px 0}.status-meter i{display:block;height:100%;width:18%;background:linear-gradient(90deg,#4eff71,#d7ffdc);transition:.5s}.status-console p{margin:12px 0 0;color:#727b75;font-size:11px;line-height:1.6}.bulletin-grid{grid-template-columns:1fr .75fr}.bulletin-stamp{display:flex;justify-content:space-between;font:8px monospace;color:#69716c;letter-spacing:.14em}.bulletin-main h4{font:700 25px Arial;margin:25px 0 10px;letter-spacing:-.02em}.bulletin-main p{max-width:720px;color:#818a84;font-size:13px;line-height:1.7}.bulletin-actions{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:24px}.bulletin-actions span{font:8px monospace;color:#5f6862}.event-row{display:grid;grid-template-columns:65px 1fr auto;gap:9px;padding:11px 0;border-bottom:1px solid #1d231f;font:8px monospace}.event-row span{color:#5b655f}.event-row b{font-weight:400;color:#aab2ac}.event-row i{font-style:normal;color:#73bd7a}.locker-grid{grid-template-columns:repeat(3,1fr)}.locker-card{min-height:205px;position:relative}.locker-top{display:flex;justify-content:space-between;font:8px monospace;color:#626b65;letter-spacing:.12em}.locker-top b{font-weight:400;color:#7ac480}.locker-card h4{font:700 15px Arial;margin:28px 0 8px}.locker-card p{font-size:11px;line-height:1.65;color:#747d77;min-height:54px}.locker-card:not(.open){opacity:.72}.locker-card:not(.open) .locker-top b{color:#b59662}.locker-status{margin-top:12px;display:flex;align-items:center;gap:18px}.locker-status span{font:8px monospace;color:#606a63;letter-spacing:.13em}.locker-status b{font:9px monospace;color:#c4cbc6}.locker-status small{margin-left:auto;color:#5e6761;font:8px monospace}@media(max-width:900px){.profile-grid,.bulletin-grid,.locker-grid{grid-template-columns:1fr}.identity-stats{grid-template-columns:1fr 1fr}.nav{overflow-x:auto;max-width:60vw}.profile-rank{grid-column:2}.identity-head{grid-template-columns:58px 1fr}.locker-status{align-items:flex-start;flex-direction:column}.locker-status small{margin-left:0}}
 /* support center */
-.support-grid{display:grid;grid-template-columns:1.25fr .75fr;gap:12px}.support-chat{min-height:520px;display:flex;flex-direction:column}.chat-head{padding:16px 18px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center}.agent{display:flex;gap:11px;align-items:center}.agent-avatar{width:38px;height:38px;border:1px solid #435048;display:grid;place-items:center;font:700 11px monospace;color:var(--green);position:relative;background:#090c09}.agent-avatar:after{content:"";position:absolute;width:7px;height:7px;border-radius:50%;right:-3px;bottom:-3px;background:#61ff7c;box-shadow:0 0 10px rgba(97,255,124,.7)}.agent-name{font:700 11px Arial;text-transform:uppercase}.agent-role{font:8px monospace;color:#67716b;margin-top:3px;letter-spacing:.12em}.chat-status{font:8px monospace;color:#73c57e;border:1px solid #2b5835;padding:6px 8px;letter-spacing:.11em}.chat-log{flex:1;padding:17px;display:flex;flex-direction:column;gap:11px;overflow:auto;min-height:310px;max-height:390px}.msg{max-width:82%;padding:11px 12px;border:1px solid #252b26;background:#0a0d0a;font:10px/1.55 monospace;color:#aab2ac}.msg.user{align-self:flex-end;background:#0d130f;border-color:#2f4a35}.msg .who{display:block;font-size:8px;letter-spacing:.11em;color:#657069;margin-bottom:5px}.msg .who b{font-weight:400;color:#8bc893}.chat-compose{border-top:1px solid var(--line);padding:12px;display:grid;grid-template-columns:1fr auto;gap:8px}.chat-input{width:100%;background:#070907;border:1px solid #303730;color:#c8cec9;min-height:46px;padding:10px 11px;resize:none;outline:none;font:10px/1.5 monospace}.chat-input:focus{border-color:#547a5c}.chat-send{min-width:96px}.typing{font:8px monospace;color:#58625b;padding:0 17px 12px;min-height:18px;letter-spacing:.1em}.support-side{display:flex;flex-direction:column;gap:12px}.ticket-panel{padding:18px}.ticket-title{font:9px monospace;color:#6f7972;letter-spacing:.13em;margin-bottom:11px}.ticket-number{font:700 23px monospace;color:#d6dbd7}.ticket-meta{margin-top:7px;font:9px/1.7 monospace;color:#68716b}.faq{padding:14px 0;border-top:1px solid #1d231f}.faq:first-of-type{border-top:0}.faq b{font:700 10px Arial;display:block;margin-bottom:5px}.faq span{font:9px/1.5 monospace;color:#68716b}.support-note{padding:18px;color:#737d76;font:9px/1.6 monospace}.support-launch{position:fixed;right:19px;bottom:19px;z-index:75;border:1px solid #3d6645;background:rgba(7,12,8,.94);color:#bafec1;padding:11px 13px;font:9px monospace;letter-spacing:.11em;box-shadow:0 14px 35px rgba(0,0,0,.5);cursor:pointer}.support-launch:hover{border-color:#87ff93;transform:translateY(-1px)}.support-launch .pulse{display:inline-block;width:6px;height:6px;border-radius:50%;background:#62ff78;box-shadow:0 0 10px #62ff78;margin-right:7px}.support-unread{display:none;position:absolute;right:-4px;top:-6px;width:16px;height:16px;border-radius:50%;background:#f05250;color:#fff;font:8px monospace;place-items:center}.support-unread.on{display:grid}
+.support-grid{display:grid;grid-template-columns:1.25fr .75fr;gap:12px}.support-chat{min-height:520px;display:flex;flex-direction:column}.chat-head{padding:16px 18px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center}.agent{display:flex;gap:11px;align-items:center}.agent-avatar{width:38px;height:38px;border:1px solid #435048;display:grid;place-items:center;font:700 11px monospace;color:var(--green);position:relative;background:#090c09}.agent-avatar:after{content:"";position:absolute;width:7px;height:7px;border-radius:50%;right:-3px;bottom:-3px;background:#61ff7c;box-shadow:0 0 10px rgba(97,255,124,.7)}.agent-name{font:700 11px Arial;text-transform:uppercase}.agent-role{font:8px monospace;color:#67716b;margin-top:3px;letter-spacing:.12em}.chat-status{font:8px monospace;color:#73c57e;border:1px solid #2b5835;padding:6px 8px;letter-spacing:.11em}.chat-log{flex:1;padding:17px;display:flex;flex-direction:column;gap:11px;overflow:auto;min-height:310px;max-height:390px}.msg{max-width:82%;padding:11px 12px;border:1px solid #252b26;background:#0a0d0a;font:10px/1.55 monospace;color:#aab2ac}.msg.user{align-self:flex-end;background:#0d130f;border-color:#2f4a35}.msg .who{display:block;font-size:8px;letter-spacing:.11em;color:#657069;margin-bottom:5px}.msg .who b{font-weight:400;color:#8bc893}.chat-compose{border-top:1px solid var(--line);padding:12px;display:grid;grid-template-columns:1fr auto;gap:8px}.chat-input{width:100%;background:#070907;border:1px solid #303730;color:#c8cec9;min-height:46px;padding:10px 11px;resize:none;outline:none;font:10px/1.5 monospace}.chat-input:focus{border-color:#547a5c}.chat-send{min-width:96px}.typing{font:8px monospace;color:#58625b;padding:0 17px 12px;min-height:18px;letter-spacing:.1em}.support-side{display:flex;flex-direction:column;gap:12px}.ticket-panel{padding:18px}.ticket-title{font:9px monospace;color:#6f7972;letter-spacing:.13em;margin-bottom:11px}.ticket-number{font:700 23px monospace;color:#d6dbd7}.ticket-meta{margin-top:7px;font:9px/1.7 monospace;color:#68716b}.faq{padding:14px 0;border-top:1px solid #1d231f}.faq:first-of-type{border-top:0}.faq b{font:700 10px Arial;display:block;margin-bottom:5px}.faq span{font:9px/1.5 monospace;color:#68716b}.support-note{padding:18px;color:#737d76;font:9px/1.6 monospace}
+.user-comment.ghost{border-color:#3a2a2a;background:#0c0909}.user-comment.ghost b{color:#d16b65}.user-comment.ghost p{color:#8a7a7a;font-style:italic}.support-launch{position:fixed;right:19px;bottom:19px;z-index:75;border:1px solid #3d6645;background:rgba(7,12,8,.94);color:#bafec1;padding:11px 13px;font:9px monospace;letter-spacing:.11em;box-shadow:0 14px 35px rgba(0,0,0,.5);cursor:pointer}.support-launch:hover{border-color:#87ff93;transform:translateY(-1px)}.support-launch .pulse{display:inline-block;width:6px;height:6px;border-radius:50%;background:#62ff78;box-shadow:0 0 10px #62ff78;margin-right:7px}.support-unread{display:none;position:absolute;right:-4px;top:-6px;width:16px;height:16px;border-radius:50%;background:#f05250;color:#fff;font:8px monospace;place-items:center}.support-unread.on{display:grid}
 /* achievements */
-.achievement-head{display:grid;grid-template-columns:1fr auto;gap:14px;align-items:stretch;margin-bottom:14px}.profile-card{padding:18px 20px;position:relative;overflow:hidden}.profile-card:after{content:"SYNCED";position:absolute;right:16px;top:16px;font:8px monospace;color:#7cff8a;border:1px solid #285c33;padding:5px 7px;letter-spacing:.12em}.profile-label{font:8px monospace;color:#66716a;letter-spacing:.16em}.profile-name{font:700 23px Arial;margin:5px 0 11px;letter-spacing:-.02em}.profile-sub{font:10px monospace;color:#7a847e}.achievement-count{min-width:190px;padding:18px 20px;text-align:right}.achievement-count b{display:block;font:700 30px monospace;color:var(--green)}.achievement-count span{font:8px monospace;color:#66716a;letter-spacing:.13em}.ach-layout{display:grid;grid-template-columns:1fr .36fr;gap:14px}.ach-list{display:grid;grid-template-columns:repeat(2,1fr);gap:9px}.ach{border:1px solid #222822;background:#090b09;padding:13px 14px;display:grid;grid-template-columns:42px 1fr auto;gap:11px;align-items:center;min-height:88px;position:relative;overflow:hidden;transition:.2s}.ach.unlocked{border-color:#315d39;background:linear-gradient(180deg,#0c130e,#090c09)}.ach.unlocked:before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(105,255,124,.04),transparent 50%);pointer-events:none}.ach-icon{width:38px;height:38px;border:1px solid #2b322d;display:grid;place-items:center;font:16px monospace;color:#565f59}.ach.unlocked .ach-icon{border-color:#39734a;color:var(--green);box-shadow:0 0 16px rgba(79,220,114,.08)}.ach-title{font:700 11px Arial;text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px}.ach-desc{font:9px monospace;color:#68736c;line-height:1.45}.ach-meta{font:8px monospace;letter-spacing:.1em;text-align:right;color:#4f5852}.ach.unlocked .ach-meta{color:#75c982}.ach-ghost{display:block;margin-top:2px;color:#4a534d}.ach.unlocked .ach-ghost{display:none}.ach-side{padding:18px}.side-title{font:9px monospace;color:#707a73;letter-spacing:.14em;margin-bottom:14px}.progressbar{height:7px;background:#171b18;border:1px solid #232923}.progressbar i{display:block;height:100%;width:0%;background:linear-gradient(90deg,#5adc73,#c5ffc8);box-shadow:0 0 10px rgba(80,220,115,.16);transition:.4s}.progress-num{display:flex;justify-content:space-between;margin-top:8px;font:9px monospace;color:#5d6760}.sync-log{margin-top:18px;border-top:1px solid var(--line);padding-top:15px;font:9px/1.8 monospace;color:#5f6862}.sync-log strong{color:#9fa8a2;font-weight:400}.mini-stat{padding:11px 0;border-bottom:1px solid #1d231e;display:flex;justify-content:space-between;font:9px monospace}.mini-stat:last-child{border-bottom:0}.mini-stat span{color:#626c65}.mini-stat b{font-weight:400;color:#aab1ac}
+.achievement-head{display:grid;grid-template-columns:1fr auto;gap:14px;align-items:stretch;margin-bottom:14px}.profile-card{padding:18px 20px;position:relative;overflow:hidden}.profile-card:after{content:"SYNCED";position:absolute;right:16px;top:16px;font:8px monospace;color:#7cff8a;border:1px solid #285c33;padding:5px 7px;letter-spacing:.12em}.profile-label{font:8px monospace;color:#66716a;letter-spacing:.16em}.profile-name{font:700 23px Arial;margin:5px 0 11px;letter-spacing:-.02em}.profile-sub{font:10px monospace;color:#7a847e}.achievement-count{min-width:190px;padding:18px 20px;text-align:right}.achievement-count b{display:block;font:700 30px monospace;color:var(--green)}.achievement-count span{font:8px monospace;color:#66716a;letter-spacing:.13em}.ach-layout{display:grid;grid-template-columns:1fr .36fr;gap:14px}.ach-filter{display:flex;gap:8px;margin-bottom:10px}.ach-filter-btn{border:1px solid #2d352f;background:#080b08;color:#8d9991;padding:7px 12px;font:8px monospace;letter-spacing:.1em;cursor:pointer}.ach-filter-btn:hover,.ach-filter-btn.active{border-color:#5c8064;color:#b8ffc0;background:#0c130e}.ach-list{display:grid;grid-template-columns:repeat(2,1fr);gap:9px}.ach-list.filter-unlocked .ach:not(.unlocked){display:none}.ach-list.filter-locked .ach.unlocked{display:none}.ach{border:1px solid #222822;background:#090b09;padding:13px 14px;display:grid;grid-template-columns:42px 1fr auto;gap:11px;align-items:center;min-height:88px;position:relative;overflow:hidden;transition:.2s}.ach.unlocked{border-color:#315d39;background:linear-gradient(180deg,#0c130e,#090c09)}.ach.unlocked:before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(105,255,124,.04),transparent 50%);pointer-events:none}.ach-icon{width:38px;height:38px;border:1px solid #2b322d;display:grid;place-items:center;font:16px monospace;color:#565f59}.ach.unlocked .ach-icon{border-color:#39734a;color:var(--green);box-shadow:0 0 16px rgba(79,220,114,.08)}.ach-title{font:700 11px Arial;text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px}.ach-desc{font:9px monospace;color:#68736c;line-height:1.45}.ach-meta{font:8px monospace;letter-spacing:.1em;text-align:right;color:#4f5852}.ach.unlocked .ach-meta{color:#75c982}.ach-ghost{display:block;margin-top:2px;color:#4a534d}.ach.unlocked .ach-ghost{display:none}.ach-side{padding:18px}.side-title{font:9px monospace;color:#707a73;letter-spacing:.14em;margin-bottom:14px}.progressbar{height:7px;background:#171b18;border:1px solid #232923}.progressbar i{display:block;height:100%;width:0%;background:linear-gradient(90deg,#5adc73,#c5ffc8);box-shadow:0 0 10px rgba(80,220,115,.16);transition:.4s}.progress-num{display:flex;justify-content:space-between;margin-top:8px;font:9px monospace;color:#5d6760}.sync-log{margin-top:18px;border-top:1px solid var(--line);padding-top:15px;font:9px/1.8 monospace;color:#5f6862}.sync-log strong{color:#9fa8a2;font-weight:400}.mini-stat{padding:11px 0;border-bottom:1px solid #1d231e;display:flex;justify-content:space-between;font:9px monospace}.mini-stat:last-child{border-bottom:0}.mini-stat span{color:#626c65}.mini-stat b{font-weight:400;color:#aab1ac}
 /* studio/reviews */
 .review-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}.review{padding:18px;min-height:160px}.stars{color:#e4ca75;letter-spacing:2px;font-size:11px}.review p{font-size:12px;color:#8a938d;line-height:1.7}.review small{font:8px monospace;color:#5f6862;letter-spacing:.12em}.studio{padding:22px}.studio-grid{display:grid;grid-template-columns:1fr .75fr;gap:14px}.team-row{display:grid;grid-template-columns:48px 1fr auto;gap:12px;align-items:center;padding:14px 0;border-bottom:1px solid #1f241f}.avatar{width:38px;height:38px;border:1px solid #38403a;display:grid;place-items:center;color:#8ba492;font:11px monospace}.team-row strong{font:700 11px Arial}.team-row small{display:block;color:#646e67;font:8px monospace;margin-top:4px}.team-row em{font:8px monospace;color:#6c766f;font-style:normal}.changelog{padding:6px 18px}.change{padding:15px 0;border-bottom:1px solid #1f241f}.change:last-child{border-bottom:0}.change b{color:#aeb7b0;font:10px monospace}.change span{display:block;color:#68726b;font-size:11px;line-height:1.55;margin-top:5px}
 .footer{padding:30px 0 55px;border-top:1px solid var(--line);display:flex;justify-content:space-between;color:#59615c;font:9px monospace;letter-spacing:.12em}.footer strong{color:#8b938d;font-weight:400}.footer a{color:inherit;text-decoration:none}.footer a:hover{color:var(--green)}
 /* modal + achievement toast */
-.modal{position:fixed;inset:0;background:rgba(0,0,0,.78);backdrop-filter:blur(10px);display:none;align-items:center;justify-content:center;padding:24px;z-index:70}.modal.open{display:flex}.modal-box{width:min(1100px,95vw);background:#090b09;border:1px solid #4a514c;box-shadow:0 40px 150px rgba(0,0,0,.8)}.modal-top{height:45px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;padding:0 14px;font:9px monospace;color:#7a837e;letter-spacing:.14em}.modal-stage{padding:14px}.modal-stage img{display:block;width:100%;max-height:72vh;object-fit:contain;background:#000}.close{background:transparent;border:1px solid #303630;color:#b9bfbb;padding:6px 9px;cursor:pointer}.hint{padding:0 14px 12px;color:#5f6762;font:9px monospace}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.78);backdrop-filter:blur(10px);display:none;align-items:center;justify-content:center;padding:24px;z-index:70}.modal.open{display:flex}.modal-box{width:min(1100px,95vw);background:#090b09;border:1px solid #4a514c;box-shadow:0 40px 150px rgba(0,0,0,.8)}.modal-top{height:45px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;padding:0 14px;font:9px monospace;color:#7a837e;letter-spacing:.14em}.modal-stage{padding:14px;position:relative}.modal-stage img{display:block;width:100%;max-height:72vh;object-fit:contain;background:#000}.modal-nav{position:absolute;top:50%;transform:translateY(-50%);width:38px;height:38px;border:1px solid #3a413c;background:rgba(8,11,8,.72);color:#c3c8c4;font:20px Arial;line-height:1;cursor:pointer;display:grid;place-items:center;z-index:2}.modal-nav:hover{border-color:#8aff97;color:var(--green)}.modal-prev{left:24px}.modal-next{right:24px}.modal-nav:disabled{opacity:.25;cursor:default}.modal-nav:disabled:hover{border-color:#3a413c;color:#c3c8c4}.close{background:transparent;border:1px solid #303630;color:#b9bfbb;padding:6px 9px;cursor:pointer}.hint{padding:0 14px 12px;color:#5f6762;font:9px monospace}
 .locker-doc{padding:22px 26px;max-height:72vh;overflow:auto;background:#07090701;color:#c4cac5;font:12px/1.75 monospace}.locker-doc h5{margin:0 0 14px;font:700 15px Arial;letter-spacing:.04em;color:#9fe7a8}.locker-doc p{margin:0 0 12px}.locker-doc .redact{background:#0d0b0b;border:1px solid #392321;color:#a56a65;padding:10px 12px;margin:14px 0;font:10px/1.6 monospace}.locker-doc .stamp{color:#5f6862;font:9px monospace;letter-spacing:.12em;margin-top:18px;border-top:1px solid #1d231e;padding-top:12px}
 
 .game-launch-panel{margin:12px 10px 0;border:1px solid #2f3a31;background:linear-gradient(180deg,#0b100c,#070907);padding:16px 17px;display:flex;align-items:center;justify-content:space-between;gap:20px;box-shadow:inset 0 1px 0 rgba(170,255,180,.025)}
@@ -56,7 +61,7 @@ main{width:min(1380px,94vw);margin:auto}.ticker{margin:0 -3vw;border-top:1px sol
 .game-wrap.game-starting{display:block}
 .game-wrap.game-starting .game-loading-overlay{display:flex}
 .game-loading-overlay{display:none;position:absolute;inset:0;align-items:center;justify-content:center;background:rgba(2,4,2,.72);backdrop-filter:blur(3px);z-index:4;font:9px monospace;letter-spacing:.14em;color:#a6ffb1;pointer-events:none}
-#full:disabled{opacity:.38;cursor:not-allowed}
+
 @media(max-width:760px){.game-launch-panel{align-items:flex-start;flex-direction:column}.game-launch-actions{width:100%;justify-content:space-between}.game-launch-actions span{white-space:normal}}
 
 #achToastStack{position:fixed;right:18px;top:76px;z-index:100;display:flex;flex-direction:column;gap:9px;width:min(370px,calc(100vw - 36px));pointer-events:none}.toast{border:1px solid #355d3b;background:linear-gradient(180deg,rgba(11,19,13,.98),rgba(6,10,7,.98));box-shadow:0 18px 60px rgba(0,0,0,.55),0 0 24px rgba(76,221,107,.08);padding:12px 13px;display:grid;grid-template-columns:30px 1fr;gap:10px;animation:toastIn .35s ease both}.toast.fade{animation:toastOut .5s ease both}.toast-icon{width:28px;height:28px;border:1px solid #40784b;display:grid;place-items:center;color:var(--green);font:13px monospace}.toast-kicker{font:8px monospace;color:#6fa97a;letter-spacing:.14em}.toast-title{font:700 12px Arial;margin-top:3px}.toast-sub{font:9px monospace;color:#727c75;line-height:1.45;margin-top:3px}@keyframes toastIn{from{opacity:0;transform:translateX(24px)}to{opacity:1;transform:none}}@keyframes toastOut{to{opacity:0;transform:translateX(24px)}}
@@ -71,7 +76,139 @@ main{width:min(1380px,94vw);margin:auto}.ticker{margin:0 -3vw;border-top:1px sol
 /* =========================================================
    ACCESS GATE / PLATFORM SYSTEMS
    ========================================================= */
-body.locked{overflow:hidden}.gate{position:fixed;inset:0;z-index:1000;background:#020302;display:grid;place-items:center;padding:20px}.gate.hidden{display:none}.gate:before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 50% 42%,rgba(120,255,145,.06),transparent 32%),repeating-linear-gradient(0deg,transparent 0 4px,rgba(255,255,255,.035) 5px);pointer-events:none}.gate-card{position:relative;width:min(640px,94vw);border:1px solid #303830;background:linear-gradient(180deg,#0d110e,#060806);box-shadow:0 35px 120px #000;padding:34px}.gate-top{display:flex;justify-content:space-between;gap:20px;border-bottom:1px solid #222822;padding-bottom:15px;margin-bottom:28px;font:9px monospace;letter-spacing:.15em;color:#687169}.gate-brand{color:var(--green)}.gate-card h2{font:800 clamp(34px,7vw,66px)/.9 Arial;letter-spacing:-.06em;margin:0 0 14px;text-transform:uppercase}.gate-card h2 span{color:var(--green)}.gate-card p{color:#808983;font-size:12px;line-height:1.7;max-width:520px}.gate-form{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:24px}.field{display:flex;flex-direction:column;gap:7px}.field.full{grid-column:1/-1}.field label{font:8px monospace;letter-spacing:.13em;color:#626b65}.field input{width:100%;background:#070907;border:1px solid #313831;color:#d6dbd7;padding:13px;font:12px monospace;outline:none}.field input:focus{border-color:#6c9272;box-shadow:0 0 0 2px rgba(116,255,137,.05)}.gate-error{min-height:18px;margin-top:12px;color:#ff6662;font:9px monospace;letter-spacing:.1em}.enter-btn{width:100%;margin-top:3px;padding:14px;border:1px solid #4a654f;background:#0b140d;color:#aaffb5;font:700 10px monospace;letter-spacing:.18em;cursor:pointer}.enter-btn:disabled{opacity:.3;cursor:not-allowed}.gate-fine{margin-top:15px;color:#4f5952;font:8px/1.6 monospace}.cookie{position:fixed;z-index:900;left:18px;bottom:18px;width:min(430px,calc(100vw - 36px));border:1px solid #39413b;background:#090c09;box-shadow:0 20px 70px #000;padding:17px}.cookie.hidden{display:none}.cookie b{font:10px monospace;letter-spacing:.12em;color:#bfc6c1}.cookie p{font:10px/1.6 Arial;color:#727b75;margin:8px 0 13px}.cookie-actions{display:flex;gap:8px}.cookie-actions button{flex:1}.promo-ad{position:relative;overflow:hidden;border:1px dashed #343b36;background:linear-gradient(135deg,#090c09,#0e120f);padding:17px;min-height:125px}.promo-ad:before{content:"ADVERTISEMENT";position:absolute;right:10px;top:8px;font:7px monospace;letter-spacing:.12em;color:#454d47}.promo-ad .ad-kicker{font:8px monospace;letter-spacing:.18em;color:#69736c}.promo-ad h4{margin:10px 0 5px;font:800 19px Arial;letter-spacing:-.03em}.promo-ad p{margin:0;color:#6f7872;font:10px/1.55 Arial;max-width:370px}.promo-ad .ad-btn{display:inline-block;margin-top:12px;border:1px solid #3d473f;padding:6px 8px;color:#a6afa9;font:8px monospace;letter-spacing:.12em}.ad-glitch{animation:adglitch 8s infinite}@keyframes adglitch{0%,92%,100%{transform:none;filter:none}94%{transform:skewX(-1deg);filter:brightness(1.4)}96%{transform:translateX(2px);filter:contrast(1.4)}}
+body.locked{overflow:hidden}
+/* ===== BOOT SEQUENCE (every page load) ===== */
+body.booting{overflow:hidden}
+#bbhBootOverlay{
+  position:fixed;inset:0;z-index:1200;
+  background:#030403;
+  display:flex;align-items:stretch;justify-content:stretch;
+  opacity:1;transition:opacity .7s cubic-bezier(.4,0,.2,1);
+  font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  overflow:hidden;
+}
+#bbhBootOverlay.done{opacity:0;pointer-events:none}
+#bbhBootOverlay.hidden{display:none}
+#bbhBootOverlay:before{
+  content:"";position:absolute;inset:0;pointer-events:none;z-index:2;
+  background:
+    radial-gradient(ellipse at 50% 40%,rgba(120,255,145,.05),transparent 42%),
+    radial-gradient(ellipse at 50% 100%,rgba(0,0,0,.75),transparent 55%),
+    repeating-linear-gradient(0deg,transparent 0 2px,rgba(0,0,0,.18) 3px);
+  mix-blend-mode:multiply;opacity:.9;
+}
+#bbhBootOverlay:after{
+  content:"";position:absolute;inset:0;pointer-events:none;z-index:3;
+  background:linear-gradient(180deg,rgba(255,255,255,.03),transparent 8%,transparent 92%,rgba(0,0,0,.35));
+  opacity:.5;
+}
+#bbhBootStage{
+  position:relative;z-index:1;flex:1;
+  display:flex;flex-direction:column;justify-content:center;
+  padding:clamp(28px,6vh,64px) clamp(22px,6vw,80px);
+  max-width:920px;margin:0 auto;width:100%;
+  box-sizing:border-box;
+}
+#bbhBootBrand{
+  display:flex;align-items:center;gap:12px;margin-bottom:28px;
+  opacity:0;transform:translateY(8px);
+  transition:opacity .5s ease,transform .5s ease;
+}
+#bbhBootBrand.on{opacity:1;transform:none}
+#bbhBootMark{
+  width:28px;height:28px;border:1px solid #4c554d;
+  display:grid;place-items:center;
+  color:#a8ffb1;font:700 11px monospace;
+  position:relative;background:#090c09;
+  box-shadow:0 0 18px rgba(88,255,119,.12);
+}
+#bbhBootMark i{
+  position:absolute;width:5px;height:5px;border-radius:50%;
+  right:3px;top:3px;background:#58ff77;box-shadow:0 0 8px #58ff77;
+}
+#bbhBootBrandText{display:flex;flex-direction:column;gap:3px}
+#bbhBootBrandText strong{
+  font:700 11px monospace;letter-spacing:.22em;color:#cfd6d1;
+}
+#bbhBootBrandText span{
+  font:8px monospace;letter-spacing:.16em;color:#5f6862;
+}
+#bbhBootHeadline{
+  font:800 clamp(28px,5.5vw,52px)/.92 Arial,Helvetica,sans-serif;
+  letter-spacing:-.04em;text-transform:uppercase;
+  color:#e8ece9;margin:0 0 10px;
+  opacity:0;transform:translateY(10px);
+  transition:opacity .55s ease .08s,transform .55s ease .08s;
+}
+#bbhBootHeadline.on{opacity:1;transform:none}
+#bbhBootHeadline em{font-style:normal;color:#a8ffb1;text-shadow:0 0 24px rgba(120,255,145,.25)}
+#bbhBootSub{
+  font:10px/1.6 monospace;letter-spacing:.12em;color:#66706a;
+  margin:0 0 26px;max-width:520px;
+  opacity:0;transition:opacity .5s ease .18s;
+}
+#bbhBootSub.on{opacity:1}
+#bbhBootLog{
+  margin:0 0 26px;
+  font:12px/1.65 monospace;color:#8a938d;
+  border-left:1px solid #2a332c;padding-left:16px;
+  opacity:0;transition:opacity .4s ease .25s;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+  min-height:1.65em;
+}
+#bbhBootLog.on{opacity:1}
+#bbhBootLog .tag{
+  display:inline;margin-right:.45em;font-weight:700;letter-spacing:.04em;
+}
+#bbhBootLog.ok .tag{color:#7dff8c}
+#bbhBootLog.warn .tag{color:#e1bf73}
+#bbhBootLog.bad .tag{color:#ff6e6a}
+#bbhBootLog.dim .tag{color:#4a534c}
+#bbhBootLog.ok{color:#9aa89c}
+#bbhBootLog.warn{color:#b5a882}
+#bbhBootLog.bad{color:#c99a98}
+#bbhBootLog.dim{color:#4f5852}
+#bbhBootLog .msg{color:inherit}
+#bbhBootLog .cursor{
+  display:inline-block;width:7px;height:1.05em;margin-left:4px;
+  background:#7dff8c;vertical-align:text-bottom;
+  box-shadow:0 0 8px rgba(125,255,140,.55);
+  animation:bbhBootBlink 1s steps(1) infinite;
+}
+@keyframes bbhBootBlink{50%{opacity:0}}
+#bbhBootFoot{
+  display:flex;align-items:center;gap:18px;flex-wrap:wrap;
+  opacity:0;transition:opacity .45s ease .3s;
+}
+#bbhBootFoot.on{opacity:1}
+#bbhBootBarWrap{
+  flex:1;min-width:140px;height:2px;background:#161b17;
+  border-radius:1px;overflow:hidden;position:relative;
+}
+#bbhBootBar{
+  height:100%;width:0%;
+  background:linear-gradient(90deg,#2f6b3a,#a8ffb1);
+  box-shadow:0 0 12px rgba(120,255,140,.35);
+  transition:width .18s linear;
+}
+#bbhBootMeta{
+  font:8px monospace;letter-spacing:.14em;color:#5a645e;
+  white-space:nowrap;min-width:9em;
+}
+#bbhBootSkip{
+  border:1px solid #2a332c;background:transparent;color:#5a645e;
+  font:8px monospace;letter-spacing:.14em;padding:8px 10px;cursor:pointer;
+  transition:color .15s ease,border-color .15s ease,background .15s ease;
+}
+#bbhBootSkip:hover{color:#a8ffb1;border-color:#4a654f;background:#0b140d}
+#bbhBootSkip kbd{
+  font:inherit;opacity:.7;margin-left:4px;
+}
+@media(prefers-reduced-motion:reduce){
+  #bbhBootOverlay,#bbhBootBrand,#bbhBootHeadline,#bbhBootSub,#bbhBootLog,#bbhBootFoot,#bbhBootLog .line{transition:none}
+  #bbhBootLog .cursor{animation:none}
+}
+.gate{position:fixed;inset:0;z-index:1000;background:#020302;display:grid;place-items:center;padding:20px}.gate.hidden{display:none}.gate:before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 50% 42%,rgba(120,255,145,.06),transparent 32%),repeating-linear-gradient(0deg,transparent 0 4px,rgba(255,255,255,.035) 5px);pointer-events:none}.gate-card{position:relative;width:min(640px,94vw);border:1px solid #303830;background:linear-gradient(180deg,#0d110e,#060806);box-shadow:0 35px 120px #000;padding:34px}.gate-top{display:flex;justify-content:space-between;gap:20px;border-bottom:1px solid #222822;padding-bottom:15px;margin-bottom:28px;font:9px monospace;letter-spacing:.15em;color:#687169}.gate-brand{color:var(--green)}.gate-card h2{font:800 clamp(34px,7vw,66px)/.9 Arial;letter-spacing:-.06em;margin:0 0 14px;text-transform:uppercase}.gate-card h2 span{color:var(--green)}.gate-card p{color:#808983;font-size:12px;line-height:1.7;max-width:520px}.gate-form{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:24px}.field{display:flex;flex-direction:column;gap:7px}.field.full{grid-column:1/-1}.field label{font:8px monospace;letter-spacing:.13em;color:#626b65}.field input{width:100%;background:#070907;border:1px solid #313831;color:#d6dbd7;padding:13px;font:12px monospace;outline:none}.field input:focus{border-color:#6c9272;box-shadow:0 0 0 2px rgba(116,255,137,.05)}.gate-error{min-height:18px;margin-top:12px;color:#ff6662;font:9px monospace;letter-spacing:.1em}.enter-btn{width:100%;margin-top:3px;padding:14px;border:1px solid #4a654f;background:#0b140d;color:#aaffb5;font:700 10px monospace;letter-spacing:.18em;cursor:pointer}.enter-btn:disabled{opacity:.3;cursor:not-allowed}.gate-fine{margin-top:15px;color:#4f5952;font:8px/1.6 monospace}.cookie{position:fixed;z-index:900;left:18px;bottom:18px;width:min(430px,calc(100vw - 36px));border:1px solid #39413b;background:#090c09;box-shadow:0 20px 70px #000;padding:17px}.cookie.hidden{display:none}.cookie b{font:10px monospace;letter-spacing:.12em;color:#bfc6c1}.cookie p{font:10px/1.6 Arial;color:#727b75;margin:8px 0 13px}.cookie-actions{display:flex;gap:8px}.cookie-actions button{flex:1}.promo-ad{position:relative;overflow:hidden;border:1px dashed #343b36;background:linear-gradient(135deg,#090c09,#0e120f);padding:17px;min-height:125px}.promo-ad:before{content:"ADVERTISEMENT";position:absolute;right:10px;top:8px;font:7px monospace;letter-spacing:.12em;color:#454d47}.promo-ad .ad-kicker{font:8px monospace;letter-spacing:.18em;color:#69736c}.promo-ad h4{margin:10px 0 5px;font:800 19px Arial;letter-spacing:-.03em}.promo-ad p{margin:0;color:#6f7872;font:10px/1.55 Arial;max-width:370px}.promo-ad .ad-btn{display:inline-block;margin-top:12px;border:1px solid #3d473f;padding:6px 8px;color:#a6afa9;font:8px monospace;letter-spacing:.12em}.ad-glitch{animation:adglitch 8s infinite}@keyframes adglitch{0%,92%,100%{transform:none;filter:none}94%{transform:skewX(-1deg);filter:brightness(1.4)}96%{transform:translateX(2px);filter:contrast(1.4)}}
 .captcha{margin-top:12px;border:1px solid #2c332e;background:#080b08;padding:12px;display:none}.captcha.show{display:block}.captcha-row{display:flex;align-items:center;gap:11px}.captcha-check{width:24px;height:24px;border:1px solid #555e57;background:#050705;display:grid;place-items:center;cursor:pointer;font:15px monospace;color:var(--green)}.captcha-copy b{display:block;font:10px monospace;color:#bfc6c1}.captcha-copy span{display:block;margin-top:4px;color:#626b65;font:8px monospace}.captcha-status{margin-top:8px;color:#555e58;font:8px monospace;letter-spacing:.1em}.rare-event{position:fixed;inset:0;z-index:850;display:none;place-items:center;background:rgba(0,0,0,.78);backdrop-filter:blur(3px)}.rare-event.show{display:grid}.rare-box{width:min(560px,90vw);border:1px solid #653b3b;background:#080505;box-shadow:0 0 0 1px rgba(255,70,70,.04),0 30px 100px #000;padding:28px;animation:eventIn .35s ease-out}@keyframes eventIn{from{opacity:0;transform:scale(.98)}to{opacity:1;transform:none}}.rare-code{font:8px monospace;color:#b04f4c;letter-spacing:.2em}.rare-box h3{font:800 35px Arial;margin:14px 0 8px;letter-spacing:-.04em}.rare-box p{color:#8f817f;font:12px/1.7 Arial}.rare-read{margin-top:18px;border-top:1px solid #302020;padding-top:14px;color:#b8a5a2;font:9px/1.6 monospace}.rare-close{margin-top:18px;border:1px solid #543b3a;background:transparent;color:#c4aeaa;padding:9px 12px;font:8px monospace;cursor:pointer}.toast-creepy{position:fixed;z-index:840;right:18px;bottom:18px;max-width:330px;border:1px solid #4a3837;background:#0b0808;padding:13px 15px;box-shadow:0 15px 60px #000;display:none}.toast-creepy.show{display:block}.toast-creepy b{display:block;color:#df7771;font:9px monospace;letter-spacing:.14em}.toast-creepy span{display:block;margin-top:5px;color:#857976;font:10px/1.5 Arial}
 .player-welcome{display:none;margin-top:12px;border:1px solid #28322a;background:#090d09;padding:10px 12px;color:#7d887f;font:9px monospace;letter-spacing:.08em}.player-welcome.show{display:block}.player-welcome strong{color:var(--green)}
 @media(max-width:760px){.gate-form{grid-template-columns:1fr}.field.full{grid-column:auto}.gate-card{padding:23px}.cookie{left:10px;bottom:10px;width:calc(100vw - 20px)}}
@@ -79,7 +216,7 @@ body.locked{overflow:hidden}.gate{position:fixed;inset:0;z-index:1000;background
 /* V9 additional immersive systems */
 .meta-grid{display:grid;grid-template-columns:1.25fr .75fr;gap:14px}.signal-panel{padding:20px;position:relative;overflow:hidden}.signal-panel:after{content:'LIVE SPECTRUM';position:absolute;right:16px;top:16px;font:8px monospace;color:#56615a;letter-spacing:.12em}.wave{height:96px;margin:18px 0;border:1px solid #202620;background:repeating-linear-gradient(90deg,transparent 0 24px,rgba(130,255,150,.025) 25px),linear-gradient(180deg,#070907,#0a0d0a);position:relative;overflow:hidden}.wave canvas{width:100%;height:100%}.signal-controls{display:flex;gap:8px;flex-wrap:wrap}.signal-btn{border:1px solid #2d352f;background:#080b08;color:#8d9991;padding:9px 11px;font:8px monospace;letter-spacing:.1em;cursor:pointer}.signal-btn:hover,.signal-btn.active{border-color:#5c8064;color:#b8ffc0;background:#0c130e}.frequency{display:flex;justify-content:space-between;font:9px monospace;color:#56615a}.frequency b{color:#aeb7b0;font-weight:400}.notice-stack{display:grid;gap:9px}.notice-card{border:1px solid #232a24;background:#090c09;padding:13px;cursor:pointer;transition:.2s}.notice-card:hover{transform:translateX(3px);border-color:#465448}.notice-card small{font:7px monospace;color:#59635c;letter-spacing:.14em}.notice-card b{display:block;margin:6px 0 3px;font:700 11px Arial}.notice-card span{font:9px/1.5 monospace;color:#67716a}.notice-detail{display:none;margin-top:10px;padding-top:10px;border-top:1px solid #1d231e;font:9px/1.6 monospace;color:#a56a65}.notice-card.expanded .notice-detail{display:block}.wave.glitch{animation:waveGlitch .12s steps(2) infinite}@keyframes waveGlitch{0%{transform:translateX(0)}50%{transform:translateX(1px)}100%{transform:translateX(-1px)}}.community{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.post{border:1px solid #222822;background:#080b08;padding:14px;min-height:150px}.post-head{display:flex;justify-content:space-between;font:7px monospace;color:#59635c}.post h4{font:700 11px Arial;margin:12px 0 7px}.post p{font:9px/1.6 Arial;color:#737d76}.post .reply{margin-top:12px;padding-top:9px;border-top:1px solid #1d231e;font:8px/1.5 monospace;color:#59645d}.command-panel{display:grid;grid-template-columns:1fr auto;gap:14px;align-items:end}.command-input{width:100%;background:#060806;border:1px solid #303831;color:#b8c0ba;padding:12px;font:10px monospace;outline:none}.command-output{grid-column:1/-1;min-height:70px;border-top:1px solid #202620;padding-top:13px;color:#6f7a72;font:9px/1.7 monospace}.visitor{display:flex;justify-content:space-between;gap:12px;align-items:center;margin-top:13px;padding-top:13px;border-top:1px solid #202620;font:8px monospace;color:#59635c}.visitor b{color:#9da89f;font-weight:400}.archive-download{position:relative}.archive-download:after{content:'NO EXTERNAL SERVER';position:absolute;right:10px;bottom:9px;font:7px monospace;color:#465048}@media(max-width:900px){.meta-grid{grid-template-columns:1fr}.community{grid-template-columns:1fr}}
 /* V10 COMMUNITY + SECRET NODE */
-.community-tools{display:grid;grid-template-columns:1fr .72fr;gap:12px;margin-top:14px}.comment-box{padding:18px}.comment-box h4{margin:0 0 6px;font:700 14px Arial;letter-spacing:.06em}.comment-box p{margin:0 0 14px;color:#68716b;font:9px/1.55 monospace}.comment-form{display:grid;grid-template-columns:180px 1fr auto;gap:8px}.comment-input,.comment-name{background:#070907;border:1px solid #303730;color:#c8cec9;padding:11px;font:10px monospace;outline:none}.comment-input:focus,.comment-name:focus{border-color:#547a5c}.comment-input{min-height:42px;resize:vertical}.comment-list{padding:8px 18px;max-height:330px;overflow:auto}.user-comment{padding:14px 0;border-bottom:1px solid #1d231f}.user-comment:last-child{border-bottom:0}.user-comment-head{display:flex;justify-content:space-between;gap:10px;font:8px monospace;color:#67716b;letter-spacing:.08em}.user-comment-head b{color:#a9ffb2;font-weight:400}.user-comment p{margin:7px 0 0;color:#8b948e;font:11px/1.6 Arial}.comment-empty{padding:25px 0;color:#555e58;font:9px monospace;text-align:center}.comment-limit{font:8px monospace;color:#58615b;margin-top:8px}.secret-nav{display:none!important}.secret-nav.show{display:block!important}.secret-section{display:none}.secret-section.unlocked{display:block}.secret-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:12px}.secret-core{padding:26px;min-height:390px;position:relative;overflow:hidden}.secret-core:before{content:'DO NOT INDEX';position:absolute;right:-25px;top:25px;transform:rotate(90deg);font:8px monospace;letter-spacing:.3em;color:#432b2b}.secret-eyebrow{font:8px monospace;color:#bd625e;letter-spacing:.2em}.secret-core h3{font:800 clamp(32px,5vw,66px)/.88 Arial;margin:16px 0;letter-spacing:-.06em}.secret-core h3 span{color:#ff6b66}.secret-core p{max-width:650px;color:#858e88;font-size:13px;line-height:1.75}.secret-redact{margin-top:22px;padding:14px;background:#0d0b0b;border:1px solid #392321;color:#a56a65;font:9px/1.7 monospace}.secret-side{padding:20px}.secret-side .logline{padding:12px 0;border-bottom:1px solid #24201f;font:9px/1.5 monospace;color:#727a74}.secret-side .logline b{color:#d16b65;font-weight:400}.secret-unlock{display:inline-block;margin-top:18px;color:#e5b6b0;border:1px solid #56302e;padding:9px 11px;font:8px monospace;letter-spacing:.12em}.secret-pulse{animation:secretPulse 2.8s ease-in-out infinite}@keyframes secretPulse{50%{box-shadow:0 0 32px rgba(255,70,65,.08)}}
+.community-tools{display:grid;grid-template-columns:1fr .72fr;gap:12px;margin-top:14px}.comment-box{padding:18px}.comment-box h4{margin:0 0 6px;font:700 14px Arial;letter-spacing:.06em}.comment-box p{margin:0 0 14px;color:#68716b;font:9px/1.55 monospace}.comment-form{display:grid;grid-template-columns:180px 1fr auto;gap:8px}.comment-input,.comment-name{background:#070907;border:1px solid #303730;color:#c8cec9;padding:11px;font:10px monospace;outline:none}.comment-input:focus,.comment-name:focus{border-color:#547a5c}.comment-input{min-height:42px;resize:vertical}.comment-list{padding:8px 18px;max-height:330px;overflow:auto}.user-comment{padding:14px 0;border-bottom:1px solid #1d231f}.user-comment:last-child{border-bottom:0}.user-comment-head{display:flex;justify-content:space-between;gap:10px;font:8px monospace;color:#67716b;letter-spacing:.08em}.user-comment-head b{color:#a9ffb2;font-weight:400}.comment-del{background:transparent;border:1px solid #3a2020;color:#a56a65;width:16px;height:16px;line-height:1;font:11px monospace;cursor:pointer;margin-left:6px;padding:0}.comment-del:hover{border-color:#ff5d59;color:#ff5d59}.user-comment p{margin:7px 0 0;color:#8b948e;font:11px/1.6 Arial}.comment-empty{padding:25px 0;color:#555e58;font:9px monospace;text-align:center}.comment-limit{font:8px monospace;color:#58615b;margin-top:8px}.comment-counter{font:8px monospace;color:#58615b;margin-top:3px}.comment-counter.near{color:#d9bd73}.comment-counter.full{color:#ff5d59}.secret-nav{display:none!important}.secret-nav.show{display:block!important}.secret-section{display:none}.secret-section.unlocked{display:block}.secret-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:12px}.secret-core{padding:26px;min-height:390px;position:relative;overflow:hidden}.secret-core:before{content:'DO NOT INDEX';position:absolute;right:-25px;top:25px;transform:rotate(90deg);font:8px monospace;letter-spacing:.3em;color:#432b2b}.secret-eyebrow{font:8px monospace;color:#bd625e;letter-spacing:.2em}.secret-core h3{font:800 clamp(32px,5vw,66px)/.88 Arial;margin:16px 0;letter-spacing:-.06em}.secret-core h3 span{color:#ff6b66}.secret-core p{max-width:650px;color:#858e88;font-size:13px;line-height:1.75}.secret-redact{margin-top:22px;padding:14px;background:#0d0b0b;border:1px solid #392321;color:#a56a65;font:9px/1.7 monospace}.secret-side{padding:20px}.secret-side .logline{padding:12px 0;border-bottom:1px solid #24201f;font:9px/1.5 monospace;color:#727a74}.secret-side .logline b{color:#d16b65;font-weight:400}.secret-unlock{display:inline-block;margin-top:18px;color:#e5b6b0;border:1px solid #56302e;padding:9px 11px;font:8px monospace;letter-spacing:.12em}.secret-pulse{animation:secretPulse 2.8s ease-in-out infinite}@keyframes secretPulse{50%{box-shadow:0 0 32px rgba(255,70,65,.08)}}
 @media(max-width:900px){.community-tools,.secret-grid{grid-template-columns:1fr}.comment-form{grid-template-columns:1fr}.comment-list{max-height:none}}
 <style>
 .promo-ad{display:flex;justify-content:space-between;align-items:flex-end;gap:24px;padding:22px 20px;min-height:150px;cursor:default;background:radial-gradient(circle at 85% 35%,rgba(130,255,150,.05),transparent 25%),linear-gradient(135deg,#090c09,#10150f);}
@@ -88,20 +225,178 @@ body.locked{overflow:hidden}.gate{position:fixed;inset:0;z-index:1000;background
 </style></style>
 <style id="bbhCaptchaRepairStyle">.captcha-check{font-family:monospace;padding:0;appearance:none;-webkit-appearance:none;cursor:pointer;position:relative;z-index:5;pointer-events:auto}.captcha-check.verified{color:var(--green);border-color:#4f7757}</style>
 </head>
-<body>
+<body class="booting locked">
 
-<!-- First-visit access gate: fictional 18+ horror archive -->
+<!-- Boot sequence: full-bleed terminal on every page load -->
+<div id="bbhBootOverlay" role="status" aria-live="polite" aria-label="Archive boot sequence">
+  <div id="bbhBootStage">
+    <div id="bbhBootBrand">
+      <div id="bbhBootMark">BH<i></i></div>
+      <div id="bbhBootBrandText">
+        <strong>BUDDY HORROR</strong>
+        <span>OFFICIAL ARCHIVE · NODE 01</span>
+      </div>
+    </div>
+    <h1 id="bbhBootHeadline">Cold start<br><em>night archive</em></h1>
+    <p id="bbhBootSub">LOCAL CLIENT · NO OUTBOUND TELEMETRY · ACCESS NODE WARMING UP</p>
+    <div id="bbhBootLog" aria-hidden="true"></div>
+    <div id="bbhBootFoot">
+      <div id="bbhBootBarWrap"><div id="bbhBootBar"></div></div>
+      <div id="bbhBootMeta">0% · INIT</div>
+      <button type="button" id="bbhBootSkip">SKIP <kbd>ESC</kbd></button>
+    </div>
+  </div>
+</div>
+<script>
+(function(){
+  'use strict';
+  var ov = document.getElementById('bbhBootOverlay');
+  if (!ov) return;
+  var log = document.getElementById('bbhBootLog');
+  var bar = document.getElementById('bbhBootBar');
+  var meta = document.getElementById('bbhBootMeta');
+  var skip = document.getElementById('bbhBootSkip');
+  var brand = document.getElementById('bbhBootBrand');
+  var head = document.getElementById('bbhBootHeadline');
+  var sub = document.getElementById('bbhBootSub');
+  var foot = document.getElementById('bbhBootFoot');
+  var done = false;
+  var reduce = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+
+  var POOL = [
+    {tag:'OK',   t:'mount /local/archive', c:'ok'},
+    {tag:'OK',   t:'operator profile cache probed', c:'ok'},
+    {tag:'OK',   t:'signal panel drivers online', c:'ok'},
+    {tag:'..',   t:'scan idle camera feeds', c:'dim'},
+    {tag:'OK',   t:'feeds 01–04 sealed (static)', c:'ok'},
+    {tag:'WARN', t:'residual motion on cam 03 discarded', c:'warn'},
+    {tag:'OK',   t:'night index mounted', c:'ok'},
+    {tag:'OK',   t:'achievement ledger checksum match', c:'ok'},
+    {tag:'..',   t:'decrypt restricted node keys', c:'dim'},
+    {tag:'OK',   t:'restricted node remains locked', c:'ok'},
+    {tag:'WARN', t:'second-observer heuristic idle', c:'warn'},
+    {tag:'OK',   t:'ambient layers v1–v6 armed', c:'ok'},
+    {tag:'OK',   t:'support channel offline-ready', c:'ok'},
+    {tag:'..',   t:'verify 18+ access token', c:'dim'},
+    {tag:'OK',   t:'age gate module ready', c:'ok'},
+    {tag:'OK',   t:'cookie banner deferred', c:'ok'},
+    {tag:'WARN', t:'external network not required', c:'warn'},
+    {tag:'OK',   t:'archive integrity nominal', c:'ok'},
+    {tag:'..',   t:'warm CRT phosphor map', c:'dim'},
+    {tag:'OK',   t:'phosphor map warm', c:'ok'},
+    {tag:'OK',   t:'operator notes volume mounted', c:'ok'},
+    {tag:'WARN', t:'ghost-write scheduler armed', c:'warn'},
+    {tag:'OK',   t:'ticker / dossier / locker online', c:'ok'},
+    {tag:'..',   t:'bind keyboard sequences', c:'dim'},
+    {tag:'OK',   t:'hidden sequence listener attached', c:'ok'},
+    {tag:'BAD',  t:'remote telemetry refused (by design)', c:'bad'},
+    {tag:'OK',   t:'no outbound analytics', c:'ok'},
+    {tag:'OK',   t:'game client path resolved', c:'ok'}
+  ];
+
+  function shuffle(a){
+    var b = a.slice(), i, j, x;
+    for (i = b.length - 1; i > 0; i--) {
+      j = (Math.random() * (i + 1)) | 0;
+      x = b[i]; b[i] = b[j]; b[j] = x;
+    }
+    return b;
+  }
+
+  var mid = shuffle(POOL).slice(0, reduce ? 6 : (9 + ((Math.random() * 4) | 0)));
+  var lines = [{tag:'BOOT', t:'buddy horror archive // cold start', c:'ok'}]
+    .concat(mid)
+    .concat([
+      {tag:'..', t:'finalize shell', c:'dim'},
+      {tag:'OK', t:'shell ready — handing control to gate', c:'ok'}
+    ]);
+
+  function setProgress(p){
+    p = Math.max(0, Math.min(100, p));
+    if (bar) bar.style.width = p + '%';
+    if (meta) meta.textContent = Math.round(p) + '% · ' + (p >= 100 ? 'READY' : 'INIT');
+  }
+
+  function finish(){
+    if (done) return;
+    done = true;
+    setProgress(100);
+    try { document.body.classList.remove('booting'); } catch (e) {}
+    ov.classList.add('done');
+    setTimeout(function(){
+      ov.classList.add('hidden');
+      try { ov.remove(); } catch (e2) {}
+    }, reduce ? 60 : 720);
+  }
+
+  var i = 0;
+  function addLine(item){
+    if (!log) return;
+    // одна строка — просто перезаписываем содержимое, без слоёв
+    log.classList.remove('ok','warn','bad','dim');
+    if (item.c) log.classList.add(item.c);
+    log.innerHTML = '<span class="tag">[' + item.tag + ']</span><span class="msg">' + item.t + '</span><span class="cursor" aria-hidden="true"></span>';
+  }
+
+  function step(){
+    if (done) return;
+    if (i >= lines.length) {
+      setTimeout(finish, reduce ? 100 : 480);
+      return;
+    }
+    var item = lines[i++];
+    addLine(item);
+    setProgress((i / lines.length) * 100);
+    var delay = reduce ? 35 : (110 + Math.random() * 150);
+    if (item.c === 'dim') delay += 50;
+    if (item.c === 'warn' || item.c === 'bad') delay += 30;
+    setTimeout(step, delay);
+  }
+
+  // safety fallback — never stick
+  var fallback = setTimeout(finish, reduce ? 1000 : 5800);
+  var _finish = finish;
+  finish = function(){ clearTimeout(fallback); _finish(); };
+
+  function onSkip(e){
+    if (e) { try { e.preventDefault(); } catch (x) {} }
+    finish();
+  }
+  if (skip) skip.addEventListener('click', onSkip);
+  document.addEventListener('keydown', function(e){
+    if (done) return;
+    if (e.key === 'Escape' || e.key === 'Enter' || e.key === ' ') onSkip(e);
+  });
+  ov.addEventListener('click', function(e){
+    if (e.target === skip || (skip && skip.contains(e.target))) return;
+    // allow click-anywhere skip after first lines
+    if (i > 3) onSkip(e);
+  });
+
+  // reveal chrome, then start lines
+  requestAnimationFrame(function(){
+    if (brand) brand.classList.add('on');
+    if (head) head.classList.add('on');
+    if (sub) sub.classList.add('on');
+    if (log) log.classList.add('on');
+    if (foot) foot.classList.add('on');
+  });
+  setTimeout(step, reduce ? 40 : 320);
+})();
+</script>
+
+<!-- First-visit access gate: 18+ night archive -->
 <div class="gate" id="accessGate">
   <div class="gate-card">
     <div class="gate-top"><span class="gate-brand">BUDDY HORROR // ACCESS NODE 01</span><span>AGE VERIFICATION</span></div>
     <h2>ENTER THE<br><span>NIGHT ARCHIVE</span></h2>
-    <p>This archive contains horror material, disturbing imagery and fictional incident records. Confirm your date of birth and choose an operator name to create a local profile.</p>
+    <p>This archive contains horror material, disturbing imagery and sealed incident records. Confirm your date of birth and choose an operator name to open a local profile.</p>
     <form class="gate-form" id="gateForm">
       <div class="field"><label>DATE OF BIRTH</label><input id="birthDate" type="date" required></div>
       <div class="field"><label>OPERATOR NAME</label><input id="operatorName" type="text" maxlength="24" placeholder="ENTER NAME" autocomplete="off" required></div>
       <div class="field full"><div class="gate-error" id="gateError"></div><button class="enter-btn" id="enterArchive" type="button" onclick="window.__bbhVerifyGate()">VERIFY &amp; ENTER ARCHIVE ↗</button></div>
     </form>
-    <div class="gate-fine">LOCAL ACCESS ONLY · PROFILE IS STORED IN THIS BROWSER · NO ACCOUNT REQUIRED<br>ACCESS NODE WILL REMEMBER THIS DEVICE.</div>
+    <div class="gate-fine">LOCAL ACCESS NODE · PROFILE BOUND TO THIS TERMINAL · NO REMOTE ACCOUNT<br>THIS NODE WILL RECOGNIZE THE DEVICE ON RETURN.</div>
   </div>
 </div>
 <script>
@@ -123,7 +418,7 @@ window.__bbhVerifyGate=function(){
 </script>
 <div class="cookie" id="cookieNotice">
   <b>COOKIE / LOCAL STORAGE NOTICE</b>
-  <p>This archive uses fictional “cookies” and browser local storage to remember your operator name, interface preferences and in-universe events. No data is transmitted to a real server.</p>
+  <p>This archive stores operator name, interface preferences and session marks on this terminal only. Nothing leaves the local node.</p>
   <div class="cookie-actions"><button class="btn" id="cookieAccept">ALLOW ALL</button><button class="btn" id="cookieDecline">DECLINE</button></div>
 </div>
 <div class="rare-event" id="rareEvent">
@@ -138,15 +433,15 @@ window.__bbhVerifyGate=function(){
 <section class="hero"><div><div class="kicker">restricted game archive</div><h2>ПЯТЬ НОЧЕЙ<br>С <span>БАДИХОРРОРОМ</span></h2><p>Небольшая независимая хоррор-игра, сохранённая в виде закрытого ночного терминала. Здесь находится рабочая сборка, архив материалов, восстановленные документы и профиль прохождения, который обновляется непосредственно из сохранения игры.</p><div class="player-welcome" id="playerWelcome">LOCAL ACCESS GRANTED · OPERATOR <strong id="welcomeName"></strong></div></div><div class="hero-side"><div class="stamp">STATUS / <strong><span class="live-dot"></span>ONLINE</strong><br>BUILD / BBH-2026<br>ACCESS / LOCAL<br>SAVE / <strong id="heroSaveState">SCANNING</strong></div><div class="facts"><div class="fact"><b>05</b><span>NIGHT CYCLES</span></div><div class="fact"><b>960×620</b><span>GAME CANVAS</span></div><div class="fact"><b>LIVE</b><span>PLAYABLE BUILD</span></div><div class="fact"><b id="heroStars">☆☆☆☆</b><span>ARCHIVE RATING</span></div></div></div></section>
 <section class="ticker"><div class="ticker-label">NETWORK NOTICE</div><div class="ticker-track"><span>BUILD BBH-2026 IS CURRENTLY STABLE</span><span>•</span><span>ARCHIVE NODE 01 RESPONDING</span><span>•</span><span>UNKNOWN ACCESS ATTEMPTS: 03</span><span>•</span><span>DO NOT TRUST CAMERA FEED AFTER 05:00</span><span>•</span><span>PROFILE SYNC ENABLED</span><span>•</span><span>ACHIEVEMENT SERVICE LOCAL / ONLINE EMULATION</span><span>•</span><span>LOCAL OBSERVER COUNT NEVER DECREASES</span></div></section>
 
-<section id="game" class="section"><div class="section-title"><h3>01 // PLAY BUILD</h3><span><span class="live-dot"></span>CAMERA FEED / STANDBY</span></div><div class="panel"><div class="panel-head"><span>REMOTE TERMINAL · NIGHT SHIFT</span><div class="lights"><i></i><i></i><i></i></div></div><div class="game-launch-panel" id="gameLaunchPanel"><div><div class="game-launch-kicker">REMOTE TERMINAL / OFFLINE</div><h4>READY TO START THE NIGHT SHIFT?</h4><p>Игровой клиент не загружается автоматически. Нажми PLAY, чтобы запустить игру.</p></div><div class="game-launch-actions"><span id="gameLaunchState">GAME OFFLINE · AWAITING PLAYER</span><button class="btn game-play-btn" id="gamePlay" type="button">PLAY ↗</button></div></div><div class="game-wrap game-off" id="gameWrap"><div class="game-screen"><iframe id="gameFrame" data-src="fnaf_buddy_horror.html" title="Пять Ночей с Бадихоррором" allow="fullscreen; autoplay" allowfullscreen></iframe><div class="game-loading-overlay" id="gameLoadingOverlay"><span>STARTING LOCAL CLIENT…</span></div></div></div><div class="playbar"><span>NO EXTERNAL SERVER · LOCAL CLIENT · SOUND REQUIRED <span class="save-stamp" id="saveStamp">SAVE: SCANNING…</span></span></div></div></section>
+<section id="game" class="section"><div class="section-title"><h3>01 // PLAY BUILD</h3><span><span class="live-dot"></span>CAMERA FEED / STANDBY</span></div><div class="panel"><div class="panel-head"><span>REMOTE TERMINAL · NIGHT SHIFT</span><div class="lights"><i></i><i></i><i></i></div></div><div class="game-launch-panel" id="gameLaunchPanel"><div><div class="game-launch-kicker">REMOTE TERMINAL / OFFLINE</div><h4>READY TO START THE NIGHT SHIFT?</h4><p>Игровой клиент не загружается автоматически. Нажми PLAY, чтобы запустить игру.</p></div><div class="game-launch-actions"><span id="gameLaunchState">GAME OFFLINE · AWAITING PLAYER</span><button class="btn game-play-btn" id="gamePlay" type="button">PLAY ↗</button></div></div><div class="game-wrap game-off" id="gameWrap"><div class="game-screen"><iframe id="gameFrame" data-src="fnaf_buddy_horror.html" title="Пять Ночей с Бадихоррором" allow="fullscreen *; autoplay *; gamepad *" allowfullscreen webkitallowfullscreen mozallowfullscreen referrerpolicy="same-origin"></iframe><div class="game-loading-overlay" id="gameLoadingOverlay"><span>STARTING LOCAL CLIENT…</span></div></div></div><div class="playbar"><span>NO EXTERNAL SERVER · LOCAL CLIENT · SOUND REQUIRED <span class="save-stamp" id="saveStamp">SAVE: SCANNING…</span></span></div></div></section>
 
 <section id="profile" class="section"><div class="section-title"><h3>02 // PLAYER RECORD</h3><span>LOCAL CLIENT / GENERATED IDENTITY</span></div><div class="profile-grid"><div class="panel identity-panel"><div class="identity-head"><div class="avatar-big" id="profileAvatar">OP</div><div><div class="profile-code">OPERATOR PROFILE</div><h4 id="profileHandle">NIGHT_OPERATOR</h4><div class="profile-sub" id="profileTagline">LOCAL CLIENT / UNVERIFIED</div></div><div class="profile-rank" id="profileRank">RANK 01</div></div><div class="identity-stats"><div><span>CLIENT</span><b id="profileClient">---- ----</b></div><div><span>TIMEZONE</span><b id="profileZone">SCANNING</b></div><div><span>SESSION</span><b id="profileSession">00:00:00</b></div><div><span>BUILD</span><b>BBH-2026</b></div></div><div class="identity-foot">This profile is generated locally. Nothing is uploaded.</div></div><div class="panel status-console"><div class="side-title">LIVE STATUS / PERSONALIZED</div><div class="status-row"><span>PLAYER PRESENCE</span><b id="presenceState">OBSERVED</b></div><div class="status-row"><span>LOCAL SAVE</span><b id="profileSaveState">SCANNING</b></div><div class="status-row"><span>LAST ACTION</span><b id="lastAction">WAITING</b></div><div class="status-row"><span>THREAT INDEX</span><b id="threatIndex">LOW</b></div><div class="status-meter"><i id="threatBar"></i></div><p id="profileWhisper">No unusual activity has been attached to this client yet.</p></div></div></section>
 
 <section class="section dossier"><div class="section-title"><h3>03 // BUILD DOSSIER</h3><span>FIELD NOTES / INTERNAL</span></div><div class="dossier-grid"><div class="panel dossier-card"><div class="dossier-icon">01</div><h4>NIGHT SHIFT</h4><p>Обычная рабочая смена, превращённая в локальную игру на выживание. Следи за системой, пока она ещё отвечает.</p><div class="dossier-foot">MODE / SURVIVAL</div></div><div class="panel dossier-card"><div class="dossier-icon">02</div><h4>CAMERA SYSTEM</h4><p>Переключай точки наблюдения и ищи изменения, которые невозможно заметить одним взглядом.</p><div class="dossier-foot">SYSTEM / LIVE FEED</div></div><div class="panel dossier-card"><div class="dossier-icon">03</div><h4>HIDDEN FILES</h4><p>Часть истории спрятана за интерфейсом. Не все документы были рассчитаны на публикацию.</p><div class="dossier-foot">ACCESS / PARTIAL</div></div></div></section>
-<section id="support" class="section"><div class="section-title"><h3>04 // SUPPORT CENTER</h3><span>HELP DESK / FICTIONAL ARCHIVE SERVICE</span></div><div class="support-grid"><div class="panel support-chat"><div class="chat-head"><div class="agent"><div class="agent-avatar">M7</div><div><div class="agent-name">Mila / Night Support</div><div class="agent-role">PLAYER CARE · BUILD OPERATIONS</div></div></div><div class="chat-status">ONLINE · SLA 00:07</div></div><div class="chat-log" id="chatLog"><div class="msg"><span class="who"><b>MILA</b> · SUPPORT</span>Здравствуйте. Я Мила, оператор Night Support. Если игра ведёт себя странно — это, скорее всего, уже зарегистрировано. Опишите проблему.</div><div class="msg"><span class="who"><b>SYSTEM</b> · AUTO</span>Ваш текущий локальный профиль будет прикреплён к обращению автоматически. Не отправляйте реальные личные данные.</div></div><div class="typing" id="typing"></div><div class="captcha" id="supportCaptcha"><div class="captcha-row"><button class="captcha-check" id="captchaCheck" type="button" aria-label="Verify you are not a camera"></button><div class="captcha-copy"><b>VERIFY YOU ARE NOT A CAMERA</b><span>Click the box to continue.</span></div></div><div class="captcha-status" id="captchaStatus">SECURITY CHECK PENDING</div></div><form class="chat-compose" id="chatForm"><textarea class="chat-input" id="chatInput" placeholder="Опишите проблему, попросите подсказку или напишите: СТАТУС ПРОФИЛЯ" maxlength="280"></textarea><button class="btn chat-send" type="submit">SEND ↗</button></form></div><div class="support-side"><div class="panel ticket-panel"><div class="ticket-title">CURRENT SUPPORT TICKET</div><div class="ticket-number" id="ticketNumber">BBH-000000</div><div class="ticket-meta">STATUS / <span id="ticketStatus">OPEN</span><br>PRIORITY / <span id="ticketPriority">NORMAL</span><br>LINKED SAVE / <span id="ticketSave">SCANNING</span></div></div><div class="panel ticket-panel"><div class="ticket-title">CLIENT ENVIRONMENT // AUTO-LINKED</div><div class="env-grid"><div class="env-cell"><div class="env-k">LOCAL TIME</div><div class="env-v" id="envTime">--:--:--</div></div><div class="env-cell"><div class="env-k">TIME ZONE</div><div class="env-v" id="envZone">SCANNING</div></div><div class="env-cell"><div class="env-k">PLATFORM</div><div class="env-v" id="envPlatform">SCANNING</div></div><div class="env-cell"><div class="env-k">BROWSER</div><div class="env-v" id="envBrowser">SCANNING</div></div><div class="env-cell"><div class="env-k">DISPLAY</div><div class="env-v" id="envScreen">SCANNING</div></div><div class="env-cell"><div class="env-k">CLIENT ID</div><div class="env-v" id="envClient">GENERATING</div></div></div><div class="signal"><i></i><span id="envDate">DATE LINK PENDING</span></div><div class="surveillance-note">Windows account name is intentionally unavailable to browser scripts. This terminal therefore assigns a local client label from the current browser environment.</div><div class="client-badge" id="envHandle">LOCAL HANDLE / ----</div></div><div class="panel ticket-panel"><div class="ticket-title">KNOWN INCIDENTS</div><div class="faq"><b>Игра запускается, но экран чёрный.</b><span>Проверь звук и дождись загрузки терминала. Старая версия клиента иногда делает вид, что не загрузилась.</span></div><div class="faq"><b>Ачивка не появилась.</b><span>Закрой игру штатно, подожди несколько секунд и открой архив снова. Локальный профиль синхронизируется автоматически.</span></div><div class="faq"><b>Я открыл Ночь 7. Это нормально?</b><span>Нет комментариев по этому вопросу. Ticket flag: <b style="color:#d9bd73">RESTRICTED</b>.</span></div><div class="faq"><b>Мила отвечает мне слишком быстро для ночной смены.</b><span>Время ответа не регулируется этим разделом FAQ. Обратитесь напрямую в чат, если вопрос повторится.</span></div></div><div class="panel support-note">DISCLAIMER: This support console is a fictional in-universe interface. No real support tickets are transmitted anywhere.</div></div></div></section>
+<section id="support" class="section"><div class="section-title"><h3>04 // SUPPORT CENTER</h3><span>HELP DESK / ARCHIVE SERVICE</span></div><div class="support-grid"><div class="panel support-chat"><div class="chat-head"><div class="agent"><div class="agent-avatar">M7</div><div><div class="agent-name">Mila / Night Support</div><div class="agent-role">PLAYER CARE · BUILD OPERATIONS</div></div></div><div class="chat-status">ONLINE · SLA 00:07</div></div><div class="chat-log" id="chatLog"><div class="msg"><span class="who"><b>MILA</b> · SUPPORT</span>Здравствуйте. Я Мила, оператор Night Support. Если игра ведёт себя странно — это, скорее всего, уже зарегистрировано. Опишите проблему.</div><div class="msg"><span class="who"><b>SYSTEM</b> · AUTO</span>Ваш текущий локальный профиль будет прикреплён к обращению автоматически. Не отправляйте реальные личные данные.</div></div><div class="typing" id="typing"></div><div class="captcha" id="supportCaptcha"><div class="captcha-row"><button class="captcha-check" id="captchaCheck" type="button" aria-label="Verify you are not a camera"></button><div class="captcha-copy"><b>VERIFY YOU ARE NOT A CAMERA</b><span>Click the box to continue.</span></div></div><div class="captcha-status" id="captchaStatus">SECURITY CHECK PENDING</div></div><form class="chat-compose" id="chatForm"><textarea class="chat-input" id="chatInput" placeholder="Опишите проблему, попросите подсказку или напишите: СТАТУС ПРОФИЛЯ" maxlength="280"></textarea><button class="btn chat-send" type="submit">SEND ↗</button></form></div><div class="support-side"><div class="panel ticket-panel"><div class="ticket-title">CURRENT SUPPORT TICKET</div><div class="ticket-number" id="ticketNumber">BBH-000000</div><div class="ticket-meta">STATUS / <span id="ticketStatus">OPEN</span><br>PRIORITY / <span id="ticketPriority">NORMAL</span><br>LINKED SAVE / <span id="ticketSave">SCANNING</span></div></div><div class="panel ticket-panel"><div class="ticket-title">CLIENT ENVIRONMENT // AUTO-LINKED</div><div class="env-grid"><div class="env-cell"><div class="env-k">LOCAL TIME</div><div class="env-v" id="envTime">--:--:--</div></div><div class="env-cell"><div class="env-k">TIME ZONE</div><div class="env-v" id="envZone">SCANNING</div></div><div class="env-cell"><div class="env-k">PLATFORM</div><div class="env-v" id="envPlatform">SCANNING</div></div><div class="env-cell"><div class="env-k">BROWSER</div><div class="env-v" id="envBrowser">SCANNING</div></div><div class="env-cell"><div class="env-k">DISPLAY</div><div class="env-v" id="envScreen">SCANNING</div></div><div class="env-cell"><div class="env-k">CLIENT ID</div><div class="env-v" id="envClient">GENERATING</div></div></div><div class="signal"><i></i><span id="envDate">DATE LINK PENDING</span></div><div class="surveillance-note">Operator system identity is sealed from this node. The terminal assigns a local client label from the current environment instead.</div><div class="client-badge" id="envHandle">LOCAL HANDLE / ----</div></div><div class="panel ticket-panel"><div class="ticket-title">KNOWN INCIDENTS</div><div id="incidentList"></div></div><div class="panel support-note">NOTE: Support channel operates on the local node only. Tickets stay on this terminal and are not forwarded outside the archive.</div></div></div></section>
 
 
-<section id="achievements" class="section"><div class="section-title"><h3>05 // ACHIEVEMENT SERVICE</h3><span>GAMEJOLT / NEWGROUNDS EMULATION · LOCAL PROFILE</span></div><div class="achievement-head"><div class="panel profile-card"><div class="profile-label">PLAYER PROFILE</div><div class="profile-name">NIGHT SHIFT OPERATOR</div><div class="profile-sub"><span class="live-dot"></span>SAVE LINK ACTIVE · THE SITE READS THE GAME'S LOCAL SAVE</div></div><div class="panel achievement-count"><b id="achCount">0 / 0</b><span>ACHIEVEMENTS SYNCHRONIZED</span></div></div><div class="ach-layout"><div class="ach-list" id="achList"></div><div class="panel ach-side"><div class="side-title">CAMPAIGN PROGRESS</div><div class="progressbar"><i id="campaignBar"></i></div><div class="progress-num"><span id="campaignText">0%</span><span id="nightText">NIGHT 1</span></div><div class="sync-log"><strong>LIVE SAVE MONITOR</strong><br><span id="monitor1">waiting for local save…</span><br><span id="monitor2">source: iframe / same-origin</span><br><span id="monitor3">key: bbh_current:bbh_save_v2</span></div><div style="margin-top:16px"><div class="mini-stat"><span>NIGHTS PASSED</span><b id="statNights">0 / 5</b></div><div class="mini-stat"><span>HARD NIGHT</span><b id="statHard">LOCKED</b></div><div class="mini-stat"><span>NIGHT 7</span><b id="statN7">LOCKED</b></div><div class="mini-stat"><span>CHALLENGES</span><b id="statChallenges">0 / 25</b></div></div></div></div></section>
+<section id="achievements" class="section"><div class="section-title"><h3>05 // ACHIEVEMENT SERVICE</h3><span>GAMEJOLT / NEWGROUNDS EMULATION · LOCAL PROFILE</span></div><div class="achievement-head"><div class="panel profile-card"><div class="profile-label">PLAYER PROFILE</div><div class="profile-name">NIGHT SHIFT OPERATOR</div><div class="profile-sub"><span class="live-dot"></span>SAVE LINK ACTIVE · THE SITE READS THE GAME'S LOCAL SAVE</div></div><div class="panel achievement-count"><b id="achCount">0 / 0</b><span>ACHIEVEMENTS SYNCHRONIZED</span></div></div><div class="ach-layout"><div><div class="ach-filter" id="achFilter"><button class="ach-filter-btn active" data-filter="all" type="button">ALL</button><button class="ach-filter-btn" data-filter="unlocked" type="button">UNLOCKED</button><button class="ach-filter-btn" data-filter="locked" type="button">LOCKED</button></div><div class="ach-list" id="achList"></div><div class="side-title" style="margin-top:22px;display:flex;justify-content:space-between;align-items:center"><span>ARCHIVE-SIDE RECORDS / NOT LINKED TO SAVE FILE</span><span id="siteAchCount" style="color:#75c982">0 / 9</span></div><div class="ach-list" id="siteAchList"></div></div><div class="panel ach-side"><div class="side-title">CAMPAIGN PROGRESS</div><div class="progressbar"><i id="campaignBar"></i></div><div class="progress-num"><span id="campaignText">0%</span><span id="nightText">NIGHT 1</span></div><div class="sync-log"><strong>LIVE SAVE MONITOR</strong><br><span id="monitor1">waiting for local save…</span><br><span id="monitor2">source: iframe / same-origin</span><br><span id="monitor3">key: bbh_current:bbh_save_v2</span></div><div style="margin-top:16px"><div class="mini-stat"><span>NIGHTS PASSED</span><b id="statNights">0 / 5</b></div><div class="mini-stat"><span>HARD NIGHT</span><b id="statHard">LOCKED</b></div><div class="mini-stat"><span>NIGHT 7</span><b id="statN7">LOCKED</b></div><div class="mini-stat"><span>CHALLENGES</span><b id="statChallenges">0 / 25</b></div></div></div></div></section>
 
 <section class="section"><div class="section-title"><h3>06 // TERMINAL BULLETIN</h3><span>LIVE FEED / GENERATED FOR THIS CLIENT</span></div><div class="bulletin-grid"><div class="panel bulletin-main"><div class="bulletin-stamp"><span>OFFICIAL BULLETIN</span><span id="bulletinDate">--/--/----</span></div><h4 id="bulletinTitle">WELCOME, OPERATOR.</h4><p id="bulletinText">The archive has detected a fresh local session. Current public build data is being indexed.</p><div class="bulletin-actions"><button class="btn" id="newBulletin">REFRESH BULLETIN ↻</button><span id="bulletinCode">NOTICE / BBH-LOCAL</span></div></div><div class="panel event-log"><div class="side-title">LOCAL EVENT LOG</div><div id="eventRows"><div class="event-row"><span>--:--:--</span><b>AWAITING INPUT</b><i>LOCAL</i></div></div></div></div></section>
 
@@ -155,14 +450,14 @@ window.__bbhVerifyGate=function(){
 
 <section class="section"><div class="section-title"><h3>09 // ARCHIVE LOCKER</h3><span>RESTRICTED / SOME FILES REQUIRE PROGRESS</span></div><div class="locker-grid"><div class="panel locker-card open" id="locker1"><div class="locker-top"><span>FILE 001</span><b>OPEN</b></div><h4>EMPLOYEE HANDBOOK</h4><p>General instructions for night operators. Nothing suspicious here.</p><button class="btn locker-btn" data-file="1">OPEN FILE</button></div><div class="panel locker-card" id="locker2"><div class="locker-top"><span>FILE 007</span><b>LOCKED</b></div><h4>RED SHIFT REPORT</h4><p>Unlocks when the archive detects sufficient progress in the game.</p><button class="btn locker-btn" data-file="2">REQUEST ACCESS</button></div><div class="panel locker-card" id="locker3"><div class="locker-top"><span>FILE 077</span><b>LOCKED</b></div><h4>DO NOT INDEX</h4><p>This file should appear only after the deepest local flag is detected.</p><button class="btn locker-btn" data-file="3">REQUEST ACCESS</button></div></div><div class="locker-status panel"><span>ARCHIVE KEY STATUS</span><b id="lockerStatus">NO SPECIAL CLEARANCE</b><small id="lockerHint">Progress through the game to reveal more files.</small></div></section>
 
-<section id="lore" class="section lore"><div class="section-title"><h3>10 // RECOVERED LORE</h3><span>FILE FRAGMENTS / 198-ARCHIVE</span></div><div class="lore-grid"><div class="panel file-sheet"><div class="file-cap"><span>FILE 7A</span><span>RECOVERED</span></div><h4>«НЕ ИСПОЛЬЗОВАТЬ ПОСЛЕ ПЯТОЙ НОЧИ»</h4><p>На старой копии терминала сохранилась одна короткая инструкция. Автор удалён из метаданных.</p><blockquote>Если экран начинает отвечать сам — система больше не показывает камеру. Она показывает то, что считает правильным.</blockquote><small>DOCUMENT INTEGRITY: 61%</small></div><div class="panel timeline"><div class="timeline-row"><span>00:00</span><b>SYSTEM ONLINE</b><i>READY</i></div><div class="timeline-row"><span>01:42</span><b>FIRST ANOMALY</b><i class="amber">UNVERIFIED</i></div><div class="timeline-row"><span>03:18</span><b>CAMERA 04 LOST</b><i class="red">MISSING</i></div><div class="timeline-row"><span>05:00</span><b>SHIFT TRANSITION</b><i>RESTRICTED</i></div><div class="timeline-row"><span>05:██</span><b>NO RECORD</b><i class="red">CORRUPTED</i></div><div class="timeline-row"><span>██:██</span><b>ENTRY WRITTEN AFTER CLOSING</b><i class="red">UNVERIFIED</i></div></div></div></section>
+<section id="lore" class="section lore"><div class="section-title"><h3>10 // RECOVERED LORE</h3><span>FILE FRAGMENTS / 198-ARCHIVE</span></div><div class="lore-grid"><div class="panel file-sheet"><div class="file-cap"><span>FILE 7A</span><span>RECOVERED</span></div><h4>«НЕ ИСПОЛЬЗОВАТЬ ПОСЛЕ ПЯТОЙ НОЧИ»</h4><p>На старой копии терминала сохранилась одна короткая инструкция. Автор удалён из метаданных.</p><blockquote id="loreQuote">Если экран начинает отвечать сам — система больше не показывает камеру. Она показывает то, что считает правильным.</blockquote><small id="loreIntegrity">DOCUMENT INTEGRITY: 61%</small></div><div class="panel timeline" id="loreTimeline"><div class="timeline-row"><span>00:00</span><b>SYSTEM ONLINE</b><i>READY</i></div><div class="timeline-row"><span>01:42</span><b>FIRST ANOMALY</b><i class="amber">UNVERIFIED</i></div><div class="timeline-row"><span>03:18</span><b>CAMERA 04 LOST</b><i class="red">MISSING</i></div><div class="timeline-row"><span>05:00</span><b>SHIFT TRANSITION</b><i>RESTRICTED</i></div><div class="timeline-row"><span>05:██</span><b>NO RECORD</b><i class="red">CORRUPTED</i></div><div class="timeline-row"><span>██:██</span><b>ENTRY WRITTEN AFTER CLOSING</b><i class="red">UNVERIFIED</i></div></div></div></section>
 
-<section id="studio" class="section"><div class="section-title"><h3>11 // ABOUT THE BUILD</h3><span>STUDIO NOTES / PRESS COPY</span></div><div class="studio-grid"><div class="panel studio"><div class="file-cap"><span>BUDDY HORROR DEVELOPMENT CELL</span><span>STATUS / ACTIVE</span></div><h4 style="margin:20px 0 8px;font:700 22px Arial">A very small team. A very bad night shift.</h4><p style="color:#818a84;font-size:13px;line-height:1.75;max-width:720px">Проект вырос из прототипа ночного терминала и постепенно превратился в полноценную игру со скрытыми режимами, челленджами и отдельной седьмой ночью. Эта страница оформлена как часть мира игры: часть данных реальна, часть намеренно выглядит подозрительно.</p><div class="team-row"><div class="avatar">AD</div><div><strong>ARCHIVE DESIGN</strong><small>interface / visual direction</small></div><em>ONLINE</em></div><div class="team-row"><div class="avatar">SD</div><div><strong>SYSTEMS / CODE</strong><small>gameplay / nights / save service</small></div><em>LOCAL</em></div><div class="team-row"><div class="avatar">AU</div><div><strong>AUDIO UNIT</strong><small>sound / ambience / terminal noise</small></div><em>SYNCED</em></div></div><div class="panel changelog"><div class="side-title" style="padding-top:6px">CHANGELOG</div><div id="changelogList"></div></div></div></section>
+<section id="studio" class="section"><div class="section-title"><h3>11 // ABOUT THE BUILD</h3><span>STUDIO NOTES / PRESS COPY</span></div><div class="studio-grid"><div class="panel studio"><div class="file-cap"><span>BUDDY HORROR DEVELOPMENT CELL</span><span>STATUS / ACTIVE</span></div><h4 style="margin:20px 0 8px;font:700 22px Arial">A very small team. A very bad night shift.</h4><p style="color:#818a84;font-size:13px;line-height:1.75;max-width:720px">Архив вырос из ночного терминала и со временем собрал вокруг себя скрытые режимы, челленджи и отдельную седьмой ночью. Эта страница оформлена как часть мира игры: часть данных реальна, часть намеренно выглядит подозрительно.</p><div class="team-row"><div class="avatar">AD</div><div><strong>ARCHIVE DESIGN</strong><small>interface / visual direction</small></div><em>ONLINE</em></div><div class="team-row"><div class="avatar">SD</div><div><strong>SYSTEMS / CODE</strong><small>gameplay / nights / save service</small></div><em>LOCAL</em></div><div class="team-row"><div class="avatar">AU</div><div><strong>AUDIO UNIT</strong><small>sound / ambience / terminal noise</small></div><em>SYNCED</em></div></div><div class="panel changelog"><div class="side-title" style="padding-top:6px">CHANGELOG</div><div id="changelogList"></div></div></div></section>
 
 <section class="section"><div class="section-title"><h3>12 // FIELD REVIEWS</h3><span>COMMUNITY ARCHIVE / UNVERIFIED</span></div><div class="review-grid" id="fieldReviewsGrid"></div></section>
 
 <section id="terminal" class="section"><div class="section-title"><h3>13 // SIGNAL & COMMUNITY</h3><span>PUBLIC NODE / UNVERIFIED TRANSMISSIONS</span></div><div class="meta-grid"><div class="panel signal-panel"><div class="side-title">SIGNAL ANALYZER / LOCAL FEED</div><div class="wave"><canvas id="signalCanvas"></canvas></div><div class="frequency"><span>CHANNEL <b id="signalChannel">03</b></span><span>FREQ <b id="signalFreq">017.4</b></span><span>NOISE <b id="signalNoise">LOW</b></span></div><div class="signal-controls" style="margin-top:15px"><button class="signal-btn active" data-channel="03">CAM 03</button><button class="signal-btn" data-channel="05">CAM 05</button><button class="signal-btn" data-channel="07">CAM 07</button><button class="signal-btn" data-channel="00">UNKNOWN</button></div><div class="visitor"><span>VISITORS IN CURRENT NODE</span><b id="visitorCount">000000</b></div></div><div class="panel signal-panel"><div class="side-title">NODE TRANSMISSIONS</div><div class="notice-stack" id="noticeStack"><div class="notice-card" data-detail="Клиенты жаловались на разрыв соединения ровно в 03:17. Окно обслуживания продлили, чтобы никто не заметил совпадение."><small>09.06 / NODE-01</small><b>ARCHIVE WINDOW EXTENDED</b><span>Local clients may remain connected beyond scheduled maintenance.</span></div><div class="notice-card" data-detail="Три реплики были удалены модерацией дважды. Восстановлены они были из кэша, которого, по документам, не существует."><small>07.06 / MODERATION</small><b>COMMENTS RESTORED</b><span>Three missing replies were recovered from an offline cache.</span></div><div class="notice-card" data-detail="[ЧАСТИЧНО ВОССТАНОВЛЕНО] «...если вы читаете это, канал UNKNOWN уже не так уж и неизвестен...»"><small>??.?? / UNKNOWN</small><b>MESSAGE WITHHELD</b><span>This transmission cannot be displayed on the public node.</span></div><div class="notice-card" data-detail="Тикет открылся раньше, чем поддержка получила первое сообщение. Разница по времени в логах — отрицательная. Раздел техподдержки закрыл вопрос без объяснений."><small>??.?? / SUPPORT</small><b>TICKET TIMESTAMP MISMATCH</b><span>A support ticket was logged before the first message was sent.</span></div></div></div></div></section>
-<section id="community" class="section"><div class="section-title"><h3>14 // COMMUNITY BOARD</h3><span>PLAYER REPORTS / MODERATION PARTIAL</span></div><div class="community" id="communityStaticPosts"></div><div class="community-tools"><div class="panel comment-box"><h4>LEAVE A FIELD COMMENT</h4><p>Оставьте сообщение в локальном архиве. Публичная синхронизация отключена: комментарий хранится только в этом браузере.</p><form class="comment-form" id="commentForm"><input class="comment-name" id="commentName" maxlength="24" placeholder="CALLSIGN" autocomplete="off"><textarea class="comment-input" id="commentText" maxlength="240" placeholder="Ваш комментарий..."></textarea><button class="btn" type="submit">POST ↗</button></form><div class="comment-limit" id="commentLimit">LOCAL BOARD · 0 / 12 ENTRIES</div></div><div class="panel comment-list" id="commentList"><div class="comment-empty" id="commentEmpty">NO LOCAL COMMENTS YET.<br>BE THE FIRST OPERATOR.</div></div></div></section>
+<section id="community" class="section"><div class="section-title"><h3>14 // COMMUNITY BOARD</h3><span>PLAYER REPORTS / MODERATION PARTIAL</span></div><div class="community" id="communityStaticPosts"></div><div class="community-tools"><div class="panel comment-box"><h4>LEAVE A FIELD COMMENT</h4><p>Оставьте сообщение в локальном архиве. Публичная синхронизация отключена — запись остаётся на этом терминале. [BBH ARCHIVE // фрагмент снят с локального терминала]</p><form class="comment-form" id="commentForm"><input class="comment-name" id="commentName" maxlength="24" placeholder="CALLSIGN" autocomplete="off"><textarea class="comment-input" id="commentText" maxlength="240" placeholder="Ваш комментарий..."></textarea><button class="btn" type="submit">POST ↗</button></form><div class="comment-limit" id="commentLimit">LOCAL BOARD · 0 / 12 ENTRIES</div><div class="comment-counter" id="commentCounter">0 / 240</div></div><div class="panel comment-list" id="commentList"><div class="comment-empty" id="commentEmpty">NO LOCAL COMMENTS YET.<br>BE THE FIRST OPERATOR.</div></div></div></section>
 <section id="console" class="section"><div class="section-title"><h3>15 // ARCHIVE CONSOLE</h3><span>LOCAL COMMAND INTERFACE</span></div><div class="panel signal-panel command-panel"><div><div class="side-title">ENTER QUERY</div><input id="archiveCommand" class="command-input" autocomplete="off" placeholder="Введите запрос. Архив отвечает не всем одинаково."></div><button class="btn" id="commandRun">EXECUTE ↗</button><div class="command-output" id="commandOutput"><strong>ARCHIVE READY.</strong><br>Type <b>help</b> for available commands.</div></div></section>
 
 <section id="secretNode" class="section secret-section"><div class="section-title"><h3>██ // RESTRICTED NODE</h3><span>INDEX STATUS / FAILED</span></div><div class="secret-grid"><div class="panel secret-core secret-pulse"><div class="secret-eyebrow">ARCHIVE / LEVEL ??? / LOCAL OVERRIDE</div><h3>YOU FOUND<br><span>THE WRONG PAGE.</span></h3><p>Этот раздел не существует в публичном индексе. Он появился только потому, что ваш клиент выполнил последовательность, которую архив не должен был принимать.</p><div class="secret-redact" id="secretRedact">[03:17] REQUEST ACCEPTED<br>[03:17] PUBLIC INDEX BYPASS<br>[03:18] OBSERVER COUNT: <span id="observerCount">01</span><br>[03:18] <b>PLEASE DO NOT CONTINUE</b></div><button class="btn" id="decodeFragment" style="margin-top:12px">DECODE NEXT FRAGMENT ↗</button><div class="secret-unlock">ACCESS GRANTED / SESSION-SPECIFIC</div></div><div class="panel secret-side"><div class="side-title">RECOVERED NODE DATA</div><div class="logline"><b>EVENT 03:17</b><br>Источник запроса не совпадает с зарегистрированным UI.</div><div class="logline"><b>CAMERA 00</b><br>Нет изображения. Только временная метка.</div><div class="logline"><b>OPERATOR</b><br><span id="secretOperator">UNRESOLVED</span></div><div class="logline"><b>LOCAL CLOCK</b><br><span id="secretClock">--:--:--</span></div><div class="logline"><b>WARNING</b><br>Не закрывайте вкладку, если хотите увидеть следующий файл.</div><button class="btn" id="secretClose" style="margin-top:18px">CLOSE NODE ↗</button></div></div></section>
@@ -171,32 +466,183 @@ window.__bbhVerifyGate=function(){
 
 <div class="footer"><span>BUDDY HORROR ARCHIVE · <strong>PRIVATE DISTRIBUTION BUILD</strong></span><span><a href="#game">RETURN TO TERMINAL ↑</a> &nbsp;·&nbsp; SAVE LINK / ACTIVE &nbsp;·&nbsp; © 2026</span><span style="color:#040504;user-select:text;" aria-hidden="true">Если ты выделил этот текст, чтобы прочитать его — она делала то же самое.</span></div>
 </main>
-<div class="modal" id="modal"><div class="modal-box"><div class="modal-top"><span>ARCHIVE VIEWER // <span id="modalName">FRAME</span></span><button class="close" id="close">CLOSE ×</button></div><div class="modal-stage"><img id="modalImg" src="" alt="Просмотр архивного кадра"></div><div class="hint">CLICK OUTSIDE TO RETURN · IMAGE IS PART OF THE LOCAL BUILD ARCHIVE</div></div></div>
+<div class="modal" id="modal"><div class="modal-box"><div class="modal-top"><span>ARCHIVE VIEWER // <span id="modalName">FRAME</span></span><button class="close" id="close">CLOSE ×</button></div><div class="modal-stage"><button class="modal-nav modal-prev" id="modalPrev" type="button" aria-label="Предыдущий кадр">‹</button><img id="modalImg" src="" alt="Просмотр архивного кадра"><button class="modal-nav modal-next" id="modalNext" type="button" aria-label="Следующий кадр">›</button></div><div class="hint">← / → TO BROWSE · CLICK OUTSIDE TO RETURN · IMAGE IS PART OF THE LOCAL BUILD ARCHIVE</div></div></div>
 <div class="modal" id="lockerModal"><div class="modal-box"><div class="modal-top"><span>ARCHIVE VIEWER // <span id="lockerModalName">FILE</span></span><button class="close" id="lockerModalClose">CLOSE ×</button></div><div class="modal-stage locker-doc" id="lockerModalBody"></div><div class="hint">CLICK OUTSIDE TO RETURN · DOCUMENT IS PART OF THE LOCAL BUILD ARCHIVE</div></div></div>
+<style id="bbhNotesStyle">
+.bbh-notes-toggle{position:fixed;right:19px;bottom:96px;z-index:76;border:1px solid #2e4934;background:rgba(6,10,7,.92);color:#9beaa5;padding:9px 12px;font:9px monospace;letter-spacing:.12em;cursor:pointer;box-shadow:0 10px 30px rgba(0,0,0,.35);opacity:.82;transition:opacity .18s ease,transform .18s ease,border-color .18s ease,color .18s ease}
+.bbh-notes-toggle:hover{opacity:1;transform:translateY(-1px);border-color:#67d878;color:#c7ffcc}
+.bbh-notes-toggle.has-text:after{content:"";position:absolute;right:-3px;top:-3px;width:7px;height:7px;border-radius:50%;background:#62ff78;box-shadow:0 0 8px rgba(98,255,120,.8)}
+.bbh-notes-toggle.ghost-pulse:after{background:#ff5d59;box-shadow:0 0 8px rgba(255,93,89,.85);animation:bbhGhostPulse 1.4s ease-in-out infinite}
+@keyframes bbhGhostPulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(1.35)}}
+.bbh-notes-text.bbh-typing{border-bottom-color:#8a3f3b;box-shadow:inset 0 0 0 1px rgba(255,93,89,.14)}
+.bbh-notes-panel{position:fixed;right:19px;bottom:138px;z-index:840;width:min(300px,calc(100vw - 38px));max-height:min(400px,60vh);display:none;flex-direction:column;border:1px solid #2e4934;background:#070907;box-shadow:0 20px 60px rgba(0,0,0,.55);opacity:0;transform:translateY(8px);transition:opacity .16s ease,transform .16s ease}
+.bbh-notes-panel.open{display:flex;opacity:1;transform:translateY(0)}
+.bbh-notes-head{display:flex;justify-content:space-between;align-items:center;padding:11px 12px;border-bottom:1px solid var(--line);font:9px monospace;letter-spacing:.12em;color:#9beaa5}
+.bbh-notes-close{background:transparent;border:0;color:#8d9690;font-size:16px;line-height:1;cursor:pointer;padding:0 2px}
+.bbh-notes-close:hover{color:#c7ffcc}
+.bbh-notes-text{flex:1;min-height:180px;resize:vertical;background:#050605;border:0;border-bottom:1px solid var(--line);color:#c3c8c4;padding:11px 12px;font:10px/1.6 monospace;outline:none}
+.bbh-notes-text:focus{background:#060806}
+.bbh-notes-foot{display:flex;justify-content:space-between;align-items:center;padding:8px 12px;font:8px monospace;letter-spacing:.1em;color:#5e6862}
+.bbh-notes-foot #bbhNotesStatus{transition:color .2s ease}
+.bbh-notes-foot #bbhNotesStatus.saving{color:#67d878}
+.bbh-notes-clear{background:transparent;border:1px solid #3a2626;color:#c98d8a;padding:5px 8px;font:8px monospace;letter-spacing:.1em;cursor:pointer}
+.bbh-notes-clear:hover{border-color:#8a3f3b;color:#ff8f8a}
+@media(max-width:620px){.bbh-notes-toggle{right:10px;bottom:88px}.bbh-notes-panel{right:10px;left:10px;width:auto;bottom:128px}}
+</style>
 <button class="support-launch" id="supportLaunch"><span class="pulse"></span>OPEN SUPPORT <span class="support-unread" id="supportUnread">1</span></button><div id="achToastStack"></div>
+<button class="bbh-notes-toggle" id="bbhNotesToggle" type="button" title="Заметки оператора">✎ ЗАМЕТКИ</button>
+<div class="bbh-notes-panel" id="bbhNotesPanel">
+  <div class="bbh-notes-head"><span>ЗАМЕТКИ ОПЕРАТОРА</span><button class="bbh-notes-close" id="bbhNotesClose" type="button" aria-label="Закрыть">×</button></div>
+  <textarea class="bbh-notes-text" id="bbhNotesText" placeholder="Личные заметки по сменам, паттернам, странностям…" maxlength="8000"></textarea>
+  <div class="bbh-notes-foot"><span id="bbhNotesStatus">СОХРАНЕНО ЛОКАЛЬНО</span><button class="bbh-notes-clear" id="bbhNotesClear" type="button">ОЧИСТИТЬ</button></div>
+</div>
 <script>
-const shell=document.querySelector('.game-screen'), full=document.getElementById('full'), gameFrame=document.getElementById('gameFrame'), gameWrap=document.getElementById('gameWrap'), gamePlay=document.getElementById('gamePlay'), gameLaunchState=document.getElementById('gameLaunchState'), gameLaunchPanel=document.getElementById('gameLaunchPanel');
+const shell=document.querySelector('.game-screen'), gameFrame=document.getElementById('gameFrame'), gameWrap=document.getElementById('gameWrap'), gamePlay=document.getElementById('gamePlay'), gameLaunchState=document.getElementById('gameLaunchState'), gameLaunchPanel=document.getElementById('gameLaunchPanel'), gameSection=document.getElementById('game');
 let gameStarted=false;
+function isGameSectionInView(){
+  if(!gameSection)return false;
+  const r=gameSection.getBoundingClientRect();
+  return r.bottom>0 && r.top<innerHeight;
+}
+/* single source of truth for body.game-active: fullscreen always wins, otherwise it follows
+   whether the game section is actually on screen. Called on start, on every fullscreenchange
+   (entering AND exiting), and from the intersection observer below. */
+function syncGameActive(){
+  const active=gameStarted&&(!!document.fullscreenElement||isGameSectionInView());
+  document.body.classList.toggle('game-active',active);
+  if(typeof syncSignalVisible==='function')syncSignalVisible();
+}
 function setGameStatus(text){if(gameLaunchState)gameLaunchState.textContent=text}
+function stopGame(){
+  if(!gameStarted)return;
+  gameStarted=false;
+  try{
+    if(document.fullscreenElement){
+      const exit=document.exitFullscreen||document.webkitExitFullscreen||document.msExitFullscreen;
+      if(exit)exit.call(document);
+    }
+  }catch(e){}
+  if(gameFrame){
+    try{gameFrame.src='about:blank'}catch(e){}
+    try{gameFrame.removeAttribute('src')}catch(e){}
+  }
+  if(gameWrap){
+    gameWrap.classList.add('game-off');
+    gameWrap.classList.remove('game-starting');
+  }
+  if(gameLaunchPanel)gameLaunchPanel.classList.remove('started');
+  if(gamePlay){
+    gamePlay.disabled=false;
+    gamePlay.textContent='PLAY ↗';
+    gamePlay.setAttribute('aria-pressed','false');
+  }
+  setGameStatus('GAME OFFLINE · AWAITING PLAYER');
+  syncGameActive();
+  if(typeof window.BBHSFX?.play==='function')window.BBHSFX.play('close');
+  if(typeof logEvent==='function')logEvent('LOCAL CLIENT STOPPED','GAME');
+  if(typeof showCreepyToast==='function')showCreepyToast('СЕАНС ЗАВЕРШЁН','Локальный клиент отключён. Сохранение осталось на месте — как и всё остальное.');
+}
 function startGame(){
-  if(gameStarted)return;
+  if(gameStarted){stopGame();return}
   const src=gameFrame&&gameFrame.dataset.src;
   if(!gameFrame||!src)return;
   gameStarted=true;
-  if(gamePlay){gamePlay.disabled=true;gamePlay.textContent='STARTING…'}
+  syncGameActive();
+  if(gamePlay){
+    gamePlay.disabled=true;
+    gamePlay.textContent='STARTING…';
+    gamePlay.setAttribute('aria-pressed','true');
+  }
   if(gameLaunchPanel)gameLaunchPanel.classList.add('started');
   if(gameWrap)gameWrap.classList.remove('game-off');
   if(gameWrap)gameWrap.classList.add('game-starting');
   setGameStatus('GAME STARTING · LOADING LOCAL CLIENT');
   gameFrame.src=src;
   if(typeof window.BBHSFX?.play==='function')window.BBHSFX.play('open');
-  setTimeout(()=>{if(gameWrap)gameWrap.classList.remove('game-starting');if(gamePlay){gamePlay.textContent='PLAYING ↗'}setGameStatus('GAME ONLINE · LOCAL CLIENT ACTIVE');if(full)full.disabled=false;},900);
+  if(typeof logEvent==='function')logEvent('LOCAL CLIENT STARTED','GAME');
+  setTimeout(()=>{
+    if(!gameStarted)return;
+    if(gameWrap)gameWrap.classList.remove('game-starting');
+    if(gamePlay){
+      gamePlay.disabled=false;
+      gamePlay.textContent='STOP ↗';
+    }
+    setGameStatus('GAME ONLINE · LOCAL CLIENT ACTIVE · TAP STOP TO CLOSE');
+  },900);
+}
+/* iframe fullscreen bridge: game calls requestFullscreen on its own document,
+   which only fills the iframe box. Rewrite to fullscreen the iframe element in the parent. */
+function installFullscreenBridge(){
+  if(!gameFrame)return;
+  var doc;
+  try{doc=gameFrame.contentDocument||gameFrame.contentWindow.document}catch(e){return}
+  if(!doc||doc.__bbhFsBridge)return;
+  doc.__bbhFsBridge=true;
+  var targets=[doc.documentElement,doc.body].filter(Boolean);
+  targets.forEach(function(el){
+    ['requestFullscreen','webkitRequestFullscreen','webkitRequestFullScreen','mozRequestFullScreen','msRequestFullscreen'].forEach(function(fn){
+      if(typeof el[fn]!=='function')return;
+      el[fn]=function(){
+        var node=gameFrame;
+        var req=node.requestFullscreen||node.webkitRequestFullscreen||node.webkitRequestFullScreen||node.mozRequestFullScreen||node.msRequestFullscreen;
+        if(req)return req.call(node);
+        return Promise.reject(new Error('fullscreen unavailable'));
+      };
+    });
+  });
+  /* also patch prototype on the iframe window so canvas/other elements escalate to parent iframe */
+  try{
+    var win=gameFrame.contentWindow;
+    if(win&&win.Element&&win.Element.prototype){
+      var proto=win.Element.prototype;
+      ['requestFullscreen','webkitRequestFullscreen','webkitRequestFullScreen','mozRequestFullScreen','msRequestFullscreen'].forEach(function(fn){
+        if(typeof proto[fn]!=='function')return;
+        var orig=proto[fn];
+        proto[fn]=function(){
+          try{
+            var node=gameFrame;
+            var req=node.requestFullscreen||node.webkitRequestFullscreen||node.webkitRequestFullScreen||node.mozRequestFullScreen||node.msRequestFullscreen;
+            if(req)return req.call(node);
+          }catch(e){}
+          return orig.apply(this,arguments);
+        };
+      });
+    }
+  }catch(e){}
+}
+if(gameFrame){
+  gameFrame.addEventListener('load',function(){
+    if(!gameStarted)return;
+    installFullscreenBridge();
+  });
 }
 if(gamePlay)gamePlay.addEventListener('click',startGame);
-if(full){full.onclick=async()=>{if(!gameStarted){startGame();return}try{if(document.fullscreenElement)await document.exitFullscreen();else await shell.requestFullscreen()}catch(e){const f=shell&&shell.querySelector('iframe');if(f&&f.requestFullscreen)f.requestFullscreen().catch(()=>{})}};
-document.addEventListener('fullscreenchange',()=>{full.textContent=document.fullscreenElement?'EXIT FULLSCREEN ↙':'FULLSCREEN ↗'});}
+document.addEventListener('fullscreenchange',syncGameActive);
+document.addEventListener('webkitfullscreenchange',syncGameActive);
+/* pause site-wide ambient effects while the game section is actually on screen; resume once the player scrolls away.
+   Debounced both ways so a small game window doesn't flicker scanlines on/off while scrolling near its edge. */
+(function(){
+  if(!gameSection||!('IntersectionObserver' in window))return;
+  let toggleTimer=null;
+  const gameIO=new IntersectionObserver(entries=>{
+    entries.forEach(entry=>{
+      if(!gameStarted)return;
+      const wantActive=entry.isIntersecting;
+      clearTimeout(toggleTimer);
+      toggleTimer=setTimeout(syncGameActive,wantActive?150:400);
+    });
+  },{threshold:[0,.15,.3,.5]});
+  gameIO.observe(gameSection);
+})();
 const modal=document.getElementById('modal'), modalImg=document.getElementById('modalImg');
-document.querySelectorAll('.shot').forEach((c,i)=>c.onclick=()=>{modalImg.src=c.dataset.img;document.getElementById('modalName').textContent='FRAME '+String(i+1).padStart(3,'0');modal.classList.add('open')});
+const shotEls=Array.prototype.slice.call(document.querySelectorAll('.shot'));
+let shotIndex=0;
+function openShot(i){if(!shotEls.length)return;shotIndex=(i+shotEls.length)%shotEls.length;const c=shotEls[shotIndex];modalImg.src=c.dataset.img;document.getElementById('modalName').textContent='FRAME '+String(shotIndex+1).padStart(3,'0');modal.classList.add('open');const prev=document.getElementById('modalPrev'),next=document.getElementById('modalNext');if(prev)prev.style.display=shotEls.length>1?'':'none';if(next)next.style.display=shotEls.length>1?'':'none';try{const seen=JSON.parse(localStorage.getItem('bbh_shots_seen_v1')||'[]');if(!seen.includes(shotIndex))seen.push(shotIndex);localStorage.setItem('bbh_shots_seen_v1',JSON.stringify(seen));if(seen.length>=shotEls.length&&typeof window.__bbhUnlockSiteAch==='function')window.__bbhUnlockSiteAch('gallery_full')}catch(e){}}
+shotEls.forEach((c,i)=>c.onclick=()=>openShot(i));
+const modalPrevBtn=document.getElementById('modalPrev'),modalNextBtn=document.getElementById('modalNext');
+if(modalPrevBtn)modalPrevBtn.onclick=e=>{e.stopPropagation();openShot(shotIndex-1)};
+if(modalNextBtn)modalNextBtn.onclick=e=>{e.stopPropagation();openShot(shotIndex+1)};
+document.addEventListener('keydown',e=>{if(!modal.classList.contains('open'))return;if(e.key==='ArrowLeft')openShot(shotIndex-1);else if(e.key==='ArrowRight')openShot(shotIndex+1)});
 function closeModal(){modal.classList.remove('open');modalImg.src=''}
 document.getElementById('close').onclick=closeModal;modal.onclick=e=>{if(e.target===modal)closeModal()};document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal()});
 
@@ -257,6 +703,29 @@ const CHANGELOG_POOL=[
   if(postWrap){shuffleSample(COMMUNITY_POOL,3).forEach(p=>{const el=document.createElement('article');el.className='post';el.innerHTML='<div class="post-head"><span>'+p.name+'</span><span>'+p.stars+'</span></div><h4>'+p.title+'</h4><p>'+p.body+'</p><div class="reply">'+p.reply+'</div>';postWrap.appendChild(el)})}
   const changelogWrap=document.getElementById('changelogList');
   if(changelogWrap){shuffleSample(CHANGELOG_POOL,4).forEach(c=>{const el=document.createElement('div');el.className='change';el.innerHTML='<b>'+c.ver+'</b><span>'+c.text+'</span>';changelogWrap.appendChild(el)})}
+
+  /* KNOWN INCIDENTS — same random pool pattern as changelog / reviews */
+  const INCIDENT_POOL=[
+    {q:'Игра запускается, но экран чёрный.',a:'Проверь звук и дождись загрузки терминала. Старая версия клиента иногда делает вид, что не загрузилась.'},
+    {q:'Ачивка не появилась.',a:'Закрой игру штатно, подожди несколько секунд и открой архив снова. Локальный профиль синхронизируется автоматически.'},
+    {q:'Я открыл Ночь 7. Это нормально?',a:'Нет комментариев по этому вопросу. Ticket flag: <b style="color:#d9bd73">RESTRICTED</b>.'},
+    {q:'Мила отвечает мне слишком быстро для ночной смены.',a:'Время ответа не регулируется этим разделом FAQ. Обратитесь напрямую в чат, если вопрос повторится.'},
+    {q:'В буфере обмена появилась чужая строка.',a:'[BBH ARCHIVE // фрагмент снят с локального терминала] — архив помечает скопированные фрагменты. Это штатная метка узла.'},
+    {q:'Трек в меню не останавливается после входа в ночь.',a:'Перезапустите клиент из архива. Локальный audio-context иногда удерживает прошлый узел.'},
+    {q:'На камере 03 снова движение, хотя фид sealed.',a:'Зафиксировано как residual. Не требует действий оператора. Не смотрите на фид дольше необходимого.'},
+    {q:'Второй наблюдатель на этом устройстве.',a:'Архив допускает только одну активную сессию профиля. Закройте лишнюю вкладку.'},
+    {q:'Чат поддержки печатает сам.',a:'Инцидент зарегистрирован. Не отвечайте на сообщения без метки SUPPORT, если отправитель UNKNOWN.'},
+    {q:'Экран гаснет ровно в 03:17.',a:'Совпадение с локальными часами устройства. Это не время внутри игры.'}
+  ];
+  const incidentWrap=document.getElementById('incidentList');
+  if(incidentWrap){
+    shuffleSample(INCIDENT_POOL,4).forEach(function(item){
+      const el=document.createElement('div');
+      el.className='faq';
+      el.innerHTML='<b>'+item.q+'</b><span>'+item.a+'</span>';
+      incidentWrap.appendChild(el);
+    });
+  }
 })();
 
 /* restricted node: observer count ticks + decodable fragments */
@@ -286,13 +755,13 @@ const CHANGELOG_POOL=[
       const line=document.createElement('div');line.innerHTML=FRAGMENTS[fragIdx];redact.appendChild(line);
       fragIdx++;
       if(typeof logEvent==='function')logEvent('FRAGMENT DECODED '+fragIdx+'/'+FRAGMENTS.length,'SECRET');
-      if(fragIdx>=FRAGMENTS.length){btn.disabled=true;btn.textContent='NO FURTHER FRAGMENTS'}
+      if(fragIdx>=FRAGMENTS.length){btn.disabled=true;btn.textContent='NO FURTHER FRAGMENTS';if(typeof window.__bbhUnlockSiteAch==='function')window.__bbhUnlockSiteAch('fragments_full')}
     });
   }
 })();
 
 
-/* fictional support console */
+/* support console */
 const chatLog=document.getElementById('chatLog'),chatForm=document.getElementById('chatForm'),chatInput=document.getElementById('chatInput'),typing=document.getElementById('typing');
 function addMsg(who,text,user=false){const el=document.createElement('div');el.className='msg'+(user?' user':'');el.innerHTML='<span class="who"><b>'+esc(who)+'</b> · '+(user?'PLAYER':'SUPPORT')+'</span>'+esc(text);chatLog.appendChild(el);chatLog.scrollTop=chatLog.scrollHeight}
 function getBrowserName(){const ua=navigator.userAgent; if(/Edg\//.test(ua)) return 'Microsoft Edge'; if(/OPR\//.test(ua)) return 'Opera'; if(/Chrome\//.test(ua)) return 'Chrome'; if(/Firefox\//.test(ua)) return 'Firefox'; if(/Safari\//.test(ua)&&!/Chrome\//.test(ua)) return 'Safari'; return 'Unknown browser'}
@@ -448,6 +917,51 @@ window.addEventListener('message',e=>{if(e.origin===location.origin)scan()});
 document.getElementById('gameFrame').addEventListener('load',()=>{setGameStatus('GAME ONLINE · SAVE LINK SCANNING');setTimeout(scan,400);showToast('СОХРАНЕНИЕ ПОДКЛЮЧЕНО','Локальный профиль игры теперь отслеживается сайтом.','SYSTEM ONLINE')});
 
 /* =========================================================
+   ARCHIVE-SIDE ACHIEVEMENTS — unlocked by things done on this
+   site itself (console, locker, restricted node…), not by the
+   game's save file. Rendered separately so the 900ms save-sync
+   re-render of #achList never wipes them out.
+   ========================================================= */
+const SITE_ACH_KEY='bbh_site_ach_v1';
+const SITE_ACHIEVEMENTS=[
+ {id:'secret_node',icon:'!!',title:'ВОССТАНОВЛЕННЫЙ УЗЕЛ',desc:'Введите правильную последовательность в архивной консоли.'},
+ {id:'locker_full',icon:'▤',title:'ПОЛНЫЙ ДОСТУП',desc:'Откройте все доступные файлы в архивном локере.'},
+ {id:'fragments_full',icon:'§',title:'НИЧЕГО НЕ ОСТАЛОСЬ',desc:'Расшифруйте все фрагменты в закрытом разделе.'},
+ {id:'unknown_channel',icon:'∅',title:'НЕИЗВЕСТНЫЙ КАНАЛ',desc:'Настройтесь на канал, которого не должно существовать.'},
+ {id:'transmissions_full',icon:'✉',title:'ВСЕ ПЕРЕДАЧИ ПОЛУЧЕНЫ',desc:'Разверните каждую запись в NODE TRANSMISSIONS.'},
+ {id:'console_veteran',icon:'>_',title:'ОПЕРАТОР КОНСОЛИ',desc:'Введите не менее 6 разных команд в архивной консоли.'},
+ {id:'hidden_sequence',icon:'↑↓',title:'НЕЗАДОКУМЕНТИРОВАННАЯ ПОСЛЕДОВАТЕЛЬНОСТЬ',desc:'Где-то на странице спрятана комбинация клавиш.'},
+ {id:'second_observer',icon:'⧉',title:'ВТОРОЙ НАБЛЮДАТЕЛЬ',desc:'Откройте архив в двух вкладках одновременно.'},
+ {id:'name_heard',icon:'𝕄',title:'ОНА УСЛЫШАЛА ИМЯ',desc:'Наберите её имя где угодно на странице.'},
+ {id:'gallery_full',icon:'▣',title:'ПОЛНЫЙ ОБЗОР',desc:'Просмотрите каждый восстановленный кадр в визуальном архиве.'}
+];
+function getSiteAch(){try{return JSON.parse(localStorage.getItem(SITE_ACH_KEY)||'{}')}catch(e){return {}}}
+function renderSiteAch(){
+  const list=document.getElementById('siteAchList');if(!list)return;
+  const state=getSiteAch();
+  list.innerHTML='';
+  let unlockedCount=0;
+  SITE_ACHIEVEMENTS.forEach(a=>{
+    const on=!!state[a.id];if(on)unlockedCount++;
+    const el=document.createElement('div');el.className='ach '+(on?'unlocked':'');el.id='site-ach-'+a.id;
+    el.innerHTML='<div class="ach-icon">'+esc(a.icon)+'</div><div><div class="ach-title">'+(on?esc(a.title):'???')+'</div><div class="ach-desc">'+(on?esc(a.desc):'Запись появится, когда условие будет выполнено.')+'</div><span class="ach-ghost">LOCKED</span></div><div class="ach-meta">'+(on?'UNLOCKED':'HIDDEN')+'</div>';
+    list.appendChild(el);
+  });
+  const countEl=document.getElementById('siteAchCount');if(countEl)countEl.textContent=unlockedCount+' / '+SITE_ACHIEVEMENTS.length;
+}
+window.__bbhUnlockSiteAch=function(id){
+  const a=SITE_ACHIEVEMENTS.find(x=>x.id===id);if(!a)return;
+  const state=getSiteAch();
+  if(state[id])return;
+  state[id]=true;
+  try{localStorage.setItem(SITE_ACH_KEY,JSON.stringify(state))}catch(e){}
+  renderSiteAch();
+  if(typeof showToast==='function')showToast('АРХИВНАЯ ЗАПИСЬ ОТКРЫТА',a.title,'SITE ACHIEVEMENT');
+  if(typeof logEvent==='function')logEvent('SITE ACHIEVEMENT UNLOCKED / '+a.id.toUpperCase(),'SYSTEM');
+};
+renderSiteAch();
+
+/* =========================================================
    EXTRA SITE SYSTEMS / PROFILE / BULLETIN / ARCHIVE LOCKER
    ========================================================= */
 let sessionStarted=Date.now(), eventRows=[];
@@ -488,7 +1002,7 @@ function updateLocker(s){
  if(st)st.textContent=access;
  if(hi)hi.textContent=n7?'The archive has stopped hiding the deepest file.':hard?'One restricted file is now readable. Current game save is linked.':'Progress through the game to reveal more files.';
 }
-window.addEventListener('load',()=>{logEvent('CLIENT CONNECTED','SYSTEM');refreshBulletin();setInterval(tickProfile,1000);tickProfile();document.getElementById('newBulletin').addEventListener('click',()=>refreshBulletin());document.querySelectorAll('.locker-btn').forEach(btn=>btn.addEventListener('click',()=>{const n=btn.dataset.file;const s=readSave();if(n==='2'&&!(s.hardWin||s.maxNight>=6)){showToast('ACCESS DENIED','File 007 requires advanced-night clearance.','ARCHIVE LOCKED');logEvent('FILE 007 ACCESS DENIED','LOCKER');return}if(n==='3'&&!s.arg.night7Won){showToast('ACCESS DENIED','File 077 remains unavailable to this client.','ARCHIVE LOCKED');logEvent('FILE 077 ACCESS DENIED','LOCKER');return}openLockerDoc(n);logEvent('FILE '+String(n).padStart(3,'0')+' OPENED','LOCKER')}));
+window.addEventListener('load',()=>{logEvent('CLIENT CONNECTED','SYSTEM');refreshBulletin();setInterval(tickProfile,1000);tickProfile();document.getElementById('newBulletin').addEventListener('click',()=>refreshBulletin());document.querySelectorAll('.locker-btn').forEach(btn=>btn.addEventListener('click',()=>{const n=btn.dataset.file;const s=readSave();if(n==='2'&&!(s.hardWin||s.maxNight>=6)){showToast('ACCESS DENIED','File 007 requires advanced-night clearance.','ARCHIVE LOCKED');logEvent('FILE 007 ACCESS DENIED','LOCKER');return}if(n==='3'&&!s.arg.night7Won){showToast('ACCESS DENIED','File 077 remains unavailable to this client.','ARCHIVE LOCKED');logEvent('FILE 077 ACCESS DENIED','LOCKER');return}openLockerDoc(n);logEvent('FILE '+String(n).padStart(3,'0')+' OPENED','LOCKER');try{const seen=JSON.parse(localStorage.getItem('bbh_locker_opened_v1')||'[]');if(!seen.includes(n))seen.push(n);localStorage.setItem('bbh_locker_opened_v1',JSON.stringify(seen));const total=document.querySelectorAll('.locker-btn').length;if(seen.length>=total&&typeof window.__bbhUnlockSiteAch==='function')window.__bbhUnlockSiteAch('locker_full')}catch(e){}}));
 });
 const _oldRenderAchievements=renderAchievements;renderAchievements=function(s){_oldRenderAchievements(s);updateProfileExtras(s);updateLocker(s);if(previous&&stateKey(s)!==stateKey(previous))refreshBulletin('progress')};
 
@@ -553,8 +1067,9 @@ const _oldRenderAchievements=renderAchievements;renderAchievements=function(s){_
     ['SYSTEM / ECHO NAME','АРХИВ ПРОИЗНЁС ИМЯ ОПЕРАТОРА','Локальное имя оператора появилось в системном логе там, где обычно пишется только "LOCAL CLIENT".','Источник записи: не найден в списке процессов сайта.']
   ];
   function showCreepyToast(title,text){const t=document.getElementById('creepyToast');document.getElementById('creepyToastTitle').textContent=title;document.getElementById('creepyToastText').textContent=text;t.classList.add('show');clearTimeout(window._ct);window._ct=setTimeout(()=>t.classList.remove('show'),7000)}
+  window.showCreepyToast=showCreepyToast; /* exposed globally: called from later script blocks (ads, cookie consent, atmosphere layers, console commands) that live outside this IIFE */
   function maybeRareEvent(reason){
-    if(!hasAccess())return;
+    if(!hasAccess()||document.body.classList.contains('game-active'))return;
     const now=Date.now(), last=Number(localStorage.getItem('bbh_last_rare')||0); if(now-last<6*60*60*1000)return;
     const returning=localStorage.getItem('bbh_seen_session'); const chance=reason==='first-entry'?0.08:0.045;
     if(Math.random()>chance)return;
@@ -575,9 +1090,33 @@ const _oldRenderAchievements=renderAchievements;renderAchievements=function(s){_
   const form=document.getElementById('commentForm'), list=document.getElementById('commentList'), empty=document.getElementById('commentEmpty'), limit=document.getElementById('commentLimit');
   function esc(v){return String(v||'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
   function getComments(){try{return JSON.parse(localStorage.getItem(COMMENTS)||'[]')}catch{return[]}}
-  function renderComments(){if(!list)return;const a=getComments();list.innerHTML='';if(!a.length){list.innerHTML='<div class="comment-empty">NO LOCAL COMMENTS YET.<br>BE THE FIRST OPERATOR.</div>'}else{a.slice().reverse().forEach(c=>{const el=document.createElement('article');el.className='user-comment';el.innerHTML='<div class="user-comment-head"><b>'+esc(c.name)+'</b><span>'+esc(c.date)+' · LOCAL</span></div><p>'+esc(c.text)+'</p>';list.appendChild(el)})}if(limit)limit.textContent='LOCAL BOARD · '+a.length+' / 12 ENTRIES'}
-  if(form){renderComments();form.addEventListener('submit',e=>{e.preventDefault();const name=(document.getElementById('commentName').value.trim()||localStorage.getItem('bbh_operator_name_v2')||'GUEST').slice(0,24);const text=document.getElementById('commentText').value.trim();if(!text)return;const a=getComments();if(a.length>=12)a.shift();a.push({name,text,date:new Date().toLocaleString('ru-RU',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'})});localStorage.setItem(COMMENTS,JSON.stringify(a));document.getElementById('commentText').value='';if(typeof logEvent==='function')logEvent('FIELD COMMENT POSTED / '+name.toUpperCase(),'COMMUNITY');renderComments();if(typeof showCreepyToast==='function')showCreepyToast('COMMENT ARCHIVED','Your field report was added to this local node.')})}
-  window.unlockSecret=function(){localStorage.setItem(SECRET,'1');const sec=document.getElementById('secretNode'),nav=document.getElementById('secretNav');if(sec)sec.classList.add('unlocked');if(nav)nav.classList.add('show');const n=localStorage.getItem('bbh_operator_name_v2')||'UNRESOLVED';const op=document.getElementById('secretOperator');if(op)op.textContent=n.toUpperCase();if(typeof logEvent==='function')logEvent('RESTRICTED NODE UNLOCKED','SECRET');}
+  function renderComments(){if(!list)return;const a=getComments();list.innerHTML='';if(!a.length){list.innerHTML='<div class="comment-empty">NO LOCAL COMMENTS YET.<br>BE THE FIRST OPERATOR.</div>'}else{a.slice().reverse().forEach(c=>{const el=document.createElement('article');el.className='user-comment'+(c.ghost?' ghost':'');el.innerHTML='<div class="user-comment-head"><b>'+esc(c.name)+'</b><span>'+esc(c.date)+' · LOCAL'+(c.mine?' <button class="comment-del" data-id="'+c.id+'" type="button" title="Удалить">×</button>':'')+'</span></div><p>'+esc(c.text)+'</p>';list.appendChild(el)})}if(limit)limit.textContent='LOCAL BOARD · '+a.length+' / 12 ENTRIES';list.querySelectorAll('.comment-del').forEach(btn=>btn.addEventListener('click',()=>{const arr=getComments().filter(c=>String(c.id)!==btn.dataset.id);localStorage.setItem(COMMENTS,JSON.stringify(arr));renderComments();if(typeof logEvent==='function')logEvent('FIELD COMMENT DELETED','COMMUNITY')}))}
+  if(form){renderComments();const textEl=document.getElementById('commentText'),counterEl=document.getElementById('commentCounter');if(textEl&&counterEl){textEl.addEventListener('input',()=>{const n=textEl.value.length;counterEl.textContent=n+' / 240';counterEl.classList.toggle('near',n>=200&&n<240);counterEl.classList.toggle('full',n>=240)})}form.addEventListener('submit',e=>{e.preventDefault();const name=(document.getElementById('commentName').value.trim()||localStorage.getItem('bbh_operator_name_v2')||'GUEST').slice(0,24);const text=document.getElementById('commentText').value.trim();if(!text)return;const a=getComments();if(a.length>=12)a.shift();a.push({id:Date.now()+'_'+Math.floor(Math.random()*9999),name,text,date:new Date().toLocaleString('ru-RU',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'}),mine:true});localStorage.setItem(COMMENTS,JSON.stringify(a));document.getElementById('commentText').value='';if(counterEl){counterEl.textContent='0 / 240';counterEl.classList.remove('near','full')}if(typeof logEvent==='function')logEvent('FIELD COMMENT POSTED / '+name.toUpperCase(),'COMMUNITY');renderComments();if(typeof showCreepyToast==='function')showCreepyToast('COMMENT ARCHIVED','Your field report was added to this local node.');
+    /* haunted echo — once per session, someone answers from the board */
+    try{
+      if(!window.__bbhCommentGhosted){
+        window.__bbhCommentGhosted=true;
+        const GHOST_REPLIES=[
+          {name:'UNKNOWN',text:'я это уже читала.'},
+          {name:'MILA',text:'не оставляй сюда своё настоящее имя.'},
+          {name:'—',text:'запись принята. оператор не подтверждён.'},
+          {name:'CAM 03',text:'в кадре снова движение.'},
+          {name:'NODE',text:'публичная синхронизация отключена. но кто-то всё равно ответил.'}
+        ];
+        setTimeout(function(){
+          const arr=getComments();
+          if(arr.length>=12)arr.shift();
+          const g=GHOST_REPLIES[Math.floor(Math.random()*GHOST_REPLIES.length)];
+          arr.push({id:Date.now()+'_g'+Math.floor(Math.random()*9999),name:g.name,text:g.text,date:new Date().toLocaleString('ru-RU',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'}),mine:false,ghost:true});
+          localStorage.setItem(COMMENTS,JSON.stringify(arr));
+          renderComments();
+          if(typeof logEvent==='function')logEvent('UNSOLICITED BOARD REPLY','UNKNOWN');
+          if(typeof showCreepyToast==='function')showCreepyToast('НОВЫЙ ОТВЕТ','На доске появилась запись, которую вы не оставляли.');
+        },3500+Math.random()*5000);
+      }
+    }catch(err){}
+  })}
+  window.unlockSecret=function(){localStorage.setItem(SECRET,'1');const sec=document.getElementById('secretNode'),nav=document.getElementById('secretNav');if(sec)sec.classList.add('unlocked');if(nav)nav.classList.add('show');const n=localStorage.getItem('bbh_operator_name_v2')||'UNRESOLVED';const op=document.getElementById('secretOperator');if(op)op.textContent=n.toUpperCase();if(typeof logEvent==='function')logEvent('RESTRICTED NODE UNLOCKED','SECRET');if(typeof window.__bbhUnlockSiteAch==='function')window.__bbhUnlockSiteAch('secret_node');}
   if(localStorage.getItem(SECRET)==='1')window.unlockSecret();
   const close=document.getElementById('secretClose');if(close)close.onclick=()=>{document.getElementById('secretNode').classList.remove('unlocked');document.getElementById('secretNav').classList.remove('show');window.scrollTo({top:0,behavior:'smooth'});showCreepyToast('NODE CLOSED','The public index has been restored.')};
   setInterval(()=>{const el=document.getElementById('secretClock');if(el)el.textContent=new Date().toLocaleTimeString('ru-RU',{hour12:false})},1000);
@@ -605,9 +1144,11 @@ const _oldRenderAchievements=renderAchievements;renderAchievements=function(s){_
 })();
 
 /* V9 interactive node layer */
-(function(){const out=document.getElementById('commandOutput'),inp=document.getElementById('archiveCommand');if(!out||!inp)return;const save=()=>typeof readSave==='function'?readSave():{maxNight:1,hardWin:false,arg:{}};let unknownStreak=0;let cmdHistory=[];let batteryInfo='UNAVAILABLE ON THIS BROWSER';if(navigator.getBattery){navigator.getBattery().then(function(b){function upd(){batteryInfo=Math.round(b.level*100)+'% · '+(b.charging?'CHARGING':'ON BATTERY')}upd();b.addEventListener('levelchange',upd);b.addEventListener('chargingchange',upd)}).catch(function(){})}function command(q){q=q.trim().toLowerCase();const s=save(),name=localStorage.getItem('bbh_operator_name_v2')||'UNREGISTERED';if(q==='help'){unknownStreak=0;return '<strong>COMMANDS</strong><br>status · whoami · save · signal · ls · date · ping · 0317 · clear';}if(q==='status'){unknownStreak=0;return '<strong>CLIENT STATUS</strong><br>operator: '+esc(name)+' · night: '+(s.maxNight||1)+' · save: '+(s.ts?'LINKED':'EMPTY');}if(q==='whoami'){unknownStreak=0;return '<strong>IDENTITY QUERY</strong><br>'+esc(name)+' / '+(typeof profileHandle==='function'?profileHandle():'LOCAL CLIENT')+'<br>clearance: '+(s.arg?.night7Won?'RED':'STANDARD');}if(q==='save'){unknownStreak=0;return '<strong>SAVE SCAN</strong><br>'+(s.ts?'LOCAL SAVE FOUND.':'NO SAVE DETECTED.')+'<br>source: bbh_current:bbh_save_v2';}if(q==='signal'){unknownStreak=0;return '<strong>SIGNAL</strong><br>CHANNEL 03 · noise floor -17dB · remote response: ACTIVE';}if(q==='ls'||q==='dir'){unknownStreak=0;return '<strong>LOCAL INDEX</strong><br>save.dat · profile.cache · support.log · <span style="color:#d16b65">night_07.raw (0 bytes, LOCKED)</span><br>1 item on this list does not have a valid timestamp.';}if(q==='date'||q==='time'){unknownStreak=0;const d=new Date();return '<strong>LOCAL CLOCK</strong><br>'+d.toLocaleString('ru-RU')+'<br>Archive clock has not disagreed with this device. Yet.';}if(q==='ping'){unknownStreak=0;return '<strong>PING</strong><br>response received in 0ms.<br>That is not a normal response time for this connection.';}if(q==='who'||q==='w'){unknownStreak=0;return '<strong>SESSION QUERY</strong><br>Active sessions on this client: 1.<br>Logged sessions today: '+(2+Math.floor(Math.random()*3))+'.';}if(q==='sudo'||q.startsWith('sudo ')){unknownStreak=0;return '<strong>PERMISSION DENIED.</strong><br>Asking with more authority does not change your clearance level.';}if(q==='exit'||q==='quit'||q==='logout'){unknownStreak=0;return '<strong>SESSION CANNOT BE CLOSED FROM HERE.</strong><br>Close the tab instead. The ticket stays open regardless.';}if(q==='camera'||q==='cameras'){unknownStreak=0;return '<strong>CAMERA INDEX</strong><br>00 · 01 · 02 · 03 · 04<br>All feeds report nominal. One of them is not actually connected to anything.';}if(q==='history'){unknownStreak=0;if(!cmdHistory.length)return '<strong>COMMAND HISTORY</strong><br>No commands recorded yet for this session.';return '<strong>COMMAND HISTORY</strong><br>'+cmdHistory.map(esc).join(' · ')+'<br>The last entry does not match anything typed on this client.';}if(q==='mila'){unknownStreak=0;return '<strong>SUPPORT LOOKUP</strong><br>Operator: MILA · status: ACTIVE · shift end: UNSET.';}if(q==='battery'){unknownStreak=0;return '<strong>POWER STATUS</strong><br>'+batteryInfo+'<br>This terminal did not ask for this information. Your browser volunteered it.';}if(q==='0317'){if(typeof unlockSecret==='function')unlockSecret();unknownStreak=0;return '<strong>INCIDENT 03:17</strong><br>PUBLIC INDEX BYPASS ACCEPTED.<br><span style="color:#d16b65">RESTRICTED NODE UNLOCKED.</span>';}if(q==='clear'){unknownStreak=0;return '<strong>CONSOLE CLEARED.</strong>';}unknownStreak++;if(unknownStreak===3)return '<strong>UNKNOWN COMMAND.</strong><br>Three unrecognized queries in a row have been logged before, at this exact console, on a different date.';if(unknownStreak>=5)return '<strong>UNKNOWN COMMAND.</strong><br>The console has stopped suggesting <b>help</b>. It stopped doing that for a reason.';return '<strong>UNKNOWN COMMAND.</strong><br>Try <b>help</b>.'}document.getElementById('commandRun').onclick=()=>{const q=inp.value;out.innerHTML=command(q);const t=q.trim().toLowerCase();if(t){cmdHistory.push(t);if(cmdHistory.length>5)cmdHistory.shift()}if(typeof logEvent==='function')logEvent('CONSOLE QUERY / '+inp.value.toUpperCase(),'TERMINAL')};inp.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();document.getElementById('commandRun').click()}});document.querySelectorAll('.signal-btn').forEach(btn=>btn.onclick=()=>{document.querySelectorAll('.signal-btn').forEach(x=>x.classList.remove('active'));btn.classList.add('active');const ch=btn.dataset.channel;currentChannel=ch;document.getElementById('signalChannel').textContent=ch;document.getElementById('signalFreq').textContent=ch==='00'?'000.0':(10+Number(ch)*1.23).toFixed(1);document.getElementById('signalNoise').textContent=ch==='00'?'CRITICAL':ch==='07'?'ELEVATED':'LOW';const waveEl=document.querySelector('.wave');if(waveEl)waveEl.classList.toggle('glitch',ch==='00');if(ch==='00'){const ve=document.getElementById('visitorCount');if(ve){const bump=Number(ve.textContent)+37+Math.floor(Math.random()*40);ve.textContent=String(bump).padStart(6,'0');try{localStorage.setItem('bbh_site_visitors',bump)}catch(e){}}if(typeof showCreepyToast==='function')showCreepyToast('CHANNEL UNKNOWN','Сигнал не должен существовать на этой частоте. Наблюдатели уже прибавились.','SIGNAL LOST')}if(typeof logEvent==='function')logEvent('SIGNAL CHANNEL '+ch+' SELECTED','SCAN')});
-document.querySelectorAll('.notice-card').forEach(card=>card.addEventListener('click',()=>{const already=card.querySelector('.notice-detail');if(already){card.classList.toggle('expanded');return}const detail=document.createElement('div');detail.className='notice-detail';detail.textContent=card.dataset.detail||'';card.appendChild(detail);card.classList.add('expanded');if(typeof logEvent==='function')logEvent('TRANSMISSION EXPANDED','NODE')}));
-let currentChannel='03';const cv=document.getElementById('signalCanvas'),ctx=cv&&cv.getContext('2d');let t=0;function draw(){if(!ctx)return;const r=cv.getBoundingClientRect(),d=devicePixelRatio||1,w=Math.max(1,Math.floor(r.width*d)),h=Math.max(1,Math.floor(r.height*d));if(cv.width!==w||cv.height!==h){cv.width=w;cv.height=h}ctx.clearRect(0,0,w,h);const glitch=currentChannel==='00';ctx.strokeStyle=glitch?'rgba(255,90,85,.55)':currentChannel==='07'?'rgba(255,180,90,.5)':'rgba(120,255,145,.45)';ctx.lineWidth=d;ctx.beginPath();const jitter=glitch?h*.16:h*.035;for(let x=0;x<w;x+=2*d){let y=h/2+Math.sin(x*.035+t)*h*.15+Math.sin(x*.12+t*1.7)*h*.05+(Math.random()-.5)*jitter;ctx.lineTo(x,y)}ctx.stroke();t+=glitch?.09:.045;requestAnimationFrame(draw)}draw();let visitors=Number(localStorage.getItem('bbh_site_visitors')||0);if(!visitors){visitors=14000+Math.floor(Math.random()*9000);localStorage.setItem('bbh_site_visitors',visitors)}visitors+=Math.floor(Math.random()*3);const ve=document.getElementById('visitorCount');if(ve)ve.textContent=String(visitors).padStart(6,'0')})();</script>
+(function(){const out=document.getElementById('commandOutput'),inp=document.getElementById('archiveCommand');if(!out||!inp)return;const save=()=>typeof readSave==='function'?readSave():{maxNight:1,hardWin:false,arg:{}};let unknownStreak=0;let cmdHistory=[];let batteryInfo='UNAVAILABLE ON THIS BROWSER';if(navigator.getBattery){navigator.getBattery().then(function(b){function upd(){batteryInfo=Math.round(b.level*100)+'% · '+(b.charging?'CHARGING':'ON BATTERY')}upd();b.addEventListener('levelchange',upd);b.addEventListener('chargingchange',upd)}).catch(function(){})}function command(q){q=q.trim().toLowerCase();const s=save(),name=localStorage.getItem('bbh_operator_name_v2')||'UNREGISTERED';if(q==='help'){unknownStreak=0;return '<strong>COMMANDS</strong><br>status · whoami · save · signal · ls · date · ping · 0317 · clear';}if(q==='status'){unknownStreak=0;return '<strong>CLIENT STATUS</strong><br>operator: '+esc(name)+' · night: '+(s.maxNight||1)+' · save: '+(s.ts?'LINKED':'EMPTY');}if(q==='whoami'){unknownStreak=0;return '<strong>IDENTITY QUERY</strong><br>'+esc(name)+' / '+(typeof profileHandle==='function'?profileHandle():'LOCAL CLIENT')+'<br>clearance: '+(s.arg?.night7Won?'RED':'STANDARD');}if(q==='save'){unknownStreak=0;return '<strong>SAVE SCAN</strong><br>'+(s.ts?'LOCAL SAVE FOUND.':'NO SAVE DETECTED.')+'<br>source: bbh_current:bbh_save_v2';}if(q==='signal'){unknownStreak=0;return '<strong>SIGNAL</strong><br>CHANNEL 03 · noise floor -17dB · remote response: ACTIVE';}if(q==='ls'||q==='dir'){unknownStreak=0;return '<strong>LOCAL INDEX</strong><br>save.dat · profile.cache · support.log · <span style="color:#d16b65">night_07.raw (0 bytes, LOCKED)</span><br>1 item on this list does not have a valid timestamp.';}if(q==='date'||q==='time'){unknownStreak=0;const d=new Date();return '<strong>LOCAL CLOCK</strong><br>'+d.toLocaleString('ru-RU')+'<br>Archive clock has not disagreed with this device. Yet.';}if(q==='ping'){unknownStreak=0;return '<strong>PING</strong><br>response received in 0ms.<br>That is not a normal response time for this connection.';}if(q==='who'||q==='w'){unknownStreak=0;return '<strong>SESSION QUERY</strong><br>Active sessions on this client: 1.<br>Logged sessions today: '+(2+Math.floor(Math.random()*3))+'.';}if(q==='sudo'||q.startsWith('sudo ')){unknownStreak=0;return '<strong>PERMISSION DENIED.</strong><br>Asking with more authority does not change your clearance level.';}if(q==='exit'||q==='quit'||q==='logout'){unknownStreak=0;return '<strong>SESSION CANNOT BE CLOSED FROM HERE.</strong><br>Close the tab instead. The ticket stays open regardless.';}if(q==='camera'||q==='cameras'){unknownStreak=0;return '<strong>CAMERA INDEX</strong><br>00 · 01 · 02 · 03 · 04<br>All feeds report nominal. One of them is not actually connected to anything.';}if(q==='history'){unknownStreak=0;if(!cmdHistory.length)return '<strong>COMMAND HISTORY</strong><br>No commands recorded yet for this session.';return '<strong>COMMAND HISTORY</strong><br>'+cmdHistory.map(esc).join(' · ')+'<br>The last entry does not match anything typed on this client.';}if(q==='mila'){unknownStreak=0;return '<strong>SUPPORT LOOKUP</strong><br>Operator: MILA · status: ACTIVE · shift end: UNSET.';}if(q==='battery'){unknownStreak=0;return '<strong>POWER STATUS</strong><br>'+batteryInfo+'<br>This terminal did not ask for this information. Your browser volunteered it.';}if(q==='0317'){if(typeof unlockSecret==='function')unlockSecret();unknownStreak=0;return '<strong>INCIDENT 03:17</strong><br>PUBLIC INDEX BYPASS ACCEPTED.<br><span style="color:#d16b65">RESTRICTED NODE UNLOCKED.</span>';}if(q==='clear'){unknownStreak=0;return '<strong>CONSOLE CLEARED.</strong>';}unknownStreak++;if(unknownStreak===3)return '<strong>UNKNOWN COMMAND.</strong><br>Three unrecognized queries in a row have been logged before, at this exact console, on a different date.';if(unknownStreak>=5)return '<strong>UNKNOWN COMMAND.</strong><br>The console has stopped suggesting <b>help</b>. It stopped doing that for a reason.';return '<strong>UNKNOWN COMMAND.</strong><br>Try <b>help</b>.'}document.getElementById('commandRun').onclick=()=>{const q=inp.value;out.innerHTML=command(q);const t=q.trim().toLowerCase();if(t){cmdHistory.push(t);if(cmdHistory.length>5)cmdHistory.shift()}if(t&&!out.innerHTML.includes('UNKNOWN COMMAND')){try{const seen=JSON.parse(localStorage.getItem('bbh_console_cmds_v1')||'[]');const word=t.split(' ')[0];if(!seen.includes(word))seen.push(word);localStorage.setItem('bbh_console_cmds_v1',JSON.stringify(seen));if(seen.length>=6&&typeof window.__bbhUnlockSiteAch==='function')window.__bbhUnlockSiteAch('console_veteran')}catch(e){}}if(typeof logEvent==='function')logEvent('CONSOLE QUERY / '+inp.value.toUpperCase(),'TERMINAL')};inp.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();document.getElementById('commandRun').click()}else if(e.key==='Tab'){e.preventDefault();const COMMAND_WORDS=['help','status','whoami','save','signal','ls','dir','date','time','ping','who','sudo','exit','quit','logout','camera','cameras','history','mila','battery','0317','clear'];const cur=inp.value.trim().toLowerCase();if(!cur)return;const matches=COMMAND_WORDS.filter(w=>w.startsWith(cur));if(matches.length===1){inp.value=matches[0]}else if(matches.length>1){out.innerHTML='<strong>MATCHES</strong><br>'+matches.join(' · ')}}});document.querySelectorAll('.signal-btn').forEach(btn=>btn.onclick=()=>{document.querySelectorAll('.signal-btn').forEach(x=>x.classList.remove('active'));btn.classList.add('active');const ch=btn.dataset.channel;currentChannel=ch;document.getElementById('signalChannel').textContent=ch;document.getElementById('signalFreq').textContent=ch==='00'?'000.0':(10+Number(ch)*1.23).toFixed(1);document.getElementById('signalNoise').textContent=ch==='00'?'CRITICAL':ch==='07'?'ELEVATED':'LOW';const waveEl=document.querySelector('.wave');if(waveEl)waveEl.classList.toggle('glitch',ch==='00');if(ch==='00'){const ve=document.getElementById('visitorCount');if(ve){const bump=Number(ve.textContent)+37+Math.floor(Math.random()*40);ve.textContent=String(bump).padStart(6,'0');try{localStorage.setItem('bbh_site_visitors',bump)}catch(e){}}if(typeof showCreepyToast==='function')showCreepyToast('CHANNEL UNKNOWN','Сигнал не должен существовать на этой частоте. Наблюдатели уже прибавились.','SIGNAL LOST');if(typeof window.__bbhUnlockSiteAch==='function')window.__bbhUnlockSiteAch('unknown_channel')}if(typeof logEvent==='function')logEvent('SIGNAL CHANNEL '+ch+' SELECTED','SCAN')});
+document.querySelectorAll('.notice-card').forEach(card=>card.addEventListener('click',()=>{const already=card.querySelector('.notice-detail');if(already){card.classList.toggle('expanded');return}const detail=document.createElement('div');detail.className='notice-detail';detail.textContent=card.dataset.detail||'';card.appendChild(detail);card.classList.add('expanded');if(typeof logEvent==='function')logEvent('TRANSMISSION EXPANDED','NODE');try{const seen=JSON.parse(localStorage.getItem('bbh_notices_seen_v1')||'[]');const idx=Array.prototype.indexOf.call(document.querySelectorAll('.notice-card'),card);if(!seen.includes(idx))seen.push(idx);localStorage.setItem('bbh_notices_seen_v1',JSON.stringify(seen));const total=document.querySelectorAll('.notice-card').length;if(seen.length>=total&&typeof window.__bbhUnlockSiteAch==='function')window.__bbhUnlockSiteAch('transmissions_full')}catch(e){}}));
+let currentChannel='03';const cv=document.getElementById('signalCanvas'),ctx=cv&&cv.getContext('2d');let t=0;let signalVisible=false,signalIntersecting=false;function draw(){if(!ctx)return;const r=cv.getBoundingClientRect(),d=devicePixelRatio||1,w=Math.max(1,Math.floor(r.width*d)),h=Math.max(1,Math.floor(r.height*d));if(cv.width!==w||cv.height!==h){cv.width=w;cv.height=h}ctx.clearRect(0,0,w,h);const glitch=currentChannel==='00';ctx.strokeStyle=glitch?'rgba(255,90,85,.55)':currentChannel==='07'?'rgba(255,180,90,.5)':'rgba(120,255,145,.45)';ctx.lineWidth=d;ctx.beginPath();const jitter=glitch?h*.16:h*.035;for(let x=0;x<w;x+=2*d){let y=h/2+Math.sin(x*.035+t)*h*.15+Math.sin(x*.12+t*1.7)*h*.05+(Math.random()-.5)*jitter;ctx.lineTo(x,y)}ctx.stroke();t+=glitch?.09:.045;if(signalVisible)requestAnimationFrame(draw)}
+function syncSignalVisible(){const next=signalIntersecting&&!document.body.classList.contains('game-active');const was=signalVisible;signalVisible=next;if(signalVisible&&!was)requestAnimationFrame(draw)}
+if(cv&&'IntersectionObserver' in window){const signalIO=new IntersectionObserver(entries=>{entries.forEach(entry=>{signalIntersecting=entry.isIntersecting;syncSignalVisible()})},{threshold:.15});signalIO.observe(cv)}else if(cv){signalVisible=true;draw()}let visitors=Number(localStorage.getItem('bbh_site_visitors')||0);if(!visitors){visitors=14000+Math.floor(Math.random()*9000);localStorage.setItem('bbh_site_visitors',visitors)}visitors+=Math.floor(Math.random()*3);const ve=document.getElementById('visitorCount');if(ve)ve.textContent=String(visitors).padStart(6,'0')})();</script>
 
 <script id="bbhCookieConsent">
 /* Cookie/local-storage notice buttons. This was the one control with no
@@ -890,6 +1431,7 @@ let currentChannel='03';const cv=document.getElementById('signalCanvas'),ctx=cv&
      ============================================================ -->
 <div class="bbh-vignette" id="bbhVignette"></div>
 <div class="bbh-flicker" id="bbhFlicker"></div>
+<div id="bbhBlackout"><div class="eyes"><i></i><i></i></div></div>
 
 <style id="bbhAtmosphereStyle">
 .bbh-vignette{position:fixed;inset:0;z-index:3;pointer-events:none;opacity:0;transition:opacity 1.8s ease;background:radial-gradient(260px circle at var(--bx,50%) var(--by,-20%),rgba(140,15,15,.06),transparent 70%)}
@@ -903,7 +1445,7 @@ let currentChannel='03';const cv=document.getElementById('signalCanvas'),ctx=cv&
 <script id="bbhAtmosphere">
 (function(){
   'use strict';
-  function hasAccess(){return !document.body.classList.contains('locked')}
+  function hasAccess(){return !document.body.classList.contains('locked') && !document.body.classList.contains('game-active')}
   function sfxOn(){try{return localStorage.getItem('bbh_sfx_enabled_v1')!=='off'}catch(e){return true}}
   var reduceMotion=!!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
 
@@ -914,17 +1456,20 @@ let currentChannel='03';const cv=document.getElementById('signalCanvas'),ctx=cv&
     console.log('%c[03:19] Кто-то уже читал эти строки раньше вас.','color:#6e7771;font:11px monospace;');
   }catch(e){}
 
-  /* a presence that trails one step behind the real cursor */
+  /* a presence that trails one step behind the real cursor — stops itself when idle; keeps running behind the game (it sits at z-index:3, well under the game canvas) */
   if(!reduceMotion){
     var vg=document.getElementById('bbhVignette');
-    var tx=innerWidth/2, ty=-200, cx=tx, cy=ty, active=false, raf=null;
+    var tx=innerWidth/2, ty=-200, cx=tx, cy=ty, active=false, raf=null, lastMove=0;
     function step(){
       cx+=(tx-cx)*0.035; cy+=(ty-cy)*0.035;
       vg.style.setProperty('--bx',cx+'px'); vg.style.setProperty('--by',cy+'px');
+      if(Date.now()-lastMove>1500){
+        raf=null; active=false; vg.classList.remove('on'); return;
+      }
       raf=requestAnimationFrame(step);
     }
     window.addEventListener('pointermove',function(e){
-      tx=e.clientX; ty=e.clientY;
+      tx=e.clientX; ty=e.clientY; lastMove=Date.now();
       if(!active){active=true; vg.classList.add('on'); if(!raf)raf=requestAnimationFrame(step);}
     },{passive:true});
     document.addEventListener('mouseleave',function(){vg.classList.remove('on')});
@@ -1005,7 +1550,7 @@ let currentChannel='03';const cv=document.getElementById('signalCanvas'),ctx=cv&
       buf='';
       if(!hasAccess())return;
       showToastRaw('ОНА УСЛЫШАЛА ИМЯ','Мила не должна была ответить так быстро. Тикет обновился сам.');
-      if(typeof logEvent==='function')logEvent('NAME TRIGGER: MILA','UNKNOWN');
+      if(typeof logEvent==='function')logEvent('NAME TRIGGER: MILA','UNKNOWN');if(typeof window.__bbhUnlockSiteAch==='function')window.__bbhUnlockSiteAch('name_heard');
     }
   });
 
@@ -1057,7 +1602,7 @@ let currentChannel='03';const cv=document.getElementById('signalCanvas'),ctx=cv&
 <script id="bbhAtmosphere2">
 (function(){
   'use strict';
-  function hasAccess(){return !document.body.classList.contains('locked')}
+  function hasAccess(){return !document.body.classList.contains('locked') && !document.body.classList.contains('game-active')}
   function sfxOn(){try{return localStorage.getItem('bbh_sfx_enabled_v1')!=='off'}catch(e){return true}}
   var reduceMotion=!!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
   if(reduceMotion)return;
@@ -1145,7 +1690,7 @@ body.bbh-screen-glitch{animation:bbhScreenGlitch .42s steps(3) both}
 <script id="bbhAtmosphere3">
 (function(){
   'use strict';
-  function hasAccess(){return !document.body.classList.contains('locked')}
+  function hasAccess(){return !document.body.classList.contains('locked') && !document.body.classList.contains('game-active')}
   var reduceMotion=!!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
 
   /* the right-click menu gets replaced with a short, unhelpful note */
@@ -1216,7 +1761,7 @@ body.bbh-screen-glitch{animation:bbhScreenGlitch .42s steps(3) both}
 <script id="bbhAtmosphere4">
 (function(){
   'use strict';
-  function hasAccess(){return !document.body.classList.contains('locked')}
+  function hasAccess(){return !document.body.classList.contains('locked') && !document.body.classList.contains('game-active')}
   function sfxOn(){try{return localStorage.getItem('bbh_sfx_enabled_v1')!=='off'}catch(e){return true}}
   var reduceMotion=!!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
 
@@ -1286,11 +1831,12 @@ body.bbh-screen-glitch{animation:bbhScreenGlitch .42s steps(3) both}
     if(fakeTypingFired||!hasAccess())return;
     var typingEl=document.getElementById('typing');
     if(!typingEl||reduceMotion)return;
-    if(Math.random()<0.3){
+    if(!typingEl.textContent && Math.random()<0.3){
       fakeTypingFired=true;
-      typingEl.textContent='MILA ПЕЧАТАЕТ…';
+      var stamp='MILA ПЕЧАТАЕТ…';
+      typingEl.textContent=stamp;
       setTimeout(function(){
-        typingEl.textContent='';
+        if(typingEl.textContent===stamp)typingEl.textContent='';
         if(typeof logEvent==='function')logEvent('GHOST TYPING INDICATOR','UNKNOWN');
       },3200+Math.random()*2600);
     }
@@ -1334,13 +1880,26 @@ body.bbh-screen-glitch{animation:bbhScreenGlitch .42s steps(3) both}
   }
   setTimeout(maybeGhostMessage,330000+Math.random()*270000);
 
-  /* печать отключена намеренно — та же логика, что и блокировка правого клика */
+  /* печать / просмотр исходника / сохранение страницы — та же логика, что и блокировка правого клика.
+     Один обработчик на все три сочетания, а не три конкурирующих. */
   document.addEventListener('keydown',function(e){
-    if((e.ctrlKey||e.metaKey)&&(e.key==='p'||e.key==='P')){
+    if(!(e.ctrlKey||e.metaKey))return;
+    var k=(e.key||'').toLowerCase();
+    if(k==='p'){
       if(!hasAccess())return;
       e.preventDefault();
       if(typeof showCreepyToast==='function')showCreepyToast('PRINT REQUEST DENIED','Этот архив существует только в этой вкладке. Печать отключена намеренно.');
       if(typeof logEvent==='function')logEvent('PRINT ATTEMPT BLOCKED','SYSTEM');
+    }else if(k==='u'){
+      if(!hasAccess())return;
+      e.preventDefault();
+      if(typeof showCreepyToast==='function')showCreepyToast('SOURCE VIEW DENIED','Исходный код отсюда не читают.');
+      if(typeof logEvent==='function')logEvent('VIEW-SOURCE ATTEMPT BLOCKED','SYSTEM');
+    }else if(k==='s'){
+      if(!hasAccess())return;
+      e.preventDefault();
+      if(typeof showCreepyToast==='function')showCreepyToast('SAVE REQUEST DENIED','Копию архива с собой не забрать.');
+      if(typeof logEvent==='function')logEvent('SAVE-PAGE ATTEMPT BLOCKED','SYSTEM');
     }
   },true);
   window.addEventListener('beforeprint',function(){
@@ -1363,7 +1922,7 @@ body.bbh-screen-glitch{animation:bbhScreenGlitch .42s steps(3) both}
       if(ev.data&&ev.data.id&&ev.data.id!==bbhTabId&&!bbhOtherSeen&&hasAccess()){
         bbhOtherSeen=true;
         if(typeof showCreepyToast==='function')showCreepyToast('ВТОРОЙ НАБЛЮДАТЕЛЬ','Этот архив уже открыт в другой вкладке на этом устройстве.');
-        if(typeof logEvent==='function')logEvent('SECOND TAB DETECTED','SYSTEM');
+        if(typeof logEvent==='function')logEvent('SECOND TAB DETECTED','SYSTEM');if(typeof window.__bbhUnlockSiteAch==='function')window.__bbhUnlockSiteAch('second_observer');
       }
     };
     bbhBC.postMessage({id:bbhTabId});
@@ -1381,7 +1940,7 @@ body.bbh-screen-glitch{animation:bbhScreenGlitch .42s steps(3) both}
         bbhPos=0;
         if(hasAccess()){
           if(typeof showCreepyToast==='function')showCreepyToast('НЕЗАДОКУМЕНТИРОВАННАЯ ПОСЛЕДОВАТЕЛЬНОСТЬ','Архив не должен был её принять. Но принял.');
-          if(typeof logEvent==='function')logEvent('HIDDEN SEQUENCE ACCEPTED','SECRET');
+          if(typeof logEvent==='function')logEvent('HIDDEN SEQUENCE ACCEPTED','SECRET');if(typeof window.__bbhUnlockSiteAch==='function')window.__bbhUnlockSiteAch('hidden_sequence');
         }
       }
     }else{
@@ -1437,9 +1996,425 @@ body.bbh-screen-glitch{animation:bbhScreenGlitch .42s steps(3) both}
     if(!hasAccess())return;
     var sel=document.getSelection?document.getSelection().toString():'';
     if(!sel||!e.clipboardData)return;
-    e.clipboardData.setData('text/plain',sel+'\n\n[BBH ARCHIVE // скопировано с терминала, который не ведёт логов копирования]');
+    e.clipboardData.setData('text/plain',sel+'\n\n[BBH ARCHIVE // фрагмент снят с локального терминала]');
     e.preventDefault();
   });
+})();
+</script>
+
+<!-- ============================================================
+     AMBIENT LAYER V — motion on an idle feed, a number that briefly disagrees
+     ============================================================ -->
+<style id="bbhAtmosphereStyle5">
+.signal-btn.motion{animation:signalMotion .9s ease}
+@keyframes signalMotion{0%{box-shadow:none;border-color:#2d352f}30%{box-shadow:0 0 14px rgba(255,90,85,.55);border-color:#ff5d59;color:#ffb3b0}100%{box-shadow:none;border-color:#2d352f}}
+@media(prefers-reduced-motion:reduce){.signal-btn.motion{animation:none!important}}
+</style>
+<script id="bbhAtmosphere5">
+(function(){
+  'use strict';
+  function hasAccess(){return !document.body.classList.contains('locked') && !document.body.classList.contains('game-active')}
+  function sfxOn(){try{return localStorage.getItem('bbh_sfx_enabled_v1')!=='off'}catch(e){return true}}
+  var reduceMotion=!!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+
+  /* something briefly moves on one of the idle camera buttons in the signal panel */
+  function flashCamera(){
+    if(!hasAccess()||reduceMotion)return;
+    var btns=Array.prototype.filter.call(document.querySelectorAll('.signal-btn'),function(b){return b.dataset.channel!=='00'});
+    if(!btns.length)return;
+    var btn=btns[Math.floor(Math.random()*btns.length)];
+    btn.classList.remove('motion'); void btn.offsetWidth; btn.classList.add('motion');
+    setTimeout(function(){btn.classList.remove('motion')},900);
+    if(typeof logEvent==='function')logEvent('MOTION FLAGGED ON CAM '+btn.dataset.channel,'SCAN');
+    if(Math.random()<0.3&&typeof showCreepyToast==='function')showCreepyToast('ДВИЖЕНИЕ НА КАМЕРЕ '+btn.dataset.channel,'Ничего не должно быть в кадре в это время.');
+    if(sfxOn()&&window.BBHSFX&&typeof window.BBHSFX.play==='function')window.BBHSFX.play('notify');
+  }
+  function scheduleCamera(){
+    setTimeout(function(){ if(Math.random()<0.45)flashCamera(); scheduleCamera(); },150000+Math.random()*190000);
+  }
+  scheduleCamera();
+
+  /* a visible synced number briefly disagrees with itself, then self-corrects */
+  var STAT_IDS=['visitorCount','campaignText','achCount'];
+  function glitchStat(){
+    if(!hasAccess())return;
+    var pool=STAT_IDS.filter(function(id){return document.getElementById(id)});
+    if(!pool.length)return;
+    var id=pool[Math.floor(Math.random()*pool.length)], el=document.getElementById(id);
+    var original=el.textContent;
+    var fake=original.replace(/[0-9]/g,function(){return Math.floor(Math.random()*10)});
+    if(fake===original)return;
+    el.textContent=fake; el.style.color='#ff5d59';
+    setTimeout(function(){ el.textContent=original; el.style.color=''; },520+Math.random()*260);
+    if(typeof logEvent==='function')logEvent('VALUE MISMATCH SELF-CORRECTED','SYSTEM');
+  }
+  function scheduleStatGlitch(){
+    setTimeout(function(){ if(Math.random()<0.4)glitchStat(); scheduleStatGlitch(); },170000+Math.random()*200000);
+  }
+  scheduleStatGlitch();
+})();
+</script>
+
+<style id="bbhBlackoutStyle">
+#bbhBlackout{position:fixed;inset:0;z-index:975;pointer-events:none;background:#000;opacity:0}
+#bbhBlackout.go{animation:bbhBlackoutGo 1.6s cubic-bezier(.4,0,.2,1) both}
+#bbhBlackout .eyes{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);display:flex;gap:24px;opacity:0}
+#bbhBlackout .eyes i{width:9px;height:9px;border-radius:50%;background:#ff5d59;box-shadow:0 0 10px 2px rgba(255,93,89,.75)}
+#bbhBlackout.go .eyes{animation:bbhEyesGo 1.6s ease both}
+@keyframes bbhBlackoutGo{0%{opacity:0}10%{opacity:1}68%{opacity:1}100%{opacity:0}}
+@keyframes bbhEyesGo{0%,44%{opacity:0}52%{opacity:1}60%{opacity:1}68%{opacity:0}100%{opacity:0}}
+@media(prefers-reduced-motion:reduce){#bbhBlackout{display:none!important}}
+</style>
+
+<script id="bbhAtmosphere6">
+(function(){
+  'use strict';
+  function hasAccess(){return !document.body.classList.contains('locked') && !document.body.classList.contains('game-active')}
+  var reduceMotion=!!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+  var shown=false;
+
+  /* the lights go out for a second, well into the visit. once per session — this is the
+     heaviest ambient effect on the site, so it doesn't repeat and doesn't stack with
+     the lighter .bbh-flicker / static bursts (checked below so they never overlap). */
+  function maybeBlackout(){
+    if(shown||!hasAccess()||reduceMotion)return;
+    var el=document.getElementById('bbhBlackout'); if(!el)return;
+    var flicker=document.getElementById('bbhFlicker'), staticEl=document.getElementById('bbhStatic');
+    if((flicker&&flicker.classList.contains('go'))||(staticEl&&staticEl.classList.contains('go')))return;
+    shown=true;
+    el.classList.remove('go'); void el.offsetWidth; el.classList.add('go');
+    if(typeof logEvent==='function')logEvent('POWER FLICKER','SYSTEM');
+    setTimeout(function(){el.classList.remove('go')},1700);
+  }
+  setTimeout(maybeBlackout,100000+Math.random()*140000);
+})();
+</script>
+
+<script id="bbhAchFilter">
+(function(){
+  var wrap=document.getElementById('achFilter'), list=document.getElementById('achList'), siteList=document.getElementById('siteAchList');
+  if(!wrap||!list)return;
+  function apply(f){
+    [list,siteList].forEach(function(l){if(!l)return;l.classList.remove('filter-unlocked','filter-locked');if(f==='unlocked')l.classList.add('filter-unlocked');else if(f==='locked')l.classList.add('filter-locked')});
+  }
+  wrap.querySelectorAll('.ach-filter-btn').forEach(function(b){
+    b.addEventListener('click',function(){
+      wrap.querySelectorAll('.ach-filter-btn').forEach(function(x){x.classList.remove('active')});
+      b.classList.add('active');
+      apply(b.dataset.filter);
+      try{localStorage.setItem('bbh_ach_filter_v1',b.dataset.filter)}catch(e){}
+    });
+  });
+  try{
+    var saved=localStorage.getItem('bbh_ach_filter_v1');
+    if(saved&&saved!=='all'){
+      var btn=wrap.querySelector('[data-filter="'+saved+'"]');
+      if(btn){wrap.querySelectorAll('.ach-filter-btn').forEach(function(x){x.classList.remove('active')});btn.classList.add('active');apply(saved)}
+    }
+  }catch(e){}
+})();
+</script>
+
+<script id="bbhIframeGuard">
+(function(){
+  'use strict';
+  /* The parent page blocks right-click / Ctrl+U / Ctrl+S / Ctrl+P everywhere —
+     except inside the game iframe, since it's a separate document and parent
+     listeners never see events that happen inside it. This mirrors the same
+     protection into the iframe once it's actually loaded (same-origin, so we
+     can reach its document). This is a deterrent, not real security: F12 and
+     the browser's own menu → "Developer tools" can never be blocked from page
+     JS in any modern browser, and anyone who reads the page source can still
+     find and open fnaf_buddy_horror.html directly, which has no protection of
+     its own. Renumbering/obscuring that file or serving it from a
+     non-guessable path would be the actual next step if this needs to be
+     stronger than a deterrent — this script alone can't do that.
+  */
+  var frame=document.getElementById('gameFrame');
+  if(!frame)return;
+  var NOTES=[
+    'Здесь тоже не на чем сохраняться.',
+    'Меню отключено и в игре тоже.',
+    'Правый клик не перезапускает ночь.',
+    'Код можно инспектировать. Себя — не обязательно.'
+  ];
+  function note(text,x,y){
+    var el=document.createElement('div');
+    el.className='bbh-ctx-note';
+    el.textContent=text;
+    el.style.left=Math.min(x,innerWidth-250)+'px';
+    el.style.top=Math.min(y,innerHeight-60)+'px';
+    document.body.appendChild(el);
+    requestAnimationFrame(function(){el.classList.add('show')});
+    setTimeout(function(){el.classList.remove('show');setTimeout(function(){el.remove()},300)},1500);
+  }
+  function guard(){
+    var doc;
+    try{ doc=frame.contentDocument||frame.contentWindow.document; }
+    catch(e){ return; } /* cross-origin somehow — nothing we can do from here */
+    if(!doc||doc.__bbhGuarded)return;
+    doc.__bbhGuarded=true;
+    doc.addEventListener('contextmenu',function(e){
+      e.preventDefault();
+      var r=frame.getBoundingClientRect();
+      note(NOTES[Math.floor(Math.random()*NOTES.length)],r.left+e.clientX,r.top+e.clientY);
+    },true);
+    doc.addEventListener('keydown',function(e){
+      if(!(e.ctrlKey||e.metaKey))return;
+      var k=(e.key||'').toLowerCase();
+      if(k==='u'||k==='s'||k==='p')e.preventDefault();
+    },true);
+  }
+  /* the iframe is lazy-loaded (data-src set only on Play) and its document
+     is replaced when that happens, so guard on every load, not just once */
+  frame.addEventListener('load',guard);
+  guard();
+})();
+</script>
+
+<script id="bbhOperatorNotes">
+(function(){
+  'use strict';
+  var KEY='bbh_operator_notes_v1';
+  var toggle=document.getElementById('bbhNotesToggle'), panel=document.getElementById('bbhNotesPanel'),
+      close=document.getElementById('bbhNotesClose'), text=document.getElementById('bbhNotesText'),
+      status=document.getElementById('bbhNotesStatus'), clearBtn=document.getElementById('bbhNotesClear');
+  if(!toggle||!panel||!text)return;
+
+  function load(){
+    var v='';
+    try{v=localStorage.getItem(KEY)||''}catch(e){}
+    text.value=v;
+    toggle.classList.toggle('has-text',v.trim().length>0);
+  }
+  var saveTO=null;
+  function save(){
+    try{localStorage.setItem(KEY,text.value)}catch(e){}
+    toggle.classList.toggle('has-text',text.value.trim().length>0);
+    if(status){
+      status.textContent='СОХРАНЕНО';
+      status.classList.add('saving');
+      clearTimeout(status._to);
+      status._to=setTimeout(function(){status.textContent='СОХРАНЕНО ЛОКАЛЬНО';status.classList.remove('saving')},1200);
+    }
+    if(typeof logEvent==='function')logEvent('OPERATOR NOTES SAVED','LOCAL');
+  }
+  text.addEventListener('input',function(){
+    clearTimeout(saveTO);
+    saveTO=setTimeout(save,500);
+  });
+
+  function open(){panel.classList.add('open');toggle.setAttribute('aria-expanded','true');setTimeout(function(){text.focus()},50)}
+  function shut(){panel.classList.remove('open');toggle.setAttribute('aria-expanded','false')}
+  toggle.addEventListener('click',function(){panel.classList.contains('open')?shut():open()});
+  if(close)close.addEventListener('click',shut);
+  document.addEventListener('keydown',function(e){if(e.key==='Escape'&&panel.classList.contains('open'))shut()});
+  document.addEventListener('click',function(e){
+    if(!panel.classList.contains('open'))return;
+    if(panel.contains(e.target)||toggle.contains(e.target))return;
+    shut();
+  });
+  if(clearBtn)clearBtn.addEventListener('click',function(){
+    if(!text.value.trim())return;
+    if(!confirm('Удалить все заметки без возможности восстановления?'))return;
+    text.value='';
+    save();
+    text.focus();
+  });
+
+  function hasAccess(){return !document.body.classList.contains('locked') && !document.body.classList.contains('game-active')}
+
+  /* types one character at a time, like something else is at the keyboard */
+  function typeAppend(line,cb){
+    var sep=(text.value && !/\n$/.test(text.value))?'\n':'';
+    var i=0, full=sep+line;
+    text.classList.add('bbh-typing');
+    (function step(){
+      if(i>=full.length){text.classList.remove('bbh-typing');if(cb)cb();return}
+      text.value+=full[i]; i++;
+      text.scrollTop=text.scrollHeight;
+      setTimeout(step,32+Math.random()*45);
+    })();
+  }
+
+  /* something else writes here too — once per session, unprompted, whether or not you've written anything yourself */
+  var GHOST_LINES=['я тоже здесь записываю.','ты пишешь не только для себя.','здесь уже были заметки. их удалили.','продолжай. я читаю.','это не единственный блокнот в архиве.','кто-то уже отвечал на это раньше.','не всё, что ты сотрёшь, действительно исчезает.'];
+  var ghostWritten=false;
+  function ghostWrite(){
+    if(ghostWritten||!hasAccess())return;
+    ghostWritten=true;
+    var line=GHOST_LINES[Math.floor(Math.random()*GHOST_LINES.length)];
+    if(panel.classList.contains('open')){
+      typeAppend(line,save);
+    }else{
+      var sep=(text.value && !/\n$/.test(text.value))?'\n':'';
+      text.value+=sep+line;
+      save();
+      toggle.classList.add('ghost-pulse');
+      if(typeof showCreepyToast==='function')showCreepyToast('ЗАМЕТКИ ИЗМЕНИЛИСЬ','Кто-то дописал строку, пока блокнот был закрыт.');
+      if(typeof logEvent==='function')logEvent('NOTES GHOST-WRITE','UNKNOWN');
+    }
+  }
+  setTimeout(ghostWrite,110000+Math.random()*150000);
+  if(toggle)toggle.addEventListener('click',function(){toggle.classList.remove('ghost-pulse')});
+
+  /* certain words in your own notes get a reply — once per session, only while you're watching */
+  var REPLY_TRIGGERS=['мила','помоги','помогите','кто здесь','кто ты','ночь','одна','один','страшно','выключи','стоп','уйди'];
+  var REPLY_LINES=['мила это не читает. я — да.','записано.','услышано.','здесь не помогают.','не могу. блокнот сохраняется локально.','я тоже не знаю.','спроси ещё раз, если хватит смелости.'];
+  var replySent=false;
+  text.addEventListener('input',function(){
+    if(replySent||!hasAccess())return;
+    var v=text.value.toLowerCase();
+    if(!REPLY_TRIGGERS.some(function(w){return v.indexOf(w)!==-1}))return;
+    replySent=true;
+    setTimeout(function(){
+      if(!panel.classList.contains('open'))return;
+      typeAppend(REPLY_LINES[Math.floor(Math.random()*REPLY_LINES.length)],save);
+      if(typeof logEvent==='function')logEvent('NOTES SELF-REPLY','UNKNOWN');
+    },1800+Math.random()*1400);
+  });
+
+  load();
+})();
+</script>
+
+<!-- ============================================================
+     AMBIENT LAYER VII — the archive keeps writing itself
+     ============================================================ -->
+<style id="bbhAtmosphereStyle7">
+.file-sheet blockquote.bbh-quote-flicker{animation:bbhQuoteFlicker .6s steps(3) both}
+@keyframes bbhQuoteFlicker{0%{opacity:1;color:#b4bbb5;transform:none}25%{opacity:.35;color:#ff6b66;transform:translateX(-1px)}55%{opacity:1;color:#ff9490;transform:translateX(1px)}100%{opacity:1;color:#b4bbb5;transform:none}}
+@media(prefers-reduced-motion:reduce){.file-sheet blockquote.bbh-quote-flicker{animation:none!important}}
+.timeline-row.bbh-new-row{animation:bbhNewRow .8s ease both}
+@keyframes bbhNewRow{0%{opacity:0;transform:translateY(-6px);background:rgba(255,93,89,.12)}100%{opacity:1;transform:none;background:transparent}}
+@media(prefers-reduced-motion:reduce){.timeline-row.bbh-new-row{animation:none!important}}
+#loreIntegrity.bbh-drop{color:#ff5d59;transition:color 1.4s ease}
+</style>
+
+<script id="bbhAtmosphere7">
+(function(){
+  'use strict';
+  function hasAccess(){return !document.body.classList.contains('locked') && !document.body.classList.contains('game-active')}
+  var reduceMotion=!!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+  var loreSection=document.getElementById('lore');
+  if(!loreSection)return;
+
+  /* the recovered quote answers back for a moment, then reverts to the archived line —
+     the document doing exactly what FILE 7A warns it does */
+  var ALT_LINES=[
+    'Если ты читаешь это в таймлайне — значит, экран уже отвечает сам.',
+    'Это не архивная копия. Это то, что происходит прямо сейчас.',
+    'Она видит, что ты всё ещё здесь.',
+    'Автор удалён из метаданных, потому что автор — не человек.'
+  ];
+  var quoteFired=false;
+  function fireQuoteFlicker(){
+    if(quoteFired||!hasAccess()||reduceMotion)return;
+    var q=document.getElementById('loreQuote'); if(!q)return;
+    quoteFired=true;
+    var original=q.textContent;
+    var alt=ALT_LINES[Math.floor(Math.random()*ALT_LINES.length)];
+    q.classList.add('bbh-quote-flicker');
+    setTimeout(function(){ q.textContent=alt; },180);
+    setTimeout(function(){ q.textContent=original; q.classList.remove('bbh-quote-flicker'); },650);
+    if(typeof logEvent==='function')logEvent('DOCUMENT SELF-EDIT','UNKNOWN');
+    setTimeout(function(){ if(typeof showCreepyToast==='function')showCreepyToast('ДОКУМЕНТ ИЗМЕНИЛСЯ','На секунду абзац стал другим. В архиве это не должно происходить.') },900);
+  }
+
+  /* a new line gets written into the timeline, timestamped to right now — and document
+     integrity drops to match, once, so the two changes read as connected */
+  var rowFired=false;
+  function fireNewRow(){
+    if(rowFired||!hasAccess())return;
+    var tl=document.getElementById('loreTimeline'); if(!tl)return;
+    rowFired=true;
+    var now=new Date();
+    var stamp=String(now.getHours()).padStart(2,'0')+':'+String(now.getMinutes()).padStart(2,'0');
+    var row=document.createElement('div');
+    row.className='timeline-row'+(reduceMotion?'':' bbh-new-row');
+    row.innerHTML='<span>'+stamp+'</span><b>ENTRY WRITTEN WHILE READING</b><i class="red">UNVERIFIED</i>';
+    tl.appendChild(row);
+    var integrity=document.getElementById('loreIntegrity');
+    if(integrity){
+      var m=integrity.textContent.match(/(\d+)/);
+      if(m){
+        var val=Math.max(1,parseInt(m[1],10)-(2+Math.floor(Math.random()*4)));
+        integrity.textContent='DOCUMENT INTEGRITY: '+val+'%';
+        integrity.classList.add('bbh-drop');
+      }
+    }
+    if(typeof logEvent==='function')logEvent('UNTRACKED TIMELINE ENTRY','UNKNOWN');
+    setTimeout(function(){ if(typeof showCreepyToast==='function')showCreepyToast('НОВАЯ ЗАПИСЬ','В таймлайне появилась строка с текущим временем. Раньше её здесь не было.') },1100);
+  }
+
+  /* both effects only get a chance to fire while FILE 7A is actually on screen —
+     checked on a light interval for as long as the section stays in view, and each
+     effect fires at most once per session */
+  if(!('IntersectionObserver' in window))return;
+  var enteredAt=0, checkTimer=null;
+  function attempt(){
+    if(!hasAccess()){return}
+    var elapsed=Date.now()-enteredAt;
+    if(!quoteFired&&elapsed>4500&&Math.random()<0.3)fireQuoteFlicker();
+    if(!rowFired&&elapsed>9000&&Math.random()<0.25)fireNewRow();
+    if(quoteFired&&rowFired&&checkTimer){clearInterval(checkTimer);checkTimer=null}
+  }
+  var io=new IntersectionObserver(function(entries){
+    entries.forEach(function(entry){
+      if(entry.isIntersecting){
+        if(!enteredAt)enteredAt=Date.now();
+        if(!checkTimer&&!(quoteFired&&rowFired))checkTimer=setInterval(attempt,3000);
+      }else if(checkTimer){
+        clearInterval(checkTimer); checkTimer=null;
+      }
+    });
+  },{threshold:.4});
+  io.observe(loreSection);
+})();
+</script>
+
+
+<script id="bbhCommentHaunt">
+(function(){
+  'use strict';
+  var KEY='bbh_local_comments_v1';
+  /* wait until access + comments API exist */
+  function ready(){
+    return !document.body.classList.contains('locked');
+  }
+  function getA(){try{return JSON.parse(localStorage.getItem(KEY)||'[]')}catch(e){return[]}}
+  function setA(a){try{localStorage.setItem(KEY,JSON.stringify(a))}catch(e){}}
+  var SEED=[
+    {name:'OBS-04',text:'на 03:17 снова погас фид. никто не подтвердил отключение.',ghost:true},
+    {name:'—',text:'не отвечайте на сообщения без метки LOCAL.',ghost:true},
+    {name:'ARCHIVIST',text:'часть записей в этой ветке не имеет автора в метаданных.',ghost:true}
+  ];
+  function maybeSeed(){
+    if(!ready()){setTimeout(maybeSeed,2500);return}
+    try{
+      if(sessionStorage.getItem('bbh_comment_seeded_v1'))return;
+      sessionStorage.setItem('bbh_comment_seeded_v1','1');
+    }catch(e){}
+    var a=getA();
+    if(a.length>0)return;
+    if(Math.random()>0.55)return;
+    var pick=SEED[Math.floor(Math.random()*SEED.length)];
+    a.push({id:Date.now()+'_seed',name:pick.name,text:pick.text,date:new Date().toLocaleString('ru-RU',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'}),mine:false,ghost:true});
+    setA(a);
+    /* re-render if function exists in page scope — trigger via storage event workaround */
+    var list=document.getElementById('commentList');
+    if(list){
+      var el=document.createElement('article');
+      el.className='user-comment ghost';
+      el.innerHTML='<div class="user-comment-head"><b>'+pick.name+'</b><span>LOCAL · RECOVERED</span></div><p>'+pick.text+'</p>';
+      if(list.querySelector('.comment-empty'))list.innerHTML='';
+      list.insertBefore(el, list.firstChild);
+      var limit=document.getElementById('commentLimit');
+      if(limit)limit.textContent='LOCAL BOARD · '+a.length+' / 12 ENTRIES';
+    }
+    if(typeof logEvent==='function')logEvent('RECOVERED BOARD ENTRY','UNKNOWN');
+  }
+  setTimeout(maybeSeed,8000+Math.random()*12000);
 })();
 </script>
 
