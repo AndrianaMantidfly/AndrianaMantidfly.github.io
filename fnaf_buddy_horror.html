@@ -3,6 +3,40 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<script id="bbhCtxBlock">
+/* Блок ПКМ / view-source — и standalone, и внутри iframe архива */
+(function(){
+  function block(e){
+    if(e){ e.preventDefault(); e.stopPropagation(); try{e.stopImmediatePropagation()}catch(x){} }
+    return false;
+  }
+  document.addEventListener('contextmenu', block, true);
+  window.addEventListener('contextmenu', block, true);
+  document.addEventListener('auxclick', function(e){ if(e.button===2) block(e); }, true);
+  document.addEventListener('keydown', function(e){
+    if(!(e.ctrlKey||e.metaKey)) return;
+    var k=(e.key||'').toLowerCase();
+    if(k==='u'||k==='s'||k==='p') block(e);
+  }, true);
+  document.oncontextmenu = block;
+  window.oncontextmenu = block;
+  function apply(){
+    try{
+      if(document.documentElement){
+        document.documentElement.oncontextmenu = block;
+        document.documentElement.setAttribute('oncontextmenu','return false');
+      }
+      if(document.body){
+        document.body.oncontextmenu = block;
+        document.body.setAttribute('oncontextmenu','return false');
+      }
+    }catch(x){}
+  }
+  apply();
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', apply);
+  else apply();
+})();
+</script>
 <style id="bbhBootCritical">
   /* До JS: чёрный экран, меню скрыто — иначе flash mainMenu до Dick Company */
   html, body { background:#050505 !important; }

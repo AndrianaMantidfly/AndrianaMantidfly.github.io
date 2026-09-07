@@ -433,7 +433,7 @@ window.__bbhVerifyGate=function(){
 <section class="hero"><div><div class="kicker">restricted game archive</div><h2>ПЯТЬ НОЧЕЙ<br>С <span>БАДИХОРРОРОМ</span></h2><p>Небольшая независимая хоррор-игра, сохранённая в виде закрытого ночного терминала. Здесь находится рабочая сборка, архив материалов, восстановленные документы и профиль прохождения, который обновляется непосредственно из сохранения игры.</p><div class="player-welcome" id="playerWelcome">LOCAL ACCESS GRANTED · OPERATOR <strong id="welcomeName"></strong></div></div><div class="hero-side"><div class="stamp">STATUS / <strong><span class="live-dot"></span>ONLINE</strong><br>BUILD / BBH-2026<br>ACCESS / LOCAL<br>SAVE / <strong id="heroSaveState">SCANNING</strong></div><div class="facts"><div class="fact"><b>05</b><span>NIGHT CYCLES</span></div><div class="fact"><b>960×620</b><span>GAME CANVAS</span></div><div class="fact"><b>LIVE</b><span>PLAYABLE BUILD</span></div><div class="fact"><b id="heroStars">☆☆☆☆</b><span>ARCHIVE RATING</span></div></div></div></section>
 <section class="ticker"><div class="ticker-label">NETWORK NOTICE</div><div class="ticker-track"><span>BUILD BBH-2026 IS CURRENTLY STABLE</span><span>•</span><span>ARCHIVE NODE 01 RESPONDING</span><span>•</span><span>UNKNOWN ACCESS ATTEMPTS: 03</span><span>•</span><span>DO NOT TRUST CAMERA FEED AFTER 05:00</span><span>•</span><span>PROFILE SYNC ENABLED</span><span>•</span><span>ACHIEVEMENT SERVICE LOCAL / ONLINE EMULATION</span><span>•</span><span>LOCAL OBSERVER COUNT NEVER DECREASES</span></div></section>
 
-<section id="game" class="section"><div class="section-title"><h3>01 // PLAY BUILD</h3><span><span class="live-dot"></span>CAMERA FEED / STANDBY</span></div><div class="panel"><div class="panel-head"><span>REMOTE TERMINAL · NIGHT SHIFT</span><div class="lights"><i></i><i></i><i></i></div></div><div class="game-launch-panel" id="gameLaunchPanel"><div><div class="game-launch-kicker">REMOTE TERMINAL / OFFLINE</div><h4>READY TO START THE NIGHT SHIFT?</h4><p>Игровой клиент не загружается автоматически. Нажми PLAY, чтобы запустить игру.</p></div><div class="game-launch-actions"><span id="gameLaunchState">GAME OFFLINE · AWAITING PLAYER</span><button class="btn game-play-btn" id="gamePlay" type="button">PLAY ↗</button></div></div><div class="game-wrap game-off" id="gameWrap"><div class="game-screen"><iframe id="gameFrame" data-src="fnaf_buddy_horror.html" title="Пять Ночей с Бадихоррором" allow="fullscreen *; autoplay *; gamepad *" allowfullscreen webkitallowfullscreen mozallowfullscreen referrerpolicy="same-origin"></iframe><div class="game-loading-overlay" id="gameLoadingOverlay"><span>STARTING LOCAL CLIENT…</span></div></div></div><div class="playbar"><span>NO EXTERNAL SERVER · LOCAL CLIENT · SOUND REQUIRED <span class="save-stamp" id="saveStamp">SAVE: SCANNING…</span></span></div></div></section>
+<section id="game" class="section"><div class="section-title"><h3>01 // PLAY BUILD</h3><span><span class="live-dot"></span>CAMERA FEED / STANDBY</span></div><div class="panel"><div class="panel-head"><span>REMOTE TERMINAL · NIGHT SHIFT</span><div class="lights"><i></i><i></i><i></i></div></div><div class="game-launch-panel" id="gameLaunchPanel"><div><div class="game-launch-kicker">REMOTE TERMINAL / OFFLINE</div><h4>READY TO START THE NIGHT SHIFT?</h4><p>Игровой клиент не загружается автоматически. Нажми PLAY, чтобы запустить игру.</p></div><div class="game-launch-actions"><span id="gameLaunchState">GAME OFFLINE · AWAITING PLAYER</span><button class="btn game-play-btn" id="gamePlay" type="button">PLAY ↗</button></div></div><div class="game-wrap game-off" id="gameWrap"><div class="game-screen"><iframe id="gameFrame" data-src="fnaf_buddy_horror.html" title="Пять Ночей с Бадихоррором" allow="fullscreen *; autoplay *; gamepad *" allowfullscreen webkitallowfullscreen mozallowfullscreen referrerpolicy="same-origin" oncontextmenu="return false"></iframe><div class="game-loading-overlay" id="gameLoadingOverlay"><span>STARTING LOCAL CLIENT…</span></div></div></div><div class="playbar"><span>NO EXTERNAL SERVER · LOCAL CLIENT · SOUND REQUIRED <span class="save-stamp" id="saveStamp">SAVE: SCANNING…</span></span></div></div></section>
 
 <section id="profile" class="section"><div class="section-title"><h3>02 // PLAYER RECORD</h3><span>LOCAL CLIENT / GENERATED IDENTITY</span></div><div class="profile-grid"><div class="panel identity-panel"><div class="identity-head"><div class="avatar-big" id="profileAvatar">OP</div><div><div class="profile-code">OPERATOR PROFILE</div><h4 id="profileHandle">NIGHT_OPERATOR</h4><div class="profile-sub" id="profileTagline">LOCAL CLIENT / UNVERIFIED</div></div><div class="profile-rank" id="profileRank">RANK 01</div></div><div class="identity-stats"><div><span>CLIENT</span><b id="profileClient">---- ----</b></div><div><span>TIMEZONE</span><b id="profileZone">SCANNING</b></div><div><span>SESSION</span><b id="profileSession">00:00:00</b></div><div><span>BUILD</span><b>BBH-2026</b></div></div><div class="identity-foot">This profile is generated locally. Nothing is uploaded.</div></div><div class="panel status-console"><div class="side-title">LIVE STATUS / PERSONALIZED</div><div class="status-row"><span>PLAYER PRESENCE</span><b id="presenceState">OBSERVED</b></div><div class="status-row"><span>LOCAL SAVE</span><b id="profileSaveState">SCANNING</b></div><div class="status-row"><span>LAST ACTION</span><b id="lastAction">WAITING</b></div><div class="status-row"><span>THREAT INDEX</span><b id="threatIndex">LOW</b></div><div class="status-meter"><i id="threatBar"></i></div><p id="profileWhisper">No unusual activity has been attached to this client yet.</p></div></div></section>
 
@@ -1712,8 +1712,9 @@ body.bbh-screen-glitch{animation:bbhScreenGlitch .42s steps(3) both}
     setTimeout(function(){el.classList.remove('show'); setTimeout(function(){el.remove()},300)},1500);
   }
   document.addEventListener('contextmenu',function(e){
-    if(!hasAccess())return;
+    /* всегда глушим нативное меню; подсказку показываем только вне game-active/locked */
     e.preventDefault();
+    if(!hasAccess())return;
     showContextNote(CONTEXT_LINES[Math.floor(Math.random()*CONTEXT_LINES.length)],e.clientX,e.clientY);
   },true);
 
@@ -2118,57 +2119,132 @@ body.bbh-screen-glitch{animation:bbhScreenGlitch .42s steps(3) both}
 <script id="bbhIframeGuard">
 (function(){
   'use strict';
-  /* The parent page blocks right-click / Ctrl+U / Ctrl+S / Ctrl+P everywhere —
-     except inside the game iframe, since it's a separate document and parent
-     listeners never see events that happen inside it. This mirrors the same
-     protection into the iframe once it's actually loaded (same-origin, so we
-     can reach its document). This is a deterrent, not real security: F12 and
-     the browser's own menu → "Developer tools" can never be blocked from page
-     JS in any modern browser, and anyone who reads the page source can still
-     find and open fnaf_buddy_horror.html directly, which has no protection of
-     its own. Renumbering/obscuring that file or serving it from a
-     non-guessable path would be the actual next step if this needs to be
-     stronger than a deterrent — this script alone can't do that.
-  */
-  var frame=document.getElementById('gameFrame');
-  if(!frame)return;
-  var NOTES=[
+  var frame = document.getElementById('gameFrame');
+  if (!frame) return;
+
+  var NOTES = [
     'Здесь тоже не на чем сохраняться.',
     'Меню отключено и в игре тоже.',
     'Правый клик не перезапускает ночь.',
     'Код можно инспектировать. Себя — не обязательно.'
   ];
-  function note(text,x,y){
-    var el=document.createElement('div');
-    el.className='bbh-ctx-note';
-    el.textContent=text;
-    el.style.left=Math.min(x,innerWidth-250)+'px';
-    el.style.top=Math.min(y,innerHeight-60)+'px';
+
+  function note(text, x, y) {
+    if (document.body.classList.contains('game-active')) return;
+    var el = document.createElement('div');
+    el.className = 'bbh-ctx-note';
+    el.textContent = text;
+    el.style.left = Math.min(x, innerWidth - 250) + 'px';
+    el.style.top = Math.min(y, innerHeight - 60) + 'px';
     document.body.appendChild(el);
-    requestAnimationFrame(function(){el.classList.add('show')});
-    setTimeout(function(){el.classList.remove('show');setTimeout(function(){el.remove()},300)},1500);
+    requestAnimationFrame(function () { el.classList.add('show'); });
+    setTimeout(function () {
+      el.classList.remove('show');
+      setTimeout(function () { el.remove(); }, 300);
+    }, 1500);
   }
-  function guard(){
-    var doc;
-    try{ doc=frame.contentDocument||frame.contentWindow.document; }
-    catch(e){ return; } /* cross-origin somehow — nothing we can do from here */
-    if(!doc||doc.__bbhGuarded)return;
-    doc.__bbhGuarded=true;
-    doc.addEventListener('contextmenu',function(e){
-      e.preventDefault();
-      var r=frame.getBoundingClientRect();
-      note(NOTES[Math.floor(Math.random()*NOTES.length)],r.left+e.clientX,r.top+e.clientY);
-    },true);
-    doc.addEventListener('keydown',function(e){
-      if(!(e.ctrlKey||e.metaKey))return;
-      var k=(e.key||'').toLowerCase();
-      if(k==='u'||k==='s'||k==='p')e.preventDefault();
-    },true);
+
+  function block(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    try { e.stopImmediatePropagation(); } catch (x) {}
+    return false;
   }
-  /* the iframe is lazy-loaded (data-src set only on Play) and its document
-     is replaced when that happens, so guard on every load, not just once */
-  frame.addEventListener('load',guard);
-  guard();
+
+  /* ПКМ по самому тегу iframe / рамке — событие в родителе */
+  frame.addEventListener('contextmenu', block, true);
+  var screen = frame.closest('.game-screen') || frame.parentElement;
+  if (screen) screen.addEventListener('contextmenu', block, true);
+
+  function injectInto(doc, win) {
+    if (!doc) return;
+
+    /* 1) listeners */
+    doc.addEventListener('contextmenu', function (e) {
+      block(e);
+      try {
+        var r = frame.getBoundingClientRect();
+        note(NOTES[(Math.random() * NOTES.length) | 0], r.left + e.clientX, r.top + e.clientY);
+      } catch (x) {}
+    }, true);
+    doc.addEventListener('auxclick', function (e) {
+      if (e.button === 2) block(e);
+    }, true);
+    doc.addEventListener('keydown', function (e) {
+      if (!(e.ctrlKey || e.metaKey)) return;
+      var k = (e.key || '').toLowerCase();
+      if (k === 'u' || k === 's' || k === 'p') block(e);
+    }, true);
+
+    /* 2) property handlers */
+    try {
+      doc.oncontextmenu = block;
+      if (doc.documentElement) {
+        doc.documentElement.oncontextmenu = block;
+        doc.documentElement.setAttribute('oncontextmenu', 'return false');
+      }
+      if (doc.body) {
+        doc.body.oncontextmenu = block;
+        doc.body.setAttribute('oncontextmenu', 'return false');
+      }
+      if (win) win.oncontextmenu = block;
+    } catch (x) {}
+
+    /* 3) inline script inside the frame — survives better than external closures for some engines */
+    try {
+      if (!doc.getElementById('bbhCtxBlock')) {
+        var s = doc.createElement('script');
+        s.id = 'bbhCtxBlock';
+        s.textContent = [
+          '(function(){',
+          'function b(e){e.preventDefault();e.stopPropagation();return false}',
+          'document.addEventListener("contextmenu",b,true);',
+          'window.addEventListener("contextmenu",b,true);',
+          'document.addEventListener("auxclick",function(e){if(e.button===2)b(e)},true);',
+          'document.oncontextmenu=b;window.oncontextmenu=b;',
+          'var r=function(){if(document.documentElement)document.documentElement.oncontextmenu=b;',
+          'if(document.body)document.body.oncontextmenu=b};',
+          'r();document.addEventListener("DOMContentLoaded",r);',
+          'setInterval(r,2000);',
+          '})();'
+        ].join('');
+        (doc.head || doc.documentElement).appendChild(s);
+      }
+    } catch (x) {}
+  }
+
+  function guard() {
+    var doc, win;
+    try {
+      win = frame.contentWindow;
+      doc = frame.contentDocument || (win && win.document);
+    } catch (e) {
+      return false;
+    }
+    if (!doc || !doc.documentElement) return false;
+    /* about:blank while stopping */
+    try {
+      if (!frame.src || frame.src === 'about:blank') return false;
+    } catch (e) {}
+    injectInto(doc, win);
+    return true;
+  }
+
+  function guardBurst() {
+    guard();
+    [0, 30, 100, 300, 800, 1500, 3000, 5000, 8000, 12000].forEach(function (ms) {
+      setTimeout(guard, ms);
+    });
+  }
+
+  frame.addEventListener('load', guardBurst);
+  /* continuous assert while game is active */
+  setInterval(function () {
+    if (!document.body.classList.contains('game-active')) return;
+    guard();
+  }, 1500);
+
+  guardBurst();
 })();
 </script>
 
