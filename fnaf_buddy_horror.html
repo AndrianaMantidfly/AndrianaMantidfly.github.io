@@ -16453,7 +16453,7 @@ function checkDoorThreats() {
       if (n1DoorGrace > 0) {
         rz.doorTimer = Math.max(0, (rz.doorTimer || 0) - dt * 0.5);
       } else {
-        rz.doorTimer = (rz.doorTimer || 0) + dt;
+        rz.doorTimer = (rz.doorTimer || 0) + Math.min(dt, 0.12);
       }
       // ~3.5 с открытой двери у порога → вход
       if (rz.doorTimer >= 3.5) {
@@ -16484,7 +16484,7 @@ function checkDoorThreats() {
         if (n1DoorGrace > 0) {
           fz.doorTimer = Math.max(0, (fz.doorTimer || 0) - dt * 0.4);
         } else {
-          fz.doorTimer = (fz.doorTimer || 0) + dt;
+          fz.doorTimer = (fz.doorTimer || 0) + Math.min(dt, 0.12);
         }
         if (fz.doorTimer >= 2.8) {
           killPlayer('Фузкут атаковал при открытии двери!', 'Фузкут');
@@ -16906,7 +16906,7 @@ function tickN2Enemy(e, dt) {
       showMessage(e.name + ' ушёл от двери → CAM ' + retreat, 55);
       return;
     }
-    e.atDoorTimer += dt;
+    e.atDoorTimer = (e.atDoorTimer || 0) + Math.min(dt, 0.12);
     if (e.atDoorTimer > 4.8) {
       killPlayer(e.name + ' ворвался через ' + (atSide === 'left' ? 'левую' : 'правую') + ' дверь!', e.name);
     }
@@ -16999,6 +16999,11 @@ function tickN2Natalya(dt) {
   // у двери: сторона ФИКСИРОВАНА (баг: rethink менял targetSide и дверь «не срабатывала»)
   if (e.atDoor) {
     const atSide = e.attackSide || e.side || e.targetSide || 'left';
+    // страховка: без явной стороны — не убиваем «молча»
+    if (!e.attackSide && !e.side) {
+      e.attackSide = atSide;
+      e.side = atSide;
+    }
     const doorClosed = atSide === 'left' ? leftDoorClosed : rightDoorClosed;
     const retreatCam = atSide === 'left' ? 3 : 12;
     if (doorClosed) {
@@ -17006,6 +17011,7 @@ function tickN2Natalya(dt) {
       e.cam = retreatCam;
       e.moveTimer = 0;
       e.atDoorTimer = 0;
+      e._doorWarned = false;
       e.lastBlocked = atSide;
       e.bold = Math.min(5, (e.bold || 0) + 1);
       e.targetSide = atSide === 'left' ? 'right' : 'left';
@@ -17016,8 +17022,14 @@ function tickN2Natalya(dt) {
       showMessage('Наталья ушла → CAM ' + retreatCam + (e.bold >= 3 ? ' (наглеет…)' : ''), 55);
       return;
     }
-    e.atDoorTimer += dt;
-    if (e.atDoorTimer > 4.6) {
+    // анти-лаг: большой dt (фон/лаг) не должен мгновенно убить без окна на дверь
+    e.atDoorTimer = (e.atDoorTimer || 0) + Math.min(dt, 0.12);
+    // повторный звук у двери, если первый arrive проглотился (без UI-сообщения — баланс)
+    if (!e._doorWarned && e.atDoorTimer > 0.4) {
+      e._doorWarned = true;
+      try { if (SFX.arrive) SFX.arrive(); } catch (x) {}
+    }
+    if (e.atDoorTimer > 5.0) {
       killPlayer('Наталья ворвалась через ' + (atSide === 'left' ? 'левую' : 'правую') + ' дверь!', 'Наталья');
     }
     return;
@@ -17084,12 +17096,23 @@ function tickN2Natalya(dt) {
       return;
     }
     if (Math.random() < 0.62 + e.bold * 0.06) {
+      // не входить в дверь, если она уже закрыта — иначе нет окна на реакцию
+      const enterClosed = e.targetSide === 'left' ? leftDoorClosed : rightDoorClosed;
+      if (enterClosed) {
+        e.cam = retreatCam;
+        e.moveTimer = 0;
+        e.lastBlocked = e.targetSide;
+        e.targetSide = e.targetSide === 'left' ? 'right' : 'left';
+        e.sideTimer = 0;
+        return;
+      }
       e.atDoor = true;
       e.side = e.targetSide;
-      e.attackSide = e.targetSide;
+      e.attackSide = e.targetSide; // фиксация стороны до ухода/убийства
       e.cam = -1;
       e.atDoorTimer = 0;
-      if (SFX.arrive) SFX.arrive();
+      e._doorWarned = false;
+      try { if (SFX.arrive) SFX.arrive(); } catch (x) {}
       return;
     }
     // CAM5/14: без бэктрека на 4/13 — ждём следующий тик (отход только через sideOccupied выше)
@@ -17183,7 +17206,7 @@ function tickN2Yasha(dt) {
       showMessage('Яша испугался света и исчез!', 70);
       return;
     }
-    e.atDoorTimer += dt;
+    e.atDoorTimer = (e.atDoorTimer || 0) + Math.min(dt, 0.12);
     if (e.atDoorTimer > 5.2) {
       killPlayer('Яша пробрался через ' + (side === 'left' ? 'левый' : 'правый') + ' проход!', 'Яша');
     }
@@ -17787,7 +17810,7 @@ function tickPismiks(dt, hour) {
         else if (SFX.enemyLeave) SFX.enemyLeave();
       }
     } else {
-      p.atDoorTimer += dt;
+      p.atDoorTimer = (p.atDoorTimer || 0) + Math.min(dt, 0.12);
       if (p.atDoorTimer > 8) {
         power = Math.max(0, power - 15);
         refreshPowerHUD();
@@ -18214,7 +18237,7 @@ function tickN3Gleb(dt, hour) {
         if (SFX.enemyLeave) SFX.enemyLeave();
       }
     } else {
-      g.atDoorTimer += dt;
+      g.atDoorTimer = (g.atDoorTimer || 0) + Math.min(dt, 0.12);
       if (g.atDoorTimer > attackLimit) {
         killPlayer('Глеб ворвался через ' + N3_DOOR_LABEL[g.door] + '!', 'Глеб');
       }
@@ -18446,7 +18469,7 @@ function updateNight3(dt) {
         else if (SFX.enemyLeave) SFX.enemyLeave();
       }
     } else {
-      j.atDoorTimer += dt;
+      j.atDoorTimer = (j.atDoorTimer || 0) + Math.min(dt, 0.12);
       if (j.atDoorTimer > attackLimit) {
         killPlayer('Джон Джурик ворвался через ' + N3_DOOR_LABEL[j.door] + '!', 'Джон Джурик');
       }
@@ -18580,7 +18603,7 @@ function tickMasturbek(dt, hour) {
       m.closeAnger = 0;
     }
 
-    m.atDoorTimer += dt;
+    m.atDoorTimer = (m.atDoorTimer || 0) + Math.min(dt, 0.12);
     const leaveTime = hour >= 3 ? 9 : 11;
     if (m.atDoorTimer > leaveTime) {
       m.stage = 0;
