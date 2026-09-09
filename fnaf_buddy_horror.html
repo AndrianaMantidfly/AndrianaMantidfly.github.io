@@ -18839,15 +18839,16 @@ function drawNight3Room() {
       }
     }
 
-    // силуэты только если дверь почти открыта
-    if (!oHere && ((n3DoorAnim && n3DoorAnim[d.id]) || 0) < 0.7) {
+    // силуэты: дверь почти открыта; Писмилях — ещё и когда смотрим на шкаф (иначе «есть, но не видно»)
+    if (!oHere && (((n3DoorAnim && n3DoorAnim[d.id]) || 0) < 0.7 || (d.id === 'closet' && n3Focus === 'closet'))) {
       const johnHeard = johnHere && stage >= 3 && n3Focus === d.id && n3Listening;
       const glebHere = n3Gleb && n3Gleb.active && n3Gleb.cooldown <= 0 && n3Gleb.door === d.id;
       const glebHeard = glebHere && n3Gleb.stage >= 3 && n3Focus === d.id && n3Listening;
       const mHere = masturbek && masturbek.cooldown <= 0 && masturbek.door === d.id;
       const mStage = mHere ? masturbek.stage : -1;
       const mHeard = mHere && mStage >= 3 && n3Focus === d.id;
-      const pHere = pismiks && Math.floor(time / 60) >= 3 && pismiks.cooldown <= 0 && d.id === 'closet' && pismiks.stage > 0;
+      const pismiVisHour = (challengeMode && challengeMode.allActiveFromStart) ? 0 : 3;
+      const pHere = pismiks && Math.floor(time / 60) >= pismiVisHour && pismiks.cooldown <= 0 && d.id === 'closet' && pismiks.stage > 0;
       if (johnHeard || glebHeard) {
         ctx.fillStyle = glebHeard ? 'rgba(30,50,40,0.55)' : 'rgba(42,32,20,0.55)';
         ctx.fillRect(d.x + 22, d.y + d.h * 0.22, d.w - 44, d.h * 0.55);
@@ -18950,7 +18951,7 @@ function drawNight3Room() {
   }
 
   // Писмилях stage 3: нарастающая зелёная виньетка + пульс
-  if (pismiks && Math.floor(time / 60) >= 3 && pismiks.cooldown <= 0 && pismiks.stage >= 3) {
+  if (pismiks && Math.floor(time / 60) >= ((challengeMode && challengeMode.allActiveFromStart) ? 0 : 3) && pismiks.cooldown <= 0 && pismiks.stage >= 3) {
     const t = Math.min(1, (pismiks.atDoorTimer || 0) / 8);
     const pulse = 0.55 + 0.45 * Math.sin(frame / 6);
     const a = (0.15 + t * 0.55) * pulse;
