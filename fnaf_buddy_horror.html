@@ -26471,7 +26471,10 @@ function bbhStartNight7() {
   try { stopMusic(); } catch (e) {}
   try { n7 = null; } catch (e) {}
   challengeMode = null; pendingChallenge = null;
-  window._bbhSkipPhoneCall = true;
+  // НЕ ставим _bbhSkipPhoneCall тут: это свежий старт ночи, звонок после арены
+  // (n7StartHybridPhoneCall) должен проиграться. Флаг нужен только при ретрае
+  // смерти внутри гибрид-офиса (retryNight сам выставляет его перед этим).
+  window._bbhSkipPhoneCall = false;
   currentNight = 7; n6 = null;
   // Прелоадер → катсцена/арена
   n7RunPreload(function() {
@@ -28885,6 +28888,11 @@ function n7UseSkill() {
   // Навык больше не на ПКМ — гвард против "ложного keyup от ПКМ" больше не нужен
   // и только вредит: он глушил реальные keyup после нажатия Space, из-за чего
   // клавиша движения залипала навсегда и персонаж бежал "сам" в её направлении.
+  // БАГ: если игрок жмёт Shift, не отпуская ЛКМ (особенно заметно на МОРОЗе —
+  // долгая анимация дыхания), holdingShoot гас навсегда и стрельба не
+  // возобновлялась без нового клика. Восстанавливаем удержание, если ЛКМ
+  // физически всё ещё зажата (тот же паттерн, что и при закрытии меню).
+  if (n7._primaryPointerDown) n7.holdingShoot = true;
 }
 function n7RollAccessoryDrop(x, y) {
   if (!n7) return;
@@ -32326,8 +32334,9 @@ function n7UpdateArena(dt) {
         e.x += dx / len * e.speed * 0.5 * dt;
         e.y += dy / len * e.speed * 0.5 * dt;
       }
-      if (!e._campaignSupport) {
+      if (!e._campaignSupport && (e.frozenT || 0) <= 0) {
         // САППОРТЕРЫ (Оракул и т.п.) никогда не стреляют в игрока — только баффают
+        // заморожен (МОРОЗ) — не стреляет, пока не оттает
         e.shotT = (e.shotT != null ? e.shotT : 0.5) - dt;
         if (e.shotT <= 0) {
           e.shotT = 1.5 + Math.random() * 0.5;
@@ -32344,8 +32353,9 @@ function n7UpdateArena(dt) {
         e.x += Math.cos(e.ang) * e.speed * 0.35 * dt;
         e.y += Math.sin(e.ang) * e.speed * 0.35 * dt;
       }
-      if (!e._campaignSupport) {
+      if (!e._campaignSupport && (e.frozenT || 0) <= 0) {
         // САППОРТЕРЫ (Ремонтник и т.п.) никогда не стреляют в игрока — только баффают
+        // заморожен (МОРОЗ) — не стреляет, пока не оттает
         e.shotT = (e.shotT != null ? e.shotT : 0.35) - dt;
         if (e.shotT <= 0) {
           e.shotT = 0.85 + Math.random() * 0.25;
@@ -32362,15 +32372,18 @@ function n7UpdateArena(dt) {
     } else if (e.type === 'mortar') {
       e.x += dx / len * e.speed * 0.4 * dt;
       e.y += dy / len * e.speed * 0.4 * dt;
-      e.shotT = (e.shotT != null ? e.shotT : 0.6) - dt;
-      if (e.shotT <= 0) {
-        e.shotT = 2.0 + Math.random() * 0.6;
-        n7.bossShots.push({
-          x: e.x, y: e.y,
-          vx: dx / len * 100, vy: dy / len * 100,
-          r: 9, life: 3.5, dmg: 1, homing: !!e._ghostEye, _ghostEye: !!e._ghostEye, _mortar: true
-        });
-        try { if (typeof playTone === 'function') playTone(90, 'sawtooth', 0.08, 0.05); } catch (eT) {}
+      if ((e.frozenT || 0) <= 0) {
+        // заморожен (МОРОЗ) — не стреляет, пока не оттает
+        e.shotT = (e.shotT != null ? e.shotT : 0.6) - dt;
+        if (e.shotT <= 0) {
+          e.shotT = 2.0 + Math.random() * 0.6;
+          n7.bossShots.push({
+            x: e.x, y: e.y,
+            vx: dx / len * 100, vy: dy / len * 100,
+            r: 9, life: 3.5, dmg: 1, homing: !!e._ghostEye, _ghostEye: !!e._ghostEye, _mortar: true
+          });
+          try { if (typeof playTone === 'function') playTone(90, 'sawtooth', 0.08, 0.05); } catch (eT) {}
+        }
       }
     } else if (e.type === 'mirage') {
       // мерцающая тварь: медленно кружит, но раз в пару секунд растворяется
