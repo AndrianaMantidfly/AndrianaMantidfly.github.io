@@ -41082,6 +41082,10 @@ function n7CompleteNight(fromCutscene) {
     walkExtraUnlockedThisRun = true;
     bbhArg.infiniteGamble = true;
     bbhArg.night7Unlocked = true;
+    // Ночь 7 пройдена — отложенный тост «Ночь 7 открыта» больше не нужен,
+    // иначе он может всплыть позже (например, при выходе из гембла в меню)
+    bbhArg.night7ToastShown = true;
+    bbhArg._pendingN7Toast = null;
     if (fromCutscene) bbhArg.n7EndCutSeen = true;
     // если кастсцену скипнули как уже виденную — флаг и так true
     if (!fromCutscene && bbhArg.n7EndCutSeen) { /* ok */ }
