@@ -625,6 +625,71 @@
   }
   button.big.secondary:hover:not(:disabled) { border-color: #78a; box-shadow: 0 0 14px rgba(80,100,180,0.3); }
   button.big.secondary:active:not(:disabled) { background: #2a2a3a; transform: scale(0.97); }
+
+  /* Кнопка подсказок — отдельный стиль от secondary */
+  button.big.bbh-hints-btn {
+    position: relative;
+    overflow: hidden;
+    letter-spacing: 0.06em;
+    font-weight: 700;
+    border-width: 2px;
+    transition: background 0.25s ease, border-color 0.25s ease, box-shadow 0.3s ease, color 0.2s ease, transform 0.1s ease;
+  }
+  button.big.bbh-hints-btn::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(255,255,255,0.07), transparent 45%, rgba(0,0,0,0.15));
+    pointer-events: none;
+  }
+  button.big.bbh-hints-btn[data-on="0"] {
+    background: linear-gradient(180deg, #1a1520 0%, #121018 100%);
+    border-color: #4a3a55;
+    color: #9a8aaa;
+    box-shadow: inset 0 0 12px rgba(0,0,0,0.45);
+  }
+  button.big.bbh-hints-btn[data-on="0"]:hover:not(:disabled) {
+    border-color: #7a6a90;
+    color: #cbb8e0;
+    box-shadow: 0 0 16px rgba(120,90,160,0.25), inset 0 0 10px rgba(0,0,0,0.3);
+  }
+  button.big.bbh-hints-btn[data-on="1"] {
+    background: linear-gradient(180deg, #2a1810 0%, #1a1008 100%);
+    border-color: #e09040;
+    color: #ffd090;
+    text-shadow: 0 0 8px rgba(255,160,60,0.45);
+    box-shadow: 0 0 18px rgba(255,140,40,0.28), inset 0 0 14px rgba(255,120,30,0.08);
+  }
+  button.big.bbh-hints-btn[data-on="1"]:hover:not(:disabled) {
+    border-color: #ffb060;
+    color: #ffe8c0;
+    box-shadow: 0 0 24px rgba(255,150,50,0.4), inset 0 0 12px rgba(255,140,40,0.12);
+  }
+  button.big.bbh-hints-btn:active:not(:disabled) {
+    transform: scale(0.96);
+  }
+  button.big.bbh-hints-btn .bbh-hints-ico {
+    display: inline-block;
+    margin-right: 0.35em;
+    font-size: 1.05em;
+    filter: drop-shadow(0 0 4px rgba(255,180,80,0.35));
+  }
+  #bbhHintsFx {
+    position: absolute;
+    inset: 0;
+    z-index: 60050;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.15s ease;
+    background: radial-gradient(ellipse at center, transparent 30%, rgba(0,0,0,0.55) 100%);
+  }
+  #bbhHintsFx.on {
+    background: radial-gradient(ellipse at center, rgba(255,160,60,0.12) 0%, rgba(40,20,5,0.15) 40%, rgba(0,0,0,0.65) 100%);
+  }
+  #bbhHintsFx.off {
+    background: radial-gradient(ellipse at center, rgba(80,60,120,0.1) 0%, rgba(10,8,20,0.2) 45%, rgba(0,0,0,0.7) 100%);
+  }
+  #bbhHintsFx.show { opacity: 1; }
   button.big:disabled {
     opacity: 0.4;
     cursor: not-allowed;
@@ -4225,6 +4290,7 @@
 
 <div id="gameContainer">
   <canvas tabindex="0" id="game" width="960" height="620"></canvas>
+  <div id="bbhHintsFx" aria-hidden="true"></div>
   <div id="ui">
     <div id="phoneCallBanner">● ВХОДЯЩИЙ ЗВОНОК</div>
     <div id="phoneSubtitles"><span id="phoneSubText" class="phone-typed"></span></div>
@@ -4298,6 +4364,7 @@
     <button class="big" type="button" id="pauseResumeBtn">ПРОДОЛЖИТЬ</button>
     <button class="big secondary" type="button" id="pauseFsBtn">⛶ ПОЛНЫЙ ЭКРАН</button>
     <button class="big secondary" type="button" onclick="toggleAudioSettings('pauseAudioSettings')">🔊 ГРОМКОСТЬ</button>
+    <button class="big bbh-hints-btn" type="button" id="bbhHintsBtnPause" data-on="0" onclick="bbhToggleHints()"><span class="bbh-hints-ico">✦</span>ПОДСКАЗКИ: ВЫКЛ</button>
     <div class="audio-settings" id="pauseAudioSettings">
       <div class="audio-setting-row"><span>Общая</span><input id="volMaster" type="range" min="0" max="100" value="100" oninput="setAudioSetting('master',this.value/100)"><output id="volMasterVal">100%</output></div>
       <div class="audio-setting-row"><span>Музыка</span><input id="volMusic" type="range" min="0" max="100" value="85" oninput="setAudioSetting('music',this.value/100)"><output id="volMusicVal">85%</output></div>
@@ -4333,6 +4400,7 @@
         <button class="big secondary" type="button" id="extraBtn" onclick="showExtraScreen()">★ ЭКСТРА</button>
         <button class="big secondary" type="button" onclick="toggleFullscreen()">⛶ ПОЛНЫЙ ЭКРАН</button>
         <button class="big secondary" type="button" onclick="toggleAudioSettings('menuAudioSettings')">🔊 ГРОМКОСТЬ</button>
+        <button class="big bbh-hints-btn" type="button" id="bbhHintsBtnMenu" data-on="0" onclick="bbhToggleHints()"><span class="bbh-hints-ico">✦</span>ПОДСКАЗКИ: ВЫКЛ</button>
         <div class="audio-settings" id="menuAudioSettings">
           <div class="audio-setting-row"><span>Общая</span><input id="volMasterMenu" type="range" min="0" max="100" value="100" oninput="setAudioSetting('master',this.value/100)"><output id="volMasterMenuVal">100%</output></div>
           <div class="audio-setting-row"><span>Музыка</span><input id="volMusicMenu" type="range" min="0" max="100" value="85" oninput="setAudioSetting('music',this.value/100)"><output id="volMusicMenuVal">85%</output></div>
@@ -4606,32 +4674,32 @@ function n6StageActive(stage){
 let n6Transition = { active:false, t:0, duration:1.15, from:-1, to:-1 };
 
 // Фантомный Фузкут (как Balloon Boy из FNAF 3)
-let n4Phantom = { active: false, cam: 0, look: 0, cd: 0, nextTry: 18 };
+let n4Phantom = { active: false, cam: 0, look: 0, cd: 0, nextTry: 13 };
 let n4PhantomScare = 0; // сек оверлея скримера Фузкута (не убивает)
 // Фантомный Могз (Phantom Puppet): на камере → офис, блокирует монитор
-let n4Mogz = { active: false, cam: 0, look: 0, phase: 'idle', seal: 0, cd: 0, nextTry: 20 };
+let n4Mogz = { active: false, cam: 0, look: 0, phase: 'idle', seal: 0, cd: 0, nextTry: 15 };
 // Фантомный Тарас — глаза в коридоре, боится света
-let n4Taras = { active: false, dist: 1, cd: 0, nextTry: 22, lightTimer: 0 };
+let n4Taras = { active: false, dist: 1, cd: 0, nextTry: 16, lightTimer: 0 };
 let n4TarasScare = 0;
 // Фантомная Наталья — тёмный коридор без Тараса; свет = атака
-let n4Natalya = { active: false, timer: 0, life: 0, cd: 0, nextTry: 30 };
+let n4Natalya = { active: false, timer: 0, life: 0, cd: 0, nextTry: 22 };
 let n4NatalyaScare = 0;
 // Фантомный Джон Джурик — в офисе; игнорировать через планшет
-let n4John = { active: false, side: 1, threat: 0, cd: 0, nextTry: 28 };
+let n4John = { active: false, side: 1, threat: 0, cd: 0, nextTry: 21 };
 let n4JohnScare = 0;
 // Фантомный Мастурбек — бродит; звук на его камере = атака (с 3:00)
-let n4Masturbek = { active: false, cam: 3, timer: 0, interval: 7.5, cd: 0 };
+let n4Masturbek = { active: false, cam: 3, timer: 0, interval: 6.0, cd: 0 };
 // Фантомная Андриана — только CAM7
-let n4Adriana = { active: false, timer: 0, life: 0, cd: 0, nextTry: 40 };
+let n4Adriana = { active: false, timer: 0, life: 0, cd: 0, nextTry: 28 };
 let n4AdrianaScare = 0;
 // общий нелетальный скример для Андрианы / Сипы / Жида / Писмиляха / Мастурбека
 let n4ExtraScare = { t: 0, max: 1.8, name: '', color: '#f88' };
 // Фантомные Сипа / Жид / Писмилях
-let n4SipaP = { active: false, cam: 0, timer: 0, life: 0, cd: 0, nextTry: 35 };
-let n4ZhidP = { active: false, cam: 0, timer: 0, life: 0, cd: 0, nextTry: 40 };
-let n4PismiP = { active: false, cam: 0, timer: 0, life: 0, cd: 0, nextTry: 45 };
+let n4SipaP = { active: false, cam: 0, timer: 0, life: 0, cd: 0, nextTry: 26 };
+let n4ZhidP = { active: false, cam: 0, timer: 0, life: 0, cd: 0, nextTry: 28 };
+let n4PismiP = { active: false, cam: 0, timer: 0, life: 0, cd: 0, nextTry: 32 };
 // Фантомный Глеб (с 4:00) — жрёт энергию на камере, тихий звук, жёлтая виньетка
-let n4PhGleb = { active: false, cam: 0, timer: 0, life: 0, cd: 0, nextTry: 20, drainPulse: 0 };
+let n4PhGleb = { active: false, cam: 0, timer: 0, life: 0, cd: 0, nextTry: 14, drainPulse: 0 };
 let n4PhGlebScare = 0;
     try { bbhApplyAllActiveN4Timers(); } catch (eAA) {}
 // извилистый граф 1→15 (офисный проход = 15)
@@ -10993,7 +11061,7 @@ function n5DrawBoss() {
     ctx.fillText('ФАЗА ' + (b.combatPhase || 1) + '  //  ' + (b.atkKind || '').toUpperCase(), W / 2, H - 27);
     ctx.fillStyle = '#666';
     ctx.font = '10px Courier New';
-    ctx.fillText('← → — меню   ·   Z / Enter — OK   ·   C — назад   ·   WASD / стрелки — душа в бою', W / 2, H - 10);
+    if (bbhHintsOn()) ctx.fillText('← → — меню   ·   Z / Enter — OK   ·   C — назад   ·   WASD / стрелки — душа в бою', W / 2, H - 10);
     return;
   }
 
@@ -11113,7 +11181,7 @@ function n5DrawBoss() {
     ctx.fillStyle = '#ffa039';
     ctx.font = '14px Courier New';
     ctx.textAlign = 'center';
-    ctx.fillText('FIGHT — жми Z / ПРОБЕЛ / тап в зелёной зоне', W / 2, by - 16);
+    if (bbhHintsOn()) ctx.fillText('FIGHT — жми Z / ПРОБЕЛ / тап в зелёной зоне', W / 2, by - 16);
     ctx.fillStyle = '#fff';
     ctx.font = '13px Courier New';
     ctx.textAlign = 'left';
@@ -12145,8 +12213,10 @@ function n5DrawTetris() {
     ctx.fillStyle = '#667';
     ctx.font = '10px Courier New';
     ctx.textAlign = 'center';
-    ctx.fillText('←→ движ  ↑/X CW  Z CCW  A 180°  ↓ soft  Space hard', W / 2, H - 28);
-    ctx.fillText('Shift/C HOLD   F рывок к стене', W / 2, H - 12);
+    if (bbhHintsOn()) {
+      ctx.fillText('←→ движ  ↑/X CW  Z CCW  A 180°  ↓ soft  Space hard', W / 2, H - 28);
+      ctx.fillText('Shift/C HOLD   F рывок к стене', W / 2, H - 12);
+    }
   }
 }
 
@@ -13529,7 +13599,7 @@ function drawNight5() {
     ctx.fillStyle = '#888';
     ctx.font = '12px Courier New';
     ctx.textAlign = 'center';
-    ctx.fillText('ВСПЫШКА −9  •  води мышью / пальцем', W / 2, H - 28);
+    if (bbhHintsOn()) ctx.fillText('ВСПЫШКА −9  •  води мышью / пальцем', W / 2, H - 28);
     ctx.fillStyle = '#222';
     ctx.fillRect(W * 0.25, 16, W * 0.5, 8);
     ctx.fillStyle = dist < 0.25 ? '#f44' : '#c84';
@@ -14179,6 +14249,7 @@ function setNightHudHidden(hidden) {
 
 function startNightWithPreload(night) {
   if ((night | 0) === 7 && typeof n7StartArena === 'function') {
+    try { bbhHintsTrack(7); } catch (eHT7) {}
     try { const go = document.getElementById('gameOverScreen'); if (go) go.style.display = 'none'; } catch (e) {}
     try { n7StartArena(false); } catch (e2) { console.error(e2); }
     return;
@@ -14577,6 +14648,7 @@ function drawPreload() {
 
 
 function startNight(night) {
+  try { bbhHintsTrack(night); } catch (eHT) {}
   // N7-runtime не должен «съедать» update() на ночах 1–6:
   // ветка `if (n7) { n7Update; return; }` полностью блокирует обычную ночь.
   // startNight вызывается только для 1–6 (семёрка идёт через n7StartArena).
@@ -14872,7 +14944,7 @@ function startNight(night) {
     n4NatalyaScare = 0;
     n4John = { active: false, side: 1, threat: 0, cd: 12 + Math.random() * 8, nextTry: 16 + Math.random() * 10, aliveFor: 0 };
     n4JohnScare = 0;
-    n4Masturbek = { active: false, cam: 3, timer: 0, interval: 7.5, cd: 0 };
+    n4Masturbek = { active: false, cam: 3, timer: 0, interval: 6.0, cd: 0 };
     n4Adriana = { active: false, timer: 0, life: 0, look: 0, cd: 8 + Math.random() * 6, nextTry: 10 + Math.random() * 8 };
     n4AdrianaScare = 0;
     n4ExtraScare = { t: 0, max: 1.8, name: '', color: '#f88' };
@@ -14881,12 +14953,13 @@ function startNight(night) {
     n4PismiP = { active: false, cam: 0, timer: 0, life: 0, look: 0, cd: 8 + Math.random() * 5, nextTry: 10 + Math.random() * 6 };
     n4PhGleb = { active: false, cam: 0, timer: 0, life: 0, cd: 4 + Math.random() * 4, nextTry: 6 + Math.random() * 5, drainPulse: 0 };
     n4PhGlebScare = 0;
+    try { n4EvReset(); } catch (eEv0) { n4Ev = null; }
     power = (typeof n4PowerCapValue === 'function' && challengeMode && (challengeMode.n4PowerCap != null || challengeMode.power != null))
       ? n4PowerCapValue() : 100;
     if (challengeMode && (challengeMode.n4PowerCap != null || challengeMode.power != null))
       window._bbhChallengePower = n4PowerCapValue();
     n4Enemy = {
-      cam: 1, timer: 0, interval: 5.2, atHall: false, hallTimer: 0,
+      cam: 1, timer: 0, interval: 4.05, atHall: false, hallTimer: 0,
       lureCam: null, lureTimer: 0, recent: [], inVent: false, prevCam: null
     };
     refreshPowerHUD();
@@ -15199,8 +15272,10 @@ function updateCamButtons() {
     const cam = idx + 1;
     b.classList.toggle('selected', cam === currentCam);
     let has = false;
-    for (const e of Object.values(enemies)) {
-      if (e.pos === cam) has = true;
+    if (bbhHintsOn()) {
+      for (const e of Object.values(enemies)) {
+        if (e.pos === cam) has = true;
+      }
     }
     b.classList.toggle('hasEnemy', has);
   });
@@ -15302,7 +15377,7 @@ if (_camBtnEl) _camBtnEl.onclick = () => {
       return;
     }
     if (!camsOpen && typeof n4MogzBlockingCams === 'function' && n4MogzBlockingCams()) {
-      showMessage('Могз держит монитор — подожди', 50);
+      showMessage(n4EvBlockMsg('Могз держит монитор — подожди'), 50);
       try { playTone(90, 'sine', 0.15, 0.04); } catch (e) {}
       return;
     }
@@ -15361,7 +15436,7 @@ if (_musicBtnEl) _musicBtnEl.onclick = () => {
       return;
     }
     if (!n4SystemsOpen && typeof n4MogzBlockingAll === 'function' && n4MogzBlockingAll()) {
-      showMessage('Могз блокирует системы — подожди', 50);
+      showMessage(n4EvBlockMsg('Могз блокирует системы — подожди'), 50);
       try { playTone(90, 'sine', 0.15, 0.04); } catch (e) {}
       return;
     }
@@ -15540,7 +15615,101 @@ function tickMessageTimer() {
   }
 }
 
+
+// --- Подсказки DLC (выкл по умолчанию) ---
+window.bbhHints = (function(){
+  try { return localStorage.getItem('bbh_hints_v1') === '1'; } catch(e) { return false; }
+})();
+function bbhHintsOn(){ return !!window.bbhHints; }
+// Трекинг «прохождение без подсказок». Сайт читает bbhArg.hintsUsed из сохранения:
+//   undefined — отсчёт не начинался (старое сохранение), false — подсказки ни разу не включали,
+//   true — включали. После победы в Ночи 7 флаг замораживается.
+function bbhHintsTrack(night){
+  try {
+    if (typeof bbhArg !== 'object' || !bbhArg) return;
+    if (bbhArg.night7Won) return;
+    if (bbhArg.hintsUsed === undefined) {
+      if ((night | 0) === 1 && (maxUnlockedNight | 0) <= 1) bbhArg.hintsUsed = false;
+      else return;
+    }
+    if (bbhArg.hintsUsed === false && bbhHintsOn()) bbhArg.hintsUsed = true;
+    saveProgress();
+  } catch (e) {}
+}
+function bbhSetHints(on){
+  window.bbhHints = !!on;
+  try { bbhHintsTrack(); } catch(e) {}
+  try { localStorage.setItem('bbh_hints_v1', window.bbhHints ? '1' : '0'); } catch(e) {}
+  try { bbhSyncHintButtons(); } catch(e) {}
+  // сразу снять подсветку с камер
+  try {
+    document.querySelectorAll('.camBtn.hasEnemy').forEach(function(b){ b.classList.remove('hasEnemy'); });
+  } catch(e) {}
+}
+function bbhSyncHintButtons(){
+  var on = bbhHintsOn();
+  var label = on
+    ? '<span class="bbh-hints-ico">✦</span>ПОДСКАЗКИ: ВКЛ'
+    : '<span class="bbh-hints-ico">✧</span>ПОДСКАЗКИ: ВЫКЛ';
+  ['bbhHintsBtnMenu','bbhHintsBtnPause'].forEach(function(id){
+    var el = document.getElementById(id);
+    if(!el) return;
+    el.innerHTML = label;
+    el.setAttribute('data-on', on ? '1' : '0');
+    el.setAttribute('aria-pressed', on ? 'true' : 'false');
+    el.title = on ? 'Подсказки включены' : 'Подсказки выключены';
+  });
+}
+function bbhHintsPlayToggleSound(on){
+  try {
+    if (typeof playTone !== 'function') return;
+    if (on) {
+      // тёплый «открытие» — восходящий
+      playTone(220, 'sine', 0.07, 0.07);
+      setTimeout(function(){ try { playTone(340, 'triangle', 0.09, 0.055); } catch(e){} }, 55);
+      setTimeout(function(){ try { playTone(520, 'sine', 0.12, 0.04, 680); } catch(e){} }, 120);
+    } else {
+      // холодный «закрытие» — нисходящий
+      playTone(480, 'triangle', 0.08, 0.05, 280);
+      setTimeout(function(){ try { playTone(200, 'sine', 0.14, 0.045, 90); } catch(e){} }, 70);
+      setTimeout(function(){ try { if (typeof playNoise === 'function') playNoise(0.08, 0.02, 600); } catch(e){} }, 40);
+    }
+  } catch (e) {}
+}
+function bbhHintsFlashFx(on){
+  try {
+    var fx = document.getElementById('bbhHintsFx');
+    if (!fx) return;
+    fx.classList.remove('show', 'on', 'off');
+    void fx.offsetWidth;
+    fx.classList.add(on ? 'on' : 'off', 'show');
+    clearTimeout(window._bbhHintsFxT);
+    window._bbhHintsFxT = setTimeout(function(){
+      try { fx.classList.remove('show'); } catch(e){}
+    }, 420);
+  } catch (e) {}
+}
+function bbhToggleHints(){
+  var next = !bbhHintsOn();
+  bbhSetHints(next);
+  try { bbhHintsPlayToggleSound(next); } catch(e) {}
+  try { bbhHintsFlashFx(next); } catch(e) {}
+}
+try {
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', function(){ try{ bbhSyncHintButtons(); }catch(e){} });
+  else bbhSyncHintButtons();
+} catch (e) {}
+function bbhIsCriticalMessage(txt){
+  if(!txt) return false;
+  var t = String(txt);
+  return /УМЕР|СМЕРТЬ|GAME\s*OVER|ПОБЕДА|6:00|НОЧЬ ПРОЙДЕНА|ВЫЖИЛ|СЕАНС ЗАВЕРШ|ОКОНЧЕНА|ПРОВАЛ|KILL|DEAD/i.test(t);
+}
+
 function showMessage(txt, duration = 80) {
+  // подсказки выкл — только критичные плашки (смерть/победа и т.п.)
+  if (!bbhHintsOn() && !bbhIsCriticalMessage(txt)) {
+    return;
+  }
   // во время звонка не всплываем плашками (кроме смерти/критичного — их всё равно режет kill)
   if (typeof phoneCall !== 'undefined' && phoneCall && !phoneCall.ended) {
     // не затираем отложенный стартовый тип
@@ -18896,7 +19065,7 @@ function drawNight3Room() {
     ctx.textAlign = 'center';
     const label = d.id === 'left' ? 'ЛЕВЫЙ' : d.id === 'right' ? 'ПРАВЫЙ' : 'ШКАФ';
     ctx.fillText(label, d.x + d.w / 2, d.y + d.h + 22);
-    if (!n3Focus && hover) {
+    if (bbhHintsOn() && !n3Focus && hover) {
       ctx.fillStyle = '#8a8';
       ctx.font = '12px Courier New';
       ctx.fillText('клик — подбежать', d.x + d.w / 2, d.y + d.h + 40);
@@ -18935,7 +19104,7 @@ function drawNight3Room() {
     ctx.fillStyle = '#555';
     ctx.font = '13px Courier New';
     ctx.textAlign = 'center';
-    ctx.fillText('Кликни на проход, чтобы подбежать', W / 2, 20);
+    if (bbhHintsOn()) ctx.fillText('Кликни на проход, чтобы подбежать', W / 2, 20);
   }
 
   // затемнение при полной стае — экранное
@@ -18967,7 +19136,7 @@ function drawNight3Room() {
     ctx.fillStyle = 'rgba(140,255,160,' + (0.4 + t * 0.45) + ')';
     ctx.font = 'bold 15px Courier New';
     ctx.textAlign = 'center';
-    ctx.fillText('ПИСМИЛЯХ — ЗАКРОЙ ШКАФ!', W / 2, H - 42);
+    if (bbhHintsOn()) ctx.fillText('ПИСМИЛЯХ — ЗАКРОЙ ШКАФ!', W / 2, H - 42);
   }
 
   // ползунок удержания двери — поверх всего UI
@@ -19645,11 +19814,13 @@ function drawNight2Tablet() {
     if (!p) continue;
     const px = mx + p.x, py = my + p.y;
     const sel = id === currentCam;
-    const has = n2EnemyCam(enemies.dubi) === id || n2EnemyCam(enemies.taras) === id ||
+    const has = bbhHintsOn() && (
+      n2EnemyCam(enemies.dubi) === id || n2EnemyCam(enemies.taras) === id ||
       n2EnemyCam(enemies.natalya) === id ||
       (enemies.yasha && enemies.yasha.active && n2EnemyCam(enemies.yasha) === id) ||
       (enemies.zhid && enemies.zhid.active && enemies.zhid.cam === id) ||
-      (enemies.gleb && enemies.gleb.active && (enemies.gleb.cam === id || enemies.gleb.pos === id));
+      (enemies.gleb && enemies.gleb.active && (enemies.gleb.cam === id || enemies.gleb.pos === id))
+    );
     ctx.beginPath();
     ctx.arc(px, py, sel ? 14 : 11, 0, Math.PI * 2);
     ctx.fillStyle = sel ? '#0a3a0a' : '#1a1a1a';
@@ -19668,7 +19839,7 @@ function drawNight2Tablet() {
   ctx.fillStyle = '#555';
   ctx.font = '11px Courier New';
   ctx.textAlign = 'left';
-  ctx.fillText('Клик по точке = камера  •  14 CAM  •  узлы 6–9 — перекрёстки', 40, panelY + panelH - 12);
+  if (bbhHintsOn()) ctx.fillText('Клик по точке = камера  •  14 CAM  •  узлы 6–9 — перекрёстки', 40, panelY + panelH - 12);
   ctx.restore();
 }
 
@@ -20316,7 +20487,7 @@ function n4DrawPhantomFuzkut(x, y, w, h, mode) {
     ctx.fillStyle = `rgba(255,50,50,${0.35 + lookT * 0.55})`;
     ctx.font = 'bold ' + (14 + Math.floor(lookT * 6)) + 'px Courier New';
     ctx.textAlign = 'center';
-    ctx.fillText('НЕ СМОТРИ!', x + w / 2, y + h - 16);
+    if (bbhHintsOn()) ctx.fillText('НЕ СМОТРИ!', x + w / 2, y + h - 16);
     // прогресс-бар угрозы
     const bw = w * 0.5, bx = x + (w - bw) / 2, by = y + 10;
     ctx.fillStyle = 'rgba(0,0,0,0.5)';
@@ -20669,7 +20840,7 @@ function drawNight4Office() {
         ctx.fillStyle = `rgba(255,60,40,${0.4 + urg * 0.5})`;
         ctx.font = 'bold 13px Courier New';
         ctx.textAlign = 'center';
-        ctx.fillText('СРОЧНО СВЕТ!', W / 2, hy + hh - 10);
+        if (bbhHintsOn()) ctx.fillText('СРОЧНО СВЕТ!', W / 2, hy + hh - 10);
       }
     }
     // чем ближе, тем ниже/крупнее/ярче глаза
@@ -20896,7 +21067,7 @@ function drawNight4Office() {
   ctx.fillStyle = '#555';
   ctx.font = '12px Courier New';
   ctx.textAlign = 'left';
-  if (!(typeof isPhoneCallActive === 'function' && isPhoneCallActive())) ctx.fillText('Ночь 4  •  Глеба гоняй 🔊  •  CAM15 → офис  •  свет ≠ Глеб  •  чини вентиляцию', 10, H - 12);
+  if (bbhHintsOn() && !(typeof isPhoneCallActive === 'function' && isPhoneCallActive())) ctx.fillText('Ночь 4  •  Глеба гоняй 🔊  •  CAM15 → офис  •  свет ≠ Глеб  •  чини вентиляцию', 10, H - 12);
 
   // Фантомный Могз в офисе (блок монитора)
   if (n4Mogz && n4Mogz.active && n4Mogz.phase === 'office') {
@@ -20938,9 +21109,13 @@ function drawNight4CamTablet() {
     ctx.textAlign = 'center';
     ctx.fillText('НЕТ СИГНАЛА', camX + camW / 2, camY + camH / 2);
     ctx.font = '13px Courier New';
-    ctx.fillText('Почини КАМЕРЫ в системах', camX + camW / 2, camY + camH / 2 + 26);
+    if (bbhHintsOn()) ctx.fillText('Почини КАМЕРЫ в системах', camX + camW / 2, camY + camH / 2 + 26);
   } else {
     n4DrawCamInterior(currentCam, camX + 4, camY + 4, camW - 8, camH - 8);
+    try { n4EvDrawCamBlocked(camX + 4, camY + 4, camW - 8, camH - 8); } catch (eEvC) {}
+    try { n4EvDrawCamFog(camX + 4, camY + 4, camW - 8, camH - 8); } catch (eEvF) {}
+    try { n4EvDrawCamFake(camX + 4, camY + 4, camW - 8, camH - 8); } catch (eEvK) {}
+    try { n4EvDrawCamCrate(camX + 4, camY + 4, camW - 8, camH - 8); } catch (eEvR) {}
     // Фантомный Фузкут — огромный статичный спрайт на всю камеру
     if (n4Phantom && n4Phantom.active && n4Phantom.cam === currentCam) {
       n4DrawPhantomFuzkut(camX, camY, camW, camH, 'cam');
@@ -21084,8 +21259,8 @@ function drawNight4CamTablet() {
   for (let id = 1; id <= 15; id++) {
     const p = node(id);
     const sel = currentCam === id;
-    const hasE = n4Enemy && n4Enemy.cam === id && !n4Enemy.atHall;
-    const hasP = n4Phantom && n4Phantom.active && n4Phantom.cam === id;
+    const hasE = bbhHintsOn() && n4Enemy && n4Enemy.cam === id && !n4Enemy.atHall;
+    const hasP = bbhHintsOn() && n4Phantom && n4Phantom.active && n4Phantom.cam === id;
     const dim = n4MapFloor === 1;
     ctx.beginPath();
     ctx.arc(p.x, p.y, sel && !dim ? 13 : 11, 0, Math.PI * 2);
@@ -21110,6 +21285,14 @@ function drawNight4CamTablet() {
     ctx.font = 'bold 10px Courier New';
     ctx.textAlign = 'center';
     ctx.fillText(String(id), p.x, p.y + 3);
+    if (n4MapFloor === 0 && n4EvBlocked(id)) n4EvDrawMapMark(p.x, p.y);
+    if (n4MapFloor === 0 && n4EvOn() && n4Ev) {
+      try {
+        if (n4Ev.crate && !n4Ev.crate.taken && Number(n4Ev.crate.cam) === Number(id)) n4EvDrawCrateMark(p.x, p.y);
+        if (n4Ev.fake && Number(n4Ev.fake.cam) === Number(id)) n4EvDrawFakeMark(p.x, p.y);
+        if (n4Ev.scramble) n4EvDrawScrambleMark(p.x, p.y, id);
+      } catch (eMk) {}
+    }
     if (n4MapFloor === 0) {
       window.n4CamHits.push({ id, x: p.x, y: p.y + panelY, r: 16 });
     }
@@ -21162,7 +21345,7 @@ function drawNight4CamTablet() {
       const vp = node(vid);
       const links = (N4_VENTS[vid] && N4_VENTS[vid].links) || [];
       const sel = currentCam === vid;
-      const hasE = n4Enemy && n4Enemy.cam === vid;
+      const hasE = bbhHintsOn() && n4Enemy && n4Enemy.cam === vid;
       const a = links[0] != null ? links[0] : '?';
       const b = links[1] != null ? links[1] : (links[0] != null ? links[0] : '?');
       const bw = 56, bh = 52;
@@ -21212,7 +21395,7 @@ function drawNight4Systems() {
   ctx.fillText('СИСТЕМЫ ОФИСА', W / 2, 56);
   ctx.fillStyle = '#678';
   ctx.font = '12px Courier New';
-  ctx.fillText('УДЕРЖИВАЙ полоску · отпустил = кулдаун (1.5с / всё 14с)', W / 2, 74);
+  if (bbhHintsOn()) ctx.fillText('УДЕРЖИВАЙ полоску · отпустил = кулдаун (1.5с / всё 14с)', W / 2, 74);
 
   const items = [
     { key: 'camera', label: 'КАМЕРЫ', y: 92 },
@@ -21326,6 +21509,10 @@ function drawNight4Systems() {
 
 function drawNight4() {
   ctx.save();
+  if (n4Ev && n4EvOn() && n4Ev.shake > 0 && state === 'playing') {
+    const sh = Math.min(1, n4Ev.shake) * 7;
+    ctx.translate((Math.random() - 0.5) * sh, (Math.random() - 0.5) * sh);
+  }
   // тряска всего кадра при слабой вентиляции
   if (state === 'playing' && n4Sys.vent < 35) {
     const v = n4Sys.vent;
@@ -21356,7 +21543,7 @@ function drawNight4() {
       ctx.fillStyle = '#9f9';
       ctx.font = 'bold 14px Courier New';
       ctx.textAlign = 'center';
-      ctx.fillText('ВЕНТИЛЯЦИЯ ОТКАЗАЛА — СРОЧНО ПОЧИНИ', W / 2 + jx, 28);
+      if (bbhHintsOn()) ctx.fillText('ВЕНТИЛЯЦИЯ ОТКАЗАЛА — СРОЧНО ПОЧИНИ', W / 2 + jx, 28);
     } else {
       ctx.fillStyle = `rgba(180,220,160,${0.25 + t35 * 0.35})`;
       ctx.font = '12px Courier New';
@@ -21387,6 +21574,8 @@ function drawNight4() {
     }
   }
 
+  // события ночи 4: щиток / терминал / завал / перезагрузка
+  try { n4EvDraw(); } catch (eEvD) {}
   // скример фантома (не убивает) — поверх всего
   if (n4PhantomScare > 0) n4DrawPhantomScare();
   if (n4TarasScare > 0) n4DrawTarasScare();
@@ -22011,7 +22200,7 @@ function drawOffice() {
     ctx.fillStyle = '#666';
     ctx.font = '12px Courier New';
     ctx.textAlign = 'left';
-    ctx.fillText('Офис  •  клик по кнопке на стене = дверь', 16, H - 50);
+    if (bbhHintsOn()) ctx.fillText('Офис  •  клик по кнопке на стене = дверь', 16, H - 50);
   } else {
     ctx.fillStyle = '#666';
     ctx.font = '12px Courier New';
@@ -22234,15 +22423,35 @@ function drawCameraView() {
     ctx.fillStyle = '#a0a';
     ctx.font = '16px Courier New';
     ctx.textAlign = 'center';
+    const boxPct = formatMusicBoxPct(musicBoxWound);
+    const low = boxPct <= 35;
+    const crit = boxPct <= 18;
+    const pulse = 0.5 + 0.5 * Math.sin((typeof time === 'number' ? time : 0) * (crit ? 12 : 7));
+    if (low) {
+      ctx.save();
+      ctx.strokeStyle = 'rgba(255,' + (crit ? 40 : 90) + ',20,' + (0.35 + pulse * 0.45) + ')';
+      ctx.lineWidth = crit ? 4 : 2.5;
+      ctx.strokeRect(camX + 3, camY + 3, camW - 6, camH - 6);
+      ctx.fillStyle = 'rgba(180,20,0,' + ((crit ? 0.12 : 0.06) * pulse) + ')';
+      ctx.fillRect(camX, camY, camW, camH);
+      ctx.restore();
+    }
+    ctx.fillStyle = low ? '#f86' : '#a0a';
+    ctx.font = '16px Courier New';
+    ctx.textAlign = 'center';
     ctx.fillText('🎵 ШКАТУЛКА МОГЗА', camX + camW/2, camY + 90);
-    ctx.fillStyle = '#ccc';
-    ctx.fillText(`Заведена: ${formatMusicBoxPct(musicBoxWound)}%`, camX + camW/2, camY + 115);
+    ctx.fillStyle = low ? '#fcc' : '#ccc';
+    ctx.fillText(`Заведена: ${boxPct}%`, camX + camW/2, camY + 115);
     ctx.fillStyle = '#333';
     ctx.fillRect(camX + camW/2 - 90, camY + 130, 180, 16);
-    {
-      const boxPct = formatMusicBoxPct(musicBoxWound);
-      ctx.fillStyle = boxPct > 35 ? '#0a0' : '#a00';
-      ctx.fillRect(camX + camW/2 - 90, camY + 130, 1.8 * boxPct, 16);
+    ctx.fillStyle = crit ? '#f20' : (low ? '#e60' : '#0a0');
+    ctx.fillRect(camX + camW/2 - 90, camY + 130, 1.8 * boxPct, 16);
+    if (low) {
+      ctx.fillStyle = 'rgba(255,255,200,' + (0.3 + pulse * 0.5) + ')';
+      for (let ti = 0; ti < 3; ti++) {
+        const tx = camX + camW/2 - 90 + 1.8 * boxPct + ti * 6;
+        if (tx < camX + camW/2 + 90) ctx.fillRect(tx, camY + 130, 2, 16);
+      }
     }
   }
   
@@ -22686,8 +22895,8 @@ function drawMap(mx, my, mw, mh) {
     const p = MAP_POS[id];
     if (!p) continue;
     const isCurrent = id === currentCam;
-    const hasEnemy = Object.values(enemies).some(e => e.pos === id && e.name !== 'Сипа');
-    const isSipa = enemies.sipa && enemies.sipa.active && enemies.sipa.pos === id;
+    const hasEnemy = bbhHintsOn() && Object.values(enemies).some(e => e.pos === id && e.name !== 'Сипа');
+    const isSipa = bbhHintsOn() && enemies.sipa && enemies.sipa.active && enemies.sipa.pos === id;
     const r = isCurrent ? 16 : 13;
 
     ctx.beginPath();
@@ -22758,7 +22967,7 @@ function drawMap(mx, my, mw, mh) {
   ctx.fillStyle = '#555';
   ctx.font = '10px Courier New';
   ctx.textAlign = 'left';
-  ctx.fillText('клик по CAM = выбор', mx + 10, my + mh - 12);
+  if (bbhHintsOn()) ctx.fillText('клик по CAM = выбор', mx + 10, my + mh - 12);
 }
 
 function drawSipaOnCam(x, y) {
@@ -27147,10 +27356,12 @@ function n7DrawFxTrans() {
       ctx.fillStyle = '#9cf';
       ctx.font = 'bold 26px Courier New';
       ctx.fillText('НОЧЬ 7 — ОФИС', WW / 2, HH * 0.45);
-      ctx.font = '13px Courier New';
-      ctx.fillStyle = '#abc';
-      ctx.shadowBlur = 0;
-      ctx.fillText('Дверь · камеры · свет · до 6:00', WW / 2, HH * 0.45 + 26);
+      if (bbhHintsOn()) {
+        ctx.font = '13px Courier New';
+        ctx.fillStyle = '#abc';
+        ctx.shadowBlur = 0;
+        ctx.fillText('Дверь · камеры · свет · до 6:00', WW / 2, HH * 0.45 + 26);
+      }
       ctx.globalAlpha = 1;
     }
     // финальный fade-out в геймплей
@@ -27426,6 +27637,13 @@ function n7TickJuice(dt) {
     for (let i = n7.chests.length - 1; i >= 0; i--) {
       const c = n7.chests[i];
       c.bob = (c.bob || 0) + dt * 4;
+      // сундук мог выпасть из врага у стены, куда герой не может зайти — возвращаем в досягаемую зону
+      try {
+        const _cw = (typeof n7ArenaWallPad === 'function') ? n7ArenaWallPad() : 22;
+        const _csc = (typeof n7HeroScale === 'function') ? n7HeroScale() : 1;
+        c.x = Math.max(_cw + 18 * _csc, Math.min(W - _cw - 18 * _csc, c.x));
+        c.y = Math.max(_cw + 32 * _csc, Math.min(H - _cw - 32 * _csc, c.y));
+      } catch (eCl) {}
       if (!(n7.upgradeOpen || n7.itemOpen || n7.accOpen) && Math.hypot((n7.px || 0) - c.x, (n7.py || 0) - c.y) < 28) {
         try { n7OpenArenaChest(c); } catch (eC) {}
         n7.chests.splice(i, 1);
@@ -27738,11 +27956,20 @@ function n7OnEnemyKilled(e, x, y) {
   // сундуки реже — иначе слишком много бесплатной силы
   // сундуки: умеренно, не спам
   if (n7._chestCd == null) n7._chestCd = 0;
-  const chestChance = (e.r > 16 ? 0.045 : 0.012) + Math.min(0.02, (n7.killStreak || 0) * 0.0015);
-  if (n7._chestCd <= 0 && Math.random() < chestChance && (n7.chests || []).length < 2) {
+  const isCamp = !!(n7.campaign && n7.campaign.active);
+  const chestChance = (isCamp
+    ? ((e.r > 16 ? 0.028 : 0.008) + Math.min(0.012, (n7.killStreak || 0) * 0.0010))
+    : ((e.r > 16 ? 0.045 : 0.012) + Math.min(0.02, (n7.killStreak || 0) * 0.0015)));
+  if (n7._chestCd <= 0 && Math.random() < chestChance && (n7.chests || []).length < (isCamp ? 1 : 2)) {
     if (!n7.chests) n7.chests = [];
-    n7.chests.push({ x: e.x, y: e.y, bob: Math.random() * 4 });
-    n7._chestCd = 7;
+    {
+      const _cw = (typeof n7ArenaWallPad === 'function') ? n7ArenaWallPad() : 22;
+      const _csc = (typeof n7HeroScale === 'function') ? n7HeroScale() : 1;
+      const cx = Math.max(_cw + 18 * _csc, Math.min(W - _cw - 18 * _csc, e.x));
+      const cy = Math.max(_cw + 32 * _csc, Math.min(H - _cw - 32 * _csc, e.y));
+      n7.chests.push({ x: cx, y: cy, bob: Math.random() * 4 });
+    }
+    n7._chestCd = isCamp ? 11 : 7;
   }
   try {
     let xp = n7XpForEnemy(e);
@@ -28070,7 +28297,7 @@ function n7LowHpBeatSfx() {
 }
 
 function n7ArenaShoot(mx, my) {
-  if (!n7 || n7.phase !== 'arena' || n7.upgradeOpen || n7.itemOpen || n7.accOpen) return;
+  if (!n7 || n7.phase !== 'arena' || n7.introLock || n7.upgradeOpen || n7.itemOpen || n7.accOpen) return;
   // только resume, без нового старта трека
   try {
     if (n7MusicMode === 'arena' && n7OggAudio && n7OggAudio.paused) {
@@ -28198,6 +28425,7 @@ var N7_SKILLS = {
             if (n7MoneybagBlockDamage(e, n7.px, n7.py, 1.15)) continue;
           if (n7EnemyIsInvuln(e)) continue;
             e.hp -= dmg;
+            e._wasHit = true;
             e.hitFlash = 0.25;
             const ang = Math.atan2(e.y - n7.py, e.x - n7.px);
             e.x += Math.cos(ang) * (55 + stacks * 14);
@@ -28599,6 +28827,7 @@ function n7MortarExplode(x, y, opts) {
       if (dmgEnemies) {
         const dmg = Math.max(1, Math.floor((n7.damage || 1) * 0.5));
         e.hp -= dmg;
+            e._wasHit = true;
         if (!n7.dmgNums) n7.dmgNums = [];
         try { n7.dmgNums.push({ x: e.x, y: e.y - 10, v: dmg, life: 0.55, color: '#fa6' }); } catch (eN) {}
         if (e.hp <= 0) {
@@ -29015,6 +29244,7 @@ function n7TickSkillAccessory(dt) {
             if (n7MoneybagBlockDamage(e, m.x, m.y, 1.35)) continue;
           if (n7EnemyIsInvuln(e)) continue;
             e.hp -= dmg;
+            e._wasHit = true;
             try { n7PushDmgNum(e.x, e.y, dmg, true); n7Shake(0.15); } catch (eDn) {}
             e.hitFlash = 0.3;
             const ang = Math.atan2(e.y - m.y, e.x - m.x);
@@ -29066,6 +29296,7 @@ function n7TickSkillAccessory(dt) {
               if (n7MoneybagBlockDamage(e, w.x, w.y, 1.0)) continue;
           if (n7EnemyIsInvuln(e)) continue;
               e.hp -= w.dmg;
+              e._wasHit = true;
               e.hitFlash = 0.2;
               if (e.hp <= 0) {
                 try { n7OnEnemyKilled(e, e.x, e.y); } catch (eK) {}
@@ -29387,6 +29618,7 @@ function n7TickSkillAccessory(dt) {
             if ((e[cdKey] || 0) > 0) continue;
             e[cdKey] = 0.12;
             e.hp -= dmgTick;
+            e._wasHit = true;
             e.hitFlash = Math.max(e.hitFlash || 0, 0.08);
             if (e.hp <= 0) {
               try { n7OnEnemyKilled(e, e.x, e.y); } catch (eK) {}
@@ -29941,12 +30173,16 @@ function n7DrawStatSheet(topY) {
 function n7XpForEnemy(e) {
   if (!e) return 1;
   const t = e.type || 'grunt';
-  if (t === 'swift' || t === 'gunner') return 1;
-  if (t === 'elite' || t === 'orbiter' || t === 'seer') return 2;
-  if (t === 'tank' || t === 'mortar' || t === 'splitter') return 3;
-  if (t === 'brute' || t === 'giant' || t === 'razor') return 4;
-  if (t === 'golden') return 2;
-  return 1 + Math.max(0, ((e.maxHp || e.hp || 1) / 4) | 0);
+  let xp = 1;
+  if (t === 'swift' || t === 'gunner') xp = 1;
+  else if (t === 'elite' || t === 'orbiter' || t === 'seer') xp = 2;
+  else if (t === 'tank' || t === 'mortar' || t === 'splitter') xp = 3;
+  else if (t === 'brute' || t === 'giant' || t === 'razor') xp = 4;
+  else if (t === 'golden') xp = 2;
+  else xp = 1 + Math.max(0, ((e.maxHp || e.hp || 1) / 4) | 0);
+  // кампания 30 UPD: XP чуть скупее, чтобы билд не обгонял спавн
+  if (n7 && n7.campaign && n7.campaign.active) xp = Math.max(1, Math.floor(xp * 0.82));
+  return xp;
 }
 function n7AddXp(amount) {
   if (!n7 || !(amount > 0)) return;
@@ -29962,8 +30198,8 @@ function n7AddXp(amount) {
     if (n7.campaign && n7.campaign.active) {
       // кампания: порог растёт без потолка 56 — прокачка всё дороже
       const lv = n7.level | 0;
-      n7.xpNeed = Math.floor(12 + lv * 5.4 + Math.max(0, lv - 6) * 1.35 + Math.max(0, lv - 12) * 1.1 + Math.max(0, lv - 20) * 2.2 + Math.max(0, lv - 30) * 3.4);
-      n7.xpNeed = Math.min(420, Math.max(12, n7.xpNeed)); // потолок отодвинут — после 10-го апгрейда прокачка не должна становиться тривиальной
+      n7.xpNeed = Math.floor(14 + lv * 6.2 + Math.max(0, lv - 5) * 1.7 + Math.max(0, lv - 10) * 1.6 + Math.max(0, lv - 16) * 2.4 + Math.max(0, lv - 24) * 3.2 + Math.max(0, lv - 32) * 4.0);
+      n7.xpNeed = Math.min(520, Math.max(14, n7.xpNeed)); // кампания: прокачка дороже, билд не обгоняет сложность
     } else {
       // ночь 7 / прочее — прежний комфортный кап
       n7.xpNeed = Math.min(56, 12 + (n7.level | 0) * 5);
@@ -31121,6 +31357,7 @@ function n7ExplodeMine(m, idx) {
         if (n7MoneybagBlockDamage(e, m.x, m.y, 1.35)) continue;
           if (n7EnemyIsInvuln(e)) continue;
         e.hp -= dmg;
+        e._wasHit = true;
         e.hitFlash = 0.3;
         try { n7PushDmgNum(e.x, e.y, dmg, true); } catch (eDn) {}
         if (e.hp <= 0) {
@@ -31686,6 +31923,7 @@ function n7UpdateArena(dt) {
                 // урон заблокирован — денежный мешок неуязвим для орбит, только толчок выше
               } else {
               e.hp -= 1; // слабый, но заметный урон
+            e._wasHit = true;
               try { n7PushDmgNum(e.x, e.y, 1, false); } catch (eDn) {}
               e.hitFlash = 0.18;
               try { if (typeof playTone === 'function') playTone(480 + Math.random()*40, 'square', 0.03, 0.025); } catch (eS) {}
@@ -31824,6 +32062,7 @@ function n7UpdateArena(dt) {
           if (n7EnemyIsInvuln(e)) continue;
           const dmg = 1.25 * stacks; // 1 стак ≈ 1.25 HP / 0.32с
           e.hp -= dmg;
+            e._wasHit = true;
           try { n7PushDmgNum(e.x, e.y, dmg, false); } catch (eDn) {}
           e.hitFlash = 0.2;
           try {
@@ -32219,6 +32458,7 @@ function n7UpdateArena(dt) {
       else {
         e.burnT -= dt;
         if ((e._slideT || 0) <= 0) e.hp -= (e.burnDps || 2) * dt;
+            e._wasHit = true;
       }
       if (Math.random() < dt * 8) e.hitFlash = 0.08;
       if (e.hp <= 0) {
@@ -32255,6 +32495,7 @@ function n7UpdateArena(dt) {
     if ((e.poisonT || 0) > 0) {
       e.poisonT -= dt;
       e.hp -= (e.poisonDps || 1.5) * dt;
+            e._wasHit = true;
       if (Math.random() < dt * 6) e.hitFlash = 0.06;
       if (e.hp <= 0) {
         try { n7OnEnemyKilled(e, e.x, e.y); } catch (eVk) {}
@@ -32776,6 +33017,7 @@ function n7UpdateArena(dt) {
             // лёд разбит — бонусный урон и снятие заморозки
             const bonus = Math.max(2, Math.floor(dmg * 1.5) + 1);
             e.hp -= dmg + bonus;
+            e._wasHit = true;
             try { n7PushDmgNum(e.x, e.y - (e.r || 10), dmg + bonus, true); n7Shake(0.25); } catch (eDn) {}
             e.frozenT = 0;
             e.iceShell = 0;
@@ -32791,6 +33033,7 @@ function n7UpdateArena(dt) {
           } else {
             // пока лёд держится — враг не получает полный урон по HP
             e.hp -= Math.max(0, dmg * 0.25);
+            e._wasHit = true;
           }
         } else if (e._eliteType==='aegis' && (e._eliteShield||0)>0) {
           const absorbed=Math.min(e._eliteShield,dmg); e._eliteShield-=absorbed; const spill=Math.max(0,dmg-absorbed);
@@ -32798,6 +33041,7 @@ function n7UpdateArena(dt) {
           if(e._eliteShield<=0){e._eliteShield=0;e.maxHp=e._eliteCoreMax;}
         } else {
           e.hp -= dmg;
+            e._wasHit = true;
         }
         try { n7PushDmgNum(e.x, e.y - (e.r || 10), dmg, wasCrit); } catch (eDn) {}
         if (wasCrit) { try { n7Shake(0.22); } catch (eSh) {} }
@@ -34240,12 +34484,13 @@ function n7DrawEnemy(e) {
   ctx.fillStyle = rim;
   ctx.fillRect(x - r * 1.5, y - r * 1.5, r * 3, r * 3);
   ctx.restore();
-  // hp ticks for fat
-  if (e.maxHp && e.maxHp > 3) {
-    ctx.fillStyle = 'rgba(0,0,0,0.5)';
-    ctx.fillRect(x - r, y - r - 6, r * 2, 3);
-    ctx.fillStyle = '#f44';
-    ctx.fillRect(x - r, y - r - 6, r * 2 * Math.max(0, e.hp / e.maxHp), 3);
+  // HP-бар: у всех врагов, только после получения урона
+  if (e.maxHp && e.maxHp > 0 && (e.hp < e.maxHp || e._wasHit)) {
+    ctx.fillStyle = 'rgba(0,0,0,0.55)';
+    ctx.fillRect(x - r, y - r - 7, r * 2, 4);
+    const ratio = Math.max(0, Math.min(1, e.hp / e.maxHp));
+    ctx.fillStyle = ratio < 0.34 ? '#ff3030' : '#f44';
+    ctx.fillRect(x - r, y - r - 7, r * 2 * ratio, 4);
   }
   ctx.restore();
 }
@@ -36946,6 +37191,15 @@ function n7StartHybrid() {
     directorCd: 8 + Math.random() * 5,
     directorT: 0,
     directorKind: '',
+    // Мягкие геймплей-события (как N4, но слабее — один смертельный враг)
+    evNext: 55 + Math.random() * 20,
+    evLast: '',
+    evCount: { blind: 0, scramble: 0, beacon: 0, flicker: 0 },
+    evBlind: null,      // { cams:[], t }
+    evScramble: null,   // { map:{}, t }
+    evBeacon: null,     // { cam, t } маяк слежения — не энергия
+    evFlicker: null,    // { t } краткий сбой света/энергии
+    evBeaconBoost: 0,   // сек усиленного слежения после подбора
     directorX: 0.5,
     directorY: 0.5,
     directorPulse: 0,
@@ -37468,7 +37722,7 @@ function n7HybridDrawPhantom(p, x, y, w, h) {
       ctx.fillStyle = '#f8a';
       ctx.font = 'bold 12px Courier New';
       ctx.textAlign = 'center';
-      ctx.fillText('НЕ СМОТРИ...', cx, y + 26);
+      if (bbhHintsOn()) ctx.fillText('НЕ СМОТРИ...', cx, y + 26);
     }
   }
   ctx.globalAlpha = Math.min(0.55, a + 0.1);
@@ -37489,26 +37743,49 @@ function n7HybridDrawMogz(x, y, w, h) {
   if (!m || !m.active) return;
   const cx = x + w * 0.5, cy = y + h * 0.48;
   ctx.save();
-  if ((n7.hybrid.phantomFrenzyT || 0) > 0 && Number(m.cam) === Number(n7.hybrid.selectedCam)) {
-    ctx.fillStyle = 'rgba(100,40,0,0.25)';
+  const pct = Math.max(0, Math.min(100, m.box || 0)) / 100;
+  const low = pct < 0.35;
+  const crit = pct < 0.18;
+  const tPulse = (n7.hybrid && n7.hybrid.time) || (n7.t || 0);
+  const pulse = 0.5 + 0.5 * Math.sin(tPulse * (crit ? 14 : 8));
+  const frenzy = (n7.hybrid.phantomFrenzyT || 0) > 0;
+  // ярость / низкий заряд — сильный визуальный сигнал на камере Могза
+  if (frenzy || low) {
+    const a = frenzy ? (0.22 + pulse * 0.2) : (crit ? 0.14 * pulse : 0.08 * pulse);
+    ctx.fillStyle = frenzy ? ('rgba(160,30,0,' + a + ')') : ('rgba(180,40,0,' + a + ')');
     ctx.fillRect(x, y, w, h);
+    ctx.strokeStyle = frenzy ? 'rgba(255,90,20,' + (0.5 + pulse * 0.4) + ')' : 'rgba(255,60,30,' + (0.35 + pulse * 0.35) + ')';
+    ctx.lineWidth = frenzy ? 3.5 : (crit ? 3 : 2);
+    ctx.strokeRect(x + 3, y + 3, w - 6, h - 6);
+    if (frenzy) {
+      ctx.globalAlpha = 0.3 + pulse * 0.25;
+      for (let gi = 0; gi < 4; gi++) {
+        const gy = y + ((gi * 41 + tPulse * 70) % Math.max(6, h - 4));
+        ctx.fillStyle = '#ff8020';
+        ctx.fillRect(x, gy, w, 2);
+      }
+      ctx.globalAlpha = 1;
+    }
   }
   // шкатулка
-  ctx.fillStyle = m.rage ? '#4a1010' : '#2a1e0c';
+  ctx.fillStyle = (m.rage || frenzy || crit) ? '#4a1010' : '#2a1e0c';
   ctx.fillRect(cx - 34, cy - 16, 68, 40);
-  ctx.strokeStyle = m.rage ? '#f66' : '#c9a24a';
-  ctx.lineWidth = 2;
+  ctx.strokeStyle = (m.rage || frenzy) ? '#f66' : (low ? '#f84' : '#c9a24a');
+  ctx.lineWidth = 2 + (low ? pulse : 0);
   ctx.strokeRect(cx - 34, cy - 16, 68, 40);
-  // глазок
-  ctx.fillStyle = m.rage ? '#f22' : '#8a6';
-  ctx.beginPath(); ctx.arc(cx, cy - 28, 10, 0, Math.PI * 2); ctx.fill();
+  // глазок — мигает при критике
+  ctx.fillStyle = (m.rage || frenzy) ? '#f22' : (crit ? ('rgba(255,' + (40+pulse*80|0) + ',20,1)') : '#8a6');
+  ctx.beginPath(); ctx.arc(cx, cy - 28, 10 + (crit ? pulse * 2 : 0), 0, Math.PI * 2); ctx.fill();
   // полоска заряда
   ctx.fillStyle = 'rgba(0,0,0,0.55)';
   ctx.fillRect(cx - 30, cy + 30, 60, 8);
-  const pct = Math.max(0, Math.min(100, m.box || 0)) / 100;
   ctx.fillStyle = pct < 0.25 ? '#f33' : (pct < 0.5 ? '#fa0' : '#4c4');
   ctx.fillRect(cx - 30, cy + 30, 60 * pct, 8);
-  ctx.fillStyle = '#ddd';
+  if (low) {
+    ctx.fillStyle = 'rgba(255,255,180,' + (0.35 + pulse * 0.5) + ')';
+    ctx.fillRect(cx - 30 + 60 * pct, cy + 30, 3, 8);
+  }
+  ctx.fillStyle = low ? '#fcc' : '#ddd';
   ctx.font = '11px Courier New';
   ctx.textAlign = 'center';
   ctx.fillText('ШКАТУЛКА ' + Math.round(m.box || 0) + '%', cx, cy + 52);
@@ -37732,6 +38009,232 @@ function n7HybridTickEscalation(dt) {
   }
 }
 
+// ===== N7 hybrid soft events (не ломают баланс, дают решения) =====
+function n7EvBanner(txt, sec) {
+  try {
+    n7.msg = txt;
+    n7.msgT = sec || 2.4;
+  } catch (e) {}
+}
+function n7EvBusy(h) {
+  if (!h) return true;
+  const e = h.enemy;
+  if (e && (e.inOffice || e.atDoor)) return true;
+  if (h.mogz && h.mogz.active && (h.mogz.rage || (h.mogz.box || 100) < 12)) return true;
+  if ((h.camAttackT || 0) > 0) return true;
+  if ((h.officeOff || 0) > 0) return true;
+  return false;
+}
+function n7EvMapCam(id) {
+  try {
+    const h = n7 && n7.hybrid;
+    if (h && h.evScramble && h.evScramble.map && h.evScramble.map[id] != null) return h.evScramble.map[id];
+  } catch (e) {}
+  return id;
+}
+function n7EvStartBlind(h) {
+  const pool = [];
+  for (let i = 1; i <= 12; i++) pool.push(i);
+  for (let i = pool.length - 1; i > 0; i--) {
+    const j = (Math.random() * (i + 1)) | 0;
+    const t = pool[i]; pool[i] = pool[j]; pool[j] = t;
+  }
+  const n = 2 + ((Math.random() * 2) | 0);
+  h.evBlind = { cams: pool.slice(0, n), t: 12 + Math.random() * 5 };
+  h.evCount.blind = (h.evCount.blind || 0) + 1;
+  n7EvBanner('СЛЕПАЯ ЗОНА', 2.6);
+  return true;
+}
+function n7EvStartScramble(h) {
+  const ids = [];
+  for (let i = 1; i <= 12; i++) ids.push(i);
+  for (let i = ids.length - 1; i > 0; i--) {
+    const j = (Math.random() * (i + 1)) | 0;
+    const t = ids[i]; ids[i] = ids[j]; ids[j] = t;
+  }
+  const map = {};
+  for (let i = 1; i <= 12; i++) map[i] = ids[i - 1];
+  if (map[1] === 1 && map[2] === 2) { map[1] = 5; map[5] = 1; }
+  h.evScramble = { map: map, t: 11 + Math.random() * 5 };
+  h.evCount.scramble = (h.evCount.scramble || 0) + 1;
+  n7EvBanner('КАМЕРЫ ПЕРЕПУТАНЫ', 2.6);
+  return true;
+}
+function n7EvStartBeacon(h) {
+  const eCam = (h.enemy && !h.enemy.atDoor && !h.enemy.inOffice) ? (h.enemy.cam | 0) : 0;
+  const pool = [];
+  for (let i = 2; i <= 11; i++) if (i !== eCam) pool.push(i);
+  if (!pool.length) return false;
+  h.evBeacon = { cam: pool[(Math.random() * pool.length) | 0], t: 22 + Math.random() * 8 };
+  h.evCount.beacon = (h.evCount.beacon || 0) + 1;
+  n7EvBanner('МАЯК СЛЕЖЕНИЯ', 2.4);
+  return true;
+}
+function n7EvStartFlicker(h) {
+  h.evFlicker = { t: 6 + Math.random() * 3 };
+  h.evCount.flicker = (h.evCount.flicker || 0) + 1;
+  h.camNoise = Math.max(h.camNoise || 0, 0.55);
+  h.staticT = Math.max(h.staticT || 0, 0.4);
+  n7EvBanner('СБОЙ ПИТАНИЯ', 2.2);
+  try { if (typeof playNoise === 'function') playNoise(0.12, 0.04, 400); } catch (e) {}
+  return true;
+}
+function n7EvStart(h) {
+  if (!h || n7EvBusy(h)) { h.evNext = 6 + Math.random() * 4; return; }
+  const hour = (typeof n7HybridHour === 'function') ? n7HybridHour() : 0;
+  const ok = [];
+  if (!h.evBlind && (h.evCount.blind || 0) < 3 && (h.time || 0) >= 50) ok.push('blind');
+  if (!h.evScramble && (h.evCount.scramble || 0) < 2 && (h.time || 0) >= 80) ok.push('scramble');
+  if (!h.evBeacon && (h.evCount.beacon || 0) < 2 && (h.time || 0) >= 70) ok.push('beacon');
+  if (!h.evFlicker && (h.evCount.flicker || 0) < 3 && (h.time || 0) >= 40) ok.push('flicker');
+  const cand = ok.filter(k => k !== h.evLast);
+  const list = cand.length ? cand : ok;
+  if (!list.length) { h.evNext = 12; return; }
+  let kind = list[(Math.random() * list.length) | 0];
+  let started = false;
+  if (kind === 'blind') started = n7EvStartBlind(h);
+  else if (kind === 'scramble') started = n7EvStartScramble(h);
+  else if (kind === 'beacon') started = n7EvStartBeacon(h);
+  else if (kind === 'flicker') started = n7EvStartFlicker(h);
+  if (started) {
+    h.evLast = kind;
+    h.evNext = Math.max(38, 48 + Math.random() * 18 - hour * 1.5);
+  } else {
+    h.evNext = 8 + Math.random() * 5;
+  }
+}
+function n7EvTick(dt) {
+  const h = n7 && n7.hybrid;
+  if (!h || n7.phase !== 'hybrid') return;
+  if (typeof isPhoneCallBlocking === 'function' && isPhoneCallBlocking()) return;
+
+  if (h.evBlind) {
+    h.evBlind.t -= dt;
+    if (h.evBlind.t <= 0) { h.evBlind = null; n7EvBanner('СИГНАЛ ВОССТАНОВЛЕН', 2.0); }
+  }
+  if (h.evScramble) {
+    h.evScramble.t -= dt;
+    if (h.evScramble.t <= 0) { h.evScramble = null; n7EvBanner('КАРТА СИНХРОНИЗИРОВАНА', 2.0); }
+  }
+  if (h.evBeacon) {
+    h.evBeacon.t -= dt;
+    if (camsOpen && Number(h.selectedCam) === Number(h.evBeacon.cam)) {
+      // не энергия: краткий «чистый» контакт с маршрутом Воука
+      try {
+        const e = h.enemy;
+        if (e && !e.inOffice) {
+          let lc = e.inVent ? (e.cam || e.ventId) : e.cam;
+          lc = Number(lc) || 0;
+          if (lc >= 11 && lc <= 12) {/* вент-маркер на карте */}
+          else if (lc > 12) lc = e.cam || h.lastSeenCam;
+          h.lastSeenCam = lc || h.lastSeenCam;
+          h.unseenT = 0;
+          h.trackQuality = 1;
+          h.trackingT = Math.max(h.trackingT || 0, 10);
+        }
+        h.evBeaconBoost = 14 + Math.random() * 4;
+        h.camNoise = Math.max(0, (h.camNoise || 0) * 0.35);
+        h.staticT = Math.max(0, (h.staticT || 0) * 0.4);
+      } catch (eB) {}
+      h.evBeacon = null;
+      n7EvBanner('МАЯК АКТИВИРОВАН', 2.4);
+      try { if (typeof playTone === 'function') playTone(520, 'sine', 0.1, 0.04, 720); } catch (eS) {}
+    } else if (h.evBeacon.t <= 0) {
+      h.evBeacon = null;
+    }
+  }
+  if (h.evBeaconBoost > 0) {
+    h.evBeaconBoost -= dt;
+    // держим качество слежения выше обычного
+    try {
+      h.trackQuality = Math.max(h.trackQuality || 0, 0.85);
+      h.unseenT = Math.max(0, (h.unseenT || 0) - dt * 0.65);
+    } catch (eBoost) {}
+    if (h.evBeaconBoost <= 0) h.evBeaconBoost = 0;
+  }
+  if (h.evFlicker) {
+    h.evFlicker.t -= dt;
+    // лёгкий доп. расход, не убийственный
+    try { power = Math.max(0, (power || 0) - 0.55 * dt); } catch (e) {}
+    if (Math.random() < 0.08) {
+      h.camNoise = Math.max(h.camNoise || 0, 0.35);
+      h.staticT = Math.max(h.staticT || 0, 0.15);
+    }
+    if (h.evFlicker.t <= 0) {
+      h.evFlicker = null;
+      n7EvBanner('ПИТАНИЕ СТАБИЛЬНО', 1.8);
+    }
+  }
+
+  // одно «мягкое» событие; не стакаем поверх атаки
+  if (!h.evBlind && !h.evScramble && !h.evFlicker && !n7EvBusy(h)) {
+    h.evNext = (h.evNext || 40) - dt;
+    if (h.evNext <= 0) n7EvStart(h);
+  }
+}
+function n7EvDrawCamOverlay(x, y, w, hgt) {
+  const h = n7 && n7.hybrid;
+  if (!h) return;
+  const cam = Number(h.selectedCam);
+  // слепая зона
+  if (h.evBlind && h.evBlind.cams && h.evBlind.cams.indexOf(cam) !== -1) {
+    const pulse = 0.5 + 0.5 * Math.sin((h.time || 0) * 6);
+    ctx.save();
+    ctx.fillStyle = 'rgba(6,8,14,' + (0.62 + pulse * 0.12) + ')';
+    ctx.fillRect(x, y, w, hgt);
+    ctx.fillStyle = '#9ab';
+    ctx.font = 'bold 16px Courier New';
+    ctx.textAlign = 'center';
+    ctx.fillText('НЕТ СИГНАЛА', x + w / 2, y + hgt * 0.48);
+    ctx.restore();
+  }
+  // маяк слежения
+  if (h.evBeacon && Number(h.evBeacon.cam) === cam) {
+    const cx = x + w * 0.72, cy = y + hgt * 0.68;
+    const pulse = 0.5 + 0.5 * Math.sin((h.time || 0) * 8);
+    ctx.save();
+    ctx.strokeStyle = 'rgba(120,200,255,' + (0.45 + pulse * 0.45) + ')';
+    ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.arc(cx, cy, 18 + pulse * 4, 0, Math.PI * 2); ctx.stroke();
+    ctx.beginPath(); ctx.arc(cx, cy, 8, 0, Math.PI * 2); ctx.stroke();
+    ctx.fillStyle = 'rgba(140,210,255,' + (0.5 + pulse * 0.4) + ')';
+    ctx.beginPath(); ctx.arc(cx, cy, 3.5, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = '#bdf';
+    ctx.font = 'bold 11px Courier New';
+    ctx.textAlign = 'center';
+    ctx.fillText('МАЯК', cx, cy + 28);
+    ctx.restore();
+  }
+  // активный буст слежения — тонкое кольцо
+  if ((h.evBeaconBoost || 0) > 0) {
+    const pulse = 0.5 + 0.5 * Math.sin((h.time || 0) * 5);
+    ctx.save();
+    ctx.strokeStyle = 'rgba(100,180,255,' + (0.2 + pulse * 0.25) + ')';
+    ctx.lineWidth = 2;
+    ctx.strokeRect(x + 5, y + 5, w - 10, hgt - 10);
+    ctx.restore();
+  }
+  // scramble ticker
+  if (h.evScramble) {
+    ctx.save();
+    ctx.fillStyle = 'rgba(40,10,20,0.5)';
+    ctx.fillRect(x + 8, y + 8, 160, 18);
+    ctx.fillStyle = '#f8a';
+    ctx.font = 'bold 11px Courier New';
+    ctx.textAlign = 'left';
+    ctx.fillText('КАМЕРЫ ПЕРЕПУТАНЫ ' + h.evScramble.t.toFixed(1) + 'с', x + 14, y + 21);
+    ctx.restore();
+  }
+  if (h.evFlicker) {
+    ctx.save();
+    const pulse = 0.5 + 0.5 * Math.sin((h.time || 0) * 14);
+    ctx.strokeStyle = 'rgba(255,200,80,' + (0.25 + pulse * 0.35) + ')';
+    ctx.lineWidth = 3;
+    ctx.strokeRect(x + 3, y + 3, w - 6, hgt - 6);
+    ctx.restore();
+  }
+}
+
 function n7HybridDirectorTick(dt) {
   const h = n7 && n7.hybrid;
   if (!h) return;
@@ -37934,6 +38437,7 @@ function n7UpdateHybrid(dt) {
   }
   try { n7HybridTickEscalation(dt); } catch (eEsc) {}
   try { n7HybridDirectorTick(dt); } catch (eDir) {}
+  try { n7EvTick(dt); } catch (eEv) {}
   try {
     const td = document.getElementById('timeDisplay');
     if (td) td.textContent = n7HybridTimeLabel();
@@ -39429,14 +39933,37 @@ function n7HybridDrawCamTablet() {
   }
 
   h._windBtn = null;
-  // подсказка ярости Могза
+  // Ярость Могза — визуальный сигнал (без текста-подсказки)
   if ((h.phantomFrenzyT || 0) > 0) {
-    ctx.fillStyle = 'rgba(120,40,0,0.55)';
-    ctx.fillRect(camX, camY, camW, 28);
-    ctx.fillStyle = '#fd8';
-    ctx.font = 'bold 13px Courier New';
-    ctx.textAlign = 'center';
-    ctx.fillText('МОГЗ ВЗБЕСИЛ ПРИЗРАКОВ!  ' + h.phantomFrenzyT.toFixed(1) + 'с', camX + camW / 2, camY + 18);
+    const ft = h.phantomFrenzyT;
+    const pulse = 0.5 + 0.5 * Math.sin((((n7.hybrid && n7.hybrid.time) || n7.t || 0)) * 14);
+    const a = Math.min(0.55, 0.18 + pulse * 0.28 + Math.min(0.2, ft * 0.02));
+    // красно-оранжевая кайма камеры + «помехи»
+    ctx.save();
+    ctx.strokeStyle = 'rgba(255,' + (60 + pulse * 40 | 0) + ',20,' + (0.45 + pulse * 0.4) + ')';
+    ctx.lineWidth = 3 + pulse * 3;
+    ctx.strokeRect(camX + 2, camY + 2, camW - 4, camH - 4);
+    ctx.fillStyle = 'rgba(180,30,0,' + (a * 0.35) + ')';
+    ctx.fillRect(camX, camY, camW, camH);
+    // горизонтальные глитч-полосы
+    ctx.globalAlpha = 0.25 + pulse * 0.25;
+    for (let gi = 0; gi < 5; gi++) {
+      const gy = camY + ((gi * 37 + (n7.t || 0) * 90) % Math.max(8, camH - 4));
+      ctx.fillStyle = gi % 2 ? 'rgba(255,120,40,0.35)' : 'rgba(40,0,0,0.4)';
+      ctx.fillRect(camX, gy, camW, 2 + (gi % 3));
+    }
+    // уголки-«сигнал тревоги»
+    ctx.globalAlpha = 0.7 + pulse * 0.3;
+    ctx.strokeStyle = '#ff6020';
+    ctx.lineWidth = 2;
+    const c = 14;
+    ctx.beginPath();
+    ctx.moveTo(camX + 6, camY + 6 + c); ctx.lineTo(camX + 6, camY + 6); ctx.lineTo(camX + 6 + c, camY + 6);
+    ctx.moveTo(camX + camW - 6, camY + 6 + c); ctx.lineTo(camX + camW - 6, camY + 6); ctx.lineTo(camX + camW - 6 - c, camY + 6);
+    ctx.moveTo(camX + 6, camY + camH - 6 - c); ctx.lineTo(camX + 6, camY + camH - 6); ctx.lineTo(camX + 6 + c, camY + camH - 6);
+    ctx.moveTo(camX + camW - 6, camY + camH - 6 - c); ctx.lineTo(camX + camW - 6, camY + camH - 6); ctx.lineTo(camX + camW - 6 - c, camY + camH - 6);
+    ctx.stroke();
+    ctx.restore();
   }
 
   if ((h.camSwitchT || 0) > 0) {
@@ -39526,8 +40053,8 @@ function n7HybridDrawCamTablet() {
       for (const id of [1,2,3,4,5,6,7,8,9,10]) {
     const p = n7HybridMapXY(id, mx0, my0, mw0, mh0);
     const sel = (h.selectedCam === id);
-    const hasE = e && !e.inVent && !e.inOffice && e.cam === id;
-    const hasM = h.mogz && h.mogz.active && Number(h.mogz.cam) === Number(id);
+    const hasE = bbhHintsOn() && e && !e.inVent && !e.inOffice && e.cam === id;
+    const hasM = bbhHintsOn() && h.mogz && h.mogz.active && Number(h.mogz.cam) === Number(id);
     // приоритет: выбран → Могз (золото) → Walk (красн.) → обычная
     let fill = '#1a2230', stroke = '#567', rad = sel ? 10 : 8;
     if (sel) { fill = '#2a6adf'; stroke = '#9cf'; }
@@ -39537,6 +40064,18 @@ function n7HybridDrawCamTablet() {
     ctx.beginPath(); ctx.arc(p.x, p.y, rad, 0, Math.PI * 2); ctx.fill();
     ctx.strokeStyle = stroke;
     ctx.lineWidth = (hasE || hasM) ? 2.5 : 2; ctx.stroke();
+    // метки мягких событий
+    if (h.evBeacon && Number(h.evBeacon.cam) === id) {
+      const pulse = 0.5 + 0.5 * Math.sin((h.time || 0) * 7);
+      ctx.strokeStyle = 'rgba(120,200,255,' + (0.5 + pulse * 0.4) + ')';
+      ctx.lineWidth = 1.5;
+      ctx.beginPath(); ctx.arc(p.x, p.y, 7 + pulse * 2, 0, Math.PI * 2); ctx.stroke();
+    }
+    if (h.evBlind && h.evBlind.cams && h.evBlind.cams.indexOf(id) !== -1) {
+      ctx.strokeStyle = 'rgba(150,180,255,0.7)';
+      ctx.lineWidth = 1.5;
+      ctx.beginPath(); ctx.arc(p.x, p.y, rad + 4, 0, Math.PI * 2); ctx.stroke();
+    }
     if (hasM && !hasE) {
       ctx.fillStyle = '#fc6';
       ctx.font = 'bold 7px Courier New';
@@ -39553,7 +40092,7 @@ function n7HybridDrawCamTablet() {
   for (const id of [11, 12]) {
     const p = n7HybridMapXY(id, mx0, my0, mw0, mh0);
     const sel = (h.selectedCam === id);
-    const hasE = e && e.inVent && (e.ventId === id || e.cam === id);
+    const hasE = bbhHintsOn() && e && e.inVent && (e.ventId === id || e.cam === id);
     const laserOn = (id === 11 && (h.laser11||0)>0) || (id === 12 && (h.laser12||0)>0);
     ctx.fillStyle = sel ? '#c60' : (hasE ? '#f40' : (laserOn ? '#420' : '#2a1a10'));
     ctx.fillRect(p.x - 14, p.y - 10, 28, 20);
@@ -39620,12 +40159,14 @@ const op = n7HybridMapXY('office', mapX, mapY + 20, mapW, mapH - 28);
     ctx.fillStyle = '#cfc';
     ctx.font = 'bold 12px Courier New';
     ctx.textAlign = 'center';
-    ctx.fillText(low ? 'ЗАВЕДИ!' : 'ЗАВЕСТИ ШКАТУЛКУ', bx + bw / 2, by + 16);
+    ctx.fillText(low ? (bbhHintsOn() ? 'ЗАВЕДИ!' : 'ШКАТУЛКА') : 'ЗАВЕСТИ ШКАТУЛКУ', bx + bw / 2, by + 16);
     ctx.fillStyle = 'rgba(0,0,0,0.5)';
     ctx.fillRect(bx + 8, by + 24, bw - 16, 8);
     ctx.fillStyle = (h.mogz.box || 0) < 25 ? '#f33' : ((h.mogz.box || 0) < 50 ? '#fa0' : '#4c4');
     ctx.fillRect(bx + 8, by + 24, (bw - 16) * Math.max(0, Math.min(1, (h.mogz.box || 0) / 100)), 8);
   }
+
+  try { n7EvDrawCamOverlay(camX, camY, camW, camH); } catch (eEvD) {}
 
   ctx.restore();
 }
@@ -40042,28 +40583,30 @@ function n7HybridDrawUI() {
       h._laserBtns.push({ ventId: ventId, camId: sc, x: bx, y: by, w: bw, h: bh });
     }
   }
-  // угрозы — разные подсказки под разные инструменты
-  if (e && e.inOffice) {
-    ctx.fillStyle = 'rgba(180,20,20,0.9)';
-    ctx.font = 'bold 15px Courier New';
-    ctx.textAlign = 'center';
-    const left = Math.max(0, (Math.max(1.55, 2.55 - n7HybridHour() * 0.12) - (e.officeT || 0)));
-    ctx.fillText('В ОФИСЕ! ВСПЫШКА  ' + left.toFixed(1) + 'с', W / 2, 32);
-  } else if (e && e.atDoor && (e.doorPressure || 0) > 0.15) {
-    ctx.fillStyle = 'rgba(200,40,40,0.85)';
-    ctx.font = 'bold 14px Courier New';
-    ctx.textAlign = 'center';
-    ctx.fillText('У ДВЕРИ — ДЕРЖИ ДВЕРЬ!', W / 2, 32);
-  } else if (e && (e.inVent || (h.fakeVentT || 0) > 0) && (h.ventWarn || 0) > 0) {
-    ctx.fillStyle = e.inVent ? 'rgba(255,105,45,0.95)' : 'rgba(255,140,40,0.85)';
-    ctx.font = 'bold 13px Courier New';
-    ctx.textAlign = 'center';
-    const vt = e.inVent ? Math.max(0, (e.ventDeadline || 0) - (e.ventT || 0)) : 0;
-    ctx.fillText(e.inVent ? ('ВЕНТ V' + (e.ventId === 11 ? '1' : '2') + ' — ЗВУК · ' + vt.toFixed(1) + 'с') : 'ВЕНТ — ПРОВЕРЬ ШАХТУ', W / 2, 32);
+  // угрозы — текстовые подсказки (выкл с bbhHints)
+  if (bbhHintsOn()) {
+    if (e && e.inOffice) {
+      ctx.fillStyle = 'rgba(180,20,20,0.9)';
+      ctx.font = 'bold 15px Courier New';
+      ctx.textAlign = 'center';
+      const left = Math.max(0, (Math.max(1.55, 2.55 - n7HybridHour() * 0.12) - (e.officeT || 0)));
+      ctx.fillText('В ОФИСЕ! ВСПЫШКА  ' + left.toFixed(1) + 'с', W / 2, 32);
+    } else if (e && e.atDoor && (e.doorPressure || 0) > 0.15) {
+      ctx.fillStyle = 'rgba(200,40,40,0.85)';
+      ctx.font = 'bold 14px Courier New';
+      ctx.textAlign = 'center';
+      ctx.fillText('У ДВЕРИ — ДЕРЖИ ДВЕРЬ!', W / 2, 32);
+    } else if (e && (e.inVent || (h.fakeVentT || 0) > 0) && (h.ventWarn || 0) > 0) {
+      ctx.fillStyle = e.inVent ? 'rgba(255,105,45,0.95)' : 'rgba(255,140,40,0.85)';
+      ctx.font = 'bold 13px Courier New';
+      ctx.textAlign = 'center';
+      const vt = e.inVent ? Math.max(0, (e.ventDeadline || 0) - (e.ventT || 0)) : 0;
+      ctx.fillText(e.inVent ? ('ВЕНТ V' + (e.ventId === 11 ? '1' : '2') + ' — ЗВУК · ' + vt.toFixed(1) + 'с') : 'ВЕНТ — ПРОВЕРЬ ШАХТУ', W / 2, 32);
+    }
   }
 
   // Давление от кемпа: видимая причина периодически открывать планшет.
-  if (!camsOpen && !e.inOffice && !e.inVent && !e.atDoor && (h.officeIdleT || 0) > 4.5) {
+  if (bbhHintsOn() && !camsOpen && !e.inOffice && !e.inVent && !e.atDoor && (h.officeIdleT || 0) > 4.5) {
     const idle = Math.max(0, Math.min(1, ((h.officeIdleT || 0) - 4.5) / 11));
     const bx = W - 206, by = 58, bw = 184, bh = 42;
     ctx.fillStyle = 'rgba(8,9,12,0.88)';
@@ -40228,7 +40771,7 @@ function n7HybridDrawUI() {
       ctx.fillText('ГЛАЗА СЛИПАЮТСЯ...', W / 2, H / 2);
     }
   }
-  if ((h.tutorialT || 0) > 0 && (h.tutorialT || 0) < 5.5) {
+  if (bbhHintsOn() && (h.tutorialT || 0) > 0 && (h.tutorialT || 0) < 5.5) {
     ctx.fillStyle = 'rgba(0,0,0,0.5)';
     ctx.fillRect(W / 2 - 200, 44, 400, 36);
     ctx.fillStyle = '#bcd';
@@ -40238,12 +40781,14 @@ function n7HybridDrawUI() {
   }
   if ((n7.msgT || 0) > 0) {
     n7.msgT -= 0.016;
-    ctx.fillStyle = 'rgba(0,0,0,0.7)';
-    ctx.fillRect(W / 2 - 160, H - 90, 320, 28);
-    ctx.fillStyle = '#eee';
-    ctx.font = '12px Courier New';
-    ctx.textAlign = 'center';
-    ctx.fillText(n7.msg || '', W / 2, H - 72);
+    if (bbhHintsOn() && n7.msg) {
+      ctx.fillStyle = 'rgba(0,0,0,0.7)';
+      ctx.fillRect(W / 2 - 160, H - 90, 320, 28);
+      ctx.fillStyle = '#eee';
+      ctx.font = '12px Courier New';
+      ctx.textAlign = 'center';
+      ctx.fillText(n7.msg || '', W / 2, H - 72);
+    }
   }
 }
 
@@ -40362,7 +40907,26 @@ function n7DrawHybrid() {
   n7HybridDrawUI();
   n7HybridDrawEscalationOverlay();
   try { n7HybridDirectorOverlay(); } catch (eDirDraw) {}
-  if (n7.msgT > 0 && n7.msg) {
+  try {
+    const hh = n7.hybrid;
+    if (hh && (hh.evBlind || hh.evScramble || hh.evFlicker || hh.evBeacon || (hh.evBeaconBoost || 0) > 0)) {
+      let label = '';
+      if (hh.evFlicker) label = 'СБОЙ ПИТАНИЯ';
+      else if (hh.evScramble) label = 'КАМЕРЫ ПЕРЕПУТАНЫ';
+      else if (hh.evBlind) label = 'СЛЕПАЯ ЗОНА';
+      else if (hh.evBeacon) label = 'МАЯК СЛЕЖЕНИЯ';
+      else if ((hh.evBeaconBoost || 0) > 0) label = 'СЛЕЖЕНИЕ УСИЛЕНО';
+      if (label) {
+        ctx.fillStyle = 'rgba(0,0,0,0.55)';
+        ctx.fillRect(W/2 - 100, 10, 200, 20);
+        ctx.fillStyle = '#fca';
+        ctx.font = 'bold 12px Courier New';
+        ctx.textAlign = 'center';
+        ctx.fillText(label, W/2, 24);
+      }
+    }
+  } catch (eEvHud) {}
+  if (bbhHintsOn() && n7.msgT > 0 && n7.msg) {
     ctx.fillStyle = 'rgba(0,0,0,0.75)';
     ctx.fillRect(W * 0.18, H * 0.12, W * 0.64, 34);
     ctx.fillStyle = '#fa6';
@@ -40656,8 +41220,9 @@ function n7HybridClick(mx, my) {
     for (let i = 0; i < hits.length; i++) {
       const ht = hits[i];
       if (Math.hypot(mx - ht.x, my - ht.y) <= (ht.r || 14)) {
-        if (h.selectedCam !== ht.id) h.camSwitchT = 0.28;
-        h.selectedCam = Number(ht.id);
+        const _evId = (typeof n7EvMapCam === 'function') ? n7EvMapCam(Number(ht.id)) : Number(ht.id);
+        if (h.selectedCam !== _evId) h.camSwitchT = 0.28;
+        h.selectedCam = _evId;
         h.camNoise = 0.45;
         h.staticT = 0.25;
         try {
@@ -42153,6 +42718,7 @@ function handleCanvasTapOriginal(e) {
   // ===== NIGHT 4 =====
   // сложная ночь: currentNight остаётся 6, сегмент 4 = stage 3
   if (currentNight === 4 || (typeof n6StageActive === 'function' && n6StageActive(3))) {
+    if (n4EvClick(mx, my)) return;
     if (n4SystemsOpen && n4SysAnim > 0.5) {
       // починка только удержанием (pointerdown), не кликом
       return;
@@ -42168,8 +42734,9 @@ function handleCanvasTapOriginal(e) {
       for (const h of hits) {
         const dx = mx - h.x, dy = my - h.y;
         if (dx * dx + dy * dy < h.r * h.r) {
-          if (currentCam !== h.id) {
-            currentCam = h.id;
+          const _evTgt = (typeof n4EvMapCam === 'function') ? n4EvMapCam(h.id) : h.id;
+          if (currentCam !== _evTgt) {
+            currentCam = _evTgt;
             if (typeof n1SwitchBurst !== 'undefined') n1SwitchBurst = 0.08;
             if (typeof tabletNoiseFlash !== 'undefined') { tabletNoiseFlash = 0.55; tabletNoiseClosing = false; }
             SFX.camSwitch();
@@ -42183,10 +42750,13 @@ function handleCanvasTapOriginal(e) {
     if (lh && !camsOpen && !n4SystemsOpen && !n4AnyPhantomScare()) {
       const dx = mx - lh.x, dy = my - lh.y;
       if (dx * dx + dy * dy < lh.r * lh.r) {
-        if (power <= 0) { showMessage('Нет энергии'); return; }
-        if (n4Sys.light < 15) { showMessage('Свет сломан — чини в СИСТЕМАХ'); return; }
+        // при перегреве лампы разрешаем ВЫКЛЮЧИТЬ свет даже без энергии / при битой системе / блоке щитка
+        const _heatOff = !!(n4EvOn() && n4Ev && n4Ev.heat && n4HallLight);
+        if (power <= 0 && !_heatOff) { showMessage('Нет энергии'); return; }
+        if (n4Sys && n4Sys.light < 15 && !_heatOff) { showMessage('Свет сломан — чини в СИСТЕМАХ'); return; }
+        if (n4EvBlockKind('light') && !_heatOff) { showMessage(n4EvBlockMsg('Щиток: свет отключён'), 45); return; }
         if (typeof n4MogzBlockingAll === 'function' && n4MogzBlockingAll()) {
-          showMessage('Могз блокирует свет — подожди', 45);
+          showMessage(n4EvBlockMsg('Могз блокирует свет — подожди'), 45);
           return;
         }
         n4HallLight = !n4HallLight;
@@ -43046,7 +43616,7 @@ function drawN2CamFeed(cam, x, y, w, h) {
       ctx.font = 'bold 14px Courier New';
       ctx.textAlign = 'center';
       const st = enemies.zhid.strikes || 0;
-      ctx.fillText('НЕ СМОТРИ ' + (3 - zhidLookTime).toFixed(1) + 's  [' + st + '/3]', x + w / 2, y + 28);
+      if (bbhHintsOn()) ctx.fillText('НЕ СМОТРИ ' + (3 - zhidLookTime).toFixed(1) + 's  [' + st + '/3]', x + w / 2, y + 28);
     }
   }
   if (enemies.gleb && enemies.gleb.active && (enemies.gleb.cam === cam || enemies.gleb.pos === cam)) {
@@ -43493,13 +44063,13 @@ function n4GlebFloorCam(e) {
 
 /* RESTORED BASELINE FUNCTION: n4MogzBlockingAll */
 function n4MogzBlockingAll() {
-  return n4MogzBlockingCams();
+  return !!(n4Mogz && n4Mogz.active && n4Mogz.phase === 'office' && n4Mogz.seal > 0) || n4EvBlockKind('all');
 }
 
 
 /* RESTORED BASELINE FUNCTION: n4MogzBlockingCams */
 function n4MogzBlockingCams() {
-  return !!(n4Mogz && n4Mogz.active && n4Mogz.phase === 'office' && n4Mogz.seal > 0);
+  return !!(n4Mogz && n4Mogz.active && n4Mogz.phase === 'office' && n4Mogz.seal > 0) || n4EvBlockKind('cam');
 }
 
 
@@ -43507,7 +44077,7 @@ function n4MogzBlockingCams() {
 function n4Neighbors(cam) {
   const out = [];
   if (cam >= 16) {
-    for (const l of (N4_VENTS[cam].links || [])) out.push({ id: l, cost: 0.55 });
+    for (const l of (N4_VENTS[cam].links || [])) { if (n4EvBlocked(l)) continue; out.push({ id: l, cost: 0.55 }); }
     // переход вент→вент через общий линк
     for (const vid of [16, 17, 18, 19, 20]) {
       if (vid === cam) continue;
@@ -43516,7 +44086,7 @@ function n4Neighbors(cam) {
     }
     return out;
   }
-  for (const n of (N4_PATHS[cam] || [])) out.push({ id: n, cost: 1 });
+  for (const n of (N4_PATHS[cam] || [])) { if (n4EvBlocked(n)) continue; out.push({ id: n, cost: 1 }); }
   // венты, касающиеся этой камеры
   for (const vid of [16, 17, 18, 19, 20]) {
     if ((N4_VENTS[vid].links || []).includes(cam)) {
@@ -43658,6 +44228,7 @@ function n4PickFreeCam(prefer) {
 
 /* RESTORED BASELINE FUNCTION: n4StartRepairAt */
 function n4StartRepairAt(mx, my) {
+  if (n4EvHit(mx, my)) return false;
   if (typeof n4MogzBlockingAll === 'function' && n4MogzBlockingAll()) return false;
   if (!n4SystemsOpen || n4SysAnim < 0.4) return false;
   const phoneOn = (typeof isPhoneCallActive === 'function' && isPhoneCallActive());
@@ -44182,14 +44753,15 @@ function n6ForceMaxActivity(stage){
       if (typeof n3CatSpawnTimer === 'number' && n3CatSpawnTimer > 8) n3CatSpawnTimer = 4;
     } else if (stage === 3) {
       if (n4Enemy) {
-        n4Enemy.interval = 3.8;
+        // сегмент 6 ночи: чуть злее, ближе к чистой N4 на 4:00
+        n4Enemy.interval = 3.55;
         if (!(n4Enemy.cam > 0)) n4Enemy.cam = 1;
       }
-      // фантомы: умеренный старт, без вечного clamp
+      // фантомы: чуть активнее (между старым сегментом и чистой N4)
       [n4Phantom, n4Mogz, n4Taras, n4Natalya, n4Masturbek, n4Adriana, n4SipaP, n4ZhidP, n4PismiP, n4PhGleb].forEach(e => {
         if (!e) return;
-        if (typeof e.nextTry === 'number' && e.nextTry > 20) e.nextTry = 8 + Math.random() * 6;
-        if (typeof e.cd === 'number' && e.cd > 20) e.cd = 6 + Math.random() * 4;
+        if (typeof e.nextTry === 'number' && e.nextTry > 18) e.nextTry = 7 + Math.random() * 5;
+        if (typeof e.cd === 'number' && e.cd > 18) e.cd = 5 + Math.random() * 4;
       });
       if (n4John) {
         if (typeof n4John.nextTry === 'number' && n4John.nextTry > 25) n4John.nextTry = 12 + Math.random() * 6;
@@ -44565,6 +45137,1068 @@ function updateN6Controls(){ n6HideCustomControls(); n6SyncOriginalControls(); }
 
 
 /* RESTORED BASELINE FUNCTION: updateNight4 */
+// ===================================================================
+// НОЧЬ 4 — ДИРЕКТОР СОБЫТИЙ
+// Три события, которые ломают привычный ритм (не правка баланса):
+//  • ЗАВАЛ        — часть коридоров перекрыта, Глеб строит новый маршрут
+//  • ПЕРЕГРУЗКА   — щиток: сбрось автоматы строго по порядку, пока сеть не рухнула
+//  • ТЕРМИНАЛ     — аварийное решение «риск / награда»
+// Работает только в чистой Ночи 4 (не в сложной ночи и не в челленджах).
+// ===================================================================
+let n4Ev = null;
+
+function n4EvReset() {
+  n4Ev = {
+    next: 48 + Math.random() * 12,   // первое событие ≈ 0:50
+    collapse: null,                  // { cams:[..], t, max }
+    brk: null,                       // щиток
+    term: null,                      // терминал
+    reboot: 0,                       // сек слепоты после перезагрузки
+    genHum: 0,                       // сек гула генератора
+    shake: 0,
+    last: '',
+    count: { c: 0, b: 0, t: 0, v: 0, f: 0, s: 0, h: 0, k: 0, r: 0 },
+    banner: null,                    // { text, color, t }
+    sparks: 0,
+    // новые события
+    leak: null,                      // { t, rate } утечка вент — чинится в системах
+    fog: null,                       // { cams:[], t } слепые камеры
+    scramble: null,                  // { map:{}, t } камеры перепутаны на карте
+    heat: null,                      // { t, max } перегрев лампы коридора
+    fake: null,                      // { cam, t } ложный контакт (фантомная метка)
+    crate: null                      // { cam, t } поставка батарей на камере
+  };
+}
+
+function n4EvOn() {
+  // чистая N4, сегмент сложной 6-й (stage 3), челленджи на N4-геймплее
+  try {
+    if (!n4Ev) return false;
+    if (typeof isNight4Gameplay === 'function' && isNight4Gameplay()) return true;
+    return currentNight === 4;
+  } catch (e) { return !!(n4Ev && currentNight === 4); }
+}
+
+function n4EvBlocked(cam) {
+  if (!n4EvOn() || !n4Ev || !n4Ev.collapse || !n4Ev.collapse.cams) return false;
+  const c = Number(cam);
+  return n4Ev.collapse.cams.some(function(x){ return Number(x) === c; });
+}
+
+// kind: 'cam' | 'light' | 'all'
+function n4EvBlockKind(kind) {
+  if (!n4EvOn()) return false;
+  const E = n4Ev;
+  if (E.reboot > 0) return true;
+  if (kind === 'all') return false;
+  if (E.brk) {
+    const it = E.brk.items.find(i => i.kind === kind);
+    if (it && it.tripped) return true;
+  }
+  return false;
+}
+
+function n4EvBlockMsg(def) {
+  if (!n4EvOn()) return def;
+  if (n4Ev.reboot > 0) return 'Идёт перезагрузка систем — подожди';
+  if (n4EvBlockKind('cam')) return 'Щиток: камеры обесточены';
+  return def;
+}
+
+function n4EvSnd(kind) {
+  try {
+    if (kind === 'rumble') { playNoise(1.1, 0.07, 140); playTone(46, 'sawtooth', 0.9, 0.05, 30); }
+    else if (kind === 'zap') { playNoise(0.25, 0.07, 3200); playTone(900, 'square', 0.12, 0.03, 120); }
+    else if (kind === 'beep') { playTone(880, 'square', 0.08, 0.03); }
+    else if (kind === 'ok') { playTone(660, 'triangle', 0.09, 0.04); setTimeout(() => { try { playTone(990, 'triangle', 0.12, 0.04); } catch (e) {} }, 90); }
+    else if (kind === 'bad') { playTone(140, 'sawtooth', 0.3, 0.05, 70); playNoise(0.25, 0.05, 500); }
+    else if (kind === 'boot') { playTone(220, 'sine', 0.35, 0.04, 90); }
+  } catch (e) {}
+}
+
+function n4EvBanner(text, color, t) {
+  if (n4Ev) n4Ev.banner = { text, color: color || '#f66', t: t || 3.2 };
+}
+
+function n4EvCloseTablets() {
+  if (camsOpen) {
+    camsOpen = false; camAnimTarget = 0;
+    try { if (typeof triggerTabletNoise === 'function') triggerTabletNoise(true); } catch (e) {}
+    try { const c = document.getElementById('camBtn'); if (c) c.classList.remove('active'); } catch (e) {}
+  }
+  if (n4SystemsOpen) {
+    n4SystemsOpen = false;
+    try { n4StopRepair(); } catch (e) {}
+    try { const m = document.getElementById('musicBtn'); if (m) m.classList.remove('active'); } catch (e) {}
+  }
+  try { if (typeof n4UpdatePanelButtons === 'function') n4UpdatePanelButtons(); } catch (e) {}
+}
+
+// связность графа: все свободные камеры 1–15 должны доставать до CAM15
+function n4EvGraphOk() {
+  const seen = { 15: true };
+  const q = [15];
+  while (q.length) {
+    const c = q.shift();
+    for (const n of n4Neighbors(c)) {
+      if (!seen[n.id]) { seen[n.id] = true; q.push(n.id); }
+    }
+  }
+  for (let i = 1; i <= 15; i++) {
+    if (!n4EvBlocked(i) && !seen[i]) return false;
+  }
+  return true;
+}
+
+// ---------- ЗАВАЛ ----------
+function n4EvStartCollapse() {
+  const E = n4Ev;
+  const g = n4Enemy;
+  if (!g || g.atHall) return false;
+  const busy = n4OccupiedCams();
+  const pool = [];
+  for (let i = 2; i <= 14; i++) if (!busy.has(i) && i !== g.cam) pool.push(i);
+  if (pool.length < 2) return false;
+  const picks = [];
+  // 1) клетка прямо на пути Глеба — заставляет искать обход
+  try {
+    const nxt = n4NextTowardOffice(g.cam, g.recent || [], false);
+    if (nxt != null && nxt >= 2 && nxt <= 14 && pool.indexOf(nxt) !== -1) picks.push(nxt);
+  } catch (e) {}
+  // 2) вторая — случайная
+  const rest = pool.filter(c => picks.indexOf(c) === -1).sort(() => Math.random() - 0.5);
+  const dur = 30 + Math.random() * 6;
+  for (let tries = 0; tries < 20; tries++) {
+    let cand;
+    if (tries === 0) {
+      cand = picks.slice();
+      if (cand.length < 2 && rest.length) cand.push(rest[0]);
+    } else if (tries < 16) {
+      // другая пара из свободных камер
+      const sh = pool.slice().sort(() => Math.random() - 0.5);
+      cand = sh.slice(0, 2);
+    } else {
+      cand = [pool[(tries * 7) % pool.length]]; // запасной вариант — одна камера
+    }
+    E.collapse = { cams: cand, t: dur, max: dur };
+    if (n4EvGraphOk()) { E.shake = 1.1; E.count.c++; return true; }
+    E.collapse = null;
+  }
+  E.collapse = null;
+  return false;
+}
+
+// ---------- ЩИТОК ----------
+const N4_EV_BRK = [
+  { kind: 'light', label: 'СВЕТ' },
+  { kind: 'cam', label: 'КАМЕРЫ' },
+  { kind: 'vent', label: 'ВЕНТ' },
+  { kind: 'power', label: 'ПИТ' }
+];
+
+function n4EvStartBreakers() {
+  const E = n4Ev;
+  const idx = [0, 1, 2, 3].sort(() => Math.random() - 0.5).slice(0, 3);
+  const orders = [1, 2, 3].sort(() => Math.random() - 0.5);
+  E.brk = {
+    t: 14, max: 14, next: 1, total: 3, flash: 0,
+    items: N4_EV_BRK.map((b, i) => {
+      const k = idx.indexOf(i);
+      return { kind: b.kind, label: b.label, tripped: k !== -1, order: k !== -1 ? orders[k] : 0, hit: null };
+    })
+  };
+  E.shake = 0.7;
+  E.count.b++;
+  return true;
+}
+
+function n4EvBreakerFail(reason) {
+  const E = n4Ev, B = E.brk;
+  if (!B) return;
+  let dmg = [];
+  for (const it of B.items) {
+    if (!it.tripped) continue;
+    if (!n4Sys && it.kind !== 'power') continue;
+    if (it.kind === 'light') { n4Sys.light = Math.min(n4Sys.light, 22); dmg.push('свет'); }
+    else if (it.kind === 'cam') { n4Sys.camera = Math.min(n4Sys.camera, 22); dmg.push('камеры'); }
+    else if (it.kind === 'vent') { n4Sys.vent = Math.min(n4Sys.vent, 22); dmg.push('вентиляция'); }
+    else if (it.kind === 'power') { power = Math.max(0, power - 9); dmg.push('−9% энергии'); }
+  }
+  E.brk = null;
+  E.shake = 0.9;
+  n4EvSnd('bad');
+  n4EvBanner('ЗАМЫКАНИЕ — ' + dmg.join(', '), '#f55', 3.6);
+  showMessage('Замыкание! Пострадало: ' + dmg.join(', '), 80);
+}
+
+function n4EvBreakerTap(i) {
+  const E = n4Ev, B = E.brk;
+  if (!B) return;
+  const it = B.items[i];
+  if (!it || !it.tripped) return;
+  if (it.order === B.next) {
+    it.tripped = false;
+    B.next++;
+    n4EvSnd('ok');
+    if (B.next > B.total) {
+      E.brk = null;
+      n4EvBanner('СЕТЬ СТАБИЛЬНА', '#7f7', 2.4);
+      n4EvSnd('ok');
+    }
+  } else {
+    // неверный порядок — выбивает всё заново
+    for (const x of B.items) { if (x.order > 0) x.tripped = true; }
+    B.next = 1;
+    B.flash = 0.6;
+    E.shake = 0.5;
+    n4EvSnd('zap');
+    try { n4CamMotionBurst = 0.4; } catch (e) {}
+    if (bbhHintsOn()) showMessage('Не тот автомат — порядок 1 → 2 → 3', 50);
+  }
+}
+
+// ---------- ТЕРМИНАЛ ----------
+function n4EvStartTerminal() {
+  const E = n4Ev;
+  const pool = [];
+  if (power < 80) pool.push('gen');
+  try {
+    if (n4Sys && (n4Sys.camera < 85 || n4Sys.vent < 85 || n4Sys.light < 85)) pool.push('reboot');
+  } catch (e) {}
+  if (n4Enemy && !n4Enemy.atHall) pool.push('lure');
+  if (pool.length < 2) return false;
+  const picks = pool.sort(() => Math.random() - 0.5).slice(0, 2);
+  E.term = { t: 15, max: 15, opts: picks, hits: [] };
+  E.count.t++;
+  return true;
+}
+
+function n4EvOptInfo(id) {
+  if (id === 'gen') return { title: 'РЕЗЕРВНЫЙ ГЕНЕРАТОР', gain: '+28% энергии', cost: 'гул 25с — Глеб ходит быстрее' };
+  if (id === 'reboot') return { title: 'ПЕРЕЗАГРУЗКА СИСТЕМ', gain: 'камеры / вент / свет → 100%', cost: 'слепота 9с: всё выключено' };
+  return { title: 'ГЛУШИТЕЛЬ-ПРИМАНКА', gain: 'уводит Глеба прочь на 14с', cost: '−10% энергии' };
+}
+
+function n4EvChoose(id) {
+  const E = n4Ev;
+  if (!E || !E.term) return;
+  E.term = null;
+  if (id === 'gen') {
+    power = Math.min(100, power + 28);
+    E.genHum = 25;
+    n4EvSnd('boot');
+    n4EvBanner('ГЕНЕРАТОР ЗАПУЩЕН', '#fc4', 3);
+    showMessage('Генератор: +28% энергии. Глеб слышит гул…', 80);
+  } else if (id === 'reboot') {
+    n4Sys.camera = 100; n4Sys.vent = 100; n4Sys.light = 100;
+    E.reboot = 9;
+    n4EvCloseTablets();
+    n4HallLight = false;
+    n4EvSnd('boot');
+    n4EvBanner('ПЕРЕЗАГРУЗКА СИСТЕМ', '#6cf', 3);
+  } else if (id === 'lure') {
+    power = Math.max(0, power - 10);
+    // самая дальняя от офиса свободная камера пола
+    let best = 1, bestD = -1;
+    for (let c = 1; c <= 14; c++) {
+      if (n4EvBlocked(c)) continue;
+      const d = n4FloorDist(c, 15);
+      if (d < 90 && d > bestD) { bestD = d; best = c; }
+    }
+    if (n4Enemy) {
+      n4Enemy.lureCam = best;
+      n4Enemy.lureTimer = 14;
+      n4Enemy.atHall = false;
+      n4Enemy.hallTimer = 0;
+      n4Enemy.recent = [];
+    }
+    n4EvSnd('ok');
+    n4EvBanner('ПРИМАНКА БРОШЕНА — CAM ' + best, '#7cf', 3);
+  } else {
+    n4EvSnd('beep');
+  }
+  E.next = 36 + Math.random() * 12;
+}
+
+// ---------- ВЫБОР И ТИК ----------
+function n4EvStartLeak() {
+  const E = n4Ev;
+  if (E.leak) return false;
+  E.leak = { t: 22 + Math.random() * 8, rate: 2.8 + Math.random() * 1.4 };
+  E.shake = Math.max(E.shake || 0, 0.35);
+  E.count.v = (E.count.v || 0) + 1;
+  return true;
+}
+
+function n4EvStartFog() {
+  const E = n4Ev;
+  if (E.fog) return false;
+  const busy = typeof n4OccupiedCams === 'function' ? n4OccupiedCams() : new Set();
+  const pool = [];
+  for (let i = 1; i <= 15; i++) if (!busy.has(i)) pool.push(i);
+  // перемешать
+  for (let i = pool.length - 1; i > 0; i--) {
+    const j = (Math.random() * (i + 1)) | 0;
+    const t = pool[i]; pool[i] = pool[j]; pool[j] = t;
+  }
+  const n = Math.min(pool.length, 3 + ((Math.random() * 2) | 0));
+  E.fog = { cams: pool.slice(0, n), t: 16 + Math.random() * 6, max: 18 };
+  E.count.f = (E.count.f || 0) + 1;
+  return true;
+}
+
+function n4EvMapCam(id) {
+  // при «камеры перепутаны» клик по точке карты ведёт на другой CAM
+  try {
+    if (n4EvOn() && n4Ev && n4Ev.scramble && n4Ev.scramble.map) {
+      const k = Number(id);
+      const m = n4Ev.scramble.map[k];
+      if (m != null) return m;
+    }
+  } catch (e) {}
+  return id;
+}
+
+function n4EvStartScramble() {
+  const E = n4Ev;
+  if (E.scramble) return false;
+  const ids = [];
+  for (let i = 1; i <= 15; i++) ids.push(i);
+  // перестановка (не фиксированные точки)
+  for (let i = ids.length - 1; i > 0; i--) {
+    const j = (Math.random() * (i + 1)) | 0;
+    const t = ids[i]; ids[i] = ids[j]; ids[j] = t;
+  }
+  // гарантируем хоть несколько реальных сдвигов
+  const map = {};
+  let shifts = 0;
+  for (let i = 1; i <= 15; i++) {
+    map[i] = ids[i - 1];
+    if (map[i] !== i) shifts++;
+  }
+  if (shifts < 4) {
+    // форс-свап
+    map[1] = 7; map[7] = 1; map[3] = 12; map[12] = 3;
+  }
+  E.scramble = { map: map, t: 14 + Math.random() * 6, max: 16 };
+  E.count.s = (E.count.s || 0) + 1;
+  return true;
+}
+
+function n4EvStartHeat() {
+  const E = n4Ev;
+  if (E.heat) return false;
+  // если свет выключен — включаем, иначе перегрев бессмысленен
+  try {
+    if (n4Sys && n4Sys.light < 8) return false; // нечем гореть
+    if (typeof n4EvBlockKind === 'function' && n4EvBlockKind('light')) return false;
+    if (!n4HallLight) n4HallLight = true;
+  } catch (e) {}
+  E.heat = { t: 11 + Math.random() * 4, max: 12, warned: false };
+  E.count.h = (E.count.h || 0) + 1;
+  return true;
+}
+
+function n4EvStartFake() {
+  const E = n4Ev;
+  if (E.fake) return false;
+  const gCam = (n4Enemy && !n4Enemy.atHall) ? (n4Enemy.cam | 0) : 0;
+  const pool = [];
+  for (let i = 2; i <= 14; i++) if (i !== gCam) pool.push(i);
+  if (!pool.length) return false;
+  const cam = pool[(Math.random() * pool.length) | 0];
+  E.fake = { cam: cam, t: 12 + Math.random() * 6 };
+  E.count.k = (E.count.k || 0) + 1;
+  return true;
+}
+
+function n4EvStartCrate() {
+  const E = n4Ev;
+  if (E.crate) return false;
+  const gCam = (n4Enemy && !n4Enemy.atHall) ? (n4Enemy.cam | 0) : 0;
+  const pool = [];
+  for (let i = 2; i <= 14; i++) {
+    if (i === gCam) continue;
+    if (n4EvBlocked(i)) continue;
+    pool.push(i);
+  }
+  if (!pool.length) return false;
+  const cam = pool[(Math.random() * pool.length) | 0];
+  E.crate = { cam: cam, t: 28 + Math.random() * 8, taken: false };
+  E.count.r = (E.count.r || 0) + 1;
+  return true;
+}
+
+function n4EvStart() {
+  const E = n4Ev;
+  const hour = Math.floor(time / 60);
+  const ok = [];
+  if (!E.collapse && hour >= 1 && n4Enemy && !n4Enemy.atHall) ok.push('collapse');
+  if (!E.brk && !E.term && time >= 85) ok.push('brk');
+  if (!E.brk && !E.term && time >= 140 && (E.count.t || 0) < 2) ok.push('term');
+  if (!E.leak && !E.brk && time >= 70 && (E.count.v || 0) < 3) ok.push('leak');
+  if (!E.fog && time >= 55 && (E.count.f || 0) < 3) ok.push('fog');
+  if (!E.scramble && time >= 95 && (E.count.s || 0) < 2) ok.push('scramble');
+  if (!E.heat && time >= 110 && (E.count.h || 0) < 2) ok.push('heat');
+  if (!E.fake && time >= 60 && (E.count.k || 0) < 3) ok.push('fake');
+  if (!E.crate && time >= 100 && (E.count.r || 0) < 2) ok.push('crate');
+  const cand = ok.filter(k => k !== E.last);
+  const list = cand.length ? cand : ok;
+  if (!list.length) { E.next = 8; return; }
+  // терминал — реже, чтобы не превращаться в рутину
+  let kind = list[Math.floor(Math.random() * list.length)];
+  if (kind === 'term' && Math.random() < 0.35 && list.length > 1) kind = list.find(k => k !== 'term') || kind;
+  let started = false;
+  if (kind === 'collapse') {
+    started = n4EvStartCollapse();
+    if (started) {
+      n4EvSnd('rumble');
+      n4EvBanner('ЗАВАЛ', '#fa4', 3.4);
+      showMessage('ЗАВАЛ: перекрыты CAM ' + n4Ev.collapse.cams.join(' и CAM '), 90);
+    }
+  } else if (kind === 'brk') {
+    started = n4EvStartBreakers();
+    if (started) {
+      n4EvSnd('zap');
+      showMessage('Перегрузка сети!', 60);
+    }
+  } else if (kind === 'term') {
+    started = n4EvStartTerminal();
+    if (started) { n4EvSnd('beep'); setTimeout(() => n4EvSnd('beep'), 140); showMessage('Аварийный терминал активен', 70); }
+  } else if (kind === 'leak') {
+    started = n4EvStartLeak();
+    if (started) {
+      n4EvSnd('zap');
+      n4EvBanner('УТЕЧКА ВЕНТИЛЯЦИИ', '#6cf', 3.0);
+      showMessage('Утечка вентиляции — почини ВЕНТ в системах', 80);
+    }
+  } else if (kind === 'fog') {
+    started = n4EvStartFog();
+    if (started) {
+      n4EvSnd('rumble');
+      n4EvBanner('СЛЕПАЯ ЗОНА', '#a9f', 2.8);
+      const ids = (n4Ev.fog && n4Ev.fog.cams) ? n4Ev.fog.cams.join(', ') : '?';
+      showMessage('Помехи на CAM ' + ids, 70);
+    }
+  } else if (kind === 'scramble') {
+    started = n4EvStartScramble();
+    if (started) {
+      n4EvSnd('zap');
+      n4EvBanner('КАМЕРЫ ПЕРЕПУТАНЫ', '#f8a', 3.0);
+      showMessage('Карта врёт: точки ведут не на те CAM', 75);
+    }
+  } else if (kind === 'heat') {
+    started = n4EvStartHeat();
+    if (started) {
+      n4EvSnd('zap');
+      n4EvBanner('ПЕРЕГРЕВ ЛАМПЫ', '#f64', 3.0);
+      showMessage('Выключи свет в коридоре, пока лампа не сгорела', 80);
+    }
+  } else if (kind === 'fake') {
+    started = n4EvStartFake();
+    if (started) {
+      n4EvSnd('beep');
+      n4EvBanner('ЛОЖНЫЙ КОНТАКТ', '#fc6', 2.8);
+      showMessage('На CAM ' + n4Ev.fake.cam + ' ложный сигнал', 70);
+    }
+  } else if (kind === 'crate') {
+    started = n4EvStartCrate();
+    if (started) {
+      n4EvSnd('beep');
+      n4EvBanner('ПОСТАВКА', '#7f7', 2.8);
+      showMessage('Ящик с батареями на CAM ' + n4Ev.crate.cam, 75);
+    }
+  }
+  if (started) {
+    E.last = kind;
+    E.next = Math.max(26, (hour >= 3 ? 32 : 40) + Math.random() * 12);
+  } else {
+    E.next = 7 + Math.random() * 4;
+  }
+}
+
+function n4EvUpdate(dt) {
+  if (!n4EvOn() || state !== 'playing') return;
+  if (typeof isPhoneCallActive === 'function' && isPhoneCallActive()) return;
+  const E = n4Ev;
+
+  if (E.shake > 0) E.shake = Math.max(0, E.shake - dt);
+  if (E.banner) { E.banner.t -= dt; if (E.banner.t <= 0) E.banner = null; }
+  if (E.genHum > 0) E.genHum = Math.max(0, E.genHum - dt);
+
+  // перезагрузка: всё мертво
+  if (E.reboot > 0) {
+    E.reboot -= dt;
+    n4EvCloseTablets();
+    n4HallLight = false;
+    if (E.reboot <= 0) {
+      E.reboot = 0;
+      n4EvSnd('ok');
+      n4EvBanner('СИСТЕМЫ В СЕТИ', '#7f7', 2.2);
+    }
+  }
+
+  // завал
+  if (E.collapse) {
+    E.collapse.t -= dt;
+    if (E.collapse.t <= 0) {
+      E.collapse = null;
+      n4EvSnd('rumble');
+      n4EvBanner('ЗАВАЛ РАЗОБРАН', '#9c9', 2.6);
+    }
+  }
+
+  // утечка вент
+  if (E.leak) {
+    E.leak.t -= dt;
+    try {
+      if (n4Sys && typeof n4Sys.vent === 'number') n4Sys.vent = Math.max(0, n4Sys.vent - E.leak.rate * dt);
+      if (typeof power === 'number') power = Math.max(0, power - 0.35 * dt);
+    } catch (eL) {}
+    if (E.leak.t <= 0) {
+      E.leak = null;
+      n4EvBanner('УТЕЧКА СТАБИЛИЗИРОВАЛАСЬ', '#89a', 2.2);
+    }
+  }
+
+  // слепая зона
+  if (E.fog) {
+    E.fog.t -= dt;
+    if (E.fog.t <= 0) {
+      E.fog = null;
+      n4EvSnd('ok');
+      n4EvBanner('СИГНАЛ ВОССТАНОВЛЕН', '#9c9', 2.2);
+    }
+  }
+
+  // камеры перепутаны
+  if (E.scramble) {
+    E.scramble.t -= dt;
+    if (E.scramble.t <= 0) {
+      E.scramble = null;
+      n4EvSnd('ok');
+      n4EvBanner('КАРТА СИНХРОНИЗИРОВАНА', '#9c9', 2.2);
+    }
+  }
+
+  // перегрев лампы
+  if (E.heat) {
+    if (!n4HallLight) {
+      E.heat = null;
+      n4EvSnd('ok');
+      n4EvBanner('ЛАМПА ОСТЫЛА', '#9c9', 2.2);
+    } else if (n4Sys && n4Sys.light < 5) {
+      // система света мертва — не наказываем перегревом, просто гасим
+      try { n4HallLight = false; } catch (e) {}
+      E.heat = null;
+      n4EvBanner('ЛАМПА ПОТУХЛА', '#a88', 2.0);
+    } else {
+      E.heat.t -= dt;
+      if (E.heat.t <= 0) {
+        E.heat = null;
+        try {
+          n4HallLight = false;
+          if (n4Sys && typeof n4Sys.light === 'number') n4Sys.light = Math.max(0, n4Sys.light - 28);
+          if (typeof power === 'number') power = Math.max(0, power - 6);
+        } catch (eH) {}
+        E.shake = Math.max(E.shake || 0, 0.8);
+        n4EvSnd('zap');
+        n4EvBanner('ЛАМПА СГОРЕЛА', '#f44', 3.0);
+        showMessage('Перегрев: свет выбит, система света повреждена', 70);
+      } else if (!E.heat.warned && E.heat.t < 4) {
+        E.heat.warned = true;
+        n4EvBanner('ЛАМПА КРИТИЧНА', '#f84', 1.6);
+      }
+    }
+  }
+
+  // ложный контакт
+  if (E.fake) {
+    E.fake.t -= dt;
+    if (E.fake.t <= 0) E.fake = null;
+  }
+
+  // поставка батарей
+  if (E.crate) {
+    E.crate.t -= dt;
+    if (!E.crate.taken && camsOpen && Number(currentCam) === Number(E.crate.cam)) {
+      E.crate.taken = true;
+      try { power = Math.min(100, (power || 0) + 18); } catch (eC) {}
+      n4EvSnd('ok');
+      n4EvBanner('БАТАРЕИ +18%', '#7f7', 2.6);
+      showMessage('Подобрал ящик с батареями', 55);
+      E.crate = null;
+    } else if (E.crate.t <= 0) {
+      E.crate = null;
+      n4EvBanner('ПОСТАВКА УПУЩЕНА', '#a88', 2.2);
+    }
+  }
+
+  // щиток
+  if (E.brk) {
+    const B = E.brk;
+    B.t -= dt;
+    if (B.flash > 0) B.flash = Math.max(0, B.flash - dt);
+    for (const it of B.items) {
+      if (!it.tripped) continue;
+      if (it.kind === 'light') n4HallLight = false;
+      else if (it.kind === 'cam' && camsOpen) {
+        camsOpen = false; camAnimTarget = 0;
+        try { if (typeof triggerTabletNoise === 'function') triggerTabletNoise(true); } catch (e) {}
+        try { const c = document.getElementById('camBtn'); if (c) c.classList.remove('active'); } catch (e) {}
+        try { if (typeof n4UpdatePanelButtons === 'function') n4UpdatePanelButtons(); } catch (e) {}
+      }
+      else if (it.kind === 'vent') {
+        try { if (n4Sys) n4Sys.vent = Math.max(0, n4Sys.vent - 2.2 * dt); } catch (e) {}
+      }
+      else if (it.kind === 'power') power = Math.max(0, power - 1.8 * dt);
+    }
+    if (B.t <= 0) n4EvBreakerFail();
+  }
+
+  // терминал
+  if (E.term) {
+    E.term.t -= dt;
+    if (E.term.t <= 0) {
+      E.term = null;
+      n4EvSnd('beep');
+      showMessage('Терминал отключился', 50);
+      E.next = 34 + Math.random() * 10;
+    }
+  }
+
+  // планировщик — пауза на блокирующих/критичных событиях
+  if (!E.brk && !E.term && !E.heat && !n4AnyPhantomScare() && !n4MogzBlockingCams()) {
+    E.next -= dt;
+    if (E.next <= 0) n4EvStart();
+  }
+}
+
+// ---------- ВВОД ----------
+function n4EvHit(mx, my) {
+  if (!n4EvOn()) return false;
+  const E = n4Ev;
+  if (E.brk) {
+    for (const it of E.brk.items) {
+      const h = it.hit;
+      if (h && mx >= h.x && mx <= h.x + h.w && my >= h.y && my <= h.y + h.h) return true;
+    }
+  }
+  if (E.term) {
+    for (const h of E.term.hits) {
+      if (mx >= h.x && mx <= h.x + h.w && my >= h.y && my <= h.y + h.h) return true;
+    }
+  }
+  return false;
+}
+
+function n4EvClick(mx, my) {
+  if (!n4EvOn() || state !== 'playing') return false;
+  const E = n4Ev;
+  if (E.brk) {
+    for (let i = 0; i < E.brk.items.length; i++) {
+      const h = E.brk.items[i].hit;
+      if (h && mx >= h.x && mx <= h.x + h.w && my >= h.y && my <= h.y + h.h) {
+        n4EvBreakerTap(i);
+        return true;
+      }
+    }
+  }
+  if (E.term) {
+    for (const h of E.term.hits) {
+      if (mx >= h.x && mx <= h.x + h.w && my >= h.y && my <= h.y + h.h) {
+        n4EvChoose(h.id);
+        return true;
+      }
+    }
+  }
+  return false;
+}
+
+// ---------- ОТРИСОВКА ----------
+function n4EvPanel(x, y, w, h, accent) {
+  ctx.fillStyle = 'rgba(8,6,10,0.92)';
+  ctx.fillRect(x, y, w, h);
+  ctx.strokeStyle = accent;
+  ctx.lineWidth = 2;
+  ctx.strokeRect(x + 1, y + 1, w - 2, h - 2);
+}
+
+function n4EvDraw() {
+  if (!n4EvOn() || state !== 'playing') return;
+  const E = n4Ev;
+  const now = performance.now();
+  ctx.save();
+
+  // перезагрузка — затемнение
+  if (E.reboot > 0) {
+    ctx.fillStyle = 'rgba(0,4,10,0.72)';
+    ctx.fillRect(0, 0, W, H);
+    ctx.fillStyle = '#6cf';
+    ctx.font = 'bold 26px Courier New';
+    ctx.textAlign = 'center';
+    ctx.fillText('ПЕРЕЗАГРУЗКА СИСТЕМ', W / 2, H * 0.44);
+    ctx.font = '16px Courier New';
+    ctx.fillText(E.reboot.toFixed(1) + 'с', W / 2, H * 0.44 + 30);
+    const bw = 260, bx = W / 2 - bw / 2, by = H * 0.44 + 44;
+    ctx.strokeStyle = '#6cf'; ctx.strokeRect(bx, by, bw, 10);
+    ctx.fillStyle = '#6cf'; ctx.fillRect(bx + 2, by + 2, (bw - 4) * (1 - E.reboot / 9), 6);
+  }
+
+  // чип завала
+  let topY = 8;
+  if (E.collapse) {
+    const c = E.collapse;
+    const w = 330, x = W / 2 - w / 2;
+    n4EvPanel(x, topY, w, 26, '#fa4');
+    ctx.fillStyle = '#fb6';
+    ctx.font = 'bold 13px Courier New';
+    ctx.textAlign = 'center';
+    ctx.fillText(bbhHintsOn() ? ('ЗАВАЛ · CAM ' + c.cams.join(', ') + ' · ' + Math.ceil(c.t) + 'с') : ('ЗАВАЛ · ' + Math.ceil(c.t) + 'с'), W / 2, topY + 18);
+    topY += 32;
+  }
+
+  // щиток
+  if (E.brk) {
+    const B = E.brk;
+    const w = 470, h = 124, x = W / 2 - w / 2, y = topY;
+    const blink = Math.sin(now * 0.02) > 0;
+    n4EvPanel(x, y, w, h, blink ? '#f33' : '#a22');
+    ctx.fillStyle = '#f66';
+    ctx.font = 'bold 14px Courier New';
+    ctx.textAlign = 'center';
+    ctx.fillText('⚡ ПЕРЕГРУЗКА СЕТИ · ' + Math.max(0, B.t).toFixed(1) + 'с', W / 2, y + 20);
+    if (bbhHintsOn()) {
+      ctx.fillStyle = '#a99';
+      ctx.font = '11px Courier New';
+      if (bbhHintsOn()) ctx.fillText('сбрасывай автоматы по порядку 1 → 2 → 3', W / 2, y + 36);
+    }
+    const bw = 96, bh = 62, gap = 14;
+    const sx = x + (w - (bw * 4 + gap * 3)) / 2;
+    for (let i = 0; i < 4; i++) {
+      const it = B.items[i];
+      const bx = sx + i * (bw + gap), by = y + 44;
+      it.hit = { x: bx, y: by, w: bw, h: bh };
+      const trip = it.tripped;
+      ctx.fillStyle = trip ? '#3a0c0c' : '#0c2a12';
+      ctx.fillRect(bx, by, bw, bh);
+      ctx.strokeStyle = trip ? '#f44' : '#4c6';
+      ctx.lineWidth = trip ? 2.5 : 1.5;
+      ctx.strokeRect(bx, by, bw, bh);
+      // рычаг
+      ctx.fillStyle = trip ? '#c33' : '#6d6';
+      ctx.fillRect(bx + 10, trip ? by + 30 : by + 8, 14, 22);
+      ctx.fillStyle = trip ? '#fcc' : '#cfc';
+      ctx.font = 'bold 12px Courier New';
+      ctx.textAlign = 'left';
+      ctx.fillText(it.label, bx + 30, by + 22);
+      if (bbhHintsOn() && trip && it.order > 0) {
+        ctx.fillStyle = '#ffd34d';
+        ctx.font = 'bold 26px Courier New';
+        ctx.textAlign = 'right';
+        ctx.fillText(String(it.order), bx + bw - 8, by + 52);
+      } else if (bbhHintsOn() && !trip && it.order > 0) {
+        ctx.fillStyle = '#7d7';
+        ctx.font = 'bold 12px Courier New';
+        ctx.textAlign = 'right';
+        ctx.fillText('ОК', bx + bw - 8, by + 52);
+      }
+    }
+    // шкала времени
+    ctx.fillStyle = 'rgba(255,255,255,0.12)';
+    ctx.fillRect(x + 8, y + h - 10, w - 16, 4);
+    ctx.fillStyle = '#f55';
+    ctx.fillRect(x + 8, y + h - 10, (w - 16) * Math.max(0, B.t / B.max), 4);
+    if (B.flash > 0) {
+      ctx.fillStyle = 'rgba(255,60,60,' + (B.flash * 0.25).toFixed(3) + ')';
+      ctx.fillRect(0, 0, W, H);
+    }
+    topY += h + 6;
+  }
+
+  // терминал
+  if (E.term) {
+    const T = E.term;
+    const w = 340, rowH = 74, h = 70 + rowH * (T.opts.length + 1), x = 24, y = H * 0.2;
+    n4EvPanel(x, y, w, h, '#fc4');
+    ctx.fillStyle = '#fc4';
+    ctx.font = 'bold 14px Courier New';
+    ctx.textAlign = 'left';
+    ctx.fillText('▌ АВАРИЙНЫЙ ТЕРМИНАЛ · ' + Math.ceil(T.t) + 'с', x + 12, y + 22);
+    ctx.fillStyle = '#a98';
+    ctx.font = '11px Courier New';
+    if (bbhHintsOn()) ctx.fillText('Выбери одно решение. Или не рискуй.', x + 12, y + 40);
+    T.hits = [];
+    const all = T.opts.concat(['ignore']);
+    all.forEach((id, i) => {
+      const bx = x + 10, by = y + 50 + i * rowH, bw = w - 20, bh = rowH - 8;
+      T.hits.push({ id, x: bx, y: by, w: bw, h: bh });
+      ctx.fillStyle = id === 'ignore' ? '#15131a' : '#22190a';
+      ctx.fillRect(bx, by, bw, bh);
+      ctx.strokeStyle = id === 'ignore' ? '#555' : '#c93';
+      ctx.lineWidth = 1.5;
+      ctx.strokeRect(bx, by, bw, bh);
+      ctx.textAlign = 'left';
+      if (id === 'ignore') {
+        ctx.fillStyle = '#aaa';
+        ctx.font = 'bold 13px Courier New';
+        ctx.fillText('[' + (i + 1) + '] ИГНОРИРОВАТЬ', bx + 10, by + 28);
+        ctx.fillStyle = '#777';
+        ctx.font = '11px Courier New';
+        ctx.fillText('ничего не менять', bx + 10, by + 48);
+      } else {
+        const inf = n4EvOptInfo(id);
+        ctx.fillStyle = '#fd8';
+        ctx.font = 'bold 13px Courier New';
+        ctx.fillText('[' + (i + 1) + '] ' + inf.title, bx + 10, by + 20);
+        ctx.fillStyle = '#8e8';
+        ctx.font = '11px Courier New';
+        ctx.fillText('+ ' + inf.gain, bx + 10, by + 38);
+        ctx.fillStyle = '#e88';
+        ctx.fillText('− ' + inf.cost, bx + 10, by + 54);
+      }
+    });
+    ctx.fillStyle = 'rgba(255,255,255,0.12)';
+    ctx.fillRect(x + 8, y + h - 8, w - 16, 3);
+    ctx.fillStyle = '#fc4';
+    ctx.fillRect(x + 8, y + h - 8, (w - 16) * Math.max(0, T.t / T.max), 3);
+  }
+
+  // гул генератора
+  if (E.genHum > 0) {
+    ctx.fillStyle = 'rgba(255,190,60,' + (0.04 + 0.03 * Math.sin(now * 0.012)).toFixed(3) + ')';
+    ctx.fillRect(0, 0, W, H);
+    ctx.fillStyle = '#fc4';
+    ctx.font = 'bold 12px Courier New';
+    ctx.textAlign = 'right';
+    ctx.fillText('ГЕНЕРАТОР ГУДИТ · ' + Math.ceil(E.genHum) + 'с', W - 14, H - 14);
+  }
+
+  // баннер
+    // перегрев — красная кайма экрана
+  if (E.heat && n4HallLight) {
+    const p = Math.max(0, Math.min(1, 1 - E.heat.t / (E.heat.max || 12)));
+    const pulse = 0.5 + 0.5 * Math.sin((typeof time === 'number' ? time : 0) * (8 + p * 6));
+    ctx.save();
+    ctx.strokeStyle = 'rgba(255,' + (40 + (1-p)*80|0) + ',20,' + (0.35 + pulse * 0.35 + p * 0.3) + ')';
+    ctx.lineWidth = 4 + p * 6;
+    ctx.strokeRect(6, 6, W - 12, H - 12);
+    ctx.fillStyle = 'rgba(180,20,0,' + (0.04 + p * 0.12 * pulse) + ')';
+    ctx.fillRect(0, 0, W, H);
+    ctx.restore();
+  }
+  // scramble — мигающий тикер
+  if (E.scramble) {
+    ctx.save();
+    ctx.fillStyle = 'rgba(40,10,20,0.55)';
+    ctx.fillRect(W / 2 - 140, 8, 280, 22);
+    ctx.fillStyle = '#f8a';
+    ctx.font = 'bold 12px Courier New';
+    ctx.textAlign = 'center';
+    ctx.fillText('КАМЕРЫ ПЕРЕПУТАНЫ  ' + E.scramble.t.toFixed(1) + 'с', W / 2, 24);
+    ctx.restore();
+  }
+
+  if (E.banner) {
+    const b = E.banner;
+    const a = Math.min(1, b.t / 0.6, (3.6 - Math.min(3.6, b.t)) / 0.25 + 0.2);
+    ctx.globalAlpha = Math.max(0, Math.min(1, a));
+    ctx.fillStyle = b.color;
+    ctx.font = (b.text.length > 24 ? 'bold 22px' : 'bold 30px') + ' Courier New';
+    ctx.textAlign = 'center';
+    ctx.shadowColor = b.color; ctx.shadowBlur = 14;
+    ctx.fillText(b.text, W / 2, H * 0.62);
+    ctx.shadowBlur = 0;
+    ctx.globalAlpha = 1;
+  }
+
+  ctx.restore();
+}
+
+// завал на экране камеры
+function n4EvDrawCamBlocked(x, y, w, h) {
+  if (!n4EvBlocked(currentCam)) return;
+  ctx.save();
+  ctx.beginPath(); ctx.rect(x, y, w, h); ctx.clip();
+  ctx.fillStyle = 'rgba(0,0,0,0.58)';
+  ctx.fillRect(x, y, w, h);
+  // обломки (детерминированно по номеру камеры)
+  let s = currentCam * 9301 + 49297;
+  const rnd = () => { s = (s * 9301 + 49297) % 233280; return s / 233280; };
+  for (let i = 0; i < 26; i++) {
+    const bx = x + w * (0.12 + rnd() * 0.76);
+    const by = y + h * (0.40 + rnd() * 0.5);
+    const bw = 24 + rnd() * 70, bh = 12 + rnd() * 34;
+    ctx.fillStyle = 'rgb(' + (38 + (rnd() * 26) | 0) + ',' + (34 + (rnd() * 22) | 0) + ',' + (30 + (rnd() * 18) | 0) + ')';
+    ctx.beginPath();
+    ctx.moveTo(bx, by + bh);
+    ctx.lineTo(bx + bw * 0.2, by);
+    ctx.lineTo(bx + bw * 0.8, by + bh * 0.1);
+    ctx.lineTo(bx + bw, by + bh);
+    ctx.closePath();
+    ctx.fill();
+  }
+  // полосы предупреждения
+  ctx.fillStyle = 'rgba(240,170,40,0.55)';
+  for (let i = -2; i < 14; i++) {
+    const sx = x + i * 46 + ((performance.now() * 0.01) % 46);
+    ctx.beginPath();
+    ctx.moveTo(sx, y); ctx.lineTo(sx + 16, y); ctx.lineTo(sx + 16 - 12, y + 12); ctx.lineTo(sx - 12, y + 12);
+    ctx.closePath(); ctx.fill();
+  }
+  ctx.fillStyle = '#fb6';
+  ctx.font = 'bold 22px Courier New';
+  ctx.textAlign = 'center';
+  ctx.fillText('ПРОХОД ЗАВАЛЕН', x + w / 2, y + h * 0.32);
+  if (bbhHintsOn()) {
+    ctx.font = '13px Courier New';
+    ctx.fillStyle = '#c96';
+    ctx.fillText('Глеб здесь не пройдёт — он ищет обход', x + w / 2, y + h * 0.32 + 24);
+  }
+  ctx.restore();
+}
+
+function n4EvFogActive(cam) {
+  if (!n4EvOn() || !n4Ev || !n4Ev.fog || !n4Ev.fog.cams) return false;
+  const c = Number(cam);
+  return n4Ev.fog.cams.some(function(x){ return Number(x) === c; });
+}
+
+function n4EvDrawCamFog(x, y, w, h) {
+  if (!n4EvFogActive(currentCam)) return;
+  const t = (n4Ev.fog && n4Ev.fog.t) || 0;
+  const pulse = 0.5 + 0.5 * Math.sin((typeof time === 'number' ? time : 0) * 7);
+  ctx.save();
+  ctx.beginPath(); ctx.rect(x, y, w, h); ctx.clip();
+  ctx.fillStyle = 'rgba(8,10,18,' + (0.55 + pulse * 0.15) + ')';
+  ctx.fillRect(x, y, w, h);
+  for (let i = 0; i < 18; i++) {
+    const gy = y + ((i * 37 + (time || 0) * 40) % Math.max(4, h));
+    ctx.fillStyle = 'rgba(180,200,255,' + (0.04 + (i % 3) * 0.03) + ')';
+    ctx.fillRect(x, gy, w, 2);
+  }
+  ctx.fillStyle = '#9bf';
+  ctx.font = 'bold 18px Courier New';
+  ctx.textAlign = 'center';
+  ctx.fillText('НЕТ СИГНАЛА', x + w / 2, y + h * 0.48);
+  ctx.font = '12px Courier New';
+  ctx.fillStyle = '#789';
+  ctx.fillText(t.toFixed(1) + 'с', x + w / 2, y + h * 0.48 + 22);
+  ctx.restore();
+}
+
+function n4EvDrawCamFake(x, y, w, h) {
+  if (!(n4EvOn() && n4Ev && n4Ev.fake && Number(n4Ev.fake.cam) === Number(currentCam))) return;
+  const pulse = 0.5 + 0.5 * Math.sin((typeof time === 'number' ? time : 0) * 6);
+  ctx.save();
+  ctx.beginPath(); ctx.rect(x, y, w, h); ctx.clip();
+  // призрачный силуэт — ложный контакт
+  const cx = x + w * 0.5, cy = y + h * 0.55;
+  ctx.globalAlpha = 0.25 + pulse * 0.2;
+  ctx.fillStyle = '#fc6';
+  ctx.beginPath();
+  ctx.ellipse(cx, cy - 30, 18, 22, 0, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.fillRect(cx - 16, cy - 10, 32, 50);
+  ctx.globalAlpha = 0.7;
+  ctx.fillStyle = '#fd8';
+  ctx.font = 'bold 14px Courier New';
+  ctx.textAlign = 'center';
+  ctx.fillText('ЛОЖНЫЙ КОНТАКТ', cx, y + 28);
+  ctx.restore();
+}
+
+function n4EvDrawCamCrate(x, y, w, h) {
+  if (!(n4EvOn() && n4Ev && n4Ev.crate && n4Ev.crate.cam === currentCam)) return;
+  const cx = x + w * 0.72, cy = y + h * 0.72;
+  ctx.save();
+  ctx.fillStyle = '#3a2a10';
+  ctx.strokeStyle = '#8a6';
+  ctx.lineWidth = 2;
+  ctx.fillRect(cx - 28, cy - 18, 56, 36);
+  ctx.strokeRect(cx - 28, cy - 18, 56, 36);
+  ctx.fillStyle = '#cfc';
+  ctx.font = 'bold 11px Courier New';
+  ctx.textAlign = 'center';
+  ctx.fillText('БАТАРЕИ', cx, cy + 4);
+  if (bbhHintsOn()) {
+    ctx.fillStyle = '#7f7';
+    ctx.font = '10px Courier New';
+    ctx.fillText('открой камеру', cx, cy + 28);
+  }
+  ctx.restore();
+}
+
+// метка завала на карте
+function n4EvDrawMapMark(px, py) {
+  ctx.save();
+  ctx.strokeStyle = '#f63';
+  ctx.lineWidth = 2.5;
+  ctx.beginPath();
+  ctx.moveTo(px - 8, py - 8); ctx.lineTo(px + 8, py + 8);
+  ctx.moveTo(px + 8, py - 8); ctx.lineTo(px - 8, py + 8);
+  ctx.stroke();
+  ctx.setLineDash([3, 3]);
+  ctx.beginPath(); ctx.arc(px, py, 15, 0, Math.PI * 2); ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.restore();
+}
+
+function n4EvDrawCrateMark(px, py) {
+  ctx.save();
+  ctx.fillStyle = '#2a6';
+  ctx.strokeStyle = '#7f7';
+  ctx.lineWidth = 1.5;
+  ctx.fillRect(px - 7, py - 6, 14, 12);
+  ctx.strokeRect(px - 7, py - 6, 14, 12);
+  ctx.fillStyle = '#cfc';
+  ctx.font = 'bold 9px Courier New';
+  ctx.textAlign = 'center';
+  ctx.fillText('+', px, py + 3);
+  ctx.restore();
+}
+
+function n4EvDrawFakeMark(px, py) {
+  ctx.save();
+  const pulse = 0.5 + 0.5 * Math.sin((typeof time === 'number' ? time : 0) * 9);
+  ctx.strokeStyle = 'rgba(255,200,60,' + (0.45 + pulse * 0.5) + ')';
+  ctx.lineWidth = 2;
+  ctx.beginPath(); ctx.arc(px, py, 12 + pulse * 2, 0, Math.PI * 2); ctx.stroke();
+  ctx.fillStyle = 'rgba(255,180,40,' + (0.35 + pulse * 0.4) + ')';
+  ctx.beginPath(); ctx.arc(px, py, 4, 0, Math.PI * 2); ctx.fill();
+  ctx.restore();
+}
+
+function n4EvDrawScrambleMark(px, py, id) {
+  // «?» только с подсказками — иначе это чит, какая точка врёт
+  if (!bbhHintsOn()) return;
+  try {
+    if (!n4Ev.scramble || !n4Ev.scramble.map) return;
+    const k = Number(id);
+    if (Number(n4Ev.scramble.map[k]) === k) return;
+  } catch (e) { return; }
+  ctx.save();
+  ctx.fillStyle = '#f8a';
+  ctx.font = 'bold 10px Courier New';
+  ctx.textAlign = 'center';
+  ctx.fillText('?', px + 10, py - 8);
+  ctx.restore();
+}
+
+// клавиши 1–3 на терминале
+window.addEventListener('keydown', (e) => {
+  try {
+    if (!n4EvOn() || !n4Ev.term || state !== 'playing') return;
+    const k = e.key;
+    if (k >= '1' && k <= '3') {
+      const all = n4Ev.term.opts.concat(['ignore']);
+      const id = all[(k | 0) - 1];
+      if (id) { n4EvChoose(id); e.preventDefault(); }
+    }
+  } catch (err) {}
+});
+
+
 function updateNight4(dt) {
   const _phoneFreeze = (typeof isPhoneCallActive === 'function' && isPhoneCallActive());
   if (_phoneFreeze) {
@@ -44628,6 +46262,7 @@ function updateNight4(dt) {
   }
 
   const hour = Math.floor(time / 60);
+  try { n4EvUpdate(dt); } catch (eEv) { console.warn('n4Ev', eEv); }
   camAnim += (camAnimTarget - camAnim) * Math.min(1, dt * 7);
   n4SysAnim += ((n4SystemsOpen ? 1 : 0) - n4SysAnim) * Math.min(1, dt * 7);
   n4HallLightAnim += ((n4HallLight ? 1 : 0) - n4HallLightAnim) * Math.min(1, dt * 9);
@@ -44661,19 +46296,35 @@ function updateNight4(dt) {
 
   let drain = 0;
   if (n4ChargeGrace <= 0) {
+    // жёстче расход только в чистой 4 ночи; сегмент 6-й оставляет прежние цифры
+    const pureN4 = (currentNight === 4) && !(typeof n6 !== 'undefined' && n6 && (n6.stage === 3 || n6.source === 4));
     if (n4SystemsOpen) {
-      // лёгкий расход в системах (не сейф, но не грабёж)
-      drain += hour >= 3 ? 0.18 : 0.1;
-      if (n4Repairing === 'power') drain += 0.12;
-      if (n4Repairing === 'all') drain += 0.08;
+      if (pureN4) {
+        drain += hour >= 3 ? 0.24 : 0.14;
+        if (n4Repairing === 'power') drain += 0.14;
+        if (n4Repairing === 'all') drain += 0.10;
+      } else {
+        drain += hour >= 3 ? 0.20 : 0.12;
+        if (n4Repairing === 'power') drain += 0.13;
+        if (n4Repairing === 'all') drain += 0.09;
+      }
+    } else if (pureN4) {
+      if (camsOpen) drain += hour >= 3 ? 1.72 : 1.42;
+      if (n4HallLight) drain += hour >= 3 ? 1.85 : 1.52;
+      if (n4Sys.camera <= 0.5) drain += 0.38;
+      if (n4Sys.light <= 0.5) drain += 0.38;
+      if (n4Sys.vent <= 0.5) drain += 0.22;
+      if (hour >= 3) drain += 0.14;
+      if (hour >= 5) drain += 0.14;
     } else {
-      if (camsOpen) drain += hour >= 3 ? 1.5 : 1.25;
-      if (n4HallLight) drain += hour >= 3 ? 1.65 : 1.35;
-      if (n4Sys.camera <= 0.5) drain += 0.32;
-      if (n4Sys.light <= 0.5) drain += 0.32;
-      if (n4Sys.vent <= 0.5) drain += 0.18;
-      if (hour >= 3) drain += 0.1;
-      if (hour >= 5) drain += 0.1;
+      // сегмент 6-й: чуть выше старого drain, ниже чистой N4
+      if (camsOpen) drain += hour >= 3 ? 1.58 : 1.32;
+      if (n4HallLight) drain += hour >= 3 ? 1.72 : 1.42;
+      if (n4Sys.camera <= 0.5) drain += 0.34;
+      if (n4Sys.light <= 0.5) drain += 0.34;
+      if (n4Sys.vent <= 0.5) drain += 0.20;
+      if (hour >= 3) drain += 0.12;
+      if (hour >= 5) drain += 0.12;
     }
   }
 
@@ -44781,8 +46432,16 @@ function updateNight4(dt) {
       try { if (SFX.sysTick) SFX.sysTick(); } catch (e) {}
     }
     if (n4Sys[n4Repairing] >= 99.5) {
+      const _repKey = n4Repairing;
       n4Sys[n4Repairing] = 100;
       try { if (SFX.sysDone) SFX.sysDone(); } catch (e) {}
+      try {
+        if (_repKey === 'vent' && n4Ev && n4Ev.leak) {
+          n4Ev.leak = null;
+          try { n4EvSnd('ok'); } catch (e0) {}
+          try { n4EvBanner('УТЕЧКА ЗАДЕЛАНА', '#7f7', 2.4); } catch (e1) {}
+        }
+      } catch (eLeak) {}
       n4StopRepair(); // авто-отпуск → кулдаун
     }
   }
@@ -45305,11 +46964,22 @@ function updateNight4(dt) {
       e.timer += dt;
       // баланс: медленнее по полу, венты быстрее; если смотрят — чуть медленнее (прячется)
       let need = e.interval * (e.cam >= 16 ? 0.62 : 1.0);
-      if (hour < 3) need *= 1.12; // 12–3: чуть медленнее, но не расслабленно
-      else if (hour >= 5) need *= 0.72;
-      else need *= 0.84; // 3–5
-      if (typeof n6 !== 'undefined' && n6 && (currentNight === 4 || (n6 && n6.source === 4))) need *= 0.78;
+      const inN6n4 = (typeof n6 !== 'undefined' && n6 && (n6.stage === 3 || n6.source === 4));
+      if (inN6n4) {
+        // сегмент 6-й: чуть жёстче, сходится с чистой N4 около 4:00
+        if (hour < 3) need *= 1.08;
+        else if (hour >= 5) need *= 0.68;
+        else need *= 0.80; // 3–5 ≈ уровень N4 на 4:00
+        need *= 0.76;
+      } else {
+        // чистая 4 ночь — заметно злее
+        if (hour < 3) need *= 1.04;
+        else if (hour >= 5) need *= 0.66;
+        else need *= 0.78;
+        need *= (e.cam >= 16 ? 0.95 : 1.0);
+      }
       if (e.lureTimer > 0) need *= 0.65;
+      if (n4Ev && n4EvOn() && n4Ev.genHum > 0) need *= 0.78;
       if (n4Sys.vent <= 0.5) need *= 0.52;
       else if (n4Sys.vent < 25) need *= 0.75;
       if (camsOpen && currentCam === e.cam) need *= 1.12;
@@ -45542,7 +47212,7 @@ function updateNight4(dt) {
     ? Math.floor((n6.globalTime || 0) / 60)
     : hour;
   // сложная: тема с 3:00 (старт сегмента 4); обычная N4 — с 4:00
-  const glebNeed = (typeof n6 !== 'undefined' && n6 && n6.stage === 3) ? 3 : 4;
+  const glebNeed = (challengeMode && challengeMode.allActiveFromStart) ? 0 : ((typeof n6 !== 'undefined' && n6 && n6.stage === 3) ? 3 : 4);
   if (glebHour >= glebNeed && state === 'playing' && n4Enemy) {
     try {
       ensureAudio();
@@ -45575,7 +47245,7 @@ function updateNight4(dt) {
   } else if (currentNight === 4 && state === 'playing') {
     const gh2 = (typeof n6 !== 'undefined' && n6 && n6.stage === 3)
       ? Math.floor((n6.globalTime || 0) / 60) : hour;
-    const need2 = (typeof n6 !== 'undefined' && n6 && n6.stage === 3) ? 3 : 4;
+    const need2 = (challengeMode && challengeMode.allActiveFromStart) ? 0 : ((typeof n6 !== 'undefined' && n6 && n6.stage === 3) ? 3 : 4);
     if (gh2 < need2) {
       try { if (typeof stopGlebTheme === 'function') stopGlebTheme(); } catch (e) {}
     }
@@ -45862,9 +47532,9 @@ function updateNight6(dt){
   ];
   function eliteChance(){
     const c=ac(); if(!c||(c.mode!=='main'&&c.mode!=='optional')) return 0;
-    const u=(typeof n7!=='undefined'&&n7)?(n7.upgrades|0):localUpd(); if(u<=7) return 0;
-    // элиты с 8 UPD — чаще в поздних секторах
-    return Math.min(0.10,0.042 + Math.max(0,c.location-1)*0.007 + Math.max(0,u-7)*0.0014 + Math.max(0,u-20)*0.0018);
+    const u=(typeof n7!=='undefined'&&n7)?(n7.upgrades|0):localUpd(); if(u<=5) return 0;
+    // элиты с 6 UPD — чаще и раньше
+    return Math.min(0.16,0.055 + Math.max(0,c.location-1)*0.010 + Math.max(0,u-5)*0.0022 + Math.max(0,u-18)*0.0025);
   }
   function eliteRoll(){
     if(Math.random()>=eliteChance()) return null;
@@ -45950,7 +47620,7 @@ function updateNight6(dt){
     n7.infinite=false;n7.arenaLimit=0;n7.maxHp=Math.max(6,n7.maxHp||6);n7.hp=6;
     n7.bossReady=false; // не тащим классического Walk365 в кампанию
     n7._campaignChestHintUntil=0;
-    n7.diffTier=0;n7.spawnEvery=1.38;
+    n7.diffTier=0;n7.spawnEvery=1.22;
     n7.enemies=[];n7.boss=null;n7.bossShots=[];n7.shots=[];n7.drops=[];n7.chests=[];n7._slagPools=[];
     n7.msg='СЕКТОР 01 · СБОРКА';n7.msgT=2.2;
     play(n7PickBattleTrack(0),true,0.055);
@@ -45998,17 +47668,17 @@ function updateNight6(dt){
   }
   function scaleByRegion(){
     const c=ac();if(!c)return 1;const u=localUpd(),late=Math.max(0,u-8),end=Math.max(0,u-20);
-    // XP без капа уже жмёт билд — scale чуть мягче на конце
-    if(c.location===1)return 1.05+u*0.014+late*0.010+end*0.006;
-    if(c.location===2)return 1.55+u*0.020+late*0.015+end*0.009;
-    if(c.location===3)return 2.05+u*0.028+late*0.022+end*0.012;
-    if(c.location===4)return 1.85+u*0.030+late*0.022+end*0.010;
-    return 2.35+u*0.038+late*0.026+end*0.014;
+    // Чуть жёстче: HP/скорость врагов обгоняют комфортный билд
+    if(c.location===1)return 1.18+u*0.020+late*0.016+end*0.010;
+    if(c.location===2)return 1.75+u*0.028+late*0.022+end*0.014;
+    if(c.location===3)return 2.35+u*0.036+late*0.028+end*0.018;
+    if(c.location===4)return 2.10+u*0.038+late*0.028+end*0.016;
+    return 2.70+u*0.048+late*0.034+end*0.022;
   }
   function addEnemy(e){
     if(!n7||!n7.enemies)return null;
     const sc=scaleByRegion();e._uid=n7._uidSeq=(n7._uidSeq||1)+1;e._campaignRegion=ac().location;
-    e.maxHp=Math.max(1,Math.ceil((e.maxHp||e.hp||1)*sc));e.hp=e.maxHp;e.speed=(e.speed||50)*(0.98+(sc-1)*0.08);e._baseSpeed=e.speed;e.spawnT=0.55;
+    e.maxHp=Math.max(1,Math.ceil((e.maxHp||e.hp||1)*sc));e.hp=e.maxHp;e.speed=(e.speed||50)*(1.02+(sc-1)*0.11);e._baseSpeed=e.speed;e.spawnT=0.48;
     n7.enemies.push(e);return e;
   }
   function spawnUnique(kind){
@@ -46096,10 +47766,10 @@ function updateNight6(dt){
   function spawnBoss(role,data){
     const c=ac();if(!c||c.bossActive||!data)return;
     const p=spawnAtEdge(role==='giant'?48:34),u=Math.max(0,localUpd()),loc=c.location;let hp=180,r=28,speed=50,color='#e76bff';
-    if(role==='mini'){hp=148+u*10;r=24;speed=68;color=['#ffbd4a','#ff7a55','#75c9ff','#e8e8ff'][(Math.random()*4)|0];}
-    if(role==='boss'){hp=340+u*23+loc*46;r=34;speed=48;color=['#e85b5b','#f1c44f','#c679ff','#56d9ff'][(Math.random()*4)|0];}
-    if(role==='giant'){hp=1120+u*30;r=52;speed=36;color='#f35a6a';}
-    if(role==='optionalBoss'){hp=(loc===4?540:660)+u*30;r=38;speed=42;color=loc===4?'#3ddcff':'#d53b52';}
+    if(role==='mini'){hp=168+u*13;r=24;speed=72;color=['#ffbd4a','#ff7a55','#75c9ff','#e8e8ff'][(Math.random()*4)|0];}
+    if(role==='boss'){hp=390+u*28+loc*54;r=34;speed=52;color=['#e85b5b','#f1c44f','#c679ff','#56d9ff'][(Math.random()*4)|0];}
+    if(role==='giant'){hp=1280+u*38;r=52;speed=38;color='#f35a6a';}
+    if(role==='optionalBoss'){hp=(loc===4?620:760)+u*36;r=38;speed=46;color=loc===4?'#3ddcff':'#d53b52';}
     const e={x:p.x,y:p.y,hp:hp,maxHp:hp,r:r,speed:speed,type:'brute',coins:10,color:color,_campaignBoss:true,_campaignRole:role,_campaignKind:data.kind,_campaignVariant:(data.variant||0),_campaignVariantName:data.name||'',_campaignRegion:loc,_uid:(n7._uidSeq=(n7._uidSeq||1)+1),_specialT:1.4,wob:Math.random()*10,ang:0,shotT:1};
     e._baseSpeed=speed;n7.enemies.push(e);c.bossUid=e._uid;c.bossRole=role;c.bossKind=data.kind;c.bossActive=true;
     n7.msg=(role==='giant'?'БОЛЬШОЙ БОСС · ':role==='optionalBoss'?'БОСС СЕКТОРА · ':'МИНИ-БОСС · ')+data.name;n7.msgT=2.4;
@@ -46409,7 +48079,7 @@ function updateNight6(dt){
       }
       n7.maxHp=Math.max(6,n7.maxHp||6);n7.hp=Math.min(n7.maxHp,Math.max(0,n7.hp||0));
       c.uniqueSpawnCd=Math.max(0,(c.uniqueSpawnCd||0)-dt);c.unique2SpawnCd=Math.max(0,(c.unique2SpawnCd||0)-dt);c.supportSpawnCd=Math.max(0,(c.supportSpawnCd||0)-dt);c.locationT=(c.locationT||0)+dt;
-      const u=localUpd(),late=Math.max(0,u-10),veryLate=Math.max(0,u-20);n7.diffTier=Math.min(12,Math.floor((u+Math.max(0,c.location-1)*2.45+late*1.55+veryLate*1.05)*.82));n7.spawnEvery=Math.max(.30,1.58-(c.location-1)*.14-u*.024-late*.014-veryLate*.014);
+      const u=localUpd(),late=Math.max(0,u-10),veryLate=Math.max(0,u-20);n7.diffTier=Math.min(14,Math.floor((u+Math.max(0,c.location-1)*2.7+late*1.75+veryLate*1.25)*.88));n7.spawnEvery=Math.max(.26,1.42-(c.location-1)*.16-u*.030-late*.018-veryLate*.018);
       const menuFrozen=!!(n7.upgradeOpen||n7.itemOpen||n7.accOpen||n7.menuClosing||(c&&(c.mode==='choice'||c.mode==='optionalClear'||c.mode==='transition')));
       n7EnsureSectorNewEnemies(menuFrozen);
       // во время мини/босса — редкая мелочь (слабее, чем на боссе 7 ночи)
@@ -47203,8 +48873,12 @@ function updateNight6(dt){
     }
     ctx.save();
     try{
-    if(!isCampaignSpecial && (reg===4||reg===5) && e.type!=='moneybag' && e.type!=='ghostY' && e.type!=='ghostR'){n7DrawLocationReskin(e,x,y,r,t);return;}
-    if(!isCampaignSpecial) baseDrawEnemy(e);
+    if(!isCampaignSpecial && (reg===4||reg===5) && e.type!=='moneybag' && e.type!=='ghostY' && e.type!=='ghostR'){
+      n7DrawLocationReskin(e,x,y,r,t);
+      // reskin уходит в return раньше baseDrawEnemy — бар рисуем сами
+    } else if(!isCampaignSpecial) {
+      baseDrawEnemy(e);
+    }
     // region-wide reskins, without touching hitboxes/collision
     if(reg===2){ctx.strokeStyle='rgba(255,90,35,.72)';ctx.lineWidth=2;ctx.beginPath();ctx.arc(x,y,r+3+Math.sin(t*5)*1.2,0,Math.PI*2);ctx.stroke();}
     if(reg===3){ctx.strokeStyle='rgba(150,115,240,.5)';ctx.lineWidth=1.5;ctx.beginPath();ctx.arc(x,y,r+3,0,Math.PI*2);ctx.stroke();}
@@ -47334,6 +49008,22 @@ function updateNight6(dt){
       const tele = (e._specialT||0);
       if(tele>0 && tele<.75){ ctx.save(); ctx.globalAlpha=Math.min(.7,(.75-tele)/.75); ctx.strokeStyle=col; ctx.lineWidth=1.5; ctx.setLineDash([5,6]); ctx.beginPath(); ctx.arc(x,y,r+17+(0.75-tele)*24,0,Math.PI*2); ctx.stroke(); ctx.restore(); }
     }
+    // HP-бар кампании: только если baseDrawEnemy не рисовал (reskin/special)
+    // и только после урона — без постоянного второго бара
+    try {
+      const skippedBase = isCampaignSpecial || (!isCampaignSpecial && (reg===4||reg===5) && e.type!=='moneybag' && e.type!=='ghostY' && e.type!=='ghostR');
+      if (skippedBase && e.maxHp && e.maxHp > 0 && e.type !== 'moneybag' && (e.hp < e.maxHp || e._wasHit)) {
+        const by = y - r - 8;
+        ctx.save();
+        ctx.globalAlpha = 1;
+        ctx.fillStyle = 'rgba(0,0,0,0.55)';
+        ctx.fillRect(x - r, by, r * 2, 4);
+        const ratio = Math.max(0, Math.min(1, e.hp / e.maxHp));
+        ctx.fillStyle = ratio < 0.34 ? '#ff3030' : '#f44';
+        ctx.fillRect(x - r, by, r * 2 * ratio, 4);
+        ctx.restore();
+      }
+    } catch (eBar) {}
     } finally { try{ctx.restore();}catch(eR){} }
   };
 
