@@ -630,11 +630,37 @@
   button.big.bbh-hints-btn {
     position: relative;
     overflow: hidden;
-    letter-spacing: 0.06em;
+    letter-spacing: 0.02em;
     font-weight: 700;
     border-width: 2px;
-    transition: background 0.25s ease, border-color 0.25s ease, box-shadow 0.3s ease, color 0.2s ease, transform 0.1s ease;
+    white-space: nowrap;
+    line-height: 1.35;
+    min-height: 48px;
+    padding: 12px 18px !important;
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    box-sizing: border-box;
+    transform: none !important;
+    transition: background 0.25s ease, border-color 0.25s ease, box-shadow 0.3s ease, color 0.2s ease;
   }
+  .bbh-hints-btn .bbh-hints-ico {
+    display: inline-block;
+    margin-right: 0;
+    flex-shrink: 0;
+    line-height: 1;
+  }
+  #pauseScreen .bbh-hints-btn,
+  #mainMenu .bbh-hints-btn {
+    width: min(360px, 88vw);
+    max-width: 100%;
+  }
+  #pauseScreen .bbh-vol-wrap,
+  #mainMenu .bbh-vol-wrap {
+    width: min(360px, 88vw);
+  }
+
   button.big.bbh-hints-btn::before {
     content: '';
     position: absolute;
@@ -806,7 +832,23 @@
     position: relative;
     z-index: 1;
   }
-  #pauseScreen h2, #pauseScreen p, #pauseScreen button, #pauseScreen .audio-settings {
+  #pauseScreen h2, #pauseScreen p, #pauseScreen button, #pauseScreen 
+  .bbh-vol-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-width: min(360px, 88vw);
+    gap: 8px;
+  }
+  .bbh-vol-wrap > button.big {
+    width: 100%;
+  }
+  .bbh-vol-wrap .audio-settings {
+    width: 100%;
+    margin: 0 auto;
+  }
+.audio-settings {
     position: relative;
     z-index: 1;
   }
@@ -4156,6 +4198,92 @@
   #bbhClassicFrame{position:fixed;inset:0;width:100%;height:100%;border:0;display:none;opacity:0;z-index:240000;background:#000;transition:opacity .28s ease;pointer-events:none;}
   #bbhClassicFrame.bbh-active{display:block;opacity:1;pointer-events:auto;}
   #bbhClassicFrame.bbh-loading{display:block;opacity:0;pointer-events:none;}
+
+  /* Унижение 💡: каловые массы на фоне Экстра / Гембл */
+  body.bbh-hints-poop #extraScreen,
+  body.bbh-hints-poop #extraContent {
+    background-image:
+      radial-gradient(ellipse at 20% 30%, rgba(58,34,16,0.45) 0%, transparent 55%),
+      radial-gradient(ellipse at 70% 60%, rgba(42,24,8,0.5) 0%, transparent 50%),
+      radial-gradient(ellipse at 40% 90%, rgba(90,80,30,0.25) 0%, transparent 45%),
+      linear-gradient(180deg, #0a0806 0%, #12100a 40%, #1a140c 100%) !important;
+    background-size: 100% 100%, 100% 100%, 100% 100%, 100% 100%;
+    animation: bbhPoopBgShift 7s ease-in-out infinite alternate;
+  }
+  body.bbh-hints-poop #argGambleScreen,
+  body.bbh-hints-poop #extraGamble {
+    background-image:
+      radial-gradient(circle at 15% 20%, rgba(58,34,16,0.55) 0%, transparent 40%),
+      radial-gradient(circle at 85% 70%, rgba(42,24,8,0.5) 0%, transparent 45%),
+      repeating-linear-gradient(180deg, transparent 0 18px, rgba(180,170,60,0.06) 18px 22px),
+      linear-gradient(180deg, #120e0a, #1a1210) !important;
+    animation: bbhPeeDrip 4s linear infinite;
+  }
+  body.bbh-hints-poop #extraScreen::before,
+  body.bbh-hints-poop #extraGamble::before {
+    content: '';
+    pointer-events: none;
+    position: absolute; inset: 0;
+    z-index: 0;
+    background:
+      radial-gradient(ellipse 80px 50px at 25% 40%, rgba(58,34,16,0.55), transparent),
+      radial-gradient(ellipse 60px 80px at 60% 55%, rgba(42,24,8,0.5), transparent),
+      radial-gradient(ellipse 70px 40px at 80% 25%, rgba(58,34,16,0.4), transparent);
+    animation: bbhPoopFloat 5s ease-in-out infinite alternate;
+  }
+  @keyframes bbhPoopBgShift {
+    from { filter: saturate(1.1) brightness(0.95); }
+    to { filter: saturate(1.25) brightness(1.05); }
+  }
+  @keyframes bbhPeeDrip {
+    from { background-position: 0 0, 0 0, 0 0, 0 0; }
+    to { background-position: 0 0, 0 0, 0 40px, 0 0; }
+  }
+  @keyframes bbhPoopFloat {
+    from { transform: translateY(0); opacity: 0.85; }
+    to { transform: translateY(12px); opacity: 1; }
+  }
+
+  /* Кнопка «Подсказки»: одна строка, как переключатель (пауза + меню) */
+  button.big.bbh-hints-btn,
+  #pauseScreen button.big.bbh-hints-btn,
+  #mainMenu .menu-btns button.big.bbh-hints-btn {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    gap: 10px !important;
+    width: 100% !important;
+    min-width: min(260px, 80vw);
+    max-width: min(320px, 88vw) !important;
+    min-height: 52px !important;
+    padding: 10px 14px 10px 16px !important;
+    text-align: left;
+    letter-spacing: 1px;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+  #pauseScreen button.big.bbh-hints-btn { width: auto !important; min-width: min(260px, 80vw) !important; }
+  .bbh-hints-btn .bbh-hints-ico { margin: 0 !important; font-size: 1.1em; flex: 0 0 auto; }
+  .bbh-hints-btn .bbh-hints-lbl { flex: 1 1 auto; text-align: left; }
+  .bbh-hints-btn .bbh-hints-state {
+    flex: 0 0 auto;
+    min-width: 54px;
+    text-align: center;
+    padding: 3px 10px;
+    border-radius: 999px;
+    border: 1px solid currentColor;
+    font-size: 0.78em;
+    letter-spacing: 1.5px;
+    line-height: 1.3;
+    transition: background .2s ease, color .2s ease, box-shadow .2s ease;
+  }
+  button.big.bbh-hints-btn[data-on="0"] .bbh-hints-state { opacity: .75; background: rgba(0,0,0,.35); }
+  button.big.bbh-hints-btn[data-on="1"] .bbh-hints-state {
+    background: rgba(255,170,70,.22);
+    color: #ffe0a8;
+    box-shadow: 0 0 10px rgba(255,150,50,.35);
+  }
 </style>
 </head>
 <body><script>
@@ -4363,13 +4491,15 @@
     <p>Игра на паузе</p>
     <button class="big" type="button" id="pauseResumeBtn">ПРОДОЛЖИТЬ</button>
     <button class="big secondary" type="button" id="pauseFsBtn">⛶ ПОЛНЫЙ ЭКРАН</button>
+    <div class="bbh-vol-wrap">
     <button class="big secondary" type="button" onclick="toggleAudioSettings('pauseAudioSettings')">🔊 ГРОМКОСТЬ</button>
-    <button class="big bbh-hints-btn" type="button" id="bbhHintsBtnPause" data-on="0" onclick="bbhToggleHints()"><span class="bbh-hints-ico">✦</span>ПОДСКАЗКИ: ВЫКЛ</button>
     <div class="audio-settings" id="pauseAudioSettings">
       <div class="audio-setting-row"><span>Общая</span><input id="volMaster" type="range" min="0" max="100" value="100" oninput="setAudioSetting('master',this.value/100)"><output id="volMasterVal">100%</output></div>
       <div class="audio-setting-row"><span>Музыка</span><input id="volMusic" type="range" min="0" max="100" value="85" oninput="setAudioSetting('music',this.value/100)"><output id="volMusicVal">85%</output></div>
       <div class="audio-setting-row"><span>Звуки</span><input id="volSound" type="range" min="0" max="100" value="100" oninput="setAudioSetting('sound',this.value/100)"><output id="volSoundVal">100%</output></div>
     </div>
+    </div>
+    <button class="big bbh-hints-btn" type="button" id="bbhHintsBtnPause" data-on="0" onclick="bbhToggleHints()"><span class="bbh-hints-ico">✦</span><span class="bbh-hints-lbl">ПОДСКАЗКИ</span><span class="bbh-hints-state">ВЫКЛ</span></button>
     <button class="big secondary" type="button" id="pauseMenuBtn">В МЕНЮ</button>
   </div>
 
@@ -4400,12 +4530,12 @@
         <button class="big secondary" type="button" id="extraBtn" onclick="showExtraScreen()">★ ЭКСТРА</button>
         <button class="big secondary" type="button" onclick="toggleFullscreen()">⛶ ПОЛНЫЙ ЭКРАН</button>
         <button class="big secondary" type="button" onclick="toggleAudioSettings('menuAudioSettings')">🔊 ГРОМКОСТЬ</button>
-        <button class="big bbh-hints-btn" type="button" id="bbhHintsBtnMenu" data-on="0" onclick="bbhToggleHints()"><span class="bbh-hints-ico">✦</span>ПОДСКАЗКИ: ВЫКЛ</button>
         <div class="audio-settings" id="menuAudioSettings">
           <div class="audio-setting-row"><span>Общая</span><input id="volMasterMenu" type="range" min="0" max="100" value="100" oninput="setAudioSetting('master',this.value/100)"><output id="volMasterMenuVal">100%</output></div>
           <div class="audio-setting-row"><span>Музыка</span><input id="volMusicMenu" type="range" min="0" max="100" value="85" oninput="setAudioSetting('music',this.value/100)"><output id="volMusicMenuVal">85%</output></div>
           <div class="audio-setting-row"><span>Звуки</span><input id="volSoundMenu" type="range" min="0" max="100" value="100" oninput="setAudioSetting('sound',this.value/100)"><output id="volSoundMenuVal">100%</output></div>
         </div>
+        <button class="big bbh-hints-btn" type="button" id="bbhHintsBtnMenu" data-on="0" onclick="bbhToggleHints()"><span class="bbh-hints-ico">✦</span><span class="bbh-hints-lbl">ПОДСКАЗКИ</span><span class="bbh-hints-state">ВЫКЛ</span></button>
         <div class="bbh-version-switch-wrap"><button class="big secondary bbh-version-switch" type="button" onclick="bbhSwitchVersion()"><span class="bbh-lever" aria-hidden="true"></span><span>РЫЧАГ · КЛАССИКА</span></button></div>
       </div>
     </div>
@@ -5123,6 +5253,11 @@ function markChallengeWin(night, ci) {
   bbhChallenges = bbhChallenges || {};
   bbhChallenges[key] = true;
   saveProgress();
+  try {
+    if (typeof bbhHintsOn === 'function' && bbhHintsOn()) {
+      setTimeout(function(){ bbhHumDomToast('ЧЕЛЛЕНДЖ СДАН… С ПОМЕТОЙ 💡', 3000); }, 400);
+    }
+  } catch (eW) {}
   try { updateMenuStars(); } catch (e) {}
   // Полный состав после гембла → огромная ачивка «СЕДЬМАЯ НОЧЬ ОТКРЫТА»
   try {
@@ -6936,6 +7071,12 @@ function pauseGame() {
     ps.classList.remove('pause-show');
     void ps.offsetWidth;
     ps.classList.add('pause-show');
+    try {
+      bbhPauseTrollApply(true);
+      if (typeof bbhHintsOn === 'function' && bbhHintsOn()) {
+        try { bbhHumVolley({ count: 5, kinds: ['tomato','poop','pee'] }); } catch (ePv) {}
+      }
+    } catch (eP) {}
   }
   updateAudioSettingsUI();
   updatePauseBtn();
@@ -7184,10 +7325,14 @@ function pauseToMenu() {
 let menuArtCanvas = null, menuArtCtx = null, menuArtRAF = 0, menuArtStartTime = 0;
 let menuArtActive = false, menuGlitchTimer = null;
 const MENU_ART_FIGURES = [
-  { x: 0.16, y: 1.03, scale: 0.72, eye: '#ff2a3a', hue: '#170a0d', depth: 0.5,  sway: 1.0, seed: 1, glitching: false },
-  { x: 0.5,  y: 1.07, scale: 1.02, eye: '#c22', hue: '#0a0608', depth: 0.85, sway: 1.4, seed: 2, glitching: false },
-  { x: 0.84, y: 1.01, scale: 0.68, eye: '#c23bff', hue: '#120810', depth: 0.45, sway: 0.8, seed: 3, glitching: false }
+  { x: 0.16, y: 1.03, scale: 0.72, eye: '#ff2a3a', hue: '#170a0d', depth: 0.5,  sway: 1.0, seed: 1, glitching: false, act: null },
+  { x: 0.5,  y: 1.07, scale: 1.02, eye: '#c22', hue: '#0a0608', depth: 0.85, sway: 1.4, seed: 2, glitching: false, act: null },
+  { x: 0.84, y: 1.01, scale: 0.68, eye: '#c23bff', hue: '#120810', depth: 0.45, sway: 0.8, seed: 3, glitching: false, act: null }
 ];
+/* Унижение для игроков с ПОДСКАЗКИ: ВКЛ — силуэты ссут и кидают помидоры */
+let menuHumFx = [];
+let menuHumNextT = 400; // ms from menuArtStartTime — сразу начинаем ссать
+let menuHumSplat = []; // residual tomato stains on glass
 function resizeMenuArtCanvas() {
   if (!menuArtCanvas) return;
   const host = menuArtCanvas.parentElement;
@@ -7212,9 +7357,15 @@ function drawMenuArtFigure(fig, w, h, t) {
   const scale = fig.scale * (h / 620);
   const sway = Math.sin(t * 0.0006 * fig.sway + fig.seed * 7) * 4 * fig.depth;
   const jitter = fig.glitching ? (Math.random() - 0.5) * 10 : 0;
+  const act = fig.act;
+  const isPee = act && act.kind === 'pee';
+  const isThrow = act && act.kind === 'tomato';
   ctx2.save();
   ctx2.translate(cx + sway + jitter, groundY);
   ctx2.scale(scale, scale);
+  // лёгкий наклон при «действиях»
+  if (isPee) ctx2.rotate(-0.06 + Math.sin((t - (act.t0 || 0)) * 0.008) * 0.03);
+  if (isThrow) ctx2.rotate(0.08 * Math.sin(Math.min(1, (t - (act.t0 || 0)) / 400) * Math.PI));
   const baseAlpha = 0.32 + fig.depth * 0.5;
   ctx2.globalAlpha = baseAlpha * 0.45;
   ctx2.fillStyle = '#000';
@@ -7234,12 +7385,14 @@ function drawMenuArtFigure(fig, w, h, t) {
   ctx2.quadraticCurveTo(58, -120, 46, 0);
   ctx2.closePath();
   ctx2.fill();
+  // руки: при броске — замах вперёд
+  const armOut = isThrow ? 1.35 : 1;
   ctx2.beginPath();
-  ctx2.moveTo(-44, -170); ctx2.quadraticCurveTo(-78, -110, -60, -6);
+  ctx2.moveTo(-44, -170); ctx2.quadraticCurveTo(-78 * armOut, -110, -60 - (isThrow ? 20 : 0), -6);
   ctx2.lineTo(-46, -6); ctx2.quadraticCurveTo(-58, -105, -32, -160); ctx2.closePath();
   ctx2.fill();
   ctx2.beginPath();
-  ctx2.moveTo(44, -170); ctx2.quadraticCurveTo(78, -110, 60, -6);
+  ctx2.moveTo(44, -170); ctx2.quadraticCurveTo(78 * armOut, -110, 60 + (isThrow ? 28 : 0), -20);
   ctx2.lineTo(46, -6); ctx2.quadraticCurveTo(58, -105, 32, -160); ctx2.closePath();
   ctx2.fill();
   ctx2.beginPath();
@@ -7249,15 +7402,227 @@ function drawMenuArtFigure(fig, w, h, t) {
   ctx2.beginPath(); ctx2.arc(-30, -270, 8, 0, Math.PI * 2); ctx2.fill();
   ctx2.beginPath(); ctx2.arc(30, -270, 8, 0, Math.PI * 2); ctx2.fill();
   const blink = 0.55 + 0.45 * Math.abs(Math.sin(t * 0.0009 * fig.sway + fig.seed));
-  const flash = fig.glitching ? 1.7 : 1;
+  const flash = fig.glitching ? 1.7 : (isPee || isThrow ? 1.35 : 1);
   ctx2.shadowColor = fig.eye;
   ctx2.shadowBlur = 14 * flash;
   ctx2.fillStyle = fig.eye;
   ctx2.globalAlpha = Math.min(1, blink * flash * baseAlpha * 1.6);
   ctx2.beginPath(); ctx2.ellipse(-13, -260, 5.5, 4, 0, 0, Math.PI * 2); ctx2.fill();
   ctx2.beginPath(); ctx2.ellipse(13, -260, 5.5, 4, 0, 0, Math.PI * 2); ctx2.fill();
+  // злорадный «рот» при унижении
+  if (isPee || isThrow) {
+    ctx2.shadowBlur = 0;
+    ctx2.globalAlpha = baseAlpha * 0.9;
+    ctx2.strokeStyle = fig.eye;
+    ctx2.lineWidth = 2;
+    ctx2.beginPath();
+    ctx2.arc(0, -248, 10, 0.15 * Math.PI, 0.85 * Math.PI);
+    ctx2.stroke();
+  }
   ctx2.shadowBlur = 0;
+  // водолазная маска (режим подсказок)
+  try {
+    if (typeof bbhHintsPoopMode === 'function' && bbhHintsPoopMode()) {
+      ctx2.globalAlpha = Math.min(1, baseAlpha * 1.5);
+      bbhDrawEnemyDiveMask(ctx2, -258);
+    }
+  } catch (eMenuMask) {}
+  // экранные координаты «источника» для эффектов
+  fig._sx = cx + sway + jitter;
+  fig._sy = groundY;
+  fig._sc = scale;
   ctx2.restore();
+}
+function menuHumWorldFromFig(fig, lx, ly) {
+  // локальные координаты фигуры → экран menuArt
+  return { x: (fig._sx || 0) + lx * (fig._sc || 1), y: (fig._sy || 0) + ly * (fig._sc || 1) };
+}
+function menuHumClearActs() {
+  try {
+    MENU_ART_FIGURES.forEach(function(f){ f.act = null; });
+    menuHumFx = [];
+  } catch (e) {}
+}
+function menuHumSpawn(t, w, h) {
+  if (typeof bbhHintsOn !== 'function' || !bbhHintsOn()) return;
+  if (!MENU_ART_FIGURES || !MENU_ART_FIGURES.length) return;
+  const free = MENU_ART_FIGURES.filter(function(f){ return !f.act; });
+  const pool = free.length ? free : MENU_ART_FIGURES;
+  const fig = pool[(Math.random() * pool.length) | 0];
+  const roll = Math.random();
+  const kind = roll < 0.55 ? 'pee' : (roll < 0.8 ? 'tomato' : 'poop');
+  const dur = kind === 'pee' ? (1600 + Math.random() * 1400) : (900 + Math.random() * 900);
+  fig.act = { kind: kind, t0: t, t1: t + dur };
+  fig.glitching = true;
+  // иногда второй силуэт тоже плюётся
+  try {
+    if (Math.random() < 0.55) {
+      const other = MENU_ART_FIGURES.find(function(f){ return f !== fig && !f.act; });
+      if (other) {
+        other.act = { kind: Math.random() < 0.5 ? 'tomato' : 'poop', t0: t, t1: t + 1000 };
+        setTimeout(function(){ try { other.act = null; } catch(e){} }, 1100);
+      }
+    }
+  } catch (e2) {}
+  setTimeout(function(){ try { fig.glitching = false; } catch(e){} }, 280);
+  // цель — «стекло» перед игроком (центр / чуть к кнопкам)
+  const tx = w * (0.28 + Math.random() * 0.44);
+  const ty = h * (0.22 + Math.random() * 0.42);
+  if (kind === 'pee') {
+    const src = menuHumWorldFromFig(fig, 6, -40);
+    const n = 28 + ((Math.random() * 22) | 0);
+    for (let i = 0; i < n; i++) {
+      const delay = i * (28 + Math.random() * 22);
+      menuHumFx.push({
+        kind: 'pee',
+        t0: t + delay,
+        life: 0.55 + Math.random() * 0.45,
+        x0: src.x + (Math.random() - 0.5) * 10,
+        y0: src.y,
+        x1: tx + (Math.random() - 0.5) * w * 0.2,
+        y1: ty + Math.random() * h * 0.25,
+        r: 1.6 + Math.random() * 2.4
+      });
+    }
+  } else {
+    const src = menuHumWorldFromFig(fig, 55, -120);
+    const count = 2 + ((Math.random() * 3) | 0);
+    for (let i = 0; i < count; i++) {
+      menuHumFx.push({
+        kind: 'tomato',
+        t0: t + i * 120,
+        life: 0.55 + Math.random() * 0.25,
+        x0: src.x,
+        y0: src.y,
+        x1: tx + (Math.random() - 0.5) * 80,
+        y1: ty + (Math.random() - 0.5) * 60,
+        r: 7 + Math.random() * 5,
+        spin: Math.random() * Math.PI * 2
+      });
+    }
+  }
+}
+function menuHumTickDraw(t, w, h, dtApprox) {
+  const hintsOn = (typeof bbhHintsOn === 'function' && bbhHintsOn());
+  if (!hintsOn) {
+    if (menuHumFx.length || menuHumSplat.length) {
+      menuHumClearActs();
+      menuHumSplat = [];
+    }
+    MENU_ART_FIGURES.forEach(function(f){ if (f.act) f.act = null; });
+    return;
+  }
+  // планировщик
+  if (t >= menuHumNextT) {
+    menuHumSpawn(t, w, h);
+    menuHumNextT = t + 350 + Math.random() * 700;
+    // иногда сразу второй залп
+    if (Math.random() < 0.4) {
+      try { setTimeout(function(){ try { menuHumSpawn(performance.now() - (menuArtStartTime||0), w, h); } catch(e){} }, 180 + Math.random()*220); } catch(eD) {}
+    }
+  }
+  // снять акт с фигуры
+  MENU_ART_FIGURES.forEach(function(f){
+    if (f.act && t >= f.act.t1) f.act = null;
+  });
+  const ctx2 = menuArtCtx;
+  // пятна от помидоров
+  for (let i = menuHumSplat.length - 1; i >= 0; i--) {
+    const s = menuHumSplat[i];
+    s.a -= (dtApprox || 16) * 0.00012;
+    if (s.a <= 0) { menuHumSplat.splice(i, 1); continue; }
+    ctx2.save();
+    ctx2.globalAlpha = Math.min(0.55, s.a);
+    ctx2.fillStyle = s.brown ? '#3a2210' : '#8a1010';
+    ctx2.beginPath();
+    ctx2.ellipse(s.x, s.y, s.rx, s.ry, s.rot, 0, Math.PI * 2);
+    ctx2.fill();
+    ctx2.fillStyle = s.brown ? '#5a3820' : '#c22';
+    ctx2.globalAlpha = Math.min(0.35, s.a * 0.7);
+    for (let k = 0; k < 4; k++) {
+      ctx2.beginPath();
+      ctx2.arc(s.x + Math.cos(s.rot + k) * s.rx * 0.7, s.y + Math.sin(s.rot + k * 1.3) * s.ry * 0.7, 2 + (k % 2), 0, Math.PI * 2);
+      ctx2.fill();
+    }
+    ctx2.restore();
+  }
+  // активные снаряды
+  for (let i = menuHumFx.length - 1; i >= 0; i--) {
+    const p = menuHumFx[i];
+    const age = t - p.t0;
+    if (age < 0) continue;
+    const u = age / (p.life * 1000);
+    if (u >= 1) {
+      if (p.kind === 'tomato' || p.kind === 'poop') {
+        menuHumSplat.push({
+          x: p.x1, y: p.y1,
+          rx: p.r * (1.2 + Math.random() * 0.8),
+          ry: p.r * (0.7 + Math.random() * 0.6),
+          rot: Math.random() * Math.PI,
+          a: 0.85 + Math.random() * 0.3,
+          brown: p.kind === 'poop'
+        });
+        // лёгкий «удар» по UI
+        try {
+          const noise = document.getElementById('menuNoiseFX');
+          if (noise) {
+            noise.classList.add('noise-flash');
+            setTimeout(function(){ try { noise.classList.remove('noise-flash'); } catch(e){} }, 120);
+          }
+        } catch (e) {}
+      }
+      menuHumFx.splice(i, 1);
+      continue;
+    }
+    // дуга
+    const ease = u * u * (3 - 2 * u);
+    const x = p.x0 + (p.x1 - p.x0) * ease;
+    const arc = p.kind === 'pee' ? Math.sin(u * Math.PI) * (40 + p.r * 8) : Math.sin(u * Math.PI) * 70;
+    const y = p.y0 + (p.y1 - p.y0) * ease - arc * (1 - u * 0.3);
+    ctx2.save();
+    if (p.kind === 'pee') {
+      ctx2.globalAlpha = 0.35 + (1 - u) * 0.45;
+      ctx2.fillStyle = '#c8b84a';
+      ctx2.shadowColor = 'rgba(200,180,60,0.4)';
+      ctx2.shadowBlur = 4;
+      ctx2.beginPath();
+      ctx2.ellipse(x, y, p.r * (1 - u * 0.3), p.r * 1.4, 0.4, 0, Math.PI * 2);
+      ctx2.fill();
+      ctx2.globalAlpha = 0.12 * (1 - u);
+      ctx2.fillStyle = '#a09030';
+      ctx2.fillRect(x - 1, y, 2, Math.min(h - y, 30 * (1 - u)));
+    } else if (p.kind === 'poop') {
+      ctx2.translate(x, y);
+      ctx2.rotate((p.spin || 0) + u * 5);
+      const fade = u > 0.75 ? (1 - (u - 0.75) / 0.25) : 1;
+      ctx2.globalAlpha = 0.85 * fade;
+      ctx2.fillStyle = '#3a2210';
+      ctx2.beginPath(); ctx2.ellipse(0, 0, p.r * 0.95, p.r * 0.7, 0, 0, Math.PI * 2); ctx2.fill();
+      ctx2.fillStyle = '#5a3820';
+      ctx2.beginPath(); ctx2.ellipse(-p.r * 0.2, -p.r * 0.28, p.r * 0.5, p.r * 0.4, 0, 0, Math.PI * 2); ctx2.fill();
+      ctx2.fillStyle = '#2a1808';
+      ctx2.beginPath(); ctx2.ellipse(p.r * 0.15, p.r * 0.1, p.r * 0.35, p.r * 0.28, 0.3, 0, Math.PI * 2); ctx2.fill();
+    } else {
+      ctx2.translate(x, y);
+      ctx2.rotate((p.spin || 0) + u * 6);
+      ctx2.globalAlpha = 0.85;
+      ctx2.fillStyle = '#c01818';
+      ctx2.beginPath();
+      ctx2.arc(0, 0, p.r, 0, Math.PI * 2);
+      ctx2.fill();
+      ctx2.fillStyle = '#7a0c0c';
+      ctx2.beginPath();
+      ctx2.arc(-p.r * 0.25, -p.r * 0.2, p.r * 0.35, 0, Math.PI * 2);
+      ctx2.fill();
+      ctx2.strokeStyle = '#2a5a18';
+      ctx2.lineWidth = 1.5;
+      ctx2.beginPath();
+      ctx2.moveTo(0, -p.r);
+      ctx2.quadraticCurveTo(p.r * 0.4, -p.r * 1.3, p.r * 0.2, -p.r * 0.6);
+      ctx2.stroke();
+    }
+    ctx2.restore();
+  }
 }
 function drawMenuArtFrame(ts) {
   if (!menuArtActive || !menuArtCanvas || !menuArtCtx) return;
@@ -7273,6 +7638,7 @@ function drawMenuArtFrame(ts) {
   menuArtCtx.fillStyle = fog;
   menuArtCtx.fillRect(0, 0, w, h);
   try { MENU_ART_FIGURES.forEach(fig => drawMenuArtFigure(fig, w, h, t)); } catch (e) {}
+  try { menuHumTickDraw(t, w, h, 16); } catch (eHum) {}
   menuArtRAF = requestAnimationFrame(drawMenuArtFrame);
 }
 function triggerMenuGlitch() {
@@ -7336,6 +7702,10 @@ function startMenuArtBg() {
   menuArtCtx = menuArtCanvas.getContext('2d');
   menuArtActive = true;
   menuArtStartTime = 0;
+  menuHumFx = [];
+  menuHumSplat = [];
+  menuHumNextT = 1200 + Math.random() * 800;
+  try { MENU_ART_FIGURES.forEach(function(f){ f.act = null; }); } catch (e) {}
   resizeMenuArtCanvas();
   if (menuArtRAF) cancelAnimationFrame(menuArtRAF);
   menuArtRAF = requestAnimationFrame(drawMenuArtFrame);
@@ -7413,7 +7783,7 @@ function showMainMenu() {
     cont.disabled = false;
     cont.style.opacity = maxUnlockedNight < 2 ? '0.55' : '1';
     cont.textContent = maxUnlockedNight < 2
-      ? 'ПРОДОЛЖИТЬ (нет сохранения)'
+      ? 'ПРОДОЛЖИТЬ (пусто)'
       : ('ПРОДОЛЖИТЬ — Ночь ' + shown);
   }
   resetNewGameArm();
@@ -7450,9 +7820,73 @@ function showMainMenu() {
   } catch (e) {}
   fitCanvas();
   try { startMenuArtBg(); } catch (e) {}
+  try { setTimeout(bbhHumMaybeMenuToast, 600); } catch (eH) {}
+  try { bbhMenuTrollApply(); } catch (eMT) {}
+}
+
+function bbhMenuTrollApply() {
+  const on = typeof bbhHintsOn === 'function' && bbhHintsOn();
+  const map = [
+    ['newGameBtn', 'НОВАЯ ИГРА', 'НОВАЯ ИГРА (С 💡)'],
+    ['continueBtn', 'ПРОДОЛЖИТЬ', 'ПРОДОЛЖИТЬ СТЫД'],
+    ['hardNightBtn', null, '☠ СЛОЖНАЯ НОЧЬ ДЛЯ НОВИЧКОВ'],
+    ['extraBtn', null, 'ЭКСТРА 💩'],
+  ];
+  // Базовая подпись берём заново, если её поменяла игра (ночь в «Продолжить», «ЕЩЁ РАЗ = СБРОС» и т.п.)
+  const fn = {
+    newGameBtn: function(b) { return window._bbhNewGameArm ? b : 'НОВАЯ ИГРА (С 💡)'; },
+    continueBtn: function(b) { return b.replace(/^ПРОДОЛЖИТЬ/, 'ПРОДОЛЖИТЬ СТЫД'); },
+    hardNightBtn: function() { return '☠ СЛОЖНАЯ НОЧЬ ДЛЯ НОВИЧКОВ'; },
+    extraBtn: function() { return 'ЭКСТРА 💩'; }
+  };
+  map.forEach(function(row) {
+    const el = document.getElementById(row[0]);
+    if (!el) return;
+    const cur = el.textContent;
+    if (el.dataset.bbhApplied === undefined || cur !== el.dataset.bbhApplied) el.dataset.bbhLabel = cur;
+    const base = el.dataset.bbhLabel;
+    const next = on ? (fn[row[0]] ? fn[row[0]](base) : base + ' 💡') : base;
+    el.textContent = next;
+    el.dataset.bbhApplied = next;
+  });
+  // подзаголовок-тролль
+  let sub = document.getElementById('bbhMenuTrollSub');
+  if (on) {
+    if (!sub) {
+      sub = document.createElement('div');
+      sub.id = 'bbhMenuTrollSub';
+      sub.style.cssText = 'text-align:center;color:#c8a840;font:12px Courier New,monospace;opacity:0.9;margin:4px 0 10px;letter-spacing:1px;';
+      const h1 = document.querySelector('#mainMenu h1');
+      if (h1 && h1.parentNode) h1.parentNode.insertBefore(sub, h1.nextSibling);
+    }
+    const lines = [
+      'СИЛУЭТЫ УЖЕ ГОТОВЯТ ПОМИДОРЫ',
+      'РЕЖИМ УНИЖЕНИЯ АКТИВЕН',
+      'ВЫКЛЮЧИ ПОДСКАЗКИ, ЕСЛИ НЕ СТРАШНО',
+      'ЭТОТ ЗАБЕГ НЕ ЗАСЧИТАЕТСЯ В ГОРДОСТИ',
+      '💧+💩 = ТВОЁ МЕНЮ'
+    ];
+    sub.textContent = lines[(Math.random() * lines.length) | 0];
+    sub.style.display = 'block';
+  } else if (sub) {
+    sub.style.display = 'none';
+  }
+  // сразу чуть больше грязи на canvas
+  try {
+    if (on) {
+      menuHumNextT = 0;
+      if (typeof menuHumSpawn === 'function' && menuArtCanvas) {
+        const dpr = Math.min(window.devicePixelRatio || 1, 2);
+        const w = menuArtCanvas.width / dpr, h = menuArtCanvas.height / dpr;
+        menuHumSpawn(0, w, h);
+        menuHumSpawn(200, w, h);
+      }
+    }
+  } catch (e) {}
 }
 
 function showConfirm(message) {
+  try { if (typeof bbhHintsOn === 'function' && bbhHintsOn()) bbhHumToastPool(['ПОДТВЕРДИ СВОЙ СТЫД 💡','ДАЖЕ ДИАЛОГ ЗНАЕТ ПРО ПОДСКАЗКИ'], 2200); } catch (e) {}
   return new Promise((resolve) => {
     const modal = document.getElementById('confirmModal');
     const text = document.getElementById('confirmText');
@@ -7483,6 +7917,7 @@ function resetNewGameArm() {
   window._bbhNewGameArm = false;
   var b = document.getElementById('newGameBtn');
   if (b) b.textContent = 'НОВАЯ ИГРА';
+  try { bbhMenuTrollApply(); } catch (eNG) {}
 }
 
 function startNewGame() {
@@ -7497,7 +7932,7 @@ function startNewGame() {
       setTimeout(function () {
         window._bbhNewGameArm = false;
         var b2 = document.getElementById('newGameBtn');
-        if (b2 && state === 'menu') b2.textContent = 'НОВАЯ ИГРА';
+        if (b2 && state === 'menu') { b2.textContent = 'НОВАЯ ИГРА'; try { bbhMenuTrollApply(); } catch (eNG2) {} }
       }, 3500);
       return;
     }
@@ -7551,6 +7986,7 @@ function continueGame() {
 function retryNight() {
   window._bbhSkipPhoneCall = true;
   try { stopPhoneCallAudio(); phoneCall = null; setPhoneCallUi(false); } catch (e) {}
+  try { setTimeout(function(){ bbhHumToastPool(BBH_HUM_RETRY, 2800); }, 500); } catch (eR) {}
   // Для смерти именно в бою Бадихоррора не прогружаем всю Ночь 5 заново:
   // возвращаемся сразу к начальному состоянию boss battle.
   if (n5BossRetryOnly && currentNight === 5) {
@@ -8104,6 +8540,7 @@ function startN5PhaseMusic(phase) {
 function startN5Cutscene() {
   hideAllScreens();
   state = 'cutscene';
+  try { setTimeout(function(){ bbhHumToastPool(BBH_HUM_CUTSCENE, 3200); }, 1000); } catch (eCs) {}
   n5CsStep = 0;
   n5CsChoice = 0;
   n5CsLastChoice = -1;
@@ -8506,7 +8943,8 @@ function n6EndingSfx(anim){
   }catch(e){}
 }
 function startN6EndingCutscene(){
-  hideAllScreens(); state='cutscene'; n6EndingActive=true; n6EndingPhase='dialog'; n6EndingFade=0; n6EndingStep=0; n6EndingLastChoice=-1; n6EndingPulse=0; n6EndingShake=0; n6EndingZoom=0; n6EndingLeaving=false; n6EndingFlash=0; n6EndingDust=[];
+  hideAllScreens(); state='cutscene'; n6EndingActive=true;
+  try { setTimeout(function(){ bbhHumToastPool(BBH_HUM_CUTSCENE, 3000); }, 800); } catch (eN6c) {} n6EndingPhase='dialog'; n6EndingFade=0; n6EndingStep=0; n6EndingLastChoice=-1; n6EndingPulse=0; n6EndingShake=0; n6EndingZoom=0; n6EndingLeaving=false; n6EndingFlash=0; n6EndingDust=[];
   n6MoodBoss=0; n6MoodSad=0; n6MoodBlush=0; n6LampSway=0; n6Mist=null;
   try { document.getElementById('cutsceneScreen')?.classList.add('n6-ending-live'); } catch(e) {}
   if(n6EndingTypeTimer){clearInterval(n6EndingTypeTimer);n6EndingTypeTimer=null;}
@@ -9420,6 +9858,13 @@ function n5IsN6Hard() {
 function n5StartTransition() {
   if (!n5 || n5.mode !== 'office') return;
   n5.mode = 'transition';
+  try {
+    if (typeof bbhHintsOn === 'function' && bbhHintsOn()) {
+      setTimeout(function(){
+        bbhHumDomToast('СЕГМЕНТ 2: ОФИС РУШИТСЯ · 💡 ВСЁ ЕЩЁ ВКЛ', 3000);
+      }, 500);
+    }
+  } catch (eT) {}
   n5.transT = 0;
   time = 120; // таймер замирает на 2:00
   power = 100;
@@ -9446,6 +9891,14 @@ function n5StartTransition() {
 function n5EnterCorridor() {
   if (!n5) return;
   n5.mode = 'corridor';
+  try {
+    if (typeof bbhHintsOn === 'function' && bbhHintsOn()) {
+      setTimeout(function(){
+        bbhHumDomToast(BBH_HUM_CORRIDOR[(Math.random() * BBH_HUM_CORRIDOR.length) | 0], 3400);
+      }, 700);
+      if (_bbhHumN) { _bbhHumN.next = 0.5; }
+    }
+  } catch (eC) {}
   n5.transT = 1;
   time = 120; // геймплей коридора начинается ровно с 2:00
   n5.transDone = true;
@@ -9555,6 +10008,13 @@ function n5InitTetris() {
 function n5EnterTetris() {
   if (!n5) return;
   n5.mode = 'tetris';
+  try {
+    if (typeof bbhHintsOn === 'function' && bbhHintsOn()) {
+      setTimeout(function(){
+        bbhHumDomToast(BBH_HUM_TETRIS[(Math.random() * BBH_HUM_TETRIS.length) | 0], 3400);
+      }, 800);
+    }
+  } catch (eTH) {}
   n5.transT = 1;
   time = 240; // тетрис с 4:00
   try {
@@ -9583,6 +10043,14 @@ function n5EnterEnding() {
   if (!n5) return;
   if (n5.mode === 'boss' || n5.mode === 'bossGlitch' || n5.mode === 'bossDialog' || n5.mode === 'bossVictory') return;
   n5.mode = 'bossGlitch';
+  try {
+    if (typeof bbhHintsOn === 'function' && bbhHintsOn()) {
+      setTimeout(function(){
+        bbhHumDomToast(BBH_HUM_BOSS[(Math.random() * BBH_HUM_BOSS.length) | 0], 3600);
+      }, 600);
+      if (_bbhHumN) { _bbhHumN.next = 0.4; }
+    }
+  } catch (eB) {}
   n5.bossGlitchT = 0;
   n5.bossTransitionSeed = Math.random() * 1000;
   n5._bossTransCue1 = false;
@@ -10769,6 +11237,7 @@ function n5DrawBoss() {
   ctx.beginPath(); ctx.moveTo(-27,-70); ctx.lineTo(-42,-92); ctx.lineTo(-18,-78); ctx.closePath(); ctx.fill();
   ctx.beginPath(); ctx.moveTo(27,-70); ctx.lineTo(42,-92); ctx.lineTo(18,-78); ctx.closePath(); ctx.fill();
 
+  try { bbhCamMaskAt(0, -47, 0.95); } catch (eB1) {}
   // глаза
   const eyeGlow = b.hitFlash > 0 ? '#fff' : (rage > 0.7 ? '#ff9b00' : '#ff3344');
   ctx.shadowColor = eyeGlow; ctx.shadowBlur = 12;
@@ -11433,6 +11902,7 @@ function n5DrawBossGlitch() {
     ctx.strokeStyle = `rgba(255,45,65,${0.35 + reveal*0.65})`;
     ctx.lineWidth = 3;
     ctx.beginPath(); ctx.ellipse(0, 0, W*0.13, H*0.25, 0, 0, Math.PI*2); ctx.stroke();
+    try { bbhCamMaskAt(0, -H*0.02, 2.5); } catch (eG1) {}
     ctx.fillStyle = '#ff3348';
     ctx.shadowColor = '#ff2238'; ctx.shadowBlur = 18;
     ctx.fillRect(-W*0.055, -H*0.06, W*0.025, H*0.02);
@@ -11995,6 +12465,7 @@ function n5DrawTetris() {
   bg.addColorStop(1, '#040406');
   ctx.fillStyle = bg;
   ctx.fillRect(0, 0, W, H);
+  try { bbhDrawSludgeBackground(ctx, W, H); } catch (eSl) {}
   // тонкая сетка фона
   ctx.strokeStyle = 'rgba(100,120,180,0.04)';
   ctx.lineWidth = 1;
@@ -12025,6 +12496,7 @@ function n5DrawTetris() {
     ctx.fillStyle = t && t.buddyMood > 0 ? '#f44' : '#a33';
     ctx.beginPath(); ctx.arc(W * 0.13 - 9, H * 0.23, 4, 0, Math.PI * 2); ctx.fill();
     ctx.beginPath(); ctx.arc(W * 0.13 + 9, H * 0.23, 4, 0, Math.PI * 2); ctx.fill();
+    try { bbhCamMaskAt(W * 0.13, H * 0.235, 0.7); } catch (eMkTp) {}
     ctx.fillStyle = '#888';
     ctx.font = 'bold 11px Courier New';
     ctx.textAlign = 'center';
@@ -13240,6 +13712,7 @@ function n5ClickAction(kind) {
       n5.activeMask = MASK_DUR;
       n5.maskOn = true;
       n5._maskCdPending = 0.65;
+      try { if (typeof bbhHintsOn === 'function' && bbhHintsOn()) bbhHumVolley({ count: 4, kinds: ['tomato','poop'], taunt: 'МАСКА НЕ СПРЯЧЕТ 💡' }); } catch (eMk) {}
       n5.activeLeft = n5.activeRight = n5.activeVent = n5.activeLook = 0;
       n5.cd.mask = 0;
       showMessage('Маска Глеба!', 28);
@@ -13422,6 +13895,7 @@ function drawNight5() {
         ctx.fillStyle = '#050505';
         ctx.beginPath(); ctx.ellipse(0, 40, 50, 90, 0, 0, Math.PI * 2); ctx.fill();
         ctx.beginPath(); ctx.arc(0, -35, 38, 0, Math.PI * 2); ctx.fill();
+        try { bbhCamMaskAt(0, -36, 1.1); } catch (eC2) {}
         ctx.fillStyle = '#111';
         ctx.beginPath(); ctx.ellipse(-14, -38, 10, 14, 0, 0, Math.PI * 2); ctx.fill();
         ctx.beginPath(); ctx.ellipse(14, -38, 10, 14, 0, 0, Math.PI * 2); ctx.fill();
@@ -13497,6 +13971,7 @@ function drawNight5() {
         ctx.beginPath();
         ctx.arc(0, -32, 28, 0, Math.PI * 2);
         ctx.fill();
+        try { bbhCamMaskAt(0, -33, 0.85); } catch (eC3) {}
         // пустые глазницы чуть светлее тьмы — чтобы читалось
         ctx.fillStyle = '#121218';
         ctx.beginPath(); ctx.ellipse(-11, -34, 7, 10, 0, 0, Math.PI * 2); ctx.fill();
@@ -13520,6 +13995,7 @@ function drawNight5() {
       ctx.globalAlpha = a * 0.5;
       ctx.fillStyle = '#1a1a1a';
       ctx.beginPath(); ctx.arc(W / 2, H * 0.48, 40, 0, Math.PI * 2); ctx.fill();
+      try { bbhCamMaskAt(W / 2, H * 0.47, 1.1); } catch (eC4) {}
       ctx.fillStyle = '#400';
       ctx.beginPath(); ctx.arc(W / 2 - 14, H * 0.46, 5, 0, Math.PI * 2); ctx.fill();
       ctx.beginPath(); ctx.arc(W / 2 + 14, H * 0.46, 5, 0, Math.PI * 2); ctx.fill();
@@ -13564,6 +14040,7 @@ function drawNight5() {
       ctx.fillStyle = '#140808';
       ctx.beginPath(); ctx.ellipse(0, 30, 40, 70, 0, 0, Math.PI * 2); ctx.fill();
       ctx.beginPath(); ctx.arc(0, -40, 32, 0, Math.PI * 2); ctx.fill();
+      try { bbhCamMaskAt(0, -41, 0.95); } catch (eC1) {}
       ctx.fillStyle = '#f22';
       ctx.beginPath(); ctx.arc(-12, -42, 6 + near * 4, 0, Math.PI * 2); ctx.fill();
       ctx.beginPath(); ctx.arc(12, -42, 6 + near * 4, 0, Math.PI * 2); ctx.fill();
@@ -13924,6 +14401,7 @@ function drawNight5() {
       ctx.fillStyle = '#200';
       ctx.beginPath(); ctx.arc(-18, -78, 4, 0, Math.PI * 2); ctx.fill();
       ctx.beginPath(); ctx.arc(18, -78, 4, 0, Math.PI * 2); ctx.fill();
+      try { bbhCamMaskAt(0, -76, 1.45); } catch (eO1) {}
       // пасть
       ctx.strokeStyle = `rgba(180, 20, 20, ${0.4 + (1 - left) * 0.4})`;
       ctx.lineWidth = 3;
@@ -13977,6 +14455,7 @@ function drawNight5() {
       ctx.fillStyle = `rgba(255, 40, 40, ${0.55 + pulse * 0.4})`;
       ctx.beginPath(); ctx.ellipse(-fr * 0.32, -fr * 0.12, fr * 0.18, fr * 0.26, 0, 0, Math.PI * 2); ctx.fill();
       ctx.beginPath(); ctx.ellipse(fr * 0.32, -fr * 0.12, fr * 0.18, fr * 0.26, 0, 0, Math.PI * 2); ctx.fill();
+      try { bbhCamMaskAt(0, -fr * 0.1, fr / 36); } catch (eO2) {}
       // grin
       ctx.strokeStyle = `rgba(200, 40, 40, ${0.7})`;
       ctx.lineWidth = 3;
@@ -14048,6 +14527,7 @@ function drawNight5() {
       ctx.fillStyle = '#0a150a';
       ctx.beginPath(); ctx.ellipse(-18, -28, 12, 16, 0, 0, Math.PI * 2); ctx.fill();
       ctx.beginPath(); ctx.ellipse(18, -28, 12, 16, 0, 0, Math.PI * 2); ctx.fill();
+      try { bbhCamMaskAt(0, -24, 1.3); } catch (eO3) {}
       ctx.strokeStyle = '#6f6';
       ctx.lineWidth = 3;
       ctx.beginPath(); ctx.arc(0, -5, 22, 0.15, Math.PI - 0.15); ctx.stroke();
@@ -14079,6 +14559,7 @@ function drawNight5() {
       ctx.fillStyle = '#f22';
       ctx.beginPath(); ctx.arc(-12, -42, 7 + urg * 4, 0, Math.PI * 2); ctx.fill();
       ctx.beginPath(); ctx.arc(12, -42, 7 + urg * 4, 0, Math.PI * 2); ctx.fill();
+      try { bbhCamMaskAt(0, -41, 0.95); } catch (eO4) {}
     }
     ctx.restore();
   }
@@ -14250,6 +14731,7 @@ function setNightHudHidden(hidden) {
 function startNightWithPreload(night) {
   if ((night | 0) === 7 && typeof n7StartArena === 'function') {
     try { bbhHintsTrack(7); } catch (eHT7) {}
+    try { bbhHumNightReset(); } catch (eHum7) {}
     try { const go = document.getElementById('gameOverScreen'); if (go) go.style.display = 'none'; } catch (e) {}
     try { n7StartArena(false); } catch (e2) { console.error(e2); }
     return;
@@ -14468,6 +14950,7 @@ function finishPreloadAndEnter() {
     try {
       if (pendingChallenge) {
         challengeMode = Object.assign({}, pendingChallenge);
+    try { setTimeout(function(){ bbhHumToastPool(BBH_HUM_CHALLENGE, 3200); }, 900); } catch (eCh) {}
         try { window._bbhActiveChallenge = Object.assign({}, pendingChallenge); } catch (e) { window._bbhActiveChallenge = pendingChallenge; }
         pendingChallenge = null;
       } else if (window._bbhRetryKeepChallenge && window._bbhActiveChallenge) {
@@ -14649,6 +15132,18 @@ function drawPreload() {
 
 function startNight(night) {
   try { bbhHintsTrack(night); } catch (eHT) {}
+  try { bbhHumNightReset(); } catch (eHumR) {}
+  try {
+    if (typeof bbhHintsOn === 'function' && bbhHintsOn()) {
+      setTimeout(function(){
+        if ((night | 0) === 6) bbhHumToastPool(BBH_HUM_N6, 3400);
+        else bbhHumDomToast('НОЧЬ ' + night + ' · РЕЖИМ УНИЖЕНИЯ 💡', 3200);
+      }, 900);
+    }
+  } catch (eST) {}
+  try { _bbhCamPoop = { cd: 1.2 + Math.random(), fx: [], marks: [] }; } catch (ePoopR) {}
+  try { _bbhHintsUsedNight = (typeof bbhHintsOn === 'function' && bbhHintsOn()); } catch (eHU) { _bbhHintsUsedNight = false; }
+  try { const h1 = document.querySelector('#gameOverScreen h1'); if (h1) h1.textContent = 'ТЕБЯ УБИЛИ'; } catch (eH1) {}
   // N7-runtime не должен «съедать» update() на ночах 1–6:
   // ветка `if (n7) { n7Update; return; }` полностью блокирует обычную ночь.
   // startNight вызывается только для 1–6 (семёрка идёт через n7StartArena).
@@ -14671,6 +15166,7 @@ function startNight(night) {
   // _bbhActiveChallenge — копия для «ЕЩЁ РАЗ» после геймовера
   if (typeof pendingChallenge !== 'undefined' && pendingChallenge) {
     challengeMode = Object.assign({}, pendingChallenge);
+    try { setTimeout(function(){ bbhHumToastPool(BBH_HUM_CHALLENGE, 3200); }, 900); } catch (eCh) {}
     try { window._bbhActiveChallenge = Object.assign({}, pendingChallenge); } catch (e) { window._bbhActiveChallenge = pendingChallenge; }
     const lab = pendingChallenge._label;
     pendingChallenge = null;
@@ -15355,6 +15851,11 @@ if (_camBtnEl) _camBtnEl.onclick = () => {
     camsOpen = !camsOpen;
     camAnimTarget = camsOpen ? 1 : 0;
     if (typeof triggerTabletNoise === 'function') triggerTabletNoise(!camsOpen);
+    try {
+      if (camsOpen && typeof bbhHintsOn === 'function' && bbhHintsOn()) {
+        bbhHumVolley({ count: 3 + ((Math.random() * 3) | 0), kinds: ['poop', 'tomato'], taunt: 'КАМЕРЫ ОТКРЫТЫ — МИШЕНЬ ДЛЯ ГОВНА' });
+      }
+    } catch (eCamH) {}
     try { const _c=document.getElementById('camBtn'); if(_c) _c.classList.toggle('active', camsOpen); } catch(e) {}
     try { const _s=document.getElementById('cameraSelect'); if(_s) _s.style.display='none'; } catch(e) {}
     updateMobileButtons();
@@ -15621,6 +16122,12 @@ window.bbhHints = (function(){
   try { return localStorage.getItem('bbh_hints_v1') === '1'; } catch(e) { return false; }
 })();
 function bbhHintsOn(){ return !!window.bbhHints; }
+try {
+  if (document.body) document.body.classList.toggle('bbh-hints-poop', !!window.bbhHints);
+  else document.addEventListener('DOMContentLoaded', function(){
+    try { document.body.classList.toggle('bbh-hints-poop', !!window.bbhHints); } catch(e) {}
+  });
+} catch (eBootPoop) {}
 // Трекинг «прохождение без подсказок». Сайт читает bbhArg.hintsUsed из сохранения:
 //   undefined — отсчёт не начинался (старое сохранение), false — подсказки ни разу не включали,
 //   true — включали. После победы в Ночи 7 флаг замораживается.
@@ -15640,17 +16147,71 @@ function bbhSetHints(on){
   window.bbhHints = !!on;
   try { bbhHintsTrack(); } catch(e) {}
   try { localStorage.setItem('bbh_hints_v1', window.bbhHints ? '1' : '0'); } catch(e) {}
+  try { document.body.classList.toggle('bbh-hints-poop', !!window.bbhHints); } catch(ePoopCls) {}
   try { bbhSyncHintButtons(); } catch(e) {}
+  try { if (!window.bbhHints) bbhHintsRestoreUi(); else { bbhPauseTrollApply(false); bbhMenuTrollApply(); } } catch(e) {}
   // сразу снять подсветку с камер
   try {
     document.querySelectorAll('.camBtn.hasEnemy').forEach(function(b){ b.classList.remove('hasEnemy'); });
   } catch(e) {}
 }
+
+// Подпись на паузе: тролль при включённых подсказках, обычный текст при выключенных
+function bbhPauseTrollApply(fresh) {
+  try {
+    var ps = document.getElementById('pauseScreen');
+    var pp = ps && ps.querySelector('p');
+    if (!pp) return;
+    if (bbhHintsOn()) {
+      if (fresh || !pp.dataset.bbhMock) {
+        var mocks = ['Пауза не отменяет подсказки 💡','Силуэты ждут в меню','Режим унижения на паузе не кончается','Выключи 💡 — станет страшнее'];
+        pp.textContent = mocks[(Math.random() * mocks.length) | 0];
+        pp.dataset.bbhMock = '1';
+      }
+    } else {
+      pp.textContent = 'Игра на паузе';
+      delete pp.dataset.bbhMock;
+    }
+  } catch (e) {}
+}
+// Заголовок/сообщение гембла: вернуть оригинал, если подсказки выключены
+function bbhHintsRestoreGambleUi() {
+  try {
+    var t = document.querySelector('#argGambleScreen .arg-g-title');
+    if (t && t.dataset.bbhOrig) { t.textContent = t.dataset.bbhOrig; delete t.dataset.bbhOrig; }
+    document.querySelectorAll('.bbh-hum-poop').forEach(function(n){ try { n.remove(); } catch (e) {} });
+  } catch (e) {}
+}
+// Полный возврат интерфейса и игры в обычное состояние при выключении подсказок
+function bbhHintsRestoreUi() {
+  try { bbhHintsRestoreGambleUi(); } catch (e) {}
+  try {
+    var tt = document.getElementById('bbhHumToast');
+    if (tt) { clearTimeout(tt._t); tt.style.opacity = '0'; }
+  } catch (e) {}
+  try {
+    if (typeof _bbhHumN === 'object' && _bbhHumN) { _bbhHumN.fx = []; _bbhHumN.stains = []; _bbhHumN.taunt = null; _bbhHumN.tauntT = 0; }
+    if (typeof _bbhHumMode === 'object' && _bbhHumMode) _bbhHumMode.fx = [];
+    if (typeof _bbhCamPoop === 'object' && _bbhCamPoop) { _bbhCamPoop.fx = []; _bbhCamPoop.marks = []; }
+    window._bbhPendingNightTip = null;
+  } catch (e) {}
+  try {
+    var m = document.getElementById('message');
+    if (m && m.style.display !== 'none' && !bbhIsCriticalMessage(m.textContent)) {
+      m.style.display = 'none'; m.textContent = '';
+      if (typeof messageTimer !== 'undefined') messageTimer = 0;
+    }
+  } catch (e) {}
+  try { document.querySelectorAll('.camBtn.hasEnemy').forEach(function(b){ b.classList.remove('hasEnemy'); }); } catch (e) {}
+  try { bbhPauseTrollApply(false); } catch (e) {}
+  try { bbhMenuTrollApply(); } catch (e) {}
+  try { if (typeof menuHumClearActs === 'function') { menuHumClearActs(); menuHumSplat = []; } } catch (e) {}
+}
 function bbhSyncHintButtons(){
   var on = bbhHintsOn();
-  var label = on
-    ? '<span class="bbh-hints-ico">✦</span>ПОДСКАЗКИ: ВКЛ'
-    : '<span class="bbh-hints-ico">✧</span>ПОДСКАЗКИ: ВЫКЛ';
+  var label = '<span class="bbh-hints-ico">' + (on ? '✦' : '✧') + '</span>'
+    + '<span class="bbh-hints-lbl">ПОДСКАЗКИ</span>'
+    + '<span class="bbh-hints-state">' + (on ? 'ВКЛ' : 'ВЫКЛ') + '</span>';
   ['bbhHintsBtnMenu','bbhHintsBtnPause'].forEach(function(id){
     var el = document.getElementById(id);
     if(!el) return;
@@ -15694,6 +16255,25 @@ function bbhToggleHints(){
   bbhSetHints(next);
   try { bbhHintsPlayToggleSound(next); } catch(e) {}
   try { bbhHintsFlashFx(next); } catch(e) {}
+  try {
+    if (next && typeof menuArtActive !== 'undefined' && menuArtActive) {
+      menuHumNextT = 0;
+      if (menuHumSplat && menuHumSplat.length > 8) menuHumSplat = menuHumSplat.slice(-5);
+    }
+    try { bbhMenuTrollApply(); } catch (eTA) {}
+    if (!next) {
+      menuHumClearActs();
+      menuHumSplat = [];
+    }
+    if (next) {
+      _bbhHintsUsedNight = true;
+      try { if (state === 'playing') _bbhHumN.next = Math.min(_bbhHumN.next, 0.8); } catch (e2) {}
+      try {
+        if (state === 'playing') bbhHumVolley({ count: 8, kinds: ['poop','tomato','pee'], taunt: 'ПОДСКАЗКИ ВКЛ — ЗАЛП ПО СТЫДУ' });
+        else if (typeof menuArtActive !== 'undefined' && menuArtActive) menuHumNextT = 0;
+      } catch (e3) {}
+    }
+  } catch (eH) {}
 }
 try {
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', function(){ try{ bbhSyncHintButtons(); }catch(e){} });
@@ -15758,6 +16338,11 @@ function killPlayer(reason, enemyName) {
   state = 'dead';
   jumpscare = isN5BossDeath ? 'Бадихоррор_BOSS' : enemyName;
   jumpscareTimer = 0;
+  try {
+    if (typeof bbhHintsOn === 'function' && bbhHintsOn()) {
+      bbhHumVolley({ count: 12, kinds: ['poop', 'tomato', 'pee'], taunt: 'ДЖАМПСКЕЙР + ГОВНО = ТВОЙ ВЕЧЕР' });
+    }
+  } catch (eDeadH) {}
   try { spawnJumpscareBurst(enemyName === 'Глеб' ? '#7CFC7C' : '#ff3b3b'); } catch (e) {}
   messageTimer = 0;
   const msgEl = document.getElementById('message');
@@ -15804,6 +16389,12 @@ function winGame() {
   try { stopPhoneCallAudio(); phoneCall = null; setPhoneCallUi(false); } catch (e) {}
   try { if (typeof n4StopVentSiren === 'function') n4StopVentSiren(true); } catch (e) {}
   state = 'winAnim';
+  try {
+    if (typeof bbhHintsOn === 'function' && bbhHintsOn()) {
+      bbhHumVolley({ count: 10, kinds: ['tomato', 'poop', 'pee'], taunt: 'ПОБЕДА С 💡 — КОНФЕТТИ ИЗ ГОВНА' });
+      setTimeout(function(){ bbhHumVolley({ count: 8, kinds: ['tomato', 'poop'] }); }, 400);
+    }
+  } catch (eWinH) {}
   try { if (typeof stopAllGameMusic === 'function') stopAllGameMusic(); else { stopAmbientMusic(); stopGlebTheme(); stopN5PhaseMusic(); stopMusic(); } } catch (e) {}
   jumpscare = null;
   try {
@@ -15864,6 +16455,21 @@ function winGame() {
   // Сложная ночь — до 7:00, остальные — 6:00
   const wonHard = (winNight === 6) || (typeof n6 !== 'undefined' && n6 && n6.globalTime >= 400);
   text.textContent = wonHard ? '7:00 AM' : '6:00 AM';
+  try {
+    if (sub) {
+      if (_bbhHintsUsedNight || (typeof bbhHintsOn === 'function' && bbhHintsOn())) {
+        const mocks = [
+          'Выжил… с подсказками. Силуэты не впечатлены.',
+          'Рассвет близко. Гордости — нет.',
+          '6:00 AM на режиме 💡. Засчитываем с позором.',
+          'Ты выжил. Подсказки выжили вместе с тобой.'
+        ];
+        sub.textContent = mocks[(Math.random() * mocks.length) | 0];
+      } else {
+        sub.textContent = '';
+      }
+    }
+  } catch (eHumW) {}
   try { text.classList.remove('win-final'); } catch (eW0) {}
   text.style.color = '';
   text.style.transform = '';
@@ -16141,7 +16747,10 @@ function update(dt) {
     try { const _c=document.getElementById('camBtn'); if(_c) _c.classList.remove('active'); } catch(e) {}
     try { const _s=document.getElementById('cameraSelect'); if(_s) _s.style.display='none'; } catch(e) {}
     updateDoorBtn();
-    if (Math.random() < 0.006) killPlayer('Энергия кончилась...', 'power');
+    if (Math.random() < 0.006) {
+      try { if (typeof bbhHintsOn === 'function' && bbhHintsOn()) bbhHumVolley({ count: 9, kinds: ['poop','pee','tomato'], taunt: 'ЭНЕРГИЯ 0 · ГОРДОСТЬ ТОЖЕ' }); } catch (e) {}
+      killPlayer('Энергия кончилась...', 'power');
+    }
   }
 
   if (_phoneFreeze) {
@@ -18131,6 +18740,7 @@ function drawN3Cats() {
     ctx.arc(15, -9, 2.5, 0, Math.PI * 2);
     ctx.arc(22, -9, 2.5, 0, Math.PI * 2);
     ctx.fill();
+    try { ctx.globalAlpha = 0.95; bbhCamMaskAt(18, -8, 0.42); } catch (eCatM) {}
     ctx.restore();
   });
 }
@@ -18996,6 +19606,7 @@ function drawNight3Room() {
       ctx.beginPath();
       ctx.arc(cx, cy - 18, 10, 0.15, Math.PI - 0.15);
       ctx.stroke();
+      try { bbhCamMaskAt(cx, cy - 29, 0.8); } catch (eOsM) {}
       ctx.restore();
 
       // прогресс взгляда
@@ -19025,6 +19636,7 @@ function drawNight3Room() {
         ctx.beginPath();
         ctx.arc(d.x + d.w / 2, d.y + d.h * 0.28, 18, 0, Math.PI * 2);
         ctx.fill();
+        try { bbhCamMaskAt(d.x + d.w / 2, d.y + d.h * 0.28, 0.42); } catch (eM) {}
       } else if (mHeard) {
         ctx.fillStyle = 'rgba(80,40,70,0.5)';
         ctx.fillRect(d.x + 22, d.y + d.h * 0.22, d.w - 44, d.h * 0.55);
@@ -19032,6 +19644,7 @@ function drawNight3Room() {
         ctx.beginPath();
         ctx.arc(d.x + d.w / 2, d.y + d.h * 0.28, 18, 0, Math.PI * 2);
         ctx.fill();
+        try { bbhCamMaskAt(d.x + d.w / 2, d.y + d.h * 0.28, 0.42); } catch (eM) {}
       } else if (pHere) {
         // Писмилях в шкафу — зелёный, всё заметнее на 3 стадии
         const st = pismiks.stage;
@@ -19049,6 +19662,7 @@ function drawNight3Room() {
           ctx.arc(cx + 8, cy - 10, 4, 0, Math.PI * 2);
           ctx.fill();
         }
+        try { bbhCamMaskAt(cx, cy - 12, 0.4 + st * 0.05); } catch (eM) {}
         if (st >= 3 && focused) {
           // таймер до кражи энергии
           const tp = Math.min(1, pismiks.atDoorTimer / 8);
@@ -19518,6 +20132,22 @@ function drawN2Zombie(e, x, y, atDoor) {
     ctx.font = '10px Courier New';
     ctx.fillText('У ДВЕРИ!', 0, 92);
   }
+  try {
+    if (typeof bbhHintsPoopMode === 'function' && bbhHintsPoopMode()) {
+      const hy = isDubi ? -30 : (isTaras ? -34 : -28);
+      const sc = 0.42;
+      ctx.save();
+      ctx.translate(0, hy);
+      ctx.scale(sc, sc);
+      bbhDrawEnemyDiveMask(ctx, 0);
+      ctx.restore();
+      ctx.save();
+      ctx.translate(0, 14);
+      ctx.scale(sc, sc);
+      bbhDrawEnemyFart(ctx);
+      ctx.restore();
+    }
+  } catch (eZ) {}
   ctx.restore();
 }
 
@@ -19582,7 +20212,35 @@ function drawN2Figure(e, x, y, atDoor) {
   } else {
     drawN2Zombie(e, 0, 0, atDoor);
   }
+  try {
+    if (typeof bbhHintsPoopMode === 'function' && bbhHintsPoopMode()) {
+      const nm = (e && e.name) || '';
+      // Тарас/Дуби уже с маской в drawN2Zombie
+      if (nm === 'Тарас' || nm === 'Дуби') { /* skip */ }
+      else {
+        let hy = -50, sc = 0.45;
+        if (nm === 'Наталья') { hy = -62; sc = 0.42; }
+        else if (nm === 'Жид') { hy = -70; sc = 0.48; }
+        else if (nm === 'Глеб') { hy = -72; sc = 0.48; }
+        else if (nm === 'Яша') { hy = -40; sc = 0.5; }
+        else if (nm === 'Сипа') { hy = 0; sc = 0.7; }
+        else { hy = -55; sc = 0.45; }
+        ctx.save();
+        ctx.translate(0, hy);
+        ctx.scale(sc, sc);
+        bbhDrawEnemyDiveMask(ctx, 0);
+        ctx.restore();
+        ctx.save();
+        ctx.translate(0, 14);
+        ctx.scale(sc, sc);
+        bbhDrawEnemyFart(ctx);
+        ctx.restore();
+      }
+    }
+  } catch (eM2) {}
   ctx.restore();
+  try { if (camsOpen) bbhCamPoopMark(x, y, (e && e.name) || 'N2'); } catch (eN2P) {}
+
 }
 
 
@@ -20464,6 +21122,7 @@ function n4DrawPhantomFuzkut(x, y, w, h, mode) {
   ctx.fillStyle = '#e8c020';
   ctx.fillRect(-95 - (mode === 'scare' ? scareT * 15 : 0), -10, 40, 70);
   ctx.fillRect(55 + (mode === 'scare' ? scareT * 15 : 0), -10, 40, 70);
+  try { if (bbhHintsPoopMode()) { ctx.save(); ctx.translate(0, -85); ctx.scale(1.5, 1.5); bbhDrawEnemyDiveMask(ctx, 0); ctx.restore(); } } catch (eMaskPh) {}
   ctx.restore();
 
   // static / помехи
@@ -20546,6 +21205,7 @@ function n4DrawJohnScare() {
   ctx.fillStyle = '#000';
   ctx.beginPath(); ctx.arc(-12, -52, 2, 0, Math.PI * 2); ctx.fill();
   ctx.beginPath(); ctx.arc(12, -52, 2, 0, Math.PI * 2); ctx.fill();
+  try { bbhCamMaskAt(0, -50, 1.05); } catch (eMkJ) {}
   ctx.setTransform(1, 0, 0, 1, 0, 0);
   ctx.fillStyle = '#9bf';
   ctx.font = 'bold 22px Courier New';
@@ -20589,6 +21249,7 @@ function n4DrawTarasScare() {
   ctx.ellipse(W / 2, H * 0.55, 70 + t * 40, 90 + t * 50, 0, 0, Math.PI * 2);
   ctx.fill();
   ctx.globalAlpha = 1;
+  try { ctx.save(); ctx.globalAlpha = 0.8; bbhCamMaskAt(W / 2, ey - 2, (spread + er * 1.7) / 34); ctx.restore(); } catch (eMkT) {}
   ctx.fillStyle = '#8f8';
   ctx.font = 'bold 24px Courier New';
   ctx.textAlign = 'center';
@@ -20622,6 +21283,7 @@ function n4DrawNatalyaScare() {
   ctx.fillStyle = '#000';
   ctx.beginPath(); ctx.arc(-12, -50, 2, 0, Math.PI * 2); ctx.fill();
   ctx.beginPath(); ctx.arc(12, -50, 2, 0, Math.PI * 2); ctx.fill();
+  try { bbhCamMaskAt(0, -48, 1.0); } catch (eMkN) {}
   ctx.setTransform(1, 0, 0, 1, 0, 0);
   ctx.fillStyle = '#f8a';
   ctx.font = 'bold 22px Courier New';
@@ -20657,6 +21319,7 @@ function n4DrawExtraScare() {
   ctx.fillStyle = '#000';
   ctx.beginPath(); ctx.arc(-14, -54, 2.5, 0, Math.PI * 2); ctx.fill();
   ctx.beginPath(); ctx.arc(14, -54, 2.5, 0, Math.PI * 2); ctx.fill();
+  try { bbhCamMaskAt(0, -52, 1.1); } catch (eMkE) {}
   ctx.setTransform(1, 0, 0, 1, 0, 0);
   ctx.globalAlpha = 0.2 + t * 0.25;
   for (let i = 0; i < 5; i++) {
@@ -20710,6 +21373,7 @@ function n4DrawPhantomMogz(x, y, w, h, mode) {
     ctx.fillStyle = `rgba(255, 60, 120, ${0.5 + lookT * 0.5 * pulse})`;
     ctx.beginPath(); ctx.arc(cx - s * 0.12, cy - s * 0.18, s * 0.06, 0, Math.PI * 2); ctx.fill();
     ctx.beginPath(); ctx.arc(cx + s * 0.12, cy - s * 0.18, s * 0.06, 0, Math.PI * 2); ctx.fill();
+    try { bbhCamMaskAt(cx, cy - s * 0.15, s * 0.0105); } catch (eMaskMg) {}
     // нити
     ctx.strokeStyle = `rgba(200, 180, 220, ${0.25 + lookT * 0.35})`;
     ctx.lineWidth = 1;
@@ -20741,6 +21405,7 @@ function n4DrawPhantomMogz(x, y, w, h, mode) {
     ctx.fillStyle = `rgba(255, 40, 100, ${0.6 + pulse * 0.4})`;
     ctx.beginPath(); ctx.arc(cx - s * 0.12, cy - s * 0.15, s * 0.07, 0, Math.PI * 2); ctx.fill();
     ctx.beginPath(); ctx.arc(cx + s * 0.12, cy - s * 0.15, s * 0.07, 0, Math.PI * 2); ctx.fill();
+    try { bbhCamMaskAt(cx, cy - s * 0.1, s * 0.0115); } catch (eMaskMg2) {}
     ctx.fillStyle = 'rgba(200, 120, 255, 0.85)';
     ctx.font = 'bold 16px Courier New';
     ctx.textAlign = 'center';
@@ -21149,6 +21814,7 @@ function drawNight4CamTablet() {
         ctx.fillStyle = p.c;
         ctx.beginPath(); ctx.arc(sx - 8, sy - 30, 4, 0, Math.PI * 2); ctx.fill();
         ctx.beginPath(); ctx.arc(sx + 8, sy - 30, 4, 0, Math.PI * 2); ctx.fill();
+        try { bbhCamMaskAt(sx, sy - 28, 0.48); } catch (ePh) {}
         ctx.restore();
         ctx.fillStyle = 'rgba(0,0,0,0.6)';
         ctx.fillRect(camX + 8, camY + 8 + i * 26, camW - 16, 22);
@@ -21721,6 +22387,771 @@ function drawLivingScenePass() {
   ctx.restore();
 }
 
+// ===== Унижение в ночах при ПОДСКАЗКИ: ВКЛ =====
+let _bbhHumN = { next: 4, fx: [], stains: [], taunt: null, tauntT: 0, laughCd: 0 };
+const BBH_HUM_TAUNTS = [
+  'С ПОДСКАЗКАМИ СМЕШНЕЕ, ДА?',
+  'РЕАЛ ФНАФЕРЫ ТАК НЕ ИГРАЮТ',
+  'КАРТА ПОДСВЕЧЕНА — ГОРДИСЬ',
+  'МЫ ВИДИМ, ЧТО ТЫ ЧИТИШЬ СОВЕТАМИ',
+  'НОЧЬ НА ЛЁГКОМ РЕЖИМЕ УНИЖЕНИЯ',
+  'СИЛУЭТЫ УЖЕ ПОССАЛИ В МЕНЮ. ТЕПЕРЬ ТУТ',
+  'ПОДСКАЗКА: ТЫ СЛАБАК',
+  'ВЫКЛЮЧИ ПОДСКАЗКИ, ЕСЛИ НЕ СТРАШНО',
+  'ОНИ ПОДМИГИВАЮТ ТЕБЕ ИЗ ТЕМНОТЫ',
+  'ЭТОТ ЗАБЕГ НЕ ЗАСЧИТАЕТСЯ В ГОРДОСТИ',
+  'ПОМИДОР ЗА ВКЛЮЧЁННЫЙ 💡',
+  'СМОТРИ КАКУЮ КАМЕРУ ПОДСВЕТИЛИ… НОВИЧОК',
+  'FNAF WIKI У ТЕБЯ В ГОЛОВЕ?',
+  'ДАЖЕ ОФИС СМЕЁТСЯ',
+  'ЭНЕРГИЯ ЕСТЬ — ЯЙЦА НЕТ',
+  'КАМЕРА №«ПОДСКАЗКА» ВКЛЮЧЕНА',
+  'ТЫ НЕ ВЫЖИВАЕШЬ — ТЕБЯ ВОДЯТ ЗА РУКУ',
+  'СПОЙЛЕР: НОЧЬ КОНЧИТСЯ В 6:00 (ЕСЛИ ПОДСКАЖЕМ)',
+  'ГОРДОСТЬ УРОВНЯ: 💡 ВКЛ',
+  'ВРАГИ КИДАЮТ ГОВНО. ЗАСЛУЖЕННО',
+  'ПАУЗА НЕ СПАСЁТ РЕПУТАЦИЮ',
+  'СЕЙЧАС БЫ ЕЩЁ АВТОПРОХОД ВКЛЮЧИТЬ',
+  'ТВОЯ МАМА ТОЖЕ С ПОДСКАЗКАМИ ИГРАЛА?',
+  'ACHIEVEMENT UNLOCKED: НОВИЧОК ВЕЧНО',
+  'МЫ НЕ ЗЛЫЕСЯ — ПРОСТО СТЫДНО ЗА ТЕБЯ',
+  'ПОДСКАЗКИ ON — УВАЖУХА OFF',
+  'СЛЕДУЮЩАЯ ПОДСКАЗКА: ВЫЙДИ В МЕНЮ И ВЫКЛЮЧИ',
+  'ЭТОТ ДЖАМПСКЕЙР ТЫ ЗАСЛУЖИЛ ДВАЖДЫ'
+];
+let _bbhHintsUsedNight = false;
+function bbhMarkHintsUsed() {
+  try { if (typeof bbhHintsOn === 'function' && bbhHintsOn()) _bbhHintsUsedNight = true; } catch (e) {}
+}
+const BBH_HUM_MENU = [
+  '💡 ВКЛ — РЕЖИМ ПОЗОРА АКТИВЕН',
+  'СИЛУЭТЫ УЖЕ ГОТОВЯТ ПОМИДОРЫ',
+  'НАСТОЯЩИЕ ФНАФЕРЫ ИГРАЮТ БЕЗ ЭТОГО',
+  'ПОДСКАЗКИ НЕ ОТМЕНЯЮТ СТЫД',
+  'ВЫБЕРИ НОЧЬ… НОВИЧОК'
+];
+function bbhHumDomToast(msg, ms) {
+  try {
+    if (typeof bbhHintsOn !== 'function' || !bbhHintsOn()) return;
+    let el = document.getElementById('bbhHumToast');
+    if (!el) {
+      el = document.createElement('div');
+      el.id = 'bbhHumToast';
+      el.style.cssText = 'position:absolute;left:50%;bottom:12%;transform:translateX(-50%);z-index:50;pointer-events:none;padding:10px 18px;background:rgba(20,4,4,0.92);border:1px solid #f64;color:#fa8;font:bold 13px Courier New,monospace;text-align:center;max-width:86%;width:max-content;border-radius:6px;box-shadow:0 0 18px rgba(255,60,40,0.25);opacity:0;transition:opacity .25s;box-sizing:border-box;';
+      const host = document.getElementById('gameContainer') || document.getElementById('bbhHintsFx') || document.body;
+      host.appendChild(el);
+    }
+    el.textContent = msg;
+    el.style.opacity = '1';
+    clearTimeout(el._t);
+    el._t = setTimeout(function(){ el.style.opacity = '0'; }, ms || 2800);
+  } catch (e) {}
+}
+function bbhHumMaybeMenuToast() {
+  try {
+    if (typeof bbhHintsOn !== 'function' || !bbhHintsOn()) return;
+    if (Math.random() > 0.55) return;
+    bbhHumDomToast(BBH_HUM_MENU[(Math.random() * BBH_HUM_MENU.length) | 0], 2600);
+  } catch (e) {}
+}
+const BBH_HUM_TETRIS = [
+  'ТЕТРИС С ПОДСКАЗКАМИ — ОЛИМПИАДА НОВИЧКОВ',
+  'БЛОКИ ПАДАЮТ, ГОРДОСТЬ УЖЕ УПАЛА',
+  'LINE CLEAR НЕ СМОЕТ СТЫД',
+  'ОН МЕШАЕТ ТЕБЕ. ПОДСКАЗКИ — ТОЖЕ',
+  'HOLD НЕ СПАСЁТ РЕПУТАЦИЮ'
+];
+const BBH_HUM_ARENA = [
+  'АРЕНА + 💡 = ЗРИТЕЛИ СМЕЮТСЯ',
+  'БИЛД СОБРАН ПОДСКАЗКАМИ?',
+  'ДАШЬ УЛЬТУ — СТЫД НЕ СБРОСИТСЯ',
+  'ХП-БАРЫ ВИДНЫ. СЛАВА — НЕТ',
+  'СЕКТОР ОЧИЩЕН… ОТ ДОСТОИНСТВА'
+];
+const BBH_HUM_GAMBLE = [
+  'СТАВКА: 10 BB · ВЫИГРЫШ: 0 УВАЖЕНИЯ',
+  'КАЗИНО ВИДИТ ТВОЙ 💡',
+  'КРУТИ ДАЛЬШЕ, НОВИЧОК',
+  'BIG BON НЕ КУПИТ ГОРДОСТЬ',
+  'РЫЧАГ ТЯНЕТСЯ ЛЕГЧЕ С ПОДСКАЗКАМИ'
+];
+let _bbhHumMode = { next: 2, fx: [] };
+function bbhHumModeId() {
+  try {
+    if (typeof extraTetrisMode !== 'undefined' && extraTetrisMode) return 'tetris';
+    if (n5 && (n5.mode === 'tetris' || n5.mode === 'transTetris')) return 'tetris';
+    if (n5 && (n5.mode === 'boss' || n5.mode === 'bossGlitch' || n5.mode === 'bossDialog' || n5.mode === 'bossVictory')) return 'boss';
+    if (n5 && (n5.mode === 'corridor' || n5.mode === 'transition')) return 'corridor';
+    if (n7 && n7.phase === 'cutscene') return 'cutscene';
+    if (n7 && (n7.shop || n7.shopOpen || n7.phase === 'shop')) return 'shop';
+    if (n7 && (n7.phase === 'arena' || n7.phase === 'campaign' || (n7.arena && n7.phase !== 'hybrid' && n7.phase !== 'cutscene'))) return 'arena';
+    if (currentNight === 6 && state === 'playing') return 'n6';
+    if (challengeMode) return 'challenge';
+    if (state === 'cutscene') return 'cutscene';
+    if (document.getElementById('extraGamble') && document.getElementById('extraGamble').classList.contains('active')) return 'gamble';
+    if (document.body && document.body.classList.contains('arg-gamble-mode')) return 'gamble';
+    const es = document.getElementById('extraScreen');
+    if (es && es.classList.contains('arg-gamble-mode')) return 'gamble';
+    const sc = document.getElementById('extraScares');
+    if (sc && sc.classList.contains('active')) return 'scare';
+  } catch (e) {}
+  return null;
+}
+const BBH_HUM_BOSS = [
+  'БОСС Н5 ВИДИТ ТВОЙ 💡',
+  'СЕГМЕНТ 4: СТЫД ПЕРЕД БАДИ',
+  'АРЕНА БОССА НЕ УВАЖАЕТ ПОДСКАЗКИ',
+  'ФИНАЛ НОЧИ — ФИНАЛ ГОРДОСТИ',
+  'MERCY? СНАЧАЛА ВЫКЛЮЧИ ПОДСКАЗКИ'
+];
+const BBH_HUM_CORRIDOR = [
+  'СЕГМЕНТ 2: КОРИДОР ПОЗОРА',
+  'БЕГИ. ПОДСКАЗКИ УЖЕ ВПЕРЕДИ',
+  'СТЕНЫ РУШАТСЯ — РЕПУТАЦИЯ ТОЖЕ',
+  'ПЕРЕХОД К ЕЩЁ БОЛЬШЕМУ СТЫДУ'
+];
+const BBH_HUM_CHALLENGE = [
+  'ЧЕЛЛЕНДЖ С 💡 — МЕДАЛЬ ИЗ ФОЛЬГИ',
+  'УСЛОВИЯ ЖЁСТКИЕ, ГОРДОСТЬ МЯГКАЯ',
+  'ПОЛНЫЙ СОСТАВ? СНАЧАЛА ВЫКЛЮЧИ ПОДСКАЗКИ',
+  'РЕКОРД ЗАСЧИТАЕМ… С ПОМЕТОЙ NOOB'
+];
+const BBH_HUM_CUTSCENE = [
+  'КАТСЦЕНА НЕ ОТМЕНЯЕТ 💡',
+  'СЮЖЕТ ВИДИТ ТВОИ ПОДСКАЗКИ',
+  'ДАЖЕ ДИАЛОГИ СТЫДЯТСЯ',
+  'ПРОПУСК КАТСЦЕНЫ НЕ СПАСЁТ РЕПУТАЦИЮ'
+];
+const BBH_HUM_SCARE = [
+  'СКРИМЕР В ПРЕВЬЮ — ТРЕНИРОВКА НОВИЧКА',
+  'ПУГАЕШЬСЯ С ПОДСКАЗКАМИ?',
+  'ЭКСТРА-СКРИМЕРЫ ВИДЯТ 💡',
+  'ДАЖЕ ПРЕВЬЮ НАД ТОБОЙ СМЕЁТСЯ'
+];
+const BBH_HUM_SHOP = [
+  'МАГАЗИН АРЕНЫ: СКИДКА НА СТЫД',
+  'КУПИ БИЛД — НЕ КУПИШЬ ГОРДОСТЬ',
+  'РЕРОЛЛ НЕ УБЕРЁТ 💡',
+  'ТОРГУЕШЬСЯ С ПОДСКАЗКАМИ'
+];
+const BBH_HUM_N6 = [
+  'СЛОЖНАЯ НОЧЬ + ПОДСКАЗКИ = ОКСЮМОРОН',
+  '6 СЕГМЕНТОВ СТЫДА',
+  'ХАРДМОД ДЛЯ ТЕХ, КТО С 💡',
+  'СЕГМЕНТ ИДЁТ. ГОРДОСТЬ — НЕТ'
+];
+const BBH_HUM_RETRY = [
+  'ЕЩЁ РАЗ С ТЕМИ ЖЕ ПОДСКАЗКАМИ?',
+  'РЕТРАЙ НЕ СТИРАЕТ ПОЗОР',
+  'СМЕРТЬ ЗАСЧИТАНА. 💡 ТОЖЕ'
+];
+function bbhHumModeTauntPool(id) {
+  if (id === 'tetris') return BBH_HUM_TETRIS;
+  if (id === 'arena') return BBH_HUM_ARENA;
+  if (id === 'gamble') return BBH_HUM_GAMBLE;
+  if (id === 'boss') return BBH_HUM_BOSS;
+  if (id === 'corridor') return BBH_HUM_CORRIDOR;
+  if (id === 'challenge') return BBH_HUM_CHALLENGE;
+  if (id === 'cutscene') return BBH_HUM_CUTSCENE;
+  if (id === 'scare') return BBH_HUM_SCARE;
+  if (id === 'shop') return BBH_HUM_SHOP;
+  if (id === 'n6') return BBH_HUM_N6;
+  return BBH_HUM_TAUNTS;
+}
+function bbhHumToastPool(pool, ms) {
+  try {
+    if (typeof bbhHintsOn !== 'function' || !bbhHintsOn()) return;
+    if (!pool || !pool.length) return;
+    bbhHumDomToast(pool[(Math.random() * pool.length) | 0], ms || 3000);
+  } catch (e) {}
+}
+/** Залп говна / мочи / помидоров в «стекло» (canvas night hum FX) */
+function bbhHumVolley(opts) {
+  try {
+    if (typeof bbhHintsOn !== 'function' || !bbhHintsOn()) return;
+    if (!_bbhHumN) return;
+    opts = opts || {};
+    const kinds = opts.kinds || ['poop', 'pee', 'tomato'];
+    const n = opts.count || (3 + ((Math.random() * 5) | 0));
+    const side = opts.side || (Math.random() < 0.5 ? 'L' : 'R');
+    for (let i = 0; i < n; i++) {
+      const kind = kinds[(Math.random() * kinds.length) | 0];
+      const fromLeft = side === 'L' ? true : side === 'R' ? false : Math.random() < 0.5;
+      const x0 = fromLeft ? -15 - Math.random() * 30 : W + 15 + Math.random() * 30;
+      const y0 = H * (0.1 + Math.random() * 0.55);
+      const x1 = W * (0.25 + Math.random() * 0.5);
+      const y1 = H * (0.25 + Math.random() * 0.45);
+      if (kind === 'pee') {
+        for (let d = 0; d < 8 + ((Math.random() * 8) | 0); d++) {
+          _bbhHumN.fx.push({
+            kind: 'pee', t: -i * 0.04 - d * 0.025, life: 0.65 + Math.random() * 0.4,
+            x0: x0 + (Math.random() - 0.5) * 12, y0: y0,
+            x1: x1 + (Math.random() - 0.5) * 60, y1: y1 + Math.random() * 80,
+            r: 1.4 + Math.random() * 2.2
+          });
+        }
+      } else {
+        _bbhHumN.fx.push({
+          kind: kind, t: -i * 0.06, life: 0.55 + Math.random() * 0.4,
+          x0: x0, y0: y0, x1: x1, y1: y1,
+          r: (kind === 'tomato' ? 7 : 5) + Math.random() * 6,
+          spin: Math.random() * 6
+        });
+      }
+    }
+    if (opts.taunt && Math.random() < 0.7) {
+      _bbhHumN.taunt = opts.taunt;
+      _bbhHumN.tauntT = 2.2 + Math.random();
+    }
+  } catch (e) {}
+}
+
+/** Canvas-оверлей для тетриса/арены (и усиление ночного) */
+function bbhHintsPoopMode() {
+  try { return typeof bbhHintsOn === 'function' && bbhHintsOn(); } catch (e) { return false; }
+}
+/** Водолазная маска на враге (локальные координаты после translate) */
+function bbhDrawEnemyDiveMask(c, headY) {
+  c = c || ctx;
+  headY = headY != null ? headY : -258;
+  c.save();
+  // ремень
+  c.strokeStyle = 'rgba(20,40,50,0.85)';
+  c.lineWidth = 4;
+  c.beginPath();
+  c.arc(0, headY, 42, -0.2, Math.PI + 0.2);
+  c.stroke();
+  // овал маски
+  c.fillStyle = 'rgba(30,55,70,0.92)';
+  c.strokeStyle = '#1a3038';
+  c.lineWidth = 2;
+  c.beginPath();
+  c.ellipse(0, headY + 4, 36, 28, 0, 0, Math.PI * 2);
+  c.fill(); c.stroke();
+  // стекло
+  const g = c.createRadialGradient(-8, headY - 4, 2, 0, headY + 4, 34);
+  g.addColorStop(0, 'rgba(120,200,220,0.55)');
+  g.addColorStop(0.5, 'rgba(40,90,110,0.35)');
+  g.addColorStop(1, 'rgba(10,30,40,0.5)');
+  c.fillStyle = g;
+  c.beginPath();
+  c.ellipse(0, headY + 4, 28, 20, 0, 0, Math.PI * 2);
+  c.fill();
+  // блик
+  c.fillStyle = 'rgba(200,240,255,0.35)';
+  c.beginPath();
+  c.ellipse(-10, headY - 2, 8, 5, -0.4, 0, Math.PI * 2);
+  c.fill();
+  // шланг
+  c.strokeStyle = '#2a4048';
+  c.lineWidth = 3;
+  c.beginPath();
+  c.moveTo(30, headY + 8);
+  c.quadraticCurveTo(48, headY + 30, 40, headY + 55);
+  c.stroke();
+  c.restore();
+}
+/** Облачко пердежа под врагом */
+function bbhDrawEnemyFart(c, t) {
+  c = c || ctx;
+  t = t != null ? t : (typeof performance !== 'undefined' ? performance.now() : Date.now());
+  c.save();
+  for (let i = 0; i < 5; i++) {
+    const ph = (t * 0.003 + i * 1.3) % 1;
+    const x = (Math.sin(t * 0.002 + i * 2) * 18);
+    const y = 8 - ph * 40;
+    const r = 10 + ph * 16 + (i % 2) * 4;
+    c.globalAlpha = 0.22 * (1 - ph);
+    c.fillStyle = i % 2 ? 'rgba(90,120,40,0.7)' : 'rgba(60,80,30,0.65)';
+    c.beginPath();
+    c.ellipse(x, y, r * 1.2, r * 0.7, ph, 0, Math.PI * 2);
+    c.fill();
+  }
+  c.restore();
+}
+/** Аура пердежа в офисе */
+/** Маска+пердёж в мировых координатах камеры (для ночей 2–7) */
+function bbhCamMaskAt(wx, wy, scale) {
+  try {
+    if (typeof bbhHintsPoopMode !== 'function' || !bbhHintsPoopMode()) return;
+    scale = scale != null ? scale : 0.55;
+    ctx.save();
+    ctx.translate(wx, wy);
+    ctx.scale(scale, scale);
+    bbhDrawEnemyDiveMask(ctx, 0);
+    ctx.restore();
+    ctx.save();
+    ctx.translate(wx, wy + 36 * scale);
+    ctx.scale(scale * 1.05, scale * 1.05);
+    bbhDrawEnemyFart(ctx);
+    ctx.restore();
+  } catch (e) {}
+}
+function bbhDrawOfficeFartAura() {
+  if (!bbhHintsPoopMode() || state !== 'playing') return;
+  if (typeof camsOpen !== 'undefined' && camsOpen) return; // на камерах своё
+  const t = typeof performance !== 'undefined' ? performance.now() : Date.now();
+  ctx.save();
+  // общий зеленоватый дым
+  const haze = ctx.createRadialGradient(W * 0.5, H * 0.85, 10, W * 0.5, H * 0.5, H * 0.7);
+  haze.addColorStop(0, 'rgba(70,90,30,0.18)');
+  haze.addColorStop(0.5, 'rgba(40,55,20,0.08)');
+  haze.addColorStop(1, 'rgba(0,0,0,0)');
+  ctx.fillStyle = haze;
+  ctx.fillRect(0, 0, W, H);
+  for (let i = 0; i < 7; i++) {
+    const ph = ((t * 0.0004 + i * 0.17) % 1);
+    const x = (W * 0.15 + i * W * 0.12 + Math.sin(t * 0.001 + i) * 30) % W;
+    const y = H * 0.55 + ph * H * 0.35;
+    ctx.globalAlpha = 0.12 * (1 - ph);
+    ctx.fillStyle = '#5a7030';
+    ctx.beginPath();
+    ctx.ellipse(x, y, 40 + ph * 50, 18 + ph * 20, 0, 0, Math.PI * 2);
+    ctx.fill();
+  }
+  ctx.restore();
+}
+/** Оверлей скримера: говно + газы */
+function bbhDrawJumpscarePoopGas() {
+  if (!bbhHintsPoopMode()) return;
+  const t = typeof performance !== 'undefined' ? performance.now() : Date.now();
+  const jt = typeof jumpscareTimer === 'number' ? jumpscareTimer : 0;
+  ctx.save();
+  // плотный газ
+  for (let i = 0; i < 14; i++) {
+    const ph = ((t * 0.001 + i * 0.11 + jt * 0.05) % 1);
+    const x = (i * 97 + jt * 13) % (W + 80) - 40;
+    const y = H * 0.3 + Math.sin(t * 0.002 + i) * 40 + ph * 80;
+    ctx.globalAlpha = 0.2 + 0.15 * Math.sin(t * 0.01 + i);
+    ctx.fillStyle = i % 3 === 0 ? 'rgba(80,100,30,0.8)' : 'rgba(50,70,25,0.7)';
+    ctx.beginPath();
+    ctx.ellipse(x, y, 50 + ph * 40, 28 + ph * 20, ph, 0, Math.PI * 2);
+    ctx.fill();
+  }
+  // летящее говно
+  for (let i = 0; i < 18; i++) {
+    const seed = i * 17 + jt;
+    const x = (seed * 47 + jt * 9) % W;
+    const y = (seed * 31 + jt * 14) % H;
+    const r = 6 + (i % 5) * 3;
+    ctx.globalAlpha = 0.55;
+    ctx.fillStyle = '#3a2210';
+    ctx.beginPath();
+    ctx.ellipse(x, y, r, r * 0.7, seed * 0.1, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.fillStyle = '#5a3820';
+    ctx.beginPath();
+    ctx.ellipse(x - r * 0.2, y - r * 0.2, r * 0.5, r * 0.4, 0, 0, Math.PI * 2);
+    ctx.fill();
+  }
+  // брызги мочи
+  ctx.globalAlpha = 0.35;
+  ctx.fillStyle = '#c8b84a';
+  for (let i = 0; i < 20; i++) {
+    const x = (i * 73 + jt * 11) % W;
+    const y = (i * 41 + jt * 17) % H;
+    ctx.fillRect(x, y, 2, 8 + (i % 4) * 3);
+  }
+  ctx.restore();
+}
+/** Фон: льющиеся каловые массы + моча (canvas) */
+function bbhDrawSludgeBackground(c, w, h, t) {
+  if (!bbhHintsPoopMode()) return;
+  c = c || ctx;
+  t = t != null ? t : (typeof performance !== 'undefined' ? performance.now() : Date.now());
+  c.save();
+  for (let i = 0; i < 9; i++) {
+    const x = ((i * 0.13 * w) + Math.sin(t * 0.0008 + i) * 20);
+    const flow = ((t * 0.04 + i * 50) % (h + 80)) - 40;
+    c.globalAlpha = 0.2;
+    c.fillStyle = '#2a1808';
+    c.beginPath();
+    c.ellipse(x, flow, 30 + (i % 3) * 12, 50 + (i % 2) * 20, 0.2, 0, Math.PI * 2);
+    c.fill();
+    c.fillStyle = '#4a3020';
+    c.beginPath();
+    c.ellipse(x - 8, flow - 15, 18, 28, 0, 0, Math.PI * 2);
+    c.fill();
+  }
+  // струи мочи
+  c.globalAlpha = 0.18;
+  c.strokeStyle = '#b8a840';
+  c.lineWidth = 3;
+  for (let i = 0; i < 6; i++) {
+    const x = w * (0.1 + i * 0.15);
+    const off = (t * 0.12 + i * 40) % (h + 40);
+    c.beginPath();
+    c.moveTo(x, off - 40);
+    c.quadraticCurveTo(x + 15, off, x - 5, off + 60);
+    c.stroke();
+  }
+  c.restore();
+}
+
+
+function bbhHumModeCanvasTick(dt) {
+  if (typeof bbhHintsOn !== 'function' || !bbhHintsOn()) return;
+  if (state !== 'playing') return;
+  const id = bbhHumModeId();
+  if (id !== 'tetris' && id !== 'arena' && id !== 'boss' && id !== 'corridor' && id !== 'challenge' && id !== 'n6' && id !== 'shop') return;
+  dt = (typeof dt === 'number' && dt > 0 && dt < 0.1) ? dt : 0.016;
+  _bbhHumMode.next -= dt;
+  if (_bbhHumMode.next <= 0) {
+    _bbhHumMode.next = 2.2 + Math.random() * 3.5;
+    try { if (Math.random() < 0.55) bbhHumVolley({ count: 3 + ((Math.random()*3)|0), kinds: ['poop','tomato','pee'] }); } catch (eMV) {}
+    const pool = bbhHumModeTauntPool(id);
+    // чаще титры + снаряды
+    if (Math.random() < 0.55 && _bbhHumN) {
+      _bbhHumN.taunt = pool[(Math.random() * pool.length) | 0];
+      _bbhHumN.tauntT = 2.2 + Math.random() * 1.2;
+    }
+    const kind = Math.random() < 0.45 ? 'poop' : (Math.random() < 0.5 ? 'tomato' : 'sticker');
+    if (kind === 'sticker' && _bbhHumN) {
+      _bbhHumN.fx.push({
+        kind: 'sticker', t: 0, life: 3 + Math.random() * 2,
+        x: W * (0.15 + Math.random() * 0.7), y: H * (0.1 + Math.random() * 0.25),
+        text: id === 'tetris' ? ['NOOB STACK','💡 CLEAR','EASY'][Math.floor(Math.random()*3)]
+             : id === 'boss' ? ['BOSS EZ','💡 N5','F+'][Math.floor(Math.random()*3)]
+             : id === 'corridor' ? ['RUN 💡','SEG 2','NOOB'][Math.floor(Math.random()*3)]
+             : ['💡 ARENA','EZ BUILD','F+'][Math.floor(Math.random()*3)],
+        rot: (Math.random() - 0.5) * 0.4
+      });
+    } else if (_bbhHumN) {
+      const fromX = id === 'tetris' ? W * 0.85 : (Math.random() < 0.5 ? 40 : W - 40);
+      const fromY = id === 'tetris' ? H * 0.3 : H * (0.2 + Math.random() * 0.4);
+      for (let i = 0; i < 2 + ((Math.random() * 2) | 0); i++) {
+        _bbhHumN.fx.push({
+          kind: kind === 'poop' ? 'poop' : 'tomato',
+          t: -i * 0.05, life: 0.6 + Math.random() * 0.3,
+          x0: fromX, y0: fromY,
+          x1: W * (0.3 + Math.random() * 0.4), y1: H * (0.35 + Math.random() * 0.35),
+          r: 6 + Math.random() * 6, spin: Math.random() * 5
+        });
+      }
+    }
+  }
+  // тетрис: «бади» сбоку плюётся говном в стак
+  if (id === 'tetris' && Math.random() < 0.008 && _bbhCamPoop) {
+    try {
+      bbhCamPoopMark(W * 0.88, H * 0.35, 'Бади');
+      if (_bbhCamPoop.cd > 0.8) _bbhCamPoop.cd = 0.4;
+    } catch (e) {}
+  }
+  // арена: враги «метят» чаще
+  if (id === 'arena' && Math.random() < 0.01 && _bbhCamPoop) {
+    try {
+      bbhCamPoopMark(W * (0.2 + Math.random() * 0.6), H * (0.25 + Math.random() * 0.4), 'Арена');
+      if (_bbhCamPoop.cd > 1) _bbhCamPoop.cd = 0.5;
+    } catch (e) {}
+  }
+}
+function bbhHumGambleOnOpen() {
+  try {
+    if (typeof bbhHintsOn !== 'function' || !bbhHintsOn()) return;
+    bbhHumDomToast(BBH_HUM_GAMBLE[(Math.random() * BBH_HUM_GAMBLE.length) | 0], 3200);
+    const title = document.querySelector('#argGambleScreen .arg-g-title');
+    if (title) {
+      title.dataset.bbhOrig = title.dataset.bbhOrig || title.textContent;
+      title.textContent = 'BIG BON CASINO · 💡 NOOB TABLE';
+    }
+    const msg = document.getElementById('argGambleMsg');
+    if (msg) msg.textContent = 'Ставка 10 BB. Подсказки не увеличивают шанс.';
+  } catch (e) {}
+}
+function bbhHumGambleOnSpin(result) {
+  try {
+    if (typeof bbhHintsOn !== 'function' || !bbhHintsOn()) return;
+    const msg = document.getElementById('argGambleMsg');
+    const lost = !result || result === 'lose' || result === 'loss';
+    const linesLose = [
+      'ПРОИГРЫШ. ПОДСКАЗКИ НЕ КРУТЯТ БАРАБАНЫ',
+      '−10 BB · −1 ГОРДОСТЬ',
+      'СИЛУЭТЫ СТАВЯТ ПРОТИВ ТЕБЯ',
+      'ЕЩЁ СПИН? РЕПУТАЦИЯ УЖЕ В МИНУСЕ'
+    ];
+    const linesWin = [
+      'ВЫИГРЫШ… НО 💡 ВСЁ ЕЩЁ ВКЛ',
+      'МОНЕТЫ ЕСТЬ. УВАЖЕНИЯ НЕТ',
+      'КАЗИНО ХОХОЧЕТ ТИШЕ, НО ХОХОЧЕТ'
+    ];
+    const line = (lost ? linesLose : linesWin)[(Math.random() * (lost ? linesLose : linesWin).length) | 0];
+    if (msg) msg.textContent = line;
+    if (Math.random() < 0.5) bbhHumDomToast(line, 2200);
+    // DOM «говно» поверх гембла
+    bbhHumGamblePoopDom();
+  } catch (e) {}
+}
+function bbhHumGamblePoopDom() {
+  try {
+    const scr = document.getElementById('argGambleScreen');
+    if (!scr) return;
+    const n = 2 + ((Math.random() * 3) | 0);
+    for (let i = 0; i < n; i++) {
+      const d = document.createElement('div');
+      d.className = 'bbh-hum-poop';
+      d.style.cssText = 'position:absolute;width:18px;height:16px;border-radius:50% 50% 45% 45%;background:radial-gradient(circle at 30% 30%,#6a4020,#2a1608);pointer-events:none;z-index:50;left:' + (20 + Math.random() * 60) + '%;top:-8%;transition:top 0.7s ease-in,opacity 0.4s;opacity:0.9;';
+      scr.style.position = scr.style.position || 'relative';
+      scr.appendChild(d);
+      requestAnimationFrame(function(){
+        d.style.top = (30 + Math.random() * 50) + '%';
+      });
+      setTimeout(function(){ d.style.opacity = '0'; }, 900);
+      setTimeout(function(){ try { d.remove(); } catch(e){} }, 1400);
+    }
+  } catch (e) {}
+}
+
+
+function bbhHumNightReset() {
+  _bbhHumN = { next: 3 + Math.random() * 4, fx: [], stains: [], taunt: null, tauntT: 0, laughCd: 0 };
+}
+function bbhHumNightSpawn() {
+  if (typeof bbhHintsOn !== 'function' || !bbhHintsOn()) return;
+  if (state !== 'playing') return;
+  bbhMarkHintsUsed();
+  const roll = Math.random();
+  if (roll < 0.28) {
+    _bbhHumN.taunt = (typeof bbhHumModeTaunt === 'function') ? bbhHumModeTaunt() : BBH_HUM_TAUNTS[(Math.random() * BBH_HUM_TAUNTS.length) | 0];
+    _bbhHumN.tauntT = 2.2 + Math.random() * 1.6;
+  } else if (roll < 0.48) {
+    const n = 1 + ((Math.random() * 3) | 0);
+    for (let i = 0; i < n; i++) {
+      _bbhHumN.fx.push({
+        kind: 'tomato', t: 0, life: 0.55 + Math.random() * 0.3,
+        x0: Math.random() < 0.5 ? -20 : W + 20, y0: H * (0.15 + Math.random() * 0.5),
+        x1: W * (0.25 + Math.random() * 0.5), y1: H * (0.2 + Math.random() * 0.45),
+        r: 8 + Math.random() * 6, spin: Math.random() * 6
+      });
+    }
+  } else if (roll < 0.62) {
+    const side = Math.random() < 0.5 ? 0 : 1;
+    const x0 = side ? W * 0.92 : W * 0.08;
+    for (let i = 0; i < 14; i++) {
+      _bbhHumN.fx.push({
+        kind: 'pee', t: -i * 0.03, life: 0.7 + Math.random() * 0.35,
+        x0: x0 + (Math.random() - 0.5) * 12, y0: H * 0.35,
+        x1: W * (0.3 + Math.random() * 0.4), y1: H * (0.55 + Math.random() * 0.25),
+        r: 1.5 + Math.random() * 2
+      });
+    }
+  } else if (roll < 0.74) {
+    // говно с угла HUD
+    for (let i = 0; i < 2 + ((Math.random() * 3) | 0); i++) {
+      _bbhHumN.fx.push({
+        kind: 'poop', t: -i * 0.05, life: 0.65 + Math.random() * 0.3,
+        x0: Math.random() < 0.5 ? 30 : W - 30, y0: 40 + Math.random() * 80,
+        x1: W * (0.3 + Math.random() * 0.4), y1: H * (0.3 + Math.random() * 0.4),
+        r: 6 + Math.random() * 6, spin: Math.random() * 5
+      });
+    }
+  } else if (roll < 0.86) {
+    _bbhHumN.fx.push({
+      kind: 'mocker', t: 0, life: 1.8 + Math.random() * 1.2,
+      side: Math.random() < 0.5 ? -1 : 1, phase: Math.random() * Math.PI * 2
+    });
+  } else {
+    // «стикер» стыда на экране
+    _bbhHumN.fx.push({
+      kind: 'sticker', t: 0, life: 3.5 + Math.random() * 2,
+      x: W * (0.12 + Math.random() * 0.76), y: H * (0.12 + Math.random() * 0.3),
+      text: ['💡 NOOB', 'EASY MODE', 'HINTS ON', 'СЛАБАК', 'F+'][Math.floor(Math.random() * 5)],
+      rot: (Math.random() - 0.5) * 0.5
+    });
+  }
+  try {
+    if (_bbhHumN.laughCd <= 0 && typeof playTone === 'function') {
+      playTone(180 + Math.random() * 40, 'square', 0.08, 0.03);
+      setTimeout(function(){ try { playTone(140, 'sawtooth', 0.12, 0.025); } catch(e){} }, 90);
+      _bbhHumN.laughCd = 6;
+    }
+  } catch (e) {}
+  // дополнительный смешанный залп
+  if (Math.random() < 0.42) {
+    try { bbhHumVolley({ count: 2 + ((Math.random() * 4) | 0), kinds: ['poop', 'tomato', 'pee'] }); } catch (eV) {}
+  }
+  // в тетрисе/боссе/арене чаще
+  let gap = 3.5 + Math.random() * 7;
+  try {
+    if ((n5 && (n5.mode === 'tetris' || n5.mode === 'transTetris' || n5.mode === 'boss' || n5.mode === 'bossGlitch' || n5.mode === 'corridor' || n5.mode === 'transition'))
+        || (typeof extraTetrisMode !== 'undefined' && extraTetrisMode)
+        || (n7 && (n7.phase === 'arena' || n7.phase === 'campaign')))
+      gap = 2.2 + Math.random() * 4.5;
+  } catch (eG) {}
+  _bbhHumN.next = gap;
+}
+function drawHintsNightHumiliate() {
+  if (typeof bbhHintsOn !== 'function' || !bbhHintsOn()) {
+    if (_bbhHumN.fx.length || _bbhHumN.stains.length || _bbhHumN.taunt) bbhHumNightReset();
+    return;
+  }
+  if (typeof isPhoneCallActive === 'function' && isPhoneCallActive()) return;
+  try { bbhDrawOfficeFartAura(); } catch (eAura) {}
+  // грубый dt из кадров
+  const dt = (typeof fixedDt === 'number' && fixedDt > 0 && fixedDt < 0.1) ? fixedDt : 0.016;
+  _bbhHumN.next -= dt;
+  if (_bbhHumN.laughCd > 0) _bbhHumN.laughCd -= dt;
+  if (_bbhHumN.next <= 0) bbhHumNightSpawn();
+
+  // пятна
+  for (let i = _bbhHumN.stains.length - 1; i >= 0; i--) {
+    const s = _bbhHumN.stains[i];
+    s.a -= dt * 0.07;
+    if (s.a <= 0) { _bbhHumN.stains.splice(i, 1); continue; }
+    ctx.save();
+    ctx.globalAlpha = Math.min(0.5, s.a);
+    ctx.fillStyle = s.color || '#7a1010';
+    ctx.beginPath();
+    ctx.ellipse(s.x, s.y, s.rx, s.ry, s.rot || 0, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.restore();
+  }
+
+  // снаряды / mocker
+  for (let i = _bbhHumN.fx.length - 1; i >= 0; i--) {
+    const p = _bbhHumN.fx[i];
+    p.t += dt;
+    const u = p.t / p.life;
+    if (u >= 1) {
+      if (p.kind === 'tomato') {
+        _bbhHumN.stains.push({
+          x: p.x1, y: p.y1,
+          rx: p.r * (1.1 + Math.random()),
+          ry: p.r * (0.6 + Math.random() * 0.5),
+          rot: Math.random() * Math.PI,
+          a: 0.75,
+          color: '#8a1212'
+        });
+      }
+      if (p.kind === 'pee') {
+        _bbhHumN.stains.push({
+          x: p.x1, y: p.y1,
+          rx: 3 + Math.random() * 4,
+          ry: 8 + Math.random() * 10,
+          rot: 0.3,
+          a: 0.4,
+          color: '#8a8030'
+        });
+      }
+      if (p.kind === 'poop') {
+        _bbhHumN.stains.push({
+          x: p.x1, y: p.y1,
+          rx: p.r * 0.9, ry: p.r * 0.6,
+          rot: Math.random(), a: 0.55, color: '#3a2210'
+        });
+      }
+      _bbhHumN.fx.splice(i, 1);
+      continue;
+    }
+    if (u < 0) continue;
+    ctx.save();
+    if (p.kind === 'tomato') {
+      const ease = u * u * (3 - 2 * u);
+      const x = p.x0 + (p.x1 - p.x0) * ease;
+      const y = p.y0 + (p.y1 - p.y0) * ease - Math.sin(u * Math.PI) * 50;
+      ctx.translate(x, y);
+      ctx.rotate(p.spin + u * 8);
+      ctx.globalAlpha = 0.9;
+      ctx.fillStyle = '#c01818';
+      ctx.beginPath(); ctx.arc(0, 0, p.r, 0, Math.PI * 2); ctx.fill();
+      ctx.fillStyle = '#6a0c0c';
+      ctx.beginPath(); ctx.arc(-p.r * 0.2, -p.r * 0.15, p.r * 0.3, 0, Math.PI * 2); ctx.fill();
+    } else if (p.kind === 'pee') {
+      const ease = Math.max(0, u);
+      const x = p.x0 + (p.x1 - p.x0) * ease;
+      const y = p.y0 + (p.y1 - p.y0) * ease - Math.sin(ease * Math.PI) * 35;
+      ctx.globalAlpha = 0.4 * (1 - ease * 0.5);
+      ctx.fillStyle = '#c8b84a';
+      ctx.beginPath(); ctx.ellipse(x, y, p.r, p.r * 1.5, 0.5, 0, Math.PI * 2); ctx.fill();
+    } else if (p.kind === 'mocker') {
+      const edge = p.side < 0 ? 36 : W - 36;
+      const bob = Math.sin(p.t * 6 + p.phase) * 6;
+      const appear = Math.min(1, p.t * 3) * Math.min(1, (p.life - p.t) * 2);
+      ctx.globalAlpha = 0.35 * appear;
+      ctx.fillStyle = '#0a0508';
+      ctx.beginPath();
+      ctx.ellipse(edge, H * 0.55 + bob, 28, 50, 0, 0, Math.PI * 2);
+      ctx.fill();
+      // глаза
+      ctx.globalAlpha = 0.7 * appear;
+      ctx.fillStyle = '#ff3030';
+      ctx.shadowColor = '#ff2020';
+      ctx.shadowBlur = 8;
+      ctx.beginPath(); ctx.ellipse(edge - 8 * p.side, H * 0.52 + bob, 4, 3, 0, 0, Math.PI * 2); ctx.fill();
+      ctx.beginPath(); ctx.ellipse(edge - 18 * p.side, H * 0.52 + bob, 4, 3, 0, 0, Math.PI * 2); ctx.fill();
+      ctx.shadowBlur = 0;
+      // средний палец силуэтом
+      if (p.t > 0.4 && p.t < p.life - 0.3) {
+        ctx.globalAlpha = 0.5 * appear;
+        ctx.fillStyle = '#12080c';
+        const fx = edge - 22 * p.side;
+        const fy = H * 0.48 + bob;
+        ctx.fillRect(fx - 3, fy - 18, 6, 20);
+        ctx.fillRect(fx - 8, fy - 8, 16, 6);
+      }
+    } else if (p.kind === 'poop') {
+      const ease = Math.max(0, u);
+      const x = p.x0 + (p.x1 - p.x0) * ease;
+      const y = p.y0 + (p.y1 - p.y0) * ease - Math.sin(ease * Math.PI) * 40;
+      ctx.translate(x, y);
+      ctx.rotate((p.spin || 0) + u * 4);
+      ctx.globalAlpha = 0.8 * (1 - Math.max(0, u - 0.75) / 0.25);
+      ctx.fillStyle = '#3a2210';
+      ctx.beginPath(); ctx.ellipse(0, 0, p.r * 0.9, p.r * 0.7, 0, 0, Math.PI * 2); ctx.fill();
+      ctx.fillStyle = '#5a3820';
+      ctx.beginPath(); ctx.ellipse(-p.r * 0.2, -p.r * 0.25, p.r * 0.5, p.r * 0.4, 0, 0, Math.PI * 2); ctx.fill();
+    } else if (p.kind === 'sticker') {
+      const appear = Math.min(1, p.t * 4) * Math.min(1, (p.life - p.t) * 2);
+      ctx.translate(p.x, p.y);
+      ctx.rotate(p.rot || 0);
+      ctx.globalAlpha = 0.75 * appear;
+      ctx.fillStyle = 'rgba(40,10,10,0.85)';
+      ctx.strokeStyle = '#f64';
+      ctx.lineWidth = 2;
+      const bw = 72, bh = 28;
+      ctx.fillRect(-bw/2, -bh/2, bw, bh);
+      ctx.strokeRect(-bw/2, -bh/2, bw, bh);
+      ctx.fillStyle = '#fa8';
+      ctx.font = 'bold 12px Courier New';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(p.text || '💡', 0, 1);
+    }
+    ctx.restore();
+  }
+
+  // постоянный «водяной знак» стыда
+  try {
+    ctx.save();
+    ctx.globalAlpha = 0.12;
+    ctx.fillStyle = '#f80';
+    ctx.font = 'bold 11px Courier New';
+    ctx.textAlign = 'left';
+    ctx.fillText('💡 ПОДСКАЗКИ ВКЛ — РЕЖИМ УНИЖЕНИЯ', 12, H - 12);
+    ctx.restore();
+  } catch (eW) {}
+
+  // текст-насмешка
+  if (_bbhHumN.tauntT > 0 && _bbhHumN.taunt) {
+    _bbhHumN.tauntT -= dt;
+    const a = Math.min(1, _bbhHumN.tauntT * 2) * Math.min(1, (2.4 - Math.max(0, 2.4 - _bbhHumN.tauntT)) * 3);
+    ctx.save();
+    ctx.globalAlpha = 0.85 * Math.max(0, Math.min(1, _bbhHumN.tauntT));
+    ctx.fillStyle = 'rgba(0,0,0,0.72)';
+    const tw = Math.min(W * 0.82, 520);
+    ctx.fillRect(W / 2 - tw / 2, H * 0.78, tw, 36);
+    ctx.strokeStyle = 'rgba(255,80,60,0.55)';
+    ctx.lineWidth = 1;
+    ctx.strokeRect(W / 2 - tw / 2, H * 0.78, tw, 36);
+    ctx.fillStyle = '#fa8';
+    ctx.font = 'bold 13px Courier New';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(_bbhHumN.taunt, W / 2, H * 0.78 + 18);
+    ctx.restore();
+    if (_bbhHumN.tauntT <= 0) _bbhHumN.taunt = null;
+  }
+}
+
 function draw() {
   ctx.fillStyle = '#0c0c0c';
   ctx.fillRect(0, 0, W, H);
@@ -21739,9 +23170,21 @@ function draw() {
     if (state === 'playing' && phoneCall && typeof drawPhoneCallOverlay === 'function') {
       try { drawPhoneCallOverlay(); } catch (ePhone) { console.error('phone overlay N7', ePhone); }
     }
+    if (state === 'playing') { try { drawHintsNightHumiliate(); } catch (eHumN7) {} }
+    if (state === 'playing') { try { bbhHumModeCanvasTick(0.016); } catch (eModeN7) {} }
+    if (state === 'playing') { try { bbhCamPoopUpdateDraw(0.016); } catch (ePoopN7) {} }
     return;
   }
-  if (extraTetrisMode) { drawExtraTetris(); return; }
+  if (extraTetrisMode) {
+    drawExtraTetris();
+    try {
+      if (typeof bbhHintsOn === 'function' && bbhHintsOn()) {
+        drawHintsNightHumiliate();
+        if (typeof bbhHumModeCanvasTick === 'function') bbhHumModeCanvasTick(0.016);
+      }
+    } catch (eHumXT) {}
+    return;
+  }
   if (state === 'menu' || state === 'winAnim') return;
   // пауза: не падать в fallback-офис Ночи 1 (иначе мелькает под меню паузы)
   if (state === 'paused') {
@@ -21762,6 +23205,9 @@ function draw() {
     if (state === 'playing') drawChallengeVisualOverlay();
     if (state === 'playing') drawDirectorOverlay();
     if (state === 'playing') drawHardNightVisualOverlay(n6 ? (n6.stage||0) : 0);
+    if (state === 'playing') { try { drawHintsNightHumiliate(); } catch (eH6) {} }
+    if (state === 'playing') { try { bbhHumModeCanvasTick(0.016); } catch (eM6) {} }
+    if (state === 'playing') { try { bbhCamPoopUpdateDraw(0.016); } catch (eP6) {} }
     if (state === 'playing' && phoneCall && typeof drawPhoneCallOverlay === 'function') drawPhoneCallOverlay();
     return;
   }
@@ -21780,12 +23226,40 @@ function draw() {
     if (state === 'playing') drawChallengeVisualOverlay();
     if (state === 'playing') drawLivingScenePass();
     if (state === 'playing') drawDirectorOverlay();
+    if (state === 'playing') { try { drawHintsNightHumiliate(); } catch (eHumN5) {} }
+    if (state === 'playing') { try { bbhHumModeCanvasTick(0.016); } catch (eModeN5) {} }
+    if (state === 'playing') { try { bbhCamPoopUpdateDraw(0.016); } catch (ePoopN5) {} }
     if (state === 'playing' && phoneCall && typeof drawPhoneCallOverlay === 'function') drawPhoneCallOverlay();
     return;
   }
   if (state === 'cutscene') {
     if (n6EndingActive) drawN6EndingFrame();
+    else if (typeof n7 !== 'undefined' && n7 && n7.phase === 'cutscene' && typeof n7DrawCutscene === 'function') n7DrawCutscene();
     else drawN5CutsceneFrame();
+    try {
+      if (typeof bbhHintsOn === 'function' && bbhHintsOn()) {
+        // лёгкий тост не каждый кадр — только редкий титр через night hum state
+        if (_bbhHumN && _bbhHumN.next > 0) {
+          _bbhHumN.next -= 0.016;
+        } else if (_bbhHumN) {
+          _bbhHumN.next = 5 + Math.random() * 6;
+          _bbhHumN.taunt = BBH_HUM_CUTSCENE[(Math.random() * BBH_HUM_CUTSCENE.length) | 0];
+          _bbhHumN.tauntT = 2.5;
+        }
+        if (_bbhHumN && _bbhHumN.tauntT > 0) {
+          _bbhHumN.tauntT -= 0.016;
+          ctx.save();
+          ctx.globalAlpha = Math.min(1, _bbhHumN.tauntT);
+          ctx.fillStyle = 'rgba(0,0,0,0.7)';
+          ctx.fillRect(W/2 - 220, H * 0.82, 440, 32);
+          ctx.fillStyle = '#fa8';
+          ctx.font = 'bold 12px Courier New';
+          ctx.textAlign = 'center';
+          ctx.fillText(_bbhHumN.taunt || '', W/2, H * 0.82 + 16);
+          ctx.restore();
+        }
+      }
+    } catch (eCsH) {}
     return;
   }
     if (currentNight === 4 && (state === 'playing' || state === 'dead')) {
@@ -21801,6 +23275,9 @@ function draw() {
     } else if (state === 'playing' && phoneCall && typeof drawPhoneCallOverlay === 'function') {
       drawPhoneCallOverlay();
     }
+    if (state === 'playing') { try { drawHintsNightHumiliate(); } catch (eHN) {} }
+    if (state === 'playing') { try { bbhHumModeCanvasTick(0.016); } catch (eMN) {} }
+    if (state === 'playing') { try { bbhCamPoopUpdateDraw(0.016); } catch (ePN) {} }
     return;
   }
 
@@ -21817,6 +23294,9 @@ if (currentNight === 3 && (state === 'playing' || state === 'dead')) {
     } else if (state === 'playing' && phoneCall && typeof drawPhoneCallOverlay === 'function') {
       drawPhoneCallOverlay();
     }
+    if (state === 'playing') { try { drawHintsNightHumiliate(); } catch (eHN) {} }
+    if (state === 'playing') { try { bbhHumModeCanvasTick(0.016); } catch (eMN) {} }
+    if (state === 'playing') { try { bbhCamPoopUpdateDraw(0.016); } catch (ePN) {} }
     return;
   }
 
@@ -21836,6 +23316,9 @@ if (currentNight === 3 && (state === 'playing' || state === 'dead')) {
     } else if (state === 'playing' && phoneCall && typeof drawPhoneCallOverlay === 'function') {
       drawPhoneCallOverlay();
     }
+    if (state === 'playing') { try { drawHintsNightHumiliate(); } catch (eHN) {} }
+    if (state === 'playing') { try { bbhHumModeCanvasTick(0.016); } catch (eMN) {} }
+    if (state === 'playing') { try { bbhCamPoopUpdateDraw(0.016); } catch (ePN) {} }
     return;
   }
   
@@ -21874,6 +23357,9 @@ if (currentNight === 3 && (state === 'playing' || state === 'dead')) {
   
   if (state === 'playing') drawVisualPolish();
   if (state === 'playing') drawDirectorOverlay();
+  if (state === 'playing') { try { drawHintsNightHumiliate(); } catch (eHumN) {} }
+  if (state === 'playing') { try { bbhHumModeCanvasTick(0.016); } catch (eMode) {} }
+  if (state === 'playing') { try { bbhCamPoopUpdateDraw(0.016); } catch (ePoop) {} }
 
   if (state === 'dead' && jumpscare) {
     jumpscareTimer++;
@@ -22227,6 +23713,7 @@ function drawEnemyAtDoor(e, x, y) {
     ctx.beginPath(); ctx.arc(0, -60, 20, 0, Math.PI*2); ctx.fill();
     ctx.fillStyle = '#0d0';
     ctx.fillRect(-10, -66, 7, 7); ctx.fillRect(3, -66, 7, 7);
+    try { bbhCamMaskAt(0, -62, 0.58); } catch (eMkR) {}
   } else if (e.name === 'Фузкут') {
     ctx.fillStyle = '#FFD700';
     ctx.beginPath();
@@ -22238,6 +23725,7 @@ function drawEnemyAtDoor(e, x, y) {
     ctx.beginPath(); ctx.arc(-10,-38,6,0,Math.PI*2); ctx.arc(10,-38,6,0,Math.PI*2); ctx.fill();
     ctx.fillStyle = '#FFD700';
     ctx.fillRect(-12, 5, 24, 28 + Math.sin(frame/4)*12);
+    try { bbhCamMaskAt(0, -42, 0.9); } catch (eMkF) {}
   } else if (e.name === 'Рушанчик') {
     const st = Math.max(0, Math.min(4, (e.stage | 0)));
     // на камерах растёт со стадией; для архива (stage 4) — крупный заметный портрет
@@ -22265,6 +23753,7 @@ function drawEnemyAtDoor(e, x, y) {
       ctx.fillRect(-16, -36, eye - 4, eye - 4);
       ctx.fillRect(10, -36, eye - 4, eye - 4);
     }
+    try { bbhCamMaskAt(0, -36, 1.15); } catch (eMkRu) {}
     ctx.restore();
     ctx.fillStyle = st >= 3 ? '#f88' : '#ccc';
     ctx.font = (st >= 3 ? 'bold 14px' : '12px') + ' Courier New';
@@ -22996,7 +24485,161 @@ function drawSipaOnCam(x, y) {
   ctx.fillStyle = '#C9A227';
   ctx.font = '14px Courier New';
   ctx.fillText('СИПА', 0, 90);
+  try {
+    if (typeof bbhHintsPoopMode === 'function' && bbhHintsPoopMode()) {
+      bbhDrawEnemyDiveMask(ctx, 0);
+      bbhDrawEnemyFart(ctx);
+    }
+  } catch (eMs) {}
   ctx.restore();
+  try { bbhCamPoopMark(x, y, 'Сипа'); } catch (eSipaP) {}
+
+}
+
+// Говно с камер: враг на фиде кидает в «стекло», потом исчезает
+let _bbhCamPoop = { cd: 1.5, fx: [], marks: [] };
+function bbhCamPoopMark(x, y, name) {
+  try {
+    if (state !== 'playing') return;
+    _bbhCamPoop.marks.push({ x: x, y: y, name: name || '?' });
+  } catch (e) {}
+}
+function bbhCamPoopUpdateDraw(dt) {
+  if (typeof dt !== 'number' || dt <= 0 || dt > 0.1) dt = 0.016;
+  const P = _bbhCamPoop;
+  if (!P) return;
+  P.cd = Math.max(0, (P.cd || 0) - dt);
+
+  // N7: враг на выбранной камере
+  try {
+    if (n7 && n7.phase === 'hybrid' && n7.hybrid && camsOpen) {
+      const h = n7.hybrid, e = h.enemy;
+      if (e && !e.inOffice && !e.atDoor && !e.inVent && Number(e.cam) === Number(h.selectedCam)) {
+        P.marks.push({ x: W * 0.42, y: H * 0.42, name: 'Воук' });
+      }
+      if (h.mogz && h.mogz.active && Number(h.mogz.cam) === Number(h.selectedCam)) {
+        P.marks.push({ x: W * 0.55, y: H * 0.4, name: 'Могз' });
+      }
+    }
+  } catch (eN) {}
+
+  // Ночь 3: нет планшета — кидают, когда смотришь в их проход
+  try {
+    if (state === 'playing' && (currentNight === 3 || (typeof n6StageActive === 'function' && n6StageActive(2)))) {
+      if (n3Focus) {
+        const sideX = n3Focus === 'left' ? W * 0.18 : (n3Focus === 'right' ? W * 0.82 : W * 0.5);
+        const y = H * 0.48;
+        if (n3Gleb && n3Gleb.active && n3Gleb.door === n3Focus)
+          P.marks.push({ x: sideX, y: y, name: 'Глеб' });
+        if (typeof masturbek !== 'undefined' && masturbek && masturbek.stage > 0 && masturbek.door === n3Focus)
+          P.marks.push({ x: sideX, y: y - 20, name: 'Мастурбек' });
+        if (typeof oslaan !== 'undefined' && oslaan && oslaan.active && oslaan.door === n3Focus)
+          P.marks.push({ x: sideX, y: y + 10, name: 'Ослан' });
+      } else {
+        // офис: Писмилях из шкафа
+        if (typeof pismiks !== 'undefined' && pismiks && pismiks.stage > 0)
+          P.marks.push({ x: W * 0.5, y: H * 0.38, name: 'Писмилях' });
+      }
+    }
+  } catch (eN3) {}
+
+  // Ночь 5: враг виден во время атаки (левый/правый/вент/лицо)
+  try {
+    if (state === 'playing' && currentNight === 5 && n5 && n5.mode === 'office' && n5.attack) {
+      const a = n5.attack;
+      if (a === 'left' || a === 'activeLeft')
+        P.marks.push({ x: W * 0.16, y: H * 0.45, name: 'Бади' });
+      else if (a === 'right' || a === 'activeRight')
+        P.marks.push({ x: W * 0.84, y: H * 0.45, name: 'Бади' });
+      else if (a === 'vent' || a === 'activeVent')
+        P.marks.push({ x: W * 0.5, y: H * 0.22, name: 'Бади' });
+      else if (a === 'stare' || a === 'face' || a === 'mask')
+        P.marks.push({ x: W * 0.5, y: H * 0.4, name: 'Бади' });
+      else
+        P.marks.push({ x: W * 0.5, y: H * 0.42, name: 'Бади' });
+    }
+    // N6 segment that replays n5-like — optional if n6 source
+    if (state === 'playing' && currentNight === 6 && typeof n6StageActive === 'function' && n6StageActive(4) && n5 && n5.attack) {
+      P.marks.push({ x: W * 0.5, y: H * 0.4, name: 'Бади' });
+    }
+  } catch (eN5) {}
+
+  // Кидок если есть метка: камеры ИЛИ проходы N3/N5
+  if (P.cd <= 0 && P.marks.length > 0) {
+    const m = P.marks[(Math.random() * P.marks.length) | 0];
+    const n = 2 + ((Math.random() * 4) | 0);
+    for (let i = 0; i < n; i++) {
+      P.fx.push({
+        t: -i * 0.05,
+        life: 0.55 + Math.random() * 0.4,
+        x0: m.x + (Math.random() - 0.5) * 30,
+        y0: m.y - 10 + (Math.random() - 0.5) * 20,
+        x1: W * (0.3 + Math.random() * 0.4),
+        y1: H * (0.3 + Math.random() * 0.4),
+        r: 5 + Math.random() * 8,
+        spin: Math.random() * 6,
+        from: m.name
+      });
+    }
+    // иногда параллельно моча/помидор из той же точки
+    if (typeof bbhHintsOn === 'function' && bbhHintsOn() && Math.random() < 0.4) {
+      try {
+        bbhHumVolley({ count: 3, kinds: Math.random() < 0.5 ? ['pee'] : ['tomato','poop'], side: m.x < W/2 ? 'L' : 'R' });
+      } catch (eMix) {}
+    }
+    P.cd = (typeof bbhHintsOn === 'function' && bbhHintsOn())
+      ? (1.1 + Math.random() * 2.2)
+      : (2.2 + Math.random() * 3.8);
+    try {
+      if (typeof playTone === 'function' && Math.random() < 0.45) {
+        playTone(90 + Math.random() * 30, 'sine', 0.06, 0.02);
+      }
+      if (typeof bbhHintsOn === 'function' && bbhHintsOn() && Math.random() < 0.35 && _bbhHumN) {
+        _bbhHumN.taunt = 'ВРАГ ПЛЕВАЕТСЯ — ЕМУ СТЫДНО ЗА ТЕБЯ';
+        _bbhHumN.tauntT = 1.8;
+      }
+    } catch (eS) {}
+  }
+  P.marks = [];
+
+  // draw / age
+  for (let i = P.fx.length - 1; i >= 0; i--) {
+    const p = P.fx[i];
+    p.t += dt;
+    const u = p.t / p.life;
+    if (u >= 1) { P.fx.splice(i, 1); continue; }
+    if (u < 0) continue;
+    const ease = u * u * (3 - 2 * u);
+    const x = p.x0 + (p.x1 - p.x0) * ease;
+    const y = p.y0 + (p.y1 - p.y0) * ease - Math.sin(Math.max(0, u) * Math.PI) * 45;
+    // «размазыва» ближе к концу
+    const squash = u > 0.75 ? (1 + (u - 0.75) * 4) : 1;
+    const fade = u > 0.7 ? (1 - (u - 0.7) / 0.3) : 1;
+    ctx.save();
+    ctx.translate(x, y);
+    ctx.rotate(p.spin + u * 5);
+    ctx.globalAlpha = 0.75 * fade;
+    // куча
+    ctx.fillStyle = '#3a2210';
+    ctx.beginPath();
+    ctx.ellipse(0, 0, p.r * 0.9 * squash, p.r * 0.7 / squash, 0, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.fillStyle = '#5a3820';
+    ctx.beginPath();
+    ctx.ellipse(-p.r * 0.15, -p.r * 0.25, p.r * 0.55, p.r * 0.45, -0.3, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.fillStyle = '#2a1808';
+    ctx.beginPath();
+    ctx.ellipse(p.r * 0.2, p.r * 0.1, p.r * 0.4, p.r * 0.3, 0.4, 0, Math.PI * 2);
+    ctx.fill();
+    // блик
+    ctx.globalAlpha = 0.25 * fade;
+    ctx.fillStyle = '#7a5030';
+    ctx.beginPath();
+    ctx.arc(-p.r * 0.25, -p.r * 0.3, p.r * 0.2, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.restore();
+  }
 }
 
 function drawEnemyOnCam(e, x, y) {
@@ -23091,7 +24734,42 @@ function drawEnemyOnCam(e, x, y) {
       ctx.fillText('→ на звук', 0, 55);
     }
   }
+  try {
+    if (typeof bbhHintsPoopMode === 'function' && bbhHintsPoopMode()) {
+      const nm = (e && e.name) || '';
+      let headY = -80;
+      let mScale = 0.55;
+      if (nm === 'Ржавик') { headY = -75; mScale = 0.5; }
+      else if (nm === 'Фузкут') { headY = -55; mScale = 0.65; }
+      else if (nm === 'Рушанчик') {
+        const st = Math.max(0, Math.min(4, (e.stage | 0)));
+        const scale = 0.42 + st * 0.22;
+        const yOff = 35 - st * 18;
+        headY = yOff - 35 * scale;
+        mScale = 0.35 + st * 0.12;
+      }
+      else if (nm === 'Могз') { headY = -55; mScale = 0.7; }
+      else if (nm === 'Глеб') { headY = -90; mScale = 0.55; }
+      else if (nm === 'Walk365') { headY = -70; mScale = 0.5; }
+      else if (nm.indexOf('Бади') >= 0 || nm.indexOf('БАДИ') >= 0) { headY = -100; mScale = 0.7; }
+      else { headY = -70; mScale = 0.55; }
+      ctx.save();
+      ctx.translate(0, headY);
+      ctx.scale(mScale, mScale);
+      bbhDrawEnemyDiveMask(ctx, 0);
+      ctx.restore();
+      ctx.save();
+      ctx.translate(0, 10);
+      ctx.scale(mScale * 1.1, mScale * 1.1);
+      bbhDrawEnemyFart(ctx);
+      ctx.restore();
+    }
+  } catch (eMask) {}
   ctx.restore();
+  try {
+    // x,y уже в координатах камеры (куда вызвали drawEnemyOnCam)
+    bbhCamPoopMark(x, y, (e && e.name) || '?');
+  } catch (eP) {}
 }
 
 function drawJumpscare(name) {
@@ -23099,6 +24777,7 @@ function drawJumpscare(name) {
   if (!extraPreview) updateParticles(1 / 60); // во время смерти update() не вызывается, двигаем частицы вручную
   ctx.fillStyle = '#000';
   ctx.fillRect(0,0,W,H);
+  try { bbhDrawJumpscarePoopGas(); } catch (eJg) {}
 
   // тряска экрана
   const shake = Math.min(jumpscareTimer, 40);
@@ -23126,6 +24805,7 @@ function drawJumpscare(name) {
     if (typeof n7FaceImg !== 'undefined' && n7FaceImg && n7FaceImg.complete && n7FaceImg.naturalWidth) {
       const sz = 220 + jumpscareTimer * 6;
       try { ctx.drawImage(n7FaceImg, -sz / 2, -sz / 2 - 20, sz, sz); } catch (e) {}
+      try { bbhCamMaskAt(0, -22, sz / 75); } catch (eWm) {}
     } else {
       ctx.fillStyle = '#1a0508';
       ctx.beginPath(); ctx.ellipse(0, 10, 160 + jumpscareTimer * 3, 190 + jumpscareTimer * 3, 0, 0, Math.PI * 2); ctx.fill();
@@ -23460,6 +25140,25 @@ function drawJumpscare(name) {
     ctx.textAlign = 'center';
     ctx.fillText(name || 'СМЕРТЬ', 0, 160);
   }
+
+  // водолазная маска на лице скримера (режим подсказок)
+  try {
+    if (bbhHintsPoopMode()) {
+      const MK = {
+        'Бадихоррор_BOSS': [0, -45, 3.2], 'Ржавик': [0, -130, 1.7], 'Фузкут': [0, -55, 2.2],
+        'Рушанчик': [0, -30, 2.4], 'Могз': [0, -40, 1.8], 'Глеб': [0, -150, 1.7],
+        'Дуби': [0, -125, 1.7], 'Тарас': [0, -140, 1.5], 'Наталья': [0, -125, 1.5],
+        'Яша': [0, -60, 1.6], 'Жид': [0, -70, 1.9], 'Джон Джурик': [0, -140, 1.6],
+        'Мастурбек Залупджон': [0, -130, 1.7], 'Бадихоррор': [0, -85, 2.0], 'Buddyhorror': [0, -85, 2.0]
+      };
+      if (scareName === 'Кошки') {
+        for (let ci = 0; ci < 4; ci++) bbhCamMaskAt(-70 + ci * 60, -5, 0.5);
+      } else {
+        const m = MK[scareName] || [0, -72, 1.7];
+        bbhCamMaskAt(m[0], m[1], m[2]);
+      }
+    }
+  } catch (eJsMask) {}
 
   ctx.restore();
 
@@ -24009,6 +25708,12 @@ function endPhoneCall(fromSkip) {
   stopPhoneCallAudio();
   playCallEndSfx();
   setPhoneCallUi(false);
+  try {
+    if (typeof bbhHintsOn === 'function' && bbhHintsOn() && state === 'playing') {
+      const lines = ['ЗВОНОК КОНЧИЛСЯ. ПОДСКАЗКИ — НЕТ','ОПЕРАТОР ТОЖЕ ВИДИТ ТВОЙ 💡','ДАЛЬШЕ БЕЗ ТЕЛЕФОННОЙ МАМЫ'];
+      if (_bbhHumN) { _bbhHumN.taunt = lines[(Math.random()*lines.length)|0]; _bbhHumN.tauntT = 2.4; }
+    }
+  } catch (ePh) {}
   // вернуть офисный эмбиент / трек ночи
   try { resumeNightMusicAfterPhone(); } catch (e) {}
   // N7 hybrid: непрерывный офисный эмбиент после звонка
@@ -24621,6 +26326,7 @@ const EXTRA_SCARES = [
 function extraUnlocked(){ try{return localStorage.getItem('bbh_extra_unlocked')==='1';}catch(e){return false;} }
 function showExtraScreen(){
   if(!extraUnlocked()) return;
+  try { setTimeout(function(){ bbhHumDomToast('ЭКСТРА С ПОДСКАЗКАМИ — ДВОЙНОЙ ПОЗОР', 3000); }, 500); } catch(e) {}
   try { stopGlebTheme(); } catch(e) {}
   try { stopN5PhaseMusic(); } catch(e) {}
   try { stopPhoneCallAudio(); phoneCall = null; setPhoneCallUi(false); } catch(e) {}
@@ -24710,26 +26416,32 @@ function extraDrawCanonicalCharacter(kind, cx, cy, scale){
       ctx.beginPath(); ctx.arc(0, -78, 28, 0, Math.PI*2); ctx.fill();
       ctx.fillStyle = '#9cf';
       ctx.fillRect(-12, -85, 8, 6); ctx.fillRect(4, -85, 8, 6);
+      try { if (bbhHintsPoopMode()) { ctx.save(); ctx.translate(0,-78); ctx.scale(0.5,0.5); bbhDrawEnemyDiveMask(ctx,0); ctx.restore(); ctx.save(); ctx.translate(0,10); ctx.scale(0.45,0.45); bbhDrawEnemyFart(ctx); ctx.restore(); } } catch(e){}
     } else if (kind === 'mast') {
       ctx.fillStyle = '#5a4030'; ctx.fillRect(-28, -65, 56, 95);
       ctx.fillStyle = '#c4956a'; ctx.beginPath(); ctx.arc(0, -72, 26, 0, Math.PI*2); ctx.fill();
+      try { if (bbhHintsPoopMode()) { ctx.save(); ctx.translate(0,-72); ctx.scale(0.48,0.48); bbhDrawEnemyDiveMask(ctx,0); ctx.restore(); ctx.save(); ctx.translate(0,8); ctx.scale(0.45,0.45); bbhDrawEnemyFart(ctx); ctx.restore(); } } catch(e){}
     } else if (kind === 'oslaan') {
       ctx.fillStyle = '#3a3550'; ctx.fillRect(-26, -60, 52, 90);
       ctx.fillStyle = '#8a7aaa'; ctx.beginPath(); ctx.arc(0, -68, 24, 0, Math.PI*2); ctx.fill();
+      try { if (bbhHintsPoopMode()) { ctx.save(); ctx.translate(0,-68); ctx.scale(0.45,0.45); bbhDrawEnemyDiveMask(ctx,0); ctx.restore(); ctx.save(); ctx.translate(0,8); ctx.scale(0.42,0.42); bbhDrawEnemyFart(ctx); ctx.restore(); } } catch(e){}
     } else if (kind === 'pismi') {
       ctx.fillStyle = '#4a3860'; ctx.fillRect(-28, -62, 56, 92);
       ctx.fillStyle = '#c8a0e8'; ctx.beginPath(); ctx.arc(0, -70, 26, 0, Math.PI*2); ctx.fill();
+      try { if (bbhHintsPoopMode()) { ctx.save(); ctx.translate(0,-70); ctx.scale(0.48,0.48); bbhDrawEnemyDiveMask(ctx,0); ctx.restore(); ctx.save(); ctx.translate(0,8); ctx.scale(0.45,0.45); bbhDrawEnemyFart(ctx); ctx.restore(); } } catch(e){}
     } else if (kind === 'cats') {
       for (let i = 0; i < 4; i++) {
         const x = -45 + i * 30;
         ctx.fillStyle = ['#888','#aaa','#666','#999'][i];
         ctx.beginPath(); ctx.ellipse(x, 20, 16, 12, 0, 0, Math.PI*2); ctx.fill();
         ctx.beginPath(); ctx.arc(x, 5, 10, 0, Math.PI*2); ctx.fill();
+        try { if (bbhHintsPoopMode()) { ctx.save(); ctx.translate(x,5); ctx.scale(0.28,0.28); bbhDrawEnemyDiveMask(ctx,0); ctx.restore(); } } catch(e){}
       }
     } else if (kind === 'boss') {
       ctx.fillStyle = '#4a1018'; ctx.fillRect(-36, -80, 72, 110);
       ctx.fillStyle = '#c22'; ctx.beginPath(); ctx.arc(0, -88, 32, 0, Math.PI*2); ctx.fill();
       ctx.fillStyle = '#fff'; ctx.fillRect(-14, -95, 8, 8); ctx.fillRect(6, -95, 8, 8);
+      try { if (bbhHintsPoopMode()) { ctx.save(); ctx.translate(0,-88); ctx.scale(0.6,0.6); bbhDrawEnemyDiveMask(ctx,0); ctx.restore(); ctx.save(); ctx.translate(0,15); ctx.scale(0.55,0.55); bbhDrawEnemyFart(ctx); ctx.restore(); } } catch(e){}
     } else {
       // фантомы / прочие — полупрозрачный цветной силуэт
       const palette={pfuz:'#d4a83b',pmogz:'#8c69b8',ptaras:'#82a878',pnat:'#c878a0',pg:'#62a36d',pjohn:'#7896c0',adriana:'#e79bb8',psipa:'#7fc8ef',pzhid:'#d8b071',ppismi:'#bd9bea',hrust:'#c03a4a',hfuz:'#d7a72e'};
@@ -24822,6 +26534,7 @@ function extraCardArt(canvasEl, kind, label){
       ctx.strokeStyle = 'rgba(180,140,80,0.35)';
       ctx.lineWidth = 2;
       ctx.strokeRect(x - 52, y - 42, 104, 134);
+      try { bbhCamMaskAt(x, y - 55, 0.55); } catch (eM) {}
     }
     else if (kind === 'mast') {
       // Мастурбек: фиолетово-шумный силуэт
@@ -24839,6 +26552,7 @@ function extraCardArt(canvasEl, kind, label){
         ctx.arc(x, y - 20, 40 + i * 14, -0.6, 0.6);
         ctx.stroke();
       }
+      try { bbhCamMaskAt(x, y - 52, 0.5); } catch (eM) {}
     }
     else if (kind === 'oslaan') {
       // Ослан Ебаев: заряжается / фиолетовый
@@ -24856,6 +26570,7 @@ function extraCardArt(canvasEl, kind, label){
       ctx.fillStyle = '#a8f';
       ctx.font = '10px Courier New'; ctx.textAlign = 'center';
       ctx.fillText('ЗАРЯД', x, y + 70);
+      try { bbhCamMaskAt(x, y - 48, 0.48); } catch (eM) {}
     }
     else if (kind === 'pismi') {
       // Писмилях: шкаф / энергия
@@ -24873,6 +26588,7 @@ function extraCardArt(canvasEl, kind, label){
       ctx.fillStyle = '#c84';
       ctx.font = 'bold 11px Courier New'; ctx.textAlign = 'center';
       ctx.fillText('−ENERGY', x, y + 95);
+      try { bbhCamMaskAt(x, y - 40, 0.5); } catch (eM) {}
     }
     else if (kind === 'cats') {
       // Гроза, Туча, Белка, Булка
@@ -24891,6 +26607,7 @@ function extraCardArt(canvasEl, kind, label){
         ctx.fillStyle = '#ccc';
         ctx.font = '9px Courier New'; ctx.textAlign = 'center';
         ctx.fillText(names[i], ox, y + 50);
+        try { bbhCamMaskAt(ox, y + 6, 0.28); } catch (eM) {}
       }
     }
 
@@ -24908,6 +26625,7 @@ function extraCardArt(canvasEl, kind, label){
       ctx.fillStyle = 'rgba(255,100,100,0.7)';
       ctx.font = 'bold 12px Courier New'; ctx.textAlign = 'center';
       ctx.fillText('ФАНТОМ', x, y + 110);
+      try { bbhCamMaskAt(x, y - 40, 0.7); } catch (eM) {}
     }
     else if (kind === 'pmogz') {
       try {
@@ -24920,6 +26638,7 @@ function extraCardArt(canvasEl, kind, label){
       ctx.fillStyle = 'rgba(180,120,255,0.75)';
       ctx.font = 'bold 12px Courier New'; ctx.textAlign = 'center';
       ctx.fillText('ФАНТОМ', x, y + 110);
+      try { bbhCamMaskAt(x, y - 40, 0.7); } catch (eM) {}
     }
     else if (kind === 'ptaras' || kind === 'pnat' || kind === 'pjohn' || kind === 'psipa' || kind === 'pzhid' || kind === 'ppismi' || kind === 'padriana' || kind === 'pgleb') {
       // как на камере Ночи 4: силуэт + цвет глаз/подписи
@@ -24969,6 +26688,7 @@ function extraCardArt(canvasEl, kind, label){
       ctx.textAlign = 'center';
       ctx.fillText('ФАНТОМ · ' + p.n, x, y + 110);
       ctx.globalAlpha = 1;
+      try { bbhCamMaskAt(x, y - 55, 0.6); } catch (eM) {}
     }
     else if (kind === 'walk365') {
       ctx.save();
@@ -25002,6 +26722,7 @@ function extraCardArt(canvasEl, kind, label){
       ctx.fillText('WALK365 // UNLOCKED', x - 82, y - 94);
       ctx.textAlign = 'right';
       ctx.fillText('N7', x + 82, y - 94);
+      try { bbhCamMaskAt(x, y - 50, 0.75); } catch (eM) {}
       ctx.restore();
     }
     else if (kind === 'boss') {
@@ -25039,6 +26760,7 @@ function extraCardArt(canvasEl, kind, label){
       ctx.fillStyle = '#17101a';
       ctx.fillRect(-70, -10, 22, 80);
       ctx.fillRect(48, -10, 22, 80);
+      try { if (bbhHintsPoopMode()) { ctx.save(); ctx.translate(0,-70); ctx.scale(0.7,0.7); bbhDrawEnemyDiveMask(ctx,0); ctx.restore(); ctx.save(); ctx.translate(0,20); ctx.scale(0.6,0.6); bbhDrawEnemyFart(ctx); ctx.restore(); } } catch(e){}
       ctx.restore();
       ctx.fillStyle = '#f66';
       ctx.font = 'bold 13px Courier New'; ctx.textAlign = 'center';
@@ -25213,6 +26935,7 @@ function playSelectedExtraScare() {
     try { showMessage('Сначала выбери скример в списке', 40); } catch (e) {}
     return;
   }
+  try { bbhHumToastPool(BBH_HUM_SCARE, 2400); } catch (eSc2) {}
   extraScareName = picked.name;
   window._extraScareType = picked.type;
   extraScarePlaying = true;
@@ -25255,6 +26978,7 @@ function startExtraScarePreview(){
   const canvasEl = document.getElementById('extraScareCanvas');
   const panel = document.getElementById('extraScares');
   if (!canvasEl || !panel || !panel.classList.contains('active')) return;
+  try { if (Math.random() < 0.4) bbhHumToastPool(BBH_HUM_SCARE, 2600); } catch (eSc) {}
   if (extraScareRaf) {
     try { cancelAnimationFrame(extraScareRaf); } catch (e) {}
     extraScareRaf = 0;
@@ -25748,6 +27472,8 @@ function argOpenGamble() {
   if (msg) msg.textContent = 'Ставка 10 Big Bon. Удачи?';
   try { startArgCasinoMusic(); } catch (eM) {}
   try { argLeverSfx(); } catch (eL) {}
+  try { if (!bbhHintsOn()) bbhHintsRestoreGambleUi(); } catch (eHR) {}
+  try { bbhHumGambleOnOpen(); } catch (eH) {}
 }
 function argCloseGamble() {
   try {
@@ -26085,6 +27811,7 @@ function argSpin() {
           if (res.total > 0) {
             bbhArg.bigBon = (bbhArg.bigBon|0) + res.total;
             if (msg) msg.textContent = 'Выигрыш +' + res.total + ' Big Bon';
+            try { bbhHumGambleOnSpin('win'); } catch (eHumW) {}
             argWinSfx();
             try {
               if (bbhArg.infiniteGamble && res.total > 0) {
@@ -26120,6 +27847,7 @@ function argSpin() {
             } catch (eU) {}
           } else {
             if (msg) msg.textContent = 'Пусто. Ещё раз?';
+            try { bbhHumGambleOnSpin('lose'); } catch (eHumL) {}
             try { argLoseSfx(); } catch (eL) {}
           }
           argRefreshWallet();
@@ -26716,6 +28444,7 @@ function n7RunPreload(done) {
 
 function n7StartCutscene() {
   state = 'cutscene';
+  try { setTimeout(function(){ bbhHumToastPool(BBH_HUM_CUTSCENE, 3200); }, 900); } catch (eCs7) {}
   n7 = { phase: 'cutscene', step: 0, choice: -1, typeT: 0, typed: 0, wait: 0.5, lines: n7BuildCutscene(), lastTyped: 0, fx: 0, lineT: 0, hoverChoice: -1, nextTensionT: 4 + Math.random() * 2 };
   try { hideAllScreens(); setNightHudHidden(true); } catch (e) {}
   try { startN7CutsceneMusic(); } catch (e) {}
@@ -27465,6 +29194,13 @@ function n7FinishCutscene() {
 function n7StartArena(fromCs) {
   try { n7StopHybridOfficeAmb(); } catch (eAmb) {}
   state = 'playing'; currentNight = 7;
+  try {
+    if (typeof bbhHintsOn === 'function' && bbhHintsOn()) {
+      setTimeout(function(){
+        bbhHumDomToast(BBH_HUM_ARENA[(Math.random() * BBH_HUM_ARENA.length) | 0], 3400);
+      }, 1200);
+    }
+  } catch (eAH) {}
   // новый заход в 7 ночь (экстра/меню/кастсцена) — всегда с арены
   try { window._bbhN7DeathPhase = null; } catch (eDp) {}
   try { window._bbhWasN7 = true; } catch (eF) {}
@@ -28995,6 +30731,12 @@ function n7TryJump() {
   n7.jumpPhase = 0; // 0..1 прогресс
   n7.jumpLanded = false;
   n7.jumpChainUsed = false;
+  try {
+    if (typeof bbhHintsPoopMode === 'function' && bbhHintsPoopMode() && typeof n7ArenaBurst === 'function') {
+      n7ArenaBurst(n7.px || W/2, (n7.py || H/2) + 20, 8, '90,110,40', 'fart');
+      n7ArenaBurst(n7.px || W/2, (n7.py || H/2) + 24, 5, '60,80,30', 'fart');
+    }
+  } catch (eJf) {}
   // небольшой рывок вперёд по направлению движения (или лицом, если стоишь на месте) —
   // без него прыжок был чисто «на месте», и приземление всё равно приходилось
   // прямо на врага (или стопку врагов, слипшихся в одной точке), не давая его перепрыгнуть
@@ -29023,6 +30765,11 @@ function n7TickJump(dt) {
   if ((n7.jumpCd || 0) > 0) n7.jumpCd = Math.max(0, n7.jumpCd - dt);
   if ((n7.jumpT || 0) > 0) {
     n7.jumpT -= dt;
+    try {
+      if (typeof bbhHintsPoopMode === 'function' && bbhHintsPoopMode() && Math.random() < 0.2) {
+        n7ArenaBurst(n7.px || 0, (n7.py || 0) + 18, 2, '80,100,35', 'fart');
+      }
+    } catch (eJt) {}
     // держим неуязвимость на весь полёт: раньше invuln выставлялся один раз в момент
     // прыжка (0.34–0.5с) и мог закончиться ДО приземления — теперь, когда прыжок ещё
     // и двигает игрока вперёд (особенно с продлением от Пружины), это давало шанс
@@ -30458,6 +32205,7 @@ function n7OfferUpgrade() {
   n7.upgradeOpen = true;
   n7.itemOpen = false;
   n7.accOpen = false;
+  try { setTimeout(function(){ bbhHumToastPool(BBH_HUM_SHOP, 2600); }, 300); } catch (eUp) {}
   n7.holdingShoot = false;
   n7BeginMenuAnim('upgrade');
   if (n7.upgradeRerollCost == null) n7.upgradeRerollCost = 5;
@@ -30513,6 +32261,7 @@ function n7OfferItems() {
   n7.itemOpen = true;
   n7.upgradeOpen = false;
   n7.accOpen = false;
+  try { setTimeout(function(){ bbhHumToastPool(BBH_HUM_SHOP, 2800); }, 350); } catch (eSh) {}
   n7BeginMenuAnim('shop');
   if (!n7.items) n7.items = {};
   if (n7.shopRerollCost == null) n7.shopRerollCost = 1;
@@ -30804,7 +32553,7 @@ function n7DrawInfDeath() {
     ctx.translate(p.x, p.y);
     if (p.rot) ctx.rotate(p.rot);
     if (p.shard) {
-      ctx.fillStyle = p.blood ? '#8a1018' : '#4a6aaa';
+      ctx.fillStyle = p.blood ? ((typeof bbhHintsPoopMode==='function'&&bbhHintsPoopMode())?(Math.random()<0.4?'#b8a840':'#3a2210'):'#8a1018') : '#4a6aaa';
       ctx.beginPath();
       ctx.moveTo(0, -p.r);
       ctx.lineTo(p.r * 0.8, p.r * 0.6);
@@ -30812,7 +32561,7 @@ function n7DrawInfDeath() {
       ctx.closePath();
       ctx.fill();
     } else {
-      ctx.fillStyle = p.blood ? '#a01018' : '#c44';
+      ctx.fillStyle = p.blood ? ((typeof bbhHintsPoopMode==='function'&&bbhHintsPoopMode())?(Math.random()<0.4?'#c8b84a':'#4a3020'):'#a01018') : '#c44';
       ctx.beginPath();
       ctx.arc(0, 0, p.r, 0, Math.PI * 2);
       ctx.fill();
@@ -33544,6 +35293,22 @@ function n7ArenaPushPart(x, y, o) {
   if (!n7) return;
   if (!n7.parts) n7.parts = [];
   o = o || {};
+  // подсказки: кровь → говно/моча
+  try {
+    if (typeof bbhHintsPoopMode === 'function' && bbhHintsPoopMode()) {
+      const k = (o.kind || '') + '';
+      const col = (o.color || '') + '';
+      if (k === 'blood' || o.blood || /220,\s*60,\s*50|160,\s*20|8a1018|a01018|255,\s*40/i.test(col) || /^2[0-5]\d,\s*[0-8]\d,\s*[0-8]\d/.test(col)) {
+        if (Math.random() < 0.45) {
+          o.color = '180,170,60'; // моча
+          o.kind = 'pee';
+        } else {
+          o.color = '58,34,16'; // говно
+          o.kind = 'poop';
+        }
+      }
+    }
+  } catch (eBl) {}
   n7.parts.push({
     x: x, y: y,
     vx: o.vx != null ? o.vx : (Math.random() - 0.5) * 40,
@@ -34484,6 +36249,22 @@ function n7DrawEnemy(e) {
   ctx.fillStyle = rim;
   ctx.fillRect(x - r * 1.5, y - r * 1.5, r * 3, r * 3);
   ctx.restore();
+  // водолазная маска — поверх тела врага (раньше рисовалась под ним и не была видна)
+  try {
+    if (typeof bbhHintsPoopMode === 'function' && bbhHintsPoopMode()) {
+      ctx.save();
+      ctx.translate(x, y - r * 0.6);
+      const sc = Math.max(0.34, r / 38);
+      ctx.scale(sc, sc);
+      bbhDrawEnemyDiveMask(ctx, 0);
+      ctx.restore();
+      ctx.save();
+      ctx.translate(x, y + r * 0.7);
+      ctx.scale(sc, sc);
+      bbhDrawEnemyFart(ctx);
+      ctx.restore();
+    }
+  } catch (eMaskA) {}
   // HP-бар: у всех врагов, только после получения урона
   if (e.maxHp && e.maxHp > 0 && (e.hp < e.maxHp || e._wasHit)) {
     ctx.fillStyle = 'rgba(0,0,0,0.55)';
@@ -36249,6 +38030,7 @@ function n7DrawArena() {
         ctx.restore();
       }
     }
+    try { if (bbhHintsPoopMode()) bbhCamMaskAt(b.x, b.y - b.r * 0.08, Math.max(0.5, b.r / 46)); } catch (eBossMk) {}
     if ((b.hitFlash || 0) > 0) b.hitFlash -= 0.05;
     ctx.restore();
     // полоса здоровья — с рамкой, свечением и сегментами (не зеркалим — это UI)
@@ -37736,6 +39518,7 @@ function n7HybridDrawPhantom(p, x, y, w, h) {
     adriana: 'АНДРИАНА', ghost_mogz: 'ШКАТУЛКА?'
   };
   ctx.fillText(labels[p.type] || '???', cx, y + h - 14);
+  try { bbhCamMaskAt(cx, cy - 10, 0.55); } catch (e) {}
   ctx.restore();
 }
 function n7HybridDrawMogz(x, y, w, h) {
@@ -37789,6 +39572,7 @@ function n7HybridDrawMogz(x, y, w, h) {
   ctx.font = '11px Courier New';
   ctx.textAlign = 'center';
   ctx.fillText('ШКАТУЛКА ' + Math.round(m.box || 0) + '%', cx, cy + 52);
+  try { bbhCamMaskAt(cx, cy - 20, 0.65); } catch (e) {}
   ctx.restore();
 }
 
@@ -39536,6 +41320,7 @@ function n7HybridDrawOffice() {
       const sz = 70 + e.doorPressure * 40;
       n7DrawWalkBody(W / 2, dy + dh * 0.15 + sz * 0.92, sz / 90);
       try { ctx.drawImage(n7FaceImg, W / 2 - sz / 2, dy + dh * 0.15, sz, sz); } catch (eD) {}
+      try { bbhCamMaskAt(W / 2, dy + dh * 0.15 + sz / 2 - 2, sz / 75); } catch (eMkD) {}
     } else {
       // запасной силуэт (картинка лица не загрузилась) — тот же рваный аниматронный
       // контур, что и на камерах, вместо голого красного кружка
@@ -39612,6 +41397,7 @@ function n7HybridDrawOffice() {
     if (typeof n7FaceImg !== 'undefined' && n7FaceImg && n7FaceImg.complete && n7FaceImg.naturalWidth) {
       n7DrawWalkBody(W / 2, fy + sz * 0.94, sz / 90);
       try { ctx.drawImage(n7FaceImg, W / 2 - sz / 2, fy, sz, sz); } catch (eD) {}
+      try { bbhCamMaskAt(W / 2, fy + sz / 2 - 2, sz / 75); } catch (eMkF) {}
     } else {
       ctx.fillStyle = '#e22';
       ctx.beginPath();
@@ -40469,6 +42255,7 @@ function n7HybridDrawCamRoomIn(camId, x, y, w, h) {
       ctx.textAlign = 'center';
       ctx.fillText('→ ОФИС', ex, ey + 52);
     }
+    try { bbhCamMaskAt(ex, ey - 2, (isVent ? 72 : 90) / 75); } catch (eMk7) {}
   }
   // обманка: призрачный отблеск лица там, где врага на самом деле нет —
   // мигает долю секунды и пропадает, в отличие от showEnemy — не связан
@@ -42125,6 +43912,7 @@ function bbhShowBootPreloader(then) {
 
 function bbhOpenInfiniteGamble() {
   if (!bbhArg || !bbhArg.infiniteGamble) return;
+  try { setTimeout(function(){ bbhHumToastPool(BBH_HUM_GAMBLE, 3000); }, 500); } catch (eIg) {}
   try { if (typeof stopN7Music === 'function') stopN7Music(); } catch (eN) {}
   try { if (typeof n7StopOggMusic === 'function') n7StopOggMusic(); } catch (eO) {}
   try { if (typeof stopMusic === 'function') stopMusic(true); } catch (eM) {}
@@ -42136,6 +43924,10 @@ function bbhOpenInfiniteGamble() {
   bbhRunExtraTransition('♠ ГЕМБЛ', function() {
     try { showExtraScreen(); } catch (e) {}
     setTimeout(function(){ try { argOpenGamble(); } catch (e) {} }, 40);
+    try {
+      if (typeof bbhHintsOn === 'function' && bbhHintsOn())
+        setTimeout(function(){ bbhHumDomToast('БЕСКОНЕЧНЫЙ ГЕМБЛ · РЕЖИМ 💡', 3000); }, 500);
+    } catch (eH) {}
   });
 }
 function bbhOpenSgtArena() {
@@ -42148,6 +43940,10 @@ function bbhOpenSgtArena() {
   try { if (typeof stopN7Music === 'function') stopN7Music(); } catch (eN) {}
   const start = function() {
     try { hideAllScreens(); } catch (e) {}
+    try {
+      if (typeof bbhHintsOn === 'function' && bbhHintsOn())
+        bbhHumDomToast('ИНФИНИТ АРЕНА · ЗРИТЕЛИ УЖЕ СМЕЮТСЯ 💡', 3200);
+    } catch (eH) {}
     n7StartArena(false);
     // Кампания 30 UPD / 5 секторов (не «бесконечка» с 8 HP)
     try { if (typeof campaignStart === 'function') campaignStart(); } catch (eCs) {}
@@ -44018,6 +45814,8 @@ function n4DrawGlebFigure(x, y, scale, inVent) {
   // рот
   ctx.fillStyle = '#1a1a1a';
   ctx.fillRect(-10, -48, 20, 6);
+  // водолазная маска (режим подсказок)
+  try { if (bbhHintsPoopMode()) { ctx.save(); ctx.translate(0, -58); ctx.scale(0.78, 0.78); bbhDrawEnemyDiveMask(ctx, 0); ctx.restore(); } } catch (eGlM) {}
   // подпись
   ctx.fillStyle = '#9f9';
   ctx.font = 'bold 13px Courier New';
@@ -45218,6 +47016,17 @@ function n4EvSnd(kind) {
 
 function n4EvBanner(text, color, t) {
   if (n4Ev) n4Ev.banner = { text, color: color || '#f66', t: t || 3.2 };
+  try {
+    if (typeof bbhHintsOn === 'function' && bbhHintsOn() && Math.random() < 0.55) {
+      const mocks = [
+        'СОБЫТИЕ Н4 · 💡 НЕ ВЫКЛЮЧЕН',
+        'ДИРЕКТОР СОБЫТИЙ ВИДИТ ПОДСКАЗКИ',
+        'ЗАВАЛ/ЩИТОК НЕ ПРИКРОЮТ СТЫД',
+        'СОБЫТИЕ ДЛЯ НОВИЧКОВ С 💡'
+      ];
+      bbhHumDomToast(mocks[(Math.random() * mocks.length) | 0], 2400);
+    }
+  } catch (eB) {}
 }
 
 function n4EvCloseTablets() {
@@ -48164,7 +49973,8 @@ function updateNight6(dt){
   };
 
   function beginTransition(to){const c=ac();if(!c)return;c.mode='transition';c.transition={t:0,dur:2.25,to:to,swapped:false,toName:(LOC[to]&&LOC[to].name)||('СЕКТОР '+to)};try{n7.holdingShoot=false;n7.upgradeOpen=false;n7.itemOpen=false;n7.accOpen=false;n7.menuClosing=false;n7.menuAnim=1;}catch(eLock){}n7.enemies=[];n7.shots=[];n7.bossShots=[];n7.drops=[];n7.chests=[];n7.boss=null;try{n7Shake(.3);}catch(e){}stopTheme();}
-  function showOptionalChoice(){const c=ac();if(!c)return;c.musicKey='';c.mode='choice';c.choiceFlash=2.6;c.choiceHover=-1;c._choiceActionLock=false;c.choicePress=0;try{n7.holdingShoot=false;n7.upgradeOpen=false;n7.itemOpen=false;n7.accOpen=false;n7.menuClosing=false;n7.menuAnim=1;n7._keyCodes=Object.create(null);}catch(eLock){}n7.enemies=[];n7.shots=[];n7.bossShots=[];n7.drops=[];n7.chests=[];n7.boss=null;n7.bossReady=false;n7.msg='АРЕНА ОЧИЩЕНА';n7.msgT=2;play('audN7_dialogue1',true,.055);}
+  function showOptionalChoice(){const c=ac();if(!c)return;c.musicKey='';c.mode='choice';c.choiceFlash=2.6;c.choiceHover=-1;c._choiceActionLock=false;c.choicePress=0;try{n7.holdingShoot=false;n7.upgradeOpen=false;n7.itemOpen=false;n7.accOpen=false;n7.menuClosing=false;n7.menuAnim=1;n7._keyCodes=Object.create(null);}catch(eLock){}n7.enemies=[];n7.shots=[];n7.bossShots=[];n7.drops=[];n7.chests=[];n7.boss=null;n7.bossReady=false;n7.msg=(typeof bbhHintsOn==='function'&&bbhHintsOn())?'АРЕНА ОЧИЩЕНА (С 💡)':'АРЕНА ОЧИЩЕНА';n7.msgT=2;
+    try{if(typeof bbhHintsOn==='function'&&bbhHintsOn())bbhHumToastPool(BBH_HUM_ARENA,2800);}catch(eAC){}play('audN7_dialogue1',true,.055);}
   function enterOptional(loc){
     const c=ac();if(!c)return;if(loc===4&&c.optionalDone.joke)return;if(loc===5&&c.optionalDone.creepy)return;
     c.musicKey='';c.location=loc;c.mode='optional';try{if(n7.turret&&n7.turret.modeT>8)n7.turret.modeT=1.2;}catch(eT0){}c.segmentBaseUpd=n7.upgrades|0;c.segmentLastUpd=0;c.mainLastUpd=n7.upgrades|0;c.pendingBosses=[];c.bossActive=false;c.bossUid=null;c.bossRole='';c.bossKind='';c.uniqueSpawnCd=4.2;c.locationT=0;c.uniqueSpawnTotal=0;c.unique2SpawnCd=6.6;c.unique2SpawnTotal=0;c.supportSpawnCd=7.2;c.supportSpawnTotal=0;c.miniBag=[];c.bannerT=2.8;c.locationBanner=(LOC[loc]&&LOC[loc].name)||('СЕКТОР '+loc);c.uniqueSpawnCd=3.2;c.musicKey='';
@@ -48856,6 +50666,11 @@ function updateNight6(dt){
     ctx.restore();
   }
 
+  // водолазная маска для врагов кампании/доп. уровней (у них своя отрисовка, мимо базовой)
+  function n7CampaignMask(e,x,y,r){
+    if(!e||e._decoy)return;
+    try{if(bbhHintsPoopMode()){ctx.save();bbhCamMaskAt(x,y-r*0.1,Math.max(0.34,r/38));ctx.restore();}}catch(eCm){}
+  }
   const baseDrawEnemy=n7DrawEnemy;
   n7DrawEnemy=function(e){
     // Campaign bosses/minibosses/уникальные враги (_unique) уже имеют своё дедикейт-арт.
@@ -48867,7 +50682,7 @@ function updateNight6(dt){
     const x=e.x,y=e.y,r=e.r||10,t=(n7&&n7.t)||0,reg=e._campaignRegion||0,wobP=e.wob||0;
     // вне кампании / без региона — обычная отрисовка (спешлы всё равно через skin если помечены)
     if(!c||!c.active){
-      if(isCampaignSpecial){ctx.save();n7CampaignSkin(e,x,y,r,t,wobP);ctx.restore();}
+      if(isCampaignSpecial){ctx.save();n7CampaignSkin(e,x,y,r,t,wobP);n7CampaignMask(e,x,y,r);ctx.restore();}
       else baseDrawEnemy(e);
       return;
     }
@@ -48875,6 +50690,7 @@ function updateNight6(dt){
     try{
     if(!isCampaignSpecial && (reg===4||reg===5) && e.type!=='moneybag' && e.type!=='ghostY' && e.type!=='ghostR'){
       n7DrawLocationReskin(e,x,y,r,t);
+      n7CampaignMask(e,x,y,r);
       // reskin уходит в return раньше baseDrawEnemy — бар рисуем сами
     } else if(!isCampaignSpecial) {
       baseDrawEnemy(e);
@@ -48904,6 +50720,7 @@ function updateNight6(dt){
       ctx.restore();
     }
     n7CampaignSkin(e,x,y,r,t,wobP);
+    n7CampaignMask(e,x,y,r);
     // мини-боссы/боссы: доп. тематический рескин под Δ/Ω
     if(e._campaignBoss&&(reg===4||reg===5)){
       ctx.save();
