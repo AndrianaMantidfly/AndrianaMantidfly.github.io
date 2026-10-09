@@ -7505,11 +7505,14 @@ function menuHumSpawn(t, w, h) {
 function menuHumTickDraw(t, w, h, dtApprox) {
   const hintsOn = (typeof bbhHintsOn === 'function' && bbhHintsOn());
   if (!hintsOn) {
-    if (menuHumFx.length || menuHumSplat.length) {
-      menuHumClearActs();
-      menuHumSplat = [];
-    }
-    MENU_ART_FIGURES.forEach(function(f){ if (f.act) f.act = null; });
+    try {
+      if (menuHumFx && menuHumFx.length) menuHumFx.length = 0;
+      if (menuHumSplat && menuHumSplat.length) menuHumSplat.length = 0;
+      if (typeof menuHumClearActs === 'function') menuHumClearActs();
+      if (typeof MENU_ART_FIGURES !== 'undefined') {
+        MENU_ART_FIGURES.forEach(function(f){ try { f.act = null; f.glitching = false; } catch(e){} });
+      }
+    } catch (eOff) {}
     return;
   }
   // планировщик
@@ -16149,10 +16152,20 @@ function bbhSetHints(on){
   try { localStorage.setItem('bbh_hints_v1', window.bbhHints ? '1' : '0'); } catch(e) {}
   try { document.body.classList.toggle('bbh-hints-poop', !!window.bbhHints); } catch(ePoopCls) {}
   try { bbhSyncHintButtons(); } catch(e) {}
-  try { if (!window.bbhHints) bbhHintsRestoreUi(); else { bbhPauseTrollApply(false); bbhMenuTrollApply(); } } catch(e) {}
-  // сразу снять подсветку с камер
   try {
-    document.querySelectorAll('.camBtn.hasEnemy').forEach(function(b){ b.classList.remove('hasEnemy'); });
+    if (!window.bbhHints) {
+      bbhHintsRestoreUi();
+    } else {
+      try { document.body.classList.add('bbh-hints-poop'); } catch(e2) {}
+      bbhPauseTrollApply(true);
+      bbhMenuTrollApply();
+    }
+  } catch(e) {}
+  // сразу снять подсветку с камер (она только при подсказках)
+  try {
+    if (!window.bbhHints) {
+      document.querySelectorAll('.camBtn.hasEnemy').forEach(function(b){ b.classList.remove('hasEnemy'); });
+    }
   } catch(e) {}
 }
 
@@ -16187,13 +16200,39 @@ function bbhHintsRestoreUi() {
   try { bbhHintsRestoreGambleUi(); } catch (e) {}
   try {
     var tt = document.getElementById('bbhHumToast');
-    if (tt) { clearTimeout(tt._t); tt.style.opacity = '0'; }
+    if (tt) { clearTimeout(tt._t); tt.style.opacity = '0'; tt.textContent = ''; }
   } catch (e) {}
   try {
-    if (typeof _bbhHumN === 'object' && _bbhHumN) { _bbhHumN.fx = []; _bbhHumN.stains = []; _bbhHumN.taunt = null; _bbhHumN.tauntT = 0; }
-    if (typeof _bbhHumMode === 'object' && _bbhHumMode) _bbhHumMode.fx = [];
-    if (typeof _bbhCamPoop === 'object' && _bbhCamPoop) { _bbhCamPoop.fx = []; _bbhCamPoop.marks = []; }
+    if (typeof _bbhHumN === 'object' && _bbhHumN) {
+      _bbhHumN.fx = []; _bbhHumN.stains = []; _bbhHumN.taunt = null; _bbhHumN.tauntT = 0;
+      _bbhHumN.next = 9999;
+    }
+    if (typeof _bbhHumMode === 'object' && _bbhHumMode) {
+      _bbhHumMode.fx = []; _bbhHumMode.next = 9999;
+      if (_bbhHumMode.stains) _bbhHumMode.stains = [];
+    }
+    if (typeof _bbhCamPoop === 'object' && _bbhCamPoop) {
+      _bbhCamPoop.fx = []; _bbhCamPoop.marks = []; _bbhCamPoop.cd = 0;
+    }
     window._bbhPendingNightTip = null;
+    // арена: убрать уже заспавненные «пердёж/говно»-частицы
+    try {
+      if (typeof n7 !== 'undefined' && n7 && n7.parts && n7.parts.length) {
+        n7.parts = n7.parts.filter(function(p){
+          var k = (p && p.kind) || '';
+          return k !== 'fart' && k !== 'poop' && k !== 'pee';
+        });
+      }
+    } catch (eParts) {}
+  } catch (e) {}
+  try {
+    if (typeof menuHumFx !== 'undefined' && menuHumFx && menuHumFx.length) menuHumFx.length = 0;
+    if (typeof menuHumSplat !== 'undefined' && menuHumSplat && menuHumSplat.length) menuHumSplat.length = 0;
+    if (typeof menuHumNextT !== 'undefined') menuHumNextT = 1e9;
+    if (typeof menuHumClearActs === 'function') menuHumClearActs();
+    if (typeof MENU_ART_FIGURES !== 'undefined' && MENU_ART_FIGURES) {
+      MENU_ART_FIGURES.forEach(function(f){ try { f.act = null; f.glitching = false; } catch(e){} });
+    }
   } catch (e) {}
   try {
     var m = document.getElementById('message');
@@ -16203,9 +16242,22 @@ function bbhHintsRestoreUi() {
     }
   } catch (e) {}
   try { document.querySelectorAll('.camBtn.hasEnemy').forEach(function(b){ b.classList.remove('hasEnemy'); }); } catch (e) {}
+  try { document.body.classList.remove('bbh-hints-poop'); } catch (e) {}
   try { bbhPauseTrollApply(false); } catch (e) {}
+  try {
+    // Сброс тролль-подписей меню: очистить applied, чтобы base восстановился
+    ['newGameBtn','continueBtn','hardNightBtn','extraBtn'].forEach(function(id){
+      var el = document.getElementById(id);
+      if (!el) return;
+      if (el.dataset.bbhLabel) {
+        el.textContent = el.dataset.bbhLabel;
+        delete el.dataset.bbhApplied;
+      }
+    });
+    var sub = document.getElementById('bbhMenuTrollSub');
+    if (sub) sub.style.display = 'none';
+  } catch (e) {}
   try { bbhMenuTrollApply(); } catch (e) {}
-  try { if (typeof menuHumClearActs === 'function') { menuHumClearActs(); menuHumSplat = []; } } catch (e) {}
 }
 function bbhSyncHintButtons(){
   var on = bbhHintsOn();
@@ -22790,7 +22842,15 @@ function bbhDrawSludgeBackground(c, w, h, t) {
 
 
 function bbhHumModeCanvasTick(dt) {
-  if (typeof bbhHintsOn !== 'function' || !bbhHintsOn()) return;
+  if (typeof bbhHintsOn !== 'function' || !bbhHintsOn()) {
+    try {
+      if (_bbhHumN && (_bbhHumN.fx.length || _bbhHumN.stains.length || _bbhHumN.taunt)) {
+        _bbhHumN.fx = []; _bbhHumN.stains = []; _bbhHumN.taunt = null; _bbhHumN.tauntT = 0;
+      }
+      if (_bbhHumMode) { _bbhHumMode.fx = []; _bbhHumMode.next = 9999; }
+    } catch (eClr) {}
+    return;
+  }
   if (state !== 'playing') return;
   const id = bbhHumModeId();
   if (id !== 'tetris' && id !== 'arena' && id !== 'boss' && id !== 'corridor' && id !== 'challenge' && id !== 'n6' && id !== 'shop') return;
@@ -24501,6 +24561,7 @@ let _bbhCamPoop = { cd: 1.5, fx: [], marks: [] };
 function bbhCamPoopMark(x, y, name) {
   try {
     if (state !== 'playing') return;
+    if (typeof bbhHintsOn === 'function' && !bbhHintsOn()) return;
     _bbhCamPoop.marks.push({ x: x, y: y, name: name || '?' });
   } catch (e) {}
 }
@@ -24508,6 +24569,13 @@ function bbhCamPoopUpdateDraw(dt) {
   if (typeof dt !== 'number' || dt <= 0 || dt > 0.1) dt = 0.016;
   const P = _bbhCamPoop;
   if (!P) return;
+  // Подсказки ВЫКЛ — мгновенно гасим все броски и метки
+  if (typeof bbhHintsOn === 'function' && !bbhHintsOn()) {
+    if (P.fx && P.fx.length) P.fx.length = 0;
+    if (P.marks && P.marks.length) P.marks.length = 0;
+    P.cd = 0;
+    return;
+  }
   P.cd = Math.max(0, (P.cd || 0) - dt);
 
   // N7: враг на выбранной камере
@@ -24564,8 +24632,8 @@ function bbhCamPoopUpdateDraw(dt) {
     }
   } catch (eN5) {}
 
-  // Кидок если есть метка: камеры ИЛИ проходы N3/N5
-  if (P.cd <= 0 && P.marks.length > 0) {
+  // Кидок если есть метка: камеры ИЛИ проходы N3/N5 (только при подсказках)
+  if (P.cd <= 0 && P.marks.length > 0 && typeof bbhHintsOn === 'function' && bbhHintsOn()) {
     const m = P.marks[(Math.random() * P.marks.length) | 0];
     const n = 2 + ((Math.random() * 4) | 0);
     for (let i = 0; i < n; i++) {
