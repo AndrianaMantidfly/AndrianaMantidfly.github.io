@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#050505">
+<title>GLEB RUN — Buddy Horror</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<script>/* sealed archive: show the sealed screen from the very first paint (no menu flash while scripts load) */
+try{if(localStorage.getItem('gleb_run_archive_sealed_v1')==='1')document.body.classList.add('game-sealed');}catch(e){}</script>
+<script>/* disable right-click context menu (and long-press menu / drag) */
+document.addEventListener('contextmenu',function(e){e.preventDefault();return false;},true);
+document.addEventListener('dragstart',function(e){e.preventDefault();},true);</script>
+<div id="ui">
+  <header id="hud" class="hidden">
+    <div class="hud-left">
+      <div class="label">SCORE</div>
+      <div id="score">0</div>
+      <div class="level-track"><div id="levelProg" class="level-prog"></div></div>
+    </div>
+    <div class="hud-mid">
+      <div class="label">LEVEL</div>
+      <div id="levelNum">1</div>
+    </div>
+    <div class="hud-right">
+      <div class="label">DIST</div>
+      <div id="dist">0m</div>
+      <div class="label mini">COMBO <span id="combo">x1</span></div>
+    </div>
+  </header>
+  <button type="button" id="btnPause" class="btn-pause" tabindex="-1" aria-label="Пауза">❚❚</button>
+  <div id="levelBanner" class="level-banner hidden" aria-hidden="true">
+    <div class="level-banner-inner">
+      <div class="level-banner-stamp">NEXT STAGE</div>
+      <div id="levelBannerText">УРОВЕНЬ 2</div>
+      <div id="levelBannerSub">150 BPM</div>
+    </div>
+  </div>
+  <div id="powers" class="powers hidden"></div>
+  <div id="meterWrap" class="meter-wrap hidden">
+    <div class="meter-label">ОБЕЗЬЯНА</div>
+    <div class="meter-bar"><div id="coinMeter" class="meter-fill"></div></div>
+    <button type="button" id="btnMonkey" class="btn-monkey" disabled>БЕЗОПАСНЫЙ РЕЖИМ (E)</button>
+  </div>
+
+  <section id="title" class="panel">
+    <div class="stamp">BUDDY HORROR // SIDE PROTOCOL</div>
+    <h1>GLEB<br><em>RUN</em></h1>
+    <p>Два уровня. У каждого свой саундтрек. <kbd>X</kbd> — пауза.</p>
+    <ul class="controls">
+      <li><kbd>←</kbd><kbd>→</kbd> / свайп — полоса</li>
+      <li><kbd>↑</kbd><kbd>Space</kbd> / свайп вверх — прыжок</li>
+      <li><kbd>↓</kbd> / свайп вниз — подкат</li>
+      <li><kbd>E</kbd> — «обезьяна»</li>
+      <li><kbd>X</kbd> — пауза</li>
+    </ul>
+    <p id="loadErr" class="err hidden"></p>
+    <div class="menu-levels">
+      <button type="button" id="btnStart130" class="btn">УРОВЕНЬ 1 · 130 BPM ↗</button>
+      <button type="button" id="btnStart150" class="btn btn-level2">УРОВЕНЬ 2 · 150 BPM ↗</button>
+      <button type="button" id="btnSecret" class="btn btn-secret hidden" disabled>УЗНАТЬ ТАЙНУ ↗</button>
+      <p class="unlock-hint">Ур.2 открывается после 12 000 очков на 1-м.<br>Тайна — после 18 000 на 2-м.</p>
+    </div>
+  </section>
+
+  <section id="pause" class="panel hidden">
+    <div class="stamp">PAUSED</div>
+    <h2>ПАУЗА</h2>
+    <p>X — продолжить</p>
+    <button type="button" id="btnResume" class="btn">ПРОДОЛЖИТЬ ↗</button>
+    <button type="button" id="btnExit" class="btn btn-ghost">В МЕНЮ</button>
+  </section>
+
+  <section id="over" class="panel hidden">
+    <div class="stamp danger">CAUGHT</div>
+    <h2>ГЛЕБА СХВАТИЛИ</h2>
+    <p id="overStats">—</p>
+    <button type="button" id="btnRetry" class="btn">ЕЩЁ РАЗ ↗</button>
+    <button type="button" id="btnExitOver" class="btn btn-ghost">В МЕНЮ</button>
+  </section>
+
+  <div id="touch" class="hidden" aria-hidden="true"></div>
+  <div id="warn" class="hidden">ОН БЛИЗКО</div>
+  <div id="beatFx" aria-hidden="true">В РИТМ!</div>
+</div>
+
+<!-- Bill Cipher secret scene -->
+<section id="billScene" class="bill-scene hidden" aria-hidden="true">
+  <canvas id="billCanvas"></canvas>
+  <div class="bill-fx bill-scan"></div>
+  <div class="bill-fx bill-noise"></div>
+  <div class="bill-fx bill-vig"></div>
+  <div id="billFlash" class="bill-fx bill-flash"></div>
+  <div class="bill-ui">
+    <div id="billStamp" class="bill-stamp">???</div>
+    <div id="billLine" class="bill-line">…</div>
+  </div>
+</section>
+
+<!-- Permanent break -->
+<section id="broken" class="broken-screen hidden" aria-hidden="true">
+  <div class="broken-glitch">FATAL EXCEPTION</div>
+  <h2>АРХИВ ЗАПЕЧАТАН</h2>
+  <p id="brokenMsg">Клиент больше не отвечает.<br>Протокол GLEB RUN завершён.<br>Повторный запуск невозможен.</p>
+  <div class="broken-code">ERR_SECRET_CONSUMED // 0xB1LL</div>
+</section>
+
+<canvas id="c"></canvas>
+<div id="vignette" aria-hidden="true"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+<script src="audio_embed.js"></script>
+<script src="game.js"></script>
+</body>
+</html>

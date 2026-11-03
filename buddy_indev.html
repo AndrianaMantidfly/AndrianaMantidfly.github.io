@@ -426,7 +426,7 @@ window.__bbhVerifyGate=function(){
 </div>
 <header>
   <div class="brand"><div class="logo">B<i></i></div><div><h1>BUDDY HORROR // ARCHIVE</h1><small>PRIVATE BUILD / ACCESS NODE 01</small></div></div>
-  <nav class="nav"><a href="#game">PLAY</a><a href="#profile">PROFILE</a><a href="#archive">ARCHIVE</a><a href="#achievements">ACHIEVEMENTS</a><a href="#support">SUPPORT</a><a href="#lore">LORE</a><a href="#studio">ABOUT</a><a class="secret-nav" id="secretNav" href="#secretNode">RED NODE</a></nav>
+  <nav class="nav"><a href="#game">PLAY</a><a href="#profile">PROFILE</a><a href="#archive">ARCHIVE</a><a href="#achievements">ACHIEVEMENTS</a><a href="#support">SUPPORT</a><a href="#lore">LORE</a><a href="#studio">ABOUT</a><a class="gleb-nav" id="glebNav" href="#glebRun">GLEB RUN</a><a class="secret-nav" id="secretNav" href="#secretNode">RED NODE</a></nav>
 </header>
 <main>
 <section class="hero"><div><div class="kicker">restricted game archive</div><h2>ПЯТЬ НОЧЕЙ<br>С <span>БАДИХОРРОРОМ</span></h2><p>Небольшая независимая хоррор-игра, сохранённая в виде закрытого ночного терминала. Здесь находится рабочая сборка, архив материалов, восстановленные документы и профиль прохождения, который обновляется непосредственно из сохранения игры.</p><div class="player-welcome" id="playerWelcome">LOCAL ACCESS GRANTED · OPERATOR <strong id="welcomeName"></strong></div></div><div class="hero-side"><div class="stamp">STATUS / <strong><span class="live-dot"></span>ONLINE</strong><br>BUILD / BBH-2026<br>ACCESS / LOCAL<br>SAVE / <strong id="heroSaveState">SCANNING</strong></div><div class="facts"><div class="fact"><b>05</b><span>NIGHT CYCLES</span></div><div class="fact"><b>960×620</b><span>GAME CANVAS</span></div><div class="fact"><b>LIVE</b><span>PLAYABLE BUILD</span></div><div class="fact"><b id="heroStars">☆☆☆☆</b><span>ARCHIVE RATING</span></div></div></div></section>
@@ -458,6 +458,8 @@ window.__bbhVerifyGate=function(){
 <section id="terminal" class="section"><div class="section-title"><h3>13 // SIGNAL & COMMUNITY</h3><span>PUBLIC NODE / UNVERIFIED TRANSMISSIONS</span></div><div class="meta-grid"><div class="panel signal-panel"><div class="side-title">SIGNAL ANALYZER / LOCAL FEED</div><div class="wave"><canvas id="signalCanvas"></canvas></div><div class="frequency"><span>CHANNEL <b id="signalChannel">03</b></span><span>FREQ <b id="signalFreq">017.4</b></span><span>NOISE <b id="signalNoise">LOW</b></span></div><div class="signal-controls" style="margin-top:15px"><button class="signal-btn active" data-channel="03">CAM 03</button><button class="signal-btn" data-channel="05">CAM 05</button><button class="signal-btn" data-channel="07">CAM 07</button><button class="signal-btn" data-channel="00">UNKNOWN</button></div><div class="visitor"><span>VISITORS IN CURRENT NODE</span><b id="visitorCount">000000</b></div></div><div class="panel signal-panel"><div class="side-title">NODE TRANSMISSIONS</div><div class="notice-stack" id="noticeStack"><div class="notice-card" data-detail="Клиенты жаловались на разрыв соединения ровно в 03:17. Окно обслуживания продлили, чтобы никто не заметил совпадение."><small>09.06 / NODE-01</small><b>ARCHIVE WINDOW EXTENDED</b><span>Local clients may remain connected beyond scheduled maintenance.</span></div><div class="notice-card" data-detail="Три реплики были удалены модерацией дважды. Восстановлены они были из кэша, которого, по документам, не существует."><small>07.06 / MODERATION</small><b>COMMENTS RESTORED</b><span>Three missing replies were recovered from an offline cache.</span></div><div class="notice-card" data-detail="[ЧАСТИЧНО ВОССТАНОВЛЕНО] «...если вы читаете это, канал UNKNOWN уже не так уж и неизвестен...»"><small>??.?? / UNKNOWN</small><b>MESSAGE WITHHELD</b><span>This transmission cannot be displayed on the public node.</span></div><div class="notice-card" data-detail="Тикет открылся раньше, чем поддержка получила первое сообщение. Разница по времени в логах — отрицательная. Раздел техподдержки закрыл вопрос без объяснений."><small>??.?? / SUPPORT</small><b>TICKET TIMESTAMP MISMATCH</b><span>A support ticket was logged before the first message was sent.</span></div></div></div></div></section>
 <section id="community" class="section"><div class="section-title"><h3>14 // COMMUNITY BOARD</h3><span>PLAYER REPORTS / MODERATION PARTIAL</span></div><div class="community" id="communityStaticPosts"></div><div class="community-tools"><div class="panel comment-box"><h4>LEAVE A FIELD COMMENT</h4><p>Оставьте сообщение в локальном архиве. Публичная синхронизация отключена — запись остаётся на этом терминале. [BBH ARCHIVE // фрагмент снят с локального терминала]</p><form class="comment-form" id="commentForm"><input class="comment-name" id="commentName" maxlength="24" placeholder="CALLSIGN" autocomplete="off"><textarea class="comment-input" id="commentText" maxlength="240" placeholder="Ваш комментарий..."></textarea><button class="btn" type="submit">POST ↗</button></form><div class="comment-limit" id="commentLimit">LOCAL BOARD · 0 / 12 ENTRIES</div><div class="comment-counter" id="commentCounter">0 / 240</div></div><div class="panel comment-list" id="commentList"><div class="comment-empty" id="commentEmpty">NO LOCAL COMMENTS YET.<br>BE THE FIRST OPERATOR.</div></div></div></section>
 <section id="console" class="section"><div class="section-title"><h3>15 // ARCHIVE CONSOLE</h3><span>LOCAL COMMAND INTERFACE</span></div><div class="panel signal-panel command-panel"><div><div class="side-title">ENTER QUERY</div><input id="archiveCommand" class="command-input" autocomplete="off" placeholder="Введите запрос. Архив отвечает не всем одинаково."></div><button class="btn" id="commandRun">EXECUTE ↗</button><div class="command-output" id="commandOutput"><strong>ARCHIVE READY.</strong><br>Type <b>help</b> for available commands.</div></div></section>
+
+<section id="glebRun" class="section gleb-section"><div class="section-title"><h3>17 // SIDE PROTOCOL</h3><span>GLEB RUN / SEAL REMOVED</span></div><div class="panel"><div class="panel-head"><span>SIDE PROTOCOL · RHYTHM RUNNER</span><div class="lights"><i></i><i></i><i></i></div></div><div class="game-launch-panel"><div><div class="game-launch-kicker">SIDE PROTOCOL / SEAL REMOVED</div><h4>GLEB RUN</h4><p>Два уровня, у каждого свой саундтрек. Ур. 2 открывается после 12 000 очков на первом, тайна — после 18 000 на втором. Звук обязателен. Секрет можно узнать только один раз.</p></div><div class="game-launch-actions"><span id="glebState">GLEB RUN OFFLINE · AWAITING PLAYER</span><button class="btn" id="glebPlay" type="button">PLAY ↗</button><button class="btn" id="glebFull" type="button" hidden>FULLSCREEN ↗</button></div></div><div class="game-wrap game-off" id="glebWrap"><div class="game-screen"><iframe id="glebFrame" data-src="gleb_runer/index.html" title="GLEB RUN" allow="fullscreen *; autoplay *" allowfullscreen referrerpolicy="same-origin" oncontextmenu="return false"></iframe></div></div><div class="playbar"><span>LOCAL CLIENT · NO EXTERNAL SERVER · PROGRESS IS WRITTEN TO THE ACHIEVEMENT SERVICE</span></div></div></section>
 
 <section id="secretNode" class="section secret-section"><div class="section-title"><h3>██ // RESTRICTED NODE</h3><span>INDEX STATUS / FAILED</span></div><div class="secret-grid"><div class="panel secret-core secret-pulse"><div class="secret-eyebrow">ARCHIVE / LEVEL ??? / LOCAL OVERRIDE</div><h3>YOU FOUND<br><span>THE WRONG PAGE.</span></h3><p>Этот раздел не существует в публичном индексе. Он появился только потому, что ваш клиент выполнил последовательность, которую архив не должен был принимать.</p><div class="secret-redact" id="secretRedact">[03:17] REQUEST ACCEPTED<br>[03:17] PUBLIC INDEX BYPASS<br>[03:18] OBSERVER COUNT: <span id="observerCount">01</span><br>[03:18] <b>PLEASE DO NOT CONTINUE</b></div><button class="btn" id="decodeFragment" style="margin-top:12px">DECODE NEXT FRAGMENT ↗</button><div class="secret-unlock">ACCESS GRANTED / SESSION-SPECIFIC</div></div><div class="panel secret-side"><div class="side-title">RECOVERED NODE DATA</div><div class="logline"><b>EVENT 03:17</b><br>Источник запроса не совпадает с зарегистрированным UI.</div><div class="logline"><b>CAMERA 00</b><br>Нет изображения. Только временная метка.</div><div class="logline"><b>OPERATOR</b><br><span id="secretOperator">UNRESOLVED</span></div><div class="logline"><b>LOCAL CLOCK</b><br><span id="secretClock">--:--:--</span></div><div class="logline"><b>WARNING</b><br>Не закрывайте вкладку, если хотите увидеть следующий файл.</div><button class="btn" id="secretClose" style="margin-top:18px">CLOSE NODE ↗</button></div></div></section>
 
@@ -724,6 +726,10 @@ const CHANGELOG_POOL=[
       el.innerHTML='<b>'+item.q+'</b><span>'+item.a+'</span>';
       incidentWrap.appendChild(el);
     });
+    const gl=document.createElement('div');
+    gl.className='faq';
+    gl.innerHTML='<b>Запечатанный боковой протокол в тикете.</b><span>Статус SEALED. Подробности оператор называет только по прямому вопросу о «Глебе».</span>';
+    incidentWrap.appendChild(gl);
   }
 })();
 
@@ -935,7 +941,11 @@ const SITE_ACHIEVEMENTS=[
  {id:'hidden_sequence',icon:'↑↓',title:'НЕЗАДОКУМЕНТИРОВАННАЯ ПОСЛЕДОВАТЕЛЬНОСТЬ',desc:'Где-то на странице спрятана комбинация клавиш.'},
  {id:'second_observer',icon:'⧉',title:'ВТОРОЙ НАБЛЮДАТЕЛЬ',desc:'Откройте архив в двух вкладках одновременно.'},
  {id:'name_heard',icon:'𝕄',title:'ОНА УСЛЫШАЛА ИМЯ',desc:'Наберите её имя где угодно на странице.'},
- {id:'gallery_full',icon:'▣',title:'ПОЛНЫЙ ОБЗОР',desc:'Просмотрите каждый восстановленный кадр в визуальном архиве.'}
+ {id:'gallery_full',icon:'▣',title:'ПОЛНЫЙ ОБЗОР',desc:'Просмотрите каждый восстановленный кадр в визуальном архиве.'},
+ {id:'gleb_open',icon:'▶',title:'БОКОВОЙ ПРОТОКОЛ',desc:'Снимите печать с GLEB RUN: игра открыта.'},
+ {id:'gleb_l1',icon:'1',title:'GLEB RUN · УРОВЕНЬ 1',desc:'Запустите первый уровень — 130 BPM.'},
+ {id:'gleb_l2',icon:'2',title:'GLEB RUN · УРОВЕНЬ 2',desc:'Наберите 12 000 очков на первом уровне: второй уровень (150 BPM) открыт.'},
+ {id:'gleb_secret',icon:'?',title:'GLEB RUN · ТАЙНА ОТКРЫТА',desc:'Наберите 18 000 очков на втором уровне: доступ к тайне разрешён.'}
 ];
 function getSiteAch(){try{return JSON.parse(localStorage.getItem(SITE_ACH_KEY)||'{}')}catch(e){return {}}}
 function renderSiteAch(){
@@ -1162,9 +1172,54 @@ if(cv&&'IntersectionObserver' in window){const signalIO=new IntersectionObserver
     try{localStorage.setItem('bbh_cookie_choice_v2',choice)}catch(e){}
     if(notice)notice.classList.add('hidden');
     if(typeof logEvent==='function')logEvent('COOKIE CONSENT / '+(choice==='accepted'?'ALLOWED':'DECLINED'),'PRIVACY');
-    if(choice==='declined'&&typeof showCreepyToast==='function'){
-      setTimeout(()=>showCreepyToast('DECLINE RECORDED','Локальное хранилище всё равно сохранило ваш выбор — иначе архив не смог бы его запомнить.'),900);
-    }
+    if(choice==='declined')declineHorror();
+  }
+  /* DECLINE: one creepy sequence per page load. ACCEPT: nothing happens. */
+  function declineHorror(){
+    if(document.getElementById('bbhDeclineScare'))return;
+    let name='ОПЕРАТОР';
+    try{name=(localStorage.getItem('bbh_operator_name_v2')||name).replace(/[<>&"']/g,'').slice(0,24).toUpperCase()}catch(e){}
+    const time=new Date().toLocaleTimeString('ru-RU',{hour12:false});
+    const st=document.createElement('style');
+    st.textContent='#bbhDeclineScare{position:fixed;inset:0;z-index:99999;background:#000;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:24px;text-align:center;font:13px/1.7 monospace;letter-spacing:.14em;color:#c9cfca;opacity:0;pointer-events:all;transition:opacity .25s}'+
+      '#bbhDeclineScare.on{opacity:1}#bbhDeclineScare.off{opacity:0;transition:opacity 1.6s ease}'+
+      '#bbhDeclineScare b{color:#ff5d59;font-size:15px}#bbhDeclineScare .ln{opacity:0;transition:opacity .6s}#bbhDeclineScare .ln.show{opacity:1}'+
+      '#bbhDeclineScare .eyes{display:flex;gap:26px;margin-top:22px;opacity:0;transition:opacity .15s}#bbhDeclineScare .eyes.show{opacity:1}'+
+      '#bbhDeclineScare .eyes i{width:10px;height:10px;border-radius:50%;background:#ff5d59;box-shadow:0 0 12px 3px rgba(255,93,89,.8)}'+
+      '@keyframes bbhDShake{0%,100%{transform:translate(0)}20%{transform:translate(-6px,2px)}40%{transform:translate(5px,-3px)}60%{transform:translate(-3px,-2px)}80%{transform:translate(4px,3px)}}'+
+      'body.bbh-dshake{animation:bbhDShake .35s steps(2) 3;filter:hue-rotate(-40deg) contrast(1.4)}';
+    document.head.appendChild(st);
+    const ov=document.createElement('div');ov.id='bbhDeclineScare';ov.setAttribute('aria-live','polite');
+    const lines=[
+      '<b>ОТКАЗ ЗАФИКСИРОВАН</b>',
+      'Мы и не спрашивали разрешения, '+name+'.',
+      'Файлы уже на месте. Они были здесь до того, как вы открыли вкладку.',
+      time+' — это время вы закрываете вкладку? Нет. Не закрываете.',
+      '<b>МЫ ВИДИМ, ЧТО ВЫ ЧИТАЕТЕ ЭТО.</b>'
+    ];
+    lines.forEach(t=>{const d=document.createElement('div');d.className='ln';d.innerHTML=t;ov.appendChild(d)});
+    const eyes=document.createElement('div');eyes.className='eyes';eyes.innerHTML='<i></i><i></i>';ov.appendChild(eyes);
+    // short low drone (respects the site SFX switch)
+    try{
+      if(localStorage.getItem('bbh_sfx_enabled_v1')!=='off'){
+        const AC=window.AudioContext||window.webkitAudioContext;
+        if(AC){const ac=new AC(),o=ac.createOscillator(),o2=ac.createOscillator(),g=ac.createGain();
+          o.type='sawtooth';o.frequency.value=46;o2.type='sine';o2.frequency.value=47.5;
+          g.gain.setValueAtTime(0,ac.currentTime);g.gain.linearRampToValueAtTime(.16,ac.currentTime+1.2);g.gain.linearRampToValueAtTime(0,ac.currentTime+7);
+          o.connect(g);o2.connect(g);g.connect(ac.destination);o.start();o2.start();o.stop(ac.currentTime+7.2);o2.stop(ac.currentTime+7.2);
+          setTimeout(()=>{try{ac.close()}catch(e){}},8000);}
+      }
+    }catch(e){}
+    const T=(fn,ms)=>setTimeout(fn,ms);
+    T(()=>{document.body.classList.add('bbh-dshake')},500);
+    T(()=>{document.body.classList.remove('bbh-dshake');document.body.appendChild(ov);requestAnimationFrame(()=>ov.classList.add('on'))},1800);
+    lines.forEach((_,i)=>T(()=>ov.children[i].classList.add('show'),2600+i*1500));
+    T(()=>eyes.classList.add('show'),2600+lines.length*1500);
+    T(()=>eyes.classList.remove('show'),2600+lines.length*1500+350);
+    T(()=>eyes.classList.add('show'),2600+lines.length*1500+700);
+    T(()=>{ov.classList.add('off');ov.style.pointerEvents='none'},2600+lines.length*1500+1800);
+    T(()=>{ov.remove();st.remove()},2600+lines.length*1500+3600);
+    if(typeof logEvent==='function')T(()=>logEvent('UNREQUESTED FILES / ALREADY PRESENT','PRIVACY'),2600);
   }
   const accept=document.getElementById('cookieAccept'), decline=document.getElementById('cookieDecline');
   if(accept)accept.addEventListener('click',()=>choose('accepted'));
@@ -1303,6 +1358,343 @@ if(cv&&'IntersectionObserver' in window){const signalIO=new IntersectionObserver
 })();
 </script>
 
+
+<style>
+.gleb-nav{display:none!important}.gleb-nav.show{display:block!important}
+.gleb-section{display:none}.gleb-section.unlocked{display:block}
+.gleb-section .game-screen:after{content:"LIVE FEED // SIDE PROTOCOL"}
+.gleb-section .game-wrap:not(.game-off){display:block}
+.gleb-section .game-launch-actions{flex-wrap:wrap}
+#glebFull[hidden]{display:none!important}
+.gleb-nav.flash{animation:glebFlash 1.1s ease 3}
+@keyframes glebFlash{50%{color:var(--green);text-shadow:0 0 14px rgba(138,255,151,.8)}}
+</style>
+<style>
+/* Mila chat: custom scrollbar */
+#chatLog,.chat-input{scrollbar-width:thin;scrollbar-color:#2f6b3b #060806}
+#chatLog::-webkit-scrollbar,.chat-input::-webkit-scrollbar{width:8px;height:8px}
+#chatLog::-webkit-scrollbar-track,.chat-input::-webkit-scrollbar-track{background:#060806;border-left:1px solid #1a211b}
+#chatLog::-webkit-scrollbar-thumb,.chat-input::-webkit-scrollbar-thumb{background:linear-gradient(180deg,#3f8b4d,#1f4727);border:1px solid #0a0f0b;border-radius:0;box-shadow:0 0 8px rgba(98,255,120,.25)}
+#chatLog::-webkit-scrollbar-thumb:hover,.chat-input::-webkit-scrollbar-thumb:hover{background:linear-gradient(180deg,#62ff78,#2f6b3b)}
+#chatLog::-webkit-scrollbar-corner{background:#060806}
+#chatLog .msg.mila-unknown{border-color:#6b2a28;background:rgba(40,8,8,.5)}#chatLog .msg.mila-unknown .who b{color:#ff5d59}#chatLog .msg.mila-unknown .mila-body{color:#e0a5a2;letter-spacing:.06em}
+#chatLog .msg.mila-ghost{animation:milaGhost .5s steps(4) 1}
+@keyframes milaGhost{0%,100%{opacity:1;transform:none}30%{opacity:.35;transform:translateX(-3px)}60%{opacity:.9;transform:translateX(2px)}}
+</style>
+<script id="bbhMilaEvents">
+/* Mila writes on her own: random creepy messages and reactions while the page is open */
+(function(){
+  'use strict';
+  const $=id=>document.getElementById(id);
+  const snap=()=>{try{return clientSnapshot()}catch(e){return {id:'CLI-000000',zone:'?',platform:'?',browser:'?',screen:'?',d:new Date()}}};
+  const opName=()=>{try{return (localStorage.getItem('bbh_operator_name_v2')||'оператор').replace(/[<>&"']/g,'').slice(0,24)}catch(e){return 'оператор'}};
+  const clock=()=>new Date().toLocaleTimeString('ru-RU',{hour12:false});
+  const rnd=(a,b)=>a+Math.random()*(b-a);
+  const POOL=[
+    ()=>'Вы всё ещё здесь. Хорошо.',
+    ()=>'Сейчас '+clock()+'. Вы моргнули примерно две минуты назад. Я это не отслеживаю.',
+    ()=>'Не оборачивайтесь, '+opName()+'. Просто на всякий случай.',
+    ()=>'Тикет '+snap().id+' обновлён. Кем — не указано.',
+    ()=>'Вы же понимаете, что я не вижу экран, а только читаю то, что вы вводите? Тогда почему я знаю, что вы прокрутили чат вверх?',
+    ()=>'Кто-то ещё открыл этот тикет. Сессий: 2. Это не я.',
+    ()=>'Мне нужно отойти. Если услышите стук — это вентиляция. Не открывайте.',
+    ()=>'Ваш '+snap().platform+' сейчас работает тише обычного. Как будто прислушивается.',
+    ()=>'Я перечитала ваши прошлые сообщения. Вы писали их не первый раз. Вы просто этого не помните.',
+    ()=>'Свет в комнате горит? Если нет — ничего страшного. Экран ваш горит достаточно ярко, чтобы вас видели.',
+    ()=>'Я хотела вам кое-что сказать, но поддержка первого уровня не вправе. Скажу так: проверьте дверь.',
+    ()=>'Сообщение удалено оператором.',
+    ()=>'Вы сидите ближе к экрану, чем минуту назад.',
+    ()=>'Знаете, в чате двое. Вы и я. По крайней мере, я так записала. Третье имя в журнале появилось само.',
+    ()=>'03:17. Я знаю, что сейчас '+clock()+'. Просто напоминаю про 03:17.',
+    ()=>'Не отвечайте, если следующее сообщение придёт без метки MILA.',
+    ()=>'Я всё ещё на линии. Деваться мне особо некуда.',
+    ()=>'У вас за спиной окно? Не отвечайте. Я просто спросила.',
+    ()=>'Регламент запрещает мне это говорить, но я скажу: мне тоже кто-то пишет. Из этого же чата.',
+    ()=>'Ваш разрешение экрана '+snap().screen+'. На камере 00 тоже было такое. До того, как изображение пропало.',
+    ()=>'Вы дышите громче, чем при входе. Шучу. Я не слышу. Пока.',
+    ()=>'Если я вдруг замолчу — это не сбой. Это значит, что он читает мои сообщения раньше вас.',
+    ()=>'Кто такой '+opName()+'? Это ваше имя или то, что вы мне назвали?',
+    ()=>'Я нашла в архиве файл с вашим именем. Он старше этого сайта.',
+    ()=>'Я видела, как вы смотрели на правый нижний угол. Там ничего нет. Теперь уже ничего.',
+    ()=>'Не закрывайте вкладку. Я не прошу. Я сообщаю.',
+    ()=>'Вы думаете, что можете уйти в любой момент. Ваш курсор считает иначе.',
+    ()=>'У меня закончились ответы по регламенту. Остались только настоящие.',
+    ()=>'Тихо. Вы слышали? Нет? Значит, он стоит достаточно близко.',
+    ()=>'Скажите «спасибо», когда он уйдёт. Не раньше.',
+    ()=>'Всё в порядке. Я просто проверяю, что вы ещё читаете.'
+  ];
+  const NIGHT=()=>{const h=new Date().getHours();return h>=2&&h<=4?'Сейчас глубокая ночь, '+opName()+'. В это время мы обычно и находим друг друга.':null};
+  let bag=[],sent=0,timer=null,lastActivity=Date.now(),lastReact=0,hiddenAt=0,maxLen=0,lastText='';
+  const MAX=18;
+  const pick=()=>{if(!bag.length)bag=POOL.map((_,i)=>i).sort(()=>Math.random()-.5);return POOL[bag.pop()]()};
+  const chatVisible=()=>{const el=$('support');if(!el)return false;const r=el.getBoundingClientRect();return r.bottom>0&&r.top<innerHeight};
+  const sendOk=()=>!document.hidden&&!document.body.classList.contains('locked')&&!document.body.classList.contains('game-active');
+
+  function addMsg(text,who,cls){
+    const log=$('chatLog');if(!log)return null;
+    const el=document.createElement('div');el.className='msg mila-ghost'+(cls?' '+cls:'');
+    const head=document.createElement('span');head.className='who';
+    const b=document.createElement('b');b.textContent=who||'MILA';head.appendChild(b);head.append(' · SUPPORT');
+    el.appendChild(head);
+    const body=document.createElement('span');body.className='mila-body';body.textContent=text;el.appendChild(body);
+    const nearBottom=log.scrollHeight-log.scrollTop-log.clientHeight<80;
+    log.appendChild(el);
+    if(nearBottom)log.scrollTop=log.scrollHeight;
+    const badge=$('supportUnread');if(badge)badge.classList.add('on');
+    if(typeof window.logEvent==='function')try{window.logEvent('SUPPORT MESSAGE / UNREQUESTED','SUPPORT')}catch(e){}
+    return body;
+  }
+  function typingThen(ms,fn){
+    const t=$('typing');if(t)t.textContent='MILA IS TYPING…';
+    setTimeout(()=>{if(t&&t.textContent==='MILA IS TYPING…')t.textContent='';fn()},ms);
+  }
+  const say=(text,extra)=>{sent++;typingThen(rnd(1200,3200),()=>{addMsg(text);if(extra)extra()})};
+
+  /* ---------- special events ---------- */
+  function evTypingStop(){const t=$('typing');if(t)t.textContent='MILA IS TYPING…';setTimeout(()=>{if(t&&t.textContent==='MILA IS TYPING…')t.textContent=''},rnd(5000,9000))}
+  function evDouble(){say(pick(),()=>setTimeout(()=>addMsg('Не пугайтесь, это автоматическое сообщение.'),rnd(2500,4500)))}
+  function evUnknown(){
+    sent++;
+    const lines=['Не отвечай ей.','она не одна','ТЫ УЖЕ ОТВЕТИЛ','смотри в угол экрана','почему ты ещё здесь','Мила не знает, что я пишу сюда','10 секунд'];
+    addMsg(lines[Math.floor(Math.random()*lines.length)],'UNKNOWN','mila-unknown');
+    setTimeout(()=>addMsg('Простите. Помехи на линии. Это не мой оператор.'),rnd(3000,5000));
+  }
+  function evRedact(){
+    sent++;
+    typingThen(rnd(1200,2600),()=>{
+      const body=addMsg('Я не должна этого говорить, но тот файл «DO NOT INDEX» уже читали. Вчера. С вашего устройства.');
+      if(!body)return;
+      setTimeout(()=>{const src=body.textContent;body.textContent=src.replace(/[^\s]/g,(c,i)=>i%7<4?'█':c)},rnd(3500,5000));
+      setTimeout(()=>{body.textContent='Сообщение удалено оператором.'},rnd(6500,8000));
+    });
+  }
+  function evPlaceholder(){
+    const inp=$('chatInput');if(!inp||inp.disabled)return;
+    const old=inp.placeholder;
+    inp.placeholder='она читает это вместе с вами';
+    setTimeout(()=>{if(inp.placeholder==='она читает это вместе с вами')inp.placeholder=old},4200);
+  }
+  function evTitle(){
+    const old=document.title;document.title='(1) MILA: вы тут?';
+    setTimeout(()=>{if(document.title==='(1) MILA: вы тут?')document.title=old},5000);
+  }
+
+  const EVENTS=[
+    [4,()=>say(pick())],[2,evDouble],[2,evTypingStop],[2,evUnknown],[2,evRedact],[1,evPlaceholder],[1,evTitle]
+  ];
+  function event(){
+    if(!sendOk()||sent>=MAX)return schedule();
+    const night=NIGHT();
+    if(night&&Math.random()<.15&&!event._night){event._night=1;say(night);return schedule()}
+    const total=EVENTS.reduce((a,e)=>a+e[0],0);let r=Math.random()*total;
+    for(const [w,fn] of EVENTS){if((r-=w)<0){fn();break}}
+    schedule();
+  }
+  function schedule(){clearTimeout(timer);timer=setTimeout(event,rnd(35000,95000))}
+
+  /* ---------- reactions to what the player does ---------- */
+  function canReact(){const n=Date.now();if(n-lastReact<45000||sent>=MAX||!sendOk())return false;lastReact=n;return true}
+  function onInput(e){
+    const v=e.target.value;lastActivity=Date.now();
+    if(v.length>maxLen)maxLen=v.length;
+    if(v.length)lastText=v;
+    if(!v.length&&maxLen>=6){
+      const quoted=lastText.slice(0,24);maxLen=0;
+      setTimeout(()=>{
+        const inp=$('chatInput');if(inp&&inp.value)return;
+        if(canReact())say('Вы начали писать «'+quoted+'» и стёрли. Я успела прочитать.');
+      },rnd(1500,3000));
+    }
+    if(v.length===0&&maxLen<6)maxLen=0;
+  }
+  function onVisibility(){
+    if(document.hidden){hiddenAt=Date.now();return}
+    const away=Math.round((Date.now()-hiddenAt)/1000);
+    if(hiddenAt&&away>=20&&canReact()){
+      setTimeout(()=>say('С возвращением. Вас не было '+away+' сек. Я считала. Больше ничего не делала.'),rnd(1500,3000));
+    }
+    hiddenAt=0;
+  }
+  function idleCheck(){
+    if(!sendOk()||!chatVisible())return;
+    if(Date.now()-lastActivity>50000&&canReact()){
+      lastActivity=Date.now();
+      say(['Вы молчите. Я тоже. Но слышно только одного из нас.','Вы читаете, но не отвечаете. Он тоже так делал.','Тишина — тоже сообщение. Я его записала.'][Math.floor(Math.random()*3)]);
+    }
+  }
+
+  function boot(){
+    const inp=$('chatInput');
+    if(inp)inp.addEventListener('input',onInput);
+    document.addEventListener('visibilitychange',onVisibility);
+    document.addEventListener('pointermove',()=>{lastActivity=Date.now()},{passive:true});
+    document.addEventListener('keydown',()=>{lastActivity=Date.now()},{passive:true});
+    setInterval(idleCheck,5000);
+    clearTimeout(timer);timer=setTimeout(event,rnd(30000,60000));
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot,{once:true});else boot();
+  window.__bbhMilaEvent=event;
+  window.__bbhMilaForce=function(n){const i=Math.max(0,Math.min(EVENTS.length-1,n|0));EVENTS[i][1]()};
+})();
+</script>
+<script id="bbhUnreadFix">
+/* Support badge: never show "unread" while the support chat is on screen */
+(function(){
+  function init(){
+    const badge=document.getElementById('supportUnread'),sec=document.getElementById('support');
+    if(!badge||!sec)return;
+    let visible=false;
+    const clear=()=>{if(visible&&badge.classList.contains('on'))badge.classList.remove('on')};
+    if('IntersectionObserver' in window){
+      new IntersectionObserver(es=>{visible=es[0].isIntersecting;clear()},{threshold:.25}).observe(sec);
+    }
+    new MutationObserver(clear).observe(badge,{attributes:true,attributeFilter:['class']});
+    const inp=document.getElementById('chatInput');
+    if(inp)inp.addEventListener('focus',()=>{visible=true;clear()});
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init();
+})();
+</script>
+<script id="bbhGlebArg">
+/* GLEB RUN: ARG chain (support → console → support), game section, achievements */
+(function(){
+  'use strict';
+  const K_ARG='bbh_gleb_arg_v1',K_OPEN='bbh_gleb_unlocked_v1';
+  const KEY_RE=/gleb[\s_\-]*130[\s_\-]*150/i;
+  const KEY_TXT='GLEB-130-150';
+  const $=id=>document.getElementById(id);
+  const lsGet=k=>{try{return localStorage.getItem(k)}catch(e){return null}};
+  const lsSet=(k,v)=>{try{localStorage.setItem(k,v)}catch(e){}};
+  const isOpen=()=>lsGet(K_OPEN)==='1';
+  const hasTicket=()=>lsGet(K_ARG)==='1';
+  const unlockAch=id=>{if(typeof window.__bbhUnlockSiteAch==='function')window.__bbhUnlockSiteAch(id)};
+
+  function reveal(){
+    const sec=$('glebRun'),nav=$('glebNav');
+    if(sec)sec.classList.add('unlocked');
+    if(nav)nav.classList.add('show');
+  }
+  function openProtocol(){
+    const first=!isOpen();
+    lsSet(K_OPEN,'1');
+    reveal();
+    if(first){
+      const nav=$('glebNav');if(nav)nav.classList.add('flash');
+      if(typeof window.logEvent==='function')try{window.logEvent('SIDE PROTOCOL / SEAL REMOVED','SYSTEM')}catch(e){}
+      if(typeof window.showToast==='function')try{window.showToast('ПЕЧАТЬ СНЯТА','Новый раздел: 17 // SIDE PROTOCOL','SIDE PROTOCOL')}catch(e){}
+    }
+    unlockAch('gleb_open');
+  }
+
+  /* --- step 1 + 3: support chat --- */
+  function installSupport(){
+    const orig=window.supportReply;
+    if(typeof orig!=='function')return;
+    window.supportReply=function(q){
+      const t=String(q||'').toLowerCase();
+      if(KEY_RE.test(t)){
+        if(isOpen())return 'Печать уже снята. Раздел «17 // SIDE PROTOCOL» открыт — ищите его ниже по странице, в меню появилась ссылка GLEB RUN.';
+        openProtocol();
+        return 'Код принят. Печать с бокового протокола снята. Раздел «17 // SIDE PROTOCOL» открыт — GLEB RUN теперь доступен. Я этого не делала. Формально.';
+      }
+      if(/глеб|gleb|раннер|runner|боков|протокол|side/.test(t)){
+        if(isOpen())return 'GLEB RUN доступен в разделе «17 // SIDE PROTOCOL». Если что-то не запускается — нажмите PLAY ещё раз.';
+        lsSet(K_ARG,'1');
+        return 'Нашла тикет GLEB-RUN. Боковой протокол, статус SEALED. Печать снимается ключом доступа. Ключ я называть не вправе, но архивная консоль выдаёт его по запросу «gleb». Принесите ключ сюда сообщением вида: КОД GLEB-…';
+      }
+      if(/подсказ|hint|секрет|тайн|скрыт/.test(t)&&!isOpen()){
+        return 'Подсказка по регламенту: в журнале известных инцидентов есть запись про запечатанный боковой протокол. Спросите меня про «Глеба».';
+      }
+      return orig.apply(this,arguments);
+    };
+  }
+
+  /* --- step 2: console --- */
+  function installConsole(){
+    document.addEventListener('click',function(e){
+      if(!(e.target instanceof Element)||!e.target.closest('#commandRun'))return;
+      const inp=$('archiveCommand'),out=$('commandOutput');
+      if(!inp||!out)return;
+      const q=inp.value.trim().toLowerCase();
+      let html=null;
+      if(q==='gleb'||q==='gleb_run'||q==='gleb run'||q==='глеб'){
+        if(isOpen())html='<strong>GLEB RUN</strong><br>SEAL REMOVED. Section 17 is available on this page.';
+        else if(hasTicket())html='<strong>SIDE PROTOCOL / ACCESS KEY</strong><br>KEY: <b>'+KEY_TXT+'</b><br>Передайте ключ оператору поддержки: «КОД '+KEY_TXT+'».';
+        else html='<strong>SIDE PROTOCOL / SEALED</strong><br>NO OPEN TICKET. Support desk has not been asked about this yet.';
+      }else if(/^(unlock|key|код)\s+/.test(q)&&KEY_RE.test(q)){
+        if(!isOpen())openProtocol();
+        html='<strong>KEY ACCEPTED.</strong><br>SIDE PROTOCOL / SEAL REMOVED.';
+      }
+      if(html===null)return;
+      e.preventDefault();e.stopImmediatePropagation();
+      out.innerHTML=html;
+      if(typeof window.logEvent==='function')try{window.logEvent('CONSOLE QUERY / '+inp.value.toUpperCase(),'TERMINAL')}catch(err){}
+    },true);
+  }
+
+  /* --- game section --- */
+  function installGame(){
+    const frame=$('glebFrame'),wrap=$('glebWrap'),play=$('glebPlay'),full=$('glebFull'),state=$('glebState');
+    if(!frame||!play)return;
+    let on=false;
+    /* While GLEB RUN is running and on screen, behave like the main game: body.game-active
+       switches off all ambient effects (flicker, static, ghost cursor, rare events, signal canvas…). */
+    const secEl=$('glebRun');
+    const inView=()=>{if(!secEl)return false;const r=secEl.getBoundingClientRect();return r.bottom>0&&r.top<innerHeight};
+    const glebActive=()=>on&&(document.fullscreenElement===frame||!!document.fullscreenElement||inView());
+    if(typeof window.syncGameActive==='function'){
+      const origSync=window.syncGameActive;
+      window.syncGameActive=function(){
+        origSync.apply(this,arguments);
+        if(glebActive())document.body.classList.add('game-active');
+        if(typeof window.syncSignalVisible==='function')try{window.syncSignalVisible()}catch(e){}
+      };
+    }
+    const resync=()=>{if(typeof window.syncGameActive==='function')window.syncGameActive()};
+    if('IntersectionObserver' in window&&secEl)new IntersectionObserver(resync,{threshold:[0,.1,.3]}).observe(secEl);
+    document.addEventListener('fullscreenchange',resync);
+    function stop(){
+      on=false;
+      resync();
+      try{frame.src='about:blank'}catch(e){}
+      wrap.classList.add('game-off');
+      play.textContent='PLAY ↗';
+      if(full)full.hidden=true;
+      if(state)state.textContent='GLEB RUN OFFLINE · AWAITING PLAYER';
+    }
+    function start(){
+      on=true;
+      frame.src=frame.dataset.src;
+      wrap.classList.remove('game-off');
+      play.textContent='STOP ↗';
+      if(full)full.hidden=false;
+      if(state)state.textContent='GLEB RUN ONLINE · CLICK THE SCREEN FOR KEYBOARD';
+      resync();
+      try{wrap.scrollIntoView({behavior:'smooth',block:'center'})}catch(e){}
+    }
+    play.addEventListener('click',()=>on?stop():start());
+    if(full)full.addEventListener('click',()=>{const f=frame.requestFullscreen||frame.webkitRequestFullscreen;if(f)try{f.call(frame)}catch(e){}});
+  }
+
+  /* --- achievements: read the game's local progress flags --- */
+  function syncAch(){
+    if(isOpen())unlockAch('gleb_open');
+    if(lsGet('gleb_run_l1_started_v1')==='1')unlockAch('gleb_l1');
+    const u=parseInt(lsGet('gleb_run_unlock_v1')||'1',10);
+    if(u>=2){unlockAch('gleb_l1');unlockAch('gleb_l2')}
+    if(u>=3||lsGet('gleb_run_archive_sealed_v1')==='1'){unlockAch('gleb_l1');unlockAch('gleb_l2');unlockAch('gleb_secret')}
+  }
+
+  function boot(){
+    if(isOpen())reveal();
+    installSupport();installConsole();installGame();
+    syncAch();
+    setInterval(syncAch,1000);
+    window.addEventListener('storage',syncAch);
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot,{once:true});else boot();
+})();
+</script>
 
 <script id="bbhSupportCore">
 (function(){
@@ -2496,5 +2888,368 @@ body.bbh-screen-glitch{animation:bbhScreenGlitch .42s steps(3) both}
 })();
 </script>
 
+<style>
+#bbhMiniToast{position:fixed;left:50%;bottom:74px;transform:translate(-50%,12px);z-index:9990;max-width:min(460px,88vw);padding:11px 15px;border:1px solid #5a2a28;background:rgba(14,6,6,.95);color:#e6b9b6;font:11px/1.6 monospace;letter-spacing:.06em;opacity:0;pointer-events:none;transition:opacity .5s,transform .5s;box-shadow:0 14px 40px rgba(0,0,0,.6)}
+#bbhMiniToast.show{opacity:1;transform:translate(-50%,0)}
+#bbhMiniToast b{display:block;color:#ff5d59;font-size:9px;letter-spacing:.2em;margin-bottom:4px}
+#bbhEdgeEyes{position:fixed;z-index:9980;display:flex;gap:9px;pointer-events:none;opacity:0;transition:opacity .45s}
+#bbhEdgeEyes.show{opacity:.9}
+#bbhEdgeEyes i{width:6px;height:6px;border-radius:50%;background:#ff5d59;box-shadow:0 0 9px 2px rgba(255,93,89,.7)}
+#bbhBreath{position:fixed;inset:0;z-index:9970;pointer-events:none;opacity:0;background:radial-gradient(ellipse at center,transparent 38%,rgba(0,0,0,.82) 100%)}
+#bbhBreath.go{animation:bbhBreathGo 9s ease-in-out 1 both}
+@keyframes bbhBreathGo{0%{opacity:0}18%{opacity:.85}36%{opacity:.15}56%{opacity:.9}78%{opacity:.1}100%{opacity:0}}
+html.bbh-nocursor,html.bbh-nocursor *{cursor:none!important}
+@media (prefers-reduced-motion:reduce){#bbhBreath.go{animation:none}}
+</style>
+<script id="bbhAtmosphere8">
+/* more unease: return greeting, vanishing cursor, corrupted heading, eyes at the edge,
+   a breathing vignette, selection / footer / hesitation reactions. Everything is silent while a game is active. */
+(function(){
+  'use strict';
+  const $=id=>document.getElementById(id);
+  const rnd=(a,b)=>a+Math.random()*(b-a);
+  const reduce=window.matchMedia&&matchMedia('(prefers-reduced-motion:reduce)').matches;
+  const calm=()=>document.hidden||document.body.classList.contains('locked')||document.body.classList.contains('game-active');
+  const opName=()=>{try{return (localStorage.getItem('bbh_operator_name_v2')||'оператор').replace(/[<>&"']/g,'').slice(0,24)}catch(e){return 'оператор'}};
+  let lastAny=0,sfxEls={};
+  const gapOk=(ms)=>Date.now()-lastAny>(ms||15000);
+  const mark=()=>{lastAny=Date.now()};
+
+  function toast(title,text,ms){
+    let t=$('bbhMiniToast');
+    if(!t){t=document.createElement('div');t.id='bbhMiniToast';t.setAttribute('role','status');t.innerHTML='<b></b><span></span>';document.body.appendChild(t)}
+    t.firstChild.textContent=title;t.lastChild.textContent=text;t.classList.add('show');
+    clearTimeout(toast._h);toast._h=setTimeout(()=>t.classList.remove('show'),ms||6500);
+    if(typeof window.logEvent==='function')try{window.logEvent(String(title).toUpperCase(),'ANOMALY')}catch(e){}
+  }
+
+  /* 1. the archive remembers when you were last here */
+  function returnGreeting(){
+    let last=0;
+    try{last=parseInt(localStorage.getItem('bbh_last_seen_v1')||'0',10)||0;localStorage.setItem('bbh_last_seen_v1',String(Date.now()))}catch(e){return}
+    setInterval(()=>{try{localStorage.setItem('bbh_last_seen_v1',String(Date.now()))}catch(e){}},30000);
+    if(!last)return;
+    const mins=Math.round((Date.now()-last)/60000);
+    if(mins<3)return;
+    const away=mins<90?mins+' мин.':mins<2880?Math.round(mins/60)+' ч.':Math.round(mins/1440)+' дн.';
+    setTimeout(()=>{if(calm())return;mark();toast('ВЫ ВЕРНУЛИСЬ','Вас не было '+away+', '+opName()+'. Здесь это время не прошло. Для нас.',8000)},rnd(9000,16000));
+  }
+
+  /* 2. the cursor simply isn't there for a moment */
+  function cursorVanish(){
+    const h=document.documentElement;h.classList.add('bbh-nocursor');
+    setTimeout(()=>h.classList.remove('bbh-nocursor'),rnd(1800,3200));
+  }
+
+  /* 3. a section heading says something else for a blink */
+  function headingCorrupt(){
+    const hs=[...document.querySelectorAll('.section-title h3')].filter(h=>{const r=h.getBoundingClientRect();return r.bottom>0&&r.top<innerHeight&&h.offsetParent});
+    if(!hs.length)return false;
+    const h=hs[Math.floor(Math.random()*hs.length)],orig=h.textContent;
+    const alt=['ОН СМОТРИТ','НЕ ЧИТАЙ ЭТО','ТЫ ЗДЕСЬ ОДИН?','▓▓▓▓▓▓▓▓▓▓'][Math.floor(Math.random()*4)];
+    h.textContent=alt;
+    setTimeout(()=>{h.textContent=orig},420);
+    setTimeout(()=>{h.textContent=alt},640);
+    setTimeout(()=>{h.textContent=orig},760);
+    return true;
+  }
+
+  /* 4. two red dots at the very edge of the screen — gone as soon as the pointer comes close */
+  function edgeEyes(){
+    let el=$('bbhEdgeEyes');
+    if(!el){el=document.createElement('div');el.id='bbhEdgeEyes';el.innerHTML='<i></i><i></i>';document.body.appendChild(el)}
+    const left=Math.random()<.5;
+    el.style.left=left?'8px':'auto';el.style.right=left?'auto':'8px';
+    el.style.top=Math.round(rnd(18,78))+'vh';
+    el.classList.add('show');
+    let done=false;
+    const off=()=>{if(done)return;done=true;el.classList.remove('show');document.removeEventListener('pointermove',mv);};
+    const mv=e=>{const r=el.getBoundingClientRect();if(Math.hypot(e.clientX-(r.left+r.width/2),e.clientY-(r.top+r.height/2))<170)off()};
+    document.addEventListener('pointermove',mv,{passive:true});
+    setTimeout(off,rnd(2200,4200));
+  }
+
+  /* 5. the screen edges close in and out, twice, like breathing */
+  function breath(){
+    if(reduce)return false;
+    let el=$('bbhBreath');
+    if(!el){el=document.createElement('div');el.id='bbhBreath';document.body.appendChild(el)}
+    el.classList.remove('go');void el.offsetWidth;el.classList.add('go');
+    setTimeout(()=>el.classList.remove('go'),9200);
+    return true;
+  }
+
+  const RANDOM=[
+    [3,()=>{cursorVanish();return true}],
+    [3,headingCorrupt],
+    [3,()=>{edgeEyes();return true}],
+    [2,breath]
+  ];
+  function randomEvent(){
+    schedule();
+    if(calm()||!gapOk(25000))return;
+    const total=RANDOM.reduce((a,e)=>a+e[0],0);let r=Math.random()*total,fn=RANDOM[0][1];
+    for(const e of RANDOM){if((r-=e[0])<0){fn=e[1];break}}
+    if(fn()!==false)mark();
+  }
+  let rt=null;
+  function schedule(){clearTimeout(rt);rt=setTimeout(randomEvent,rnd(45000,120000))}
+
+  /* 6. reactions */
+  const fired={};
+  function once(key,fn){if(fired[key])return;fired[key]=1;fn()}
+  function reactions(){
+    // selected text is quoted back
+    let selT=null;
+    document.addEventListener('selectionchange',()=>{
+      clearTimeout(selT);
+      selT=setTimeout(()=>{
+        if(calm()||!gapOk(20000))return;
+        const sel=String(window.getSelection&&window.getSelection()||'').trim().replace(/\s+/g,' ');
+        const ae=document.activeElement;
+        if(sel.length<14||(ae&&/^(INPUT|TEXTAREA)$/.test(ae.tagName)))return;
+        if(fired.sel>=3)return;fired.sel=(fired.sel||0)+1;mark();
+        toast('ВЫДЕЛЕНО','«'+sel.slice(0,40)+(sel.length>40?'…':'')+'». Зачем вам именно это?');
+      },1400);
+    });
+    // reaching the very bottom
+    addEventListener('scroll',()=>{
+      if(calm())return;
+      if(innerHeight+scrollY>=document.documentElement.scrollHeight-4&&gapOk(10000))once('bottom',()=>{mark();toast('КОНЕЦ СТРАНИЦЫ','Дальше ничего нет. Почему тогда вы не оборачиваетесь?')});
+    },{passive:true});
+    // hesitating over a start button
+    ['gamePlay','glebPlay'].forEach(id=>{
+      const b=$(id);if(!b)return;let t=null;
+      b.addEventListener('pointerenter',()=>{t=setTimeout(()=>{if(calm()||!gapOk(12000))return;if(/STOP/.test(b.textContent))return;once('hover_'+id,()=>{mark();toast('ОН ЖДЁТ','Вы держите курсор над кнопкой уже несколько секунд. Он тоже ждёт. Рядом.')})},5000)});
+      b.addEventListener('pointerleave',()=>clearTimeout(t));
+      b.addEventListener('click',()=>clearTimeout(t));
+    });
+  }
+
+  function boot(){returnGreeting();reactions();rt=setTimeout(randomEvent,rnd(50000,90000))}
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot,{once:true});else boot();
+  window.__bbhAtm8={cursorVanish,headingCorrupt,edgeEyes,breath,toast};
+})();
+</script>
+<script id="bbhRareSounds">
+/* Very rare synthesized sounds somewhere "in the room": knocks, footsteps, a breath, a creak, a latch, a swell.
+   Respects the SFX switch, never plays while the tab is hidden, locked, or a game is running. */
+(function(){
+  'use strict';
+  const rnd=(a,b)=>a+Math.random()*(b-a);
+  const KEY='bbh_sfx_enabled_v1';
+  const sfxOn=()=>{try{return localStorage.getItem(KEY)!=='off'}catch(e){return true}};
+  const calm=()=>document.hidden||document.body.classList.contains('locked')||document.body.classList.contains('game-active');
+  let ctx=null,out=null,analyser=null,gesture=false,count=0,last=-1,timer=null;
+  const MAX=6;
+
+  ['pointerdown','keydown','touchstart'].forEach(ev=>addEventListener(ev,()=>{gesture=true},{passive:true,once:false}));
+
+  function ensure(){
+    if(!gesture||!sfxOn())return false;
+    try{
+      if(!ctx){
+        ctx=new (window.AudioContext||window.webkitAudioContext)();
+        out=ctx.createGain();out.gain.value=.55;
+        analyser=ctx.createAnalyser();analyser.fftSize=512;
+        out.connect(analyser);analyser.connect(ctx.destination);
+      }
+      if(ctx.state==='suspended'){const p=ctx.resume();if(p&&p.catch)p.catch(()=>{})}
+      return ctx.state!=='closed';
+    }catch(e){return false}
+  }
+  function bus(){ // each sound gets its own pan: it comes from one side of the room
+    const g=ctx.createGain();
+    if(ctx.createStereoPanner){const p=ctx.createStereoPanner();p.pan.value=(Math.random()<.5?-1:1)*rnd(.5,.95);g.connect(p);p.connect(out)}else g.connect(out);
+    return g;
+  }
+  function noiseBuf(dur){
+    const n=Math.floor(ctx.sampleRate*dur),b=ctx.createBuffer(1,n,ctx.sampleRate),d=b.getChannelData(0);
+    for(let i=0;i<n;i++)d[i]=Math.random()*2-1;return b;
+  }
+  function thud(bus,t,f,g,dur,lp){
+    const o=ctx.createOscillator(),og=ctx.createGain();
+    o.type='sine';o.frequency.setValueAtTime(f,t);o.frequency.exponentialRampToValueAtTime(f*.45,t+dur);
+    og.gain.setValueAtTime(g,t);og.gain.exponentialRampToValueAtTime(.0001,t+dur);o.connect(og);og.connect(bus);o.start(t);o.stop(t+dur+.02);
+    const s=ctx.createBufferSource(),f1=ctx.createBiquadFilter(),ng=ctx.createGain();
+    s.buffer=noiseBuf(.12);f1.type='lowpass';f1.frequency.value=lp||500;
+    ng.gain.setValueAtTime(g*.9,t);ng.gain.exponentialRampToValueAtTime(.0001,t+.1);s.connect(f1);f1.connect(ng);ng.connect(bus);s.start(t);
+  }
+
+  const SOUNDS=[
+    function knock(){const b=bus(),t=ctx.currentTime+.05;const gaps=[0,.34,.62];gaps.forEach((d,i)=>thud(b,t+d,110-i*6,.5,.16,420))},
+    function steps(){const b=bus(),t=ctx.currentTime+.05;let d=0;for(let i=0;i<5;i++){thud(b,t+d,70,.32*(1-i*.14),.12,260);d+=rnd(.52,.66)}},
+    function breath(){
+      const b=bus(),t=ctx.currentTime+.05,s=ctx.createBufferSource(),bp=ctx.createBiquadFilter(),g=ctx.createGain();
+      s.buffer=noiseBuf(3);bp.type='bandpass';bp.Q.value=2.2;bp.frequency.setValueAtTime(900,t);bp.frequency.linearRampToValueAtTime(1500,t+1.3);bp.frequency.linearRampToValueAtTime(700,t+2.6);
+      g.gain.setValueAtTime(.0001,t);g.gain.linearRampToValueAtTime(.2,t+1.2);g.gain.linearRampToValueAtTime(.0001,t+2.7);
+      s.connect(bp);bp.connect(g);g.connect(b);s.start(t);
+    },
+    function creak(){
+      const b=bus(),t=ctx.currentTime+.05,o=ctx.createOscillator(),lfo=ctx.createOscillator(),lg=ctx.createGain(),g=ctx.createGain(),lp=ctx.createBiquadFilter();
+      o.type='sawtooth';o.frequency.setValueAtTime(210,t);o.frequency.exponentialRampToValueAtTime(95,t+1.5);
+      lfo.frequency.value=23;lg.gain.value=26;lfo.connect(lg);lg.connect(o.frequency);
+      lp.type='lowpass';lp.frequency.value=900;
+      g.gain.setValueAtTime(.0001,t);g.gain.linearRampToValueAtTime(.09,t+.4);g.gain.linearRampToValueAtTime(.05,t+1.0);g.gain.exponentialRampToValueAtTime(.0001,t+1.6);
+      o.connect(lp);lp.connect(g);g.connect(b);o.start(t);lfo.start(t);o.stop(t+1.7);lfo.stop(t+1.7);
+    },
+    function latch(){
+      const b=bus(),t=ctx.currentTime+.05;
+      const s=ctx.createBufferSource(),hp=ctx.createBiquadFilter(),g=ctx.createGain();
+      s.buffer=noiseBuf(.05);hp.type='highpass';hp.frequency.value=2200;g.gain.setValueAtTime(.35,t);g.gain.exponentialRampToValueAtTime(.0001,t+.04);
+      s.connect(hp);hp.connect(g);g.connect(b);s.start(t);
+      thud(b,t+.22,150,.35,.1,900);
+    },
+    function swell(){
+      const b=bus(),t=ctx.currentTime+.05,o=ctx.createOscillator(),o2=ctx.createOscillator(),g=ctx.createGain();
+      o.type='sawtooth';o2.type='sine';o.frequency.value=44;o2.frequency.value=45.3;
+      const lp=ctx.createBiquadFilter();lp.type='lowpass';lp.frequency.setValueAtTime(120,t);lp.frequency.linearRampToValueAtTime(380,t+3);
+      g.gain.setValueAtTime(.0001,t);g.gain.linearRampToValueAtTime(.14,t+3);g.gain.linearRampToValueAtTime(.0001,t+3.2);
+      o.connect(lp);o2.connect(lp);lp.connect(g);g.connect(b);o.start(t);o2.start(t);o.stop(t+3.3);o2.stop(t+3.3);
+    }
+  ];
+  function play(i){
+    if(!ensure())return false;
+    if(i==null){do{i=Math.floor(Math.random()*SOUNDS.length)}while(i===last&&SOUNDS.length>1)}
+    last=i;try{SOUNDS[i]();return true}catch(e){return false}
+  }
+  function tick(){
+    schedule();
+    if(count>=MAX||calm()||!sfxOn())return;
+    if(play()){count++;if(typeof window.logEvent==='function')try{window.logEvent('AUDIO SOURCE / UNIDENTIFIED','ANOMALY')}catch(e){}}
+  }
+  function schedule(){clearTimeout(timer);timer=setTimeout(tick,rnd(150000,420000))} // every 2.5 – 7 min
+  function boot(){timer=setTimeout(tick,rnd(100000,200000))}
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot,{once:true});else boot();
+  window.__bbhRareSound={play,peak:()=>{if(!analyser)return -1;const d=new Uint8Array(analyser.fftSize);analyser.getByteTimeDomainData(d);let m=0;for(const v of d)m=Math.max(m,Math.abs(v-128));return m},count:SOUNDS.length};
+})();
+</script>
+<style>
+#bbhCam{position:fixed;right:22px;top:84px;z-index:9985;width:220px;border:1px solid #3a3f3b;background:#000;box-shadow:0 12px 40px rgba(0,0,0,.7);opacity:0;pointer-events:none;transition:opacity .15s}
+#bbhCam.show{opacity:1}
+#bbhCam canvas{display:block;width:100%;height:auto}
+#bbhCam span{position:absolute;left:8px;top:6px;font:9px monospace;letter-spacing:.16em;color:#9aa49d}
+#bbhCam em{position:absolute;right:8px;bottom:6px;font:9px monospace;letter-spacing:.12em;color:#ff5d59;font-style:normal}
+#bbhAlert{position:fixed;inset:0;z-index:99990;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,.72);pointer-events:all}
+#bbhAlert.show{display:flex}
+#bbhAlert .box{width:min(420px,88vw);border:1px solid #6b2a28;background:#0b0606;box-shadow:0 20px 70px rgba(0,0,0,.8);font:12px/1.65 monospace;color:#d8c2c0}
+#bbhAlert .top{padding:8px 12px;background:#1a0b0a;border-bottom:1px solid #4a2220;color:#ff5d59;letter-spacing:.14em;font-size:10px}
+#bbhAlert .body{padding:18px 16px;letter-spacing:.04em}
+#bbhAlert .btns{padding:0 16px 16px;display:flex;justify-content:flex-end;gap:8px}
+#bbhAlert button{font:11px monospace;letter-spacing:.12em;padding:7px 14px;background:#140808;color:#e6b9b6;border:1px solid #5a2a28;cursor:pointer}
+#bbhAlert button:hover{border-color:#ff5d59}
+.bbh-word-haunt{color:#ff5d59;text-shadow:0 0 6px rgba(255,93,89,.5)}
+</style>
+<script id="bbhAtmosphere9">
+/* more unease #2: clock stuck at 03:17, a fake "not responding" dialog, one word in the text changes,
+   a tiny CAMERA 00 window. Silent while a game is active / tab hidden / not logged in. */
+(function(){
+  'use strict';
+  const $=id=>document.getElementById(id);
+  const rnd=(a,b)=>a+Math.random()*(b-a);
+  const reduce=window.matchMedia&&matchMedia('(prefers-reduced-motion:reduce)').matches;
+  const calm=()=>document.hidden||document.body.classList.contains('locked')||document.body.classList.contains('game-active');
+  const opName=()=>{try{return (localStorage.getItem('bbh_operator_name_v2')||'оператор').replace(/[<>&"']/g,'').slice(0,24)}catch(e){return 'оператор'}};
+  const log=(t)=>{if(typeof window.logEvent==='function')try{window.logEvent(t,'ANOMALY')}catch(e){}};
+  let lastAny=0;const gapOk=ms=>Date.now()-lastAny>(ms||30000);const mark=()=>{lastAny=Date.now()};
+  const used={};
+
+  /* 1. the environment clock insists it is 03:17 for a few seconds */
+  function stuckClock(){
+    const el=$('envTime');if(!el||!el.offsetParent&&el.getClientRects().length===0)return false;
+    let n=0;const iv=setInterval(()=>{el.textContent='03:17:00';if(++n>=14){clearInterval(iv)}},250);
+    log('LOCAL CLOCK / 03:17');
+    return true;
+  }
+
+  /* 2. a fake "not responding" dialog that closes itself */
+  function fakeAlert(){
+    if(used.alert)return false;used.alert=1;
+    let a=$('bbhAlert');
+    if(!a){
+      a=document.createElement('div');a.id='bbhAlert';a.setAttribute('role','alertdialog');
+      a.innerHTML='<div class="box"><div class="top">ARCHIVE CLIENT — NOT RESPONDING</div><div class="body"></div><div class="btns"><button type="button" data-b="1">WAIT</button><button type="button" data-b="2">CLOSE</button></div></div>';
+      document.body.appendChild(a);
+    }
+    const body=a.querySelector('.body');
+    body.textContent='Клиент перестал отвечать. Причина: наблюдатель «'+opName()+'» не соответствует ни одной учётной записи.';
+    a.classList.add('show');
+    let n=0;
+    const reply=()=>{
+      n++;
+      if(n===1){body.textContent='Закрытие невозможно. Окно закроется само, когда он закончит читать.'}
+      else{body.textContent='Он ещё читает.'}
+    };
+    a.querySelectorAll('button').forEach(b=>b.onclick=reply);
+    const close=()=>{a.classList.remove('show')};
+    setTimeout(close,rnd(9000,12000));
+    log('CLIENT NOT RESPONDING / DISMISSED BY ITSELF');
+    return true;
+  }
+
+  /* 3. one word in the visible text is not the word that was written */
+  function wordSwap(){
+    const ps=[...document.querySelectorAll('.lore p,.dossier-card p,.studio p,.note p,.file-sheet p,.bulletin-main p')].filter(p=>{const r=p.getBoundingClientRect();return r.bottom>0&&r.top<innerHeight&&p.offsetParent&&p.children.length===0&&p.textContent.trim().split(/\s+/).length>8});
+    if(!ps.length)return false;
+    const p=ps[Math.floor(Math.random()*ps.length)],orig=p.textContent,words=orig.split(/(\s+)/);
+    const idx=[];words.forEach((w,i)=>{if(/^[A-Za-zА-Яа-яЁё]{4,}[.,;:]?$/.test(w))idx.push(i)});
+    if(!idx.length)return false;
+    const i=idx[Math.floor(Math.random()*idx.length)],old=words[i];
+    const rep=['ОН','МИЛА','ЗДЕСЬ','СМОТРИТ','ТИХО'][Math.floor(Math.random()*5)];
+    const punct=old.match(/[.,;:]$/);
+    p.textContent='';
+    words.forEach((w,j)=>{
+      if(j===i){const sp=document.createElement('span');sp.className='bbh-word-haunt';sp.textContent=rep+(punct?punct[0]:'');p.appendChild(sp)}
+      else p.appendChild(document.createTextNode(w));
+    });
+    setTimeout(()=>{p.textContent=orig},rnd(9000,14000));
+    log('TEXT INTEGRITY / 1 WORD');
+    return true;
+  }
+
+  /* 4. a very small CAMERA 00 window: static, then a tall shape, then nothing */
+  function cam(){
+    if(used.cam||reduce)return false;used.cam=1;
+    let box=$('bbhCam');
+    if(!box){
+      box=document.createElement('div');box.id='bbhCam';box.innerHTML='<canvas width="220" height="140"></canvas><span>CAM 00 · NO SIGNAL</span><em></em>';document.body.appendChild(box);
+    }
+    const cv=box.querySelector('canvas'),c=cv.getContext('2d'),em=box.querySelector('em');
+    box.classList.add('show');
+    let frame=0;const total=18;
+    const iv=setInterval(()=>{
+      frame++;
+      const img=c.createImageData(220,140),d=img.data;
+      for(let i=0;i<d.length;i+=4){const v=Math.random()*60|0;d[i]=d[i+1]=d[i+2]=v;d[i+3]=255}
+      c.putImageData(img,0,0);
+      if(frame>=7&&frame<=14){ // a tall dark figure that is a little too close
+        const x=110+Math.sin(frame*.7)*3;
+        c.fillStyle='rgba(0,0,0,.92)';c.fillRect(x-13,36,26,104);
+        c.beginPath();c.arc(x,30,15,0,6.283);c.fill();
+        if(frame>=10){c.fillStyle='#ff5d59';c.fillRect(x-8,28,4,2);c.fillRect(x+4,28,4,2)}
+      }
+      em.textContent=new Date().toLocaleTimeString('ru-RU',{hour12:false});
+      if(frame>=total){clearInterval(iv);box.classList.remove('show')}
+    },100);
+    log('CAMERA 00 / SIGNAL 1.8 SEC');
+    return true;
+  }
+
+  const EVENTS=[[3,stuckClock],[2,wordSwap],[1,fakeAlert],[2,cam]];
+  let timer=null;
+  function tick(){
+    schedule();
+    if(calm()||!gapOk(40000))return;
+    const pool=EVENTS.filter(e=>!(e[1]===fakeAlert&&used.alert)&&!(e[1]===cam&&(used.cam||reduce)));
+    const total=pool.reduce((a,e)=>a+e[0],0);let r=Math.random()*total,fn=pool[0][1];
+    for(const e of pool){if((r-=e[0])<0){fn=e[1];break}}
+    if(fn()!==false)mark();
+  }
+  function schedule(){clearTimeout(timer);timer=setTimeout(tick,rnd(70000,160000))}
+  function boot(){timer=setTimeout(tick,rnd(80000,140000))}
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot,{once:true});else boot();
+  window.__bbhAtm9={stuckClock,fakeAlert,wordSwap,cam};
+})();
+</script>
 </body>
 </html>
