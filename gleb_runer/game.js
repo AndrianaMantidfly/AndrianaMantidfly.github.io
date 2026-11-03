@@ -265,6 +265,7 @@
   // over the thin overlap zone between two roof meshes and drop onRoof to
   // false mid-run, sending the player through the bridge into the next car.
   var roofGrace = 0;
+  var propScrubT = 0;
 
   function ensureAudioCtx() {
     if (audioCtx) return audioCtx;
@@ -5011,6 +5012,12 @@ function onKeyUp(e) {
       return true;
     }
 
+    // FIX: ground props (bars, fences, boxes...) can never hit a player who is
+    // standing on / running along a train roof or ramp. Roof height (~1.73) used
+    // to sit just under the bar top (~1.75-1.79), so an "invisible" bar inside the
+    // train killed you on the roof.
+    if (onRoof || roofGrace > 0 || roofContact || y >= H_ROOF - 0.25) return false;
+
     // Overhead bar / fence: slide under OR jump clear of the bar top
     if (o.userData.slideOk || o.userData.lowOnly) {
       if (sliding) return false;
@@ -5724,6 +5731,14 @@ function onKeyUp(e) {
       dustPoints.geometry.attributes.position.needsUpdate = true;
     }
 
+    // FIX: moving/approaching trains can overtake props that were fine at spawn time.
+    // Re-scrub a few times per second so no hidden prop ever lives inside a hull.
+    propScrubT = (typeof propScrubT === 'number' ? propScrubT : 0) - dt;
+    if (propScrubT <= 0) {
+      propScrubT = 0.12;
+      try { scrubPropsInsideTrains(0.6); } catch (eScrub) {}
+    }
+
     var i, o, p;
     var roofStill = false;
     roofContact = false;
@@ -5821,6 +5836,8 @@ function onKeyUp(e) {
         }
       }
       if (pwr.jet <= 0 && inLaneX(o.userData.lane, laneX) && sweptHit) {
+        // FIX: a ground prop buried inside / on a train on this lane is not a real obstacle
+        if (PROP_KINDS_NO_TRAIN[o.userData.kind] && (onRoof || roofGrace > 0 || y >= H_ROOF - 0.25)) continue;
         if (o.userData.roof) {
           // sliding into a climbable car: stand up and board instead of dying
           if (sliding) {
