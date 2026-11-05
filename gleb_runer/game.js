@@ -100,8 +100,8 @@
     });
   }
   var groundTex, laneLines = [];
-  var dustPoints, dustCount = 64;
-  var rainPoints, rainCount = 150;
+  var dustPoints, dustCount = 64; // real values are set right after PERF is built (below)
+  var rainPoints, rainCount = 120;
   var fovCur = 65;
 
   // ===== PERFORMANCE: quality tier + adaptive resolution =====================
@@ -134,10 +134,12 @@
       tier: tier, low: tier === 'low', max: caps.max, min: caps.min, aa: caps.aa,
       shadows: caps.shadows, shadowSize: caps.shadowSize,
       ratio: 1, ema: 16.7, slowMs: 0, fastMs: 0, coolMs: 3000, raiseBlockMs: 0,
-      floorMs: 0, floorSaved: false
+      floorMs: 0, floorSaved: false, bootLockMs: 0
     };
   })();
   PERF.ratio = Math.min(window.devicePixelRatio || 1, PERF.max);
+  dustCount = PERF.low ? 24 : (PERF.tier === 'mid' ? 40 : 64);
+  rainCount = PERF.low ? 40 : (PERF.tier === 'mid' ? 80 : 120);
 
   // Low tier: swap the PBR material for Lambert (per-vertex lighting) — much
   // cheaper on weak GPUs. Must run before any mesh is built.
@@ -187,9 +189,13 @@
   }
 
   function applyRenderRatio(r) {
+    if (!renderer) return;
+    if (Math.abs((PERF.ratio || 1) - r) < 0.04) return; // ignore tiny steps
     PERF.ratio = r;
     renderer.setPixelRatio(r);
     renderer.setSize(window.innerWidth, window.innerHeight);
+    // immediately paint so the browser never presents an empty buffer
+    try { if (scene && camera) renderer.render(scene, camera); } catch (eR) {}
   }
 
   function dropShadowsNow() {
@@ -201,6 +207,11 @@
   // Dynamic resolution: called once per real frame with the raw frame time (ms).
   function adaptQuality(rawMs) {
     if (!renderer || rawMs > 250 || !running || paused || dying) return;
+    // First ~5s of a run: jump SFX / first shader compiles cause one-frame stalls.
+    // Resizing the canvas mid-hitch is what produced the black flash on early jumps.
+    if (PERF.bootLockMs > 0) { PERF.bootLockMs -= rawMs; return; }
+    // Ignore single-frame spikes (audio graph spin-up) — don't resize on those
+    if (rawMs > 40 && PERF.ema < 20) return;
     PERF.ema += (rawMs - PERF.ema) * 0.08;
     if (PERF.raiseBlockMs > 0) PERF.raiseBlockMs -= rawMs;
     if (PERF.coolMs > 0) { PERF.coolMs -= rawMs; return; }
@@ -492,6 +503,22 @@
   function sfxJump() {
     sfxTone(380, 0.12, { type: 'sine', slideTo: 720, gain: 0.2 });
     sfxTone(190, 0.08, { type: 'triangle', slideTo: 120, gain: 0.1 });
+  }
+  // Wake the audio graph once (inaudible) so the first gameplay jump doesn't hitch
+  var _sfxPrimed = false;
+  function primeSfx() {
+    if (_sfxPrimed || !audioCtx) return;
+    _sfxPrimed = true;
+    try {
+      var t0 = audioCtx.currentTime;
+      var o = audioCtx.createOscillator();
+      var g = audioCtx.createGain();
+      g.gain.setValueAtTime(0.0001, t0);
+      o.connect(g); g.connect(audioCtx.destination);
+      o.start(t0); o.stop(t0 + 0.05);
+      sfxTone(440, 0.04, { type: 'sine', gain: 0.0001 });
+      sfxThud(0.04, { freq: 100, gain: 0.0001 });
+    } catch (e) {}
   }
   function sfxSlide() {
     sfxThud(0.1, { freq: 220, gain: 0.18 });
@@ -1027,16 +1054,35 @@ function stopMusic() {
   }
 
   var visualQuality = { low: false };
+  // Shared materials: hundreds of props used to each allocate their own
+  // MeshStandardMaterial. Caching by key cuts GPU program switches hard.
+  var _matCache = Object.create(null);
   function mat(color, opts) {
     opts = opts || {};
+    var rough = opts.roughness != null ? opts.roughness : 0.68;
+    var metal = opts.metalness != null ? opts.metalness : 0.08;
+    var em = opts.emissive != null ? opts.emissive : 0x000000;
+    var ei = opts.ei != null ? opts.ei : 0;
+    var flat = opts.flat ? 1 : 0;
+    // non-cacheable flags (transparent etc.) fall through to unique mats
+    if (opts.transparent || opts.map || opts.opacity != null) {
+      var mu = new THREE.MeshStandardMaterial({
+        color: color, roughness: rough, metalness: metal,
+        emissive: em, emissiveIntensity: ei, flatShading: !!flat,
+        transparent: !!opts.transparent, opacity: opts.opacity != null ? opts.opacity : 1,
+        map: opts.map || null
+      });
+      return mu;
+    }
+    var key = (color >>> 0) + '_' + rough + '_' + metal + '_' + (em >>> 0) + '_' + ei + '_' + flat;
+    var hit = _matCache[key];
+    if (hit) return hit;
     var m = new THREE.MeshStandardMaterial({
-      color: color,
-      roughness: opts.roughness != null ? opts.roughness : 0.68,
-      metalness: opts.metalness != null ? opts.metalness : 0.08,
-      emissive: opts.emissive != null ? opts.emissive : 0x000000,
-      emissiveIntensity: opts.ei != null ? opts.ei : 0
+      color: color, roughness: rough, metalness: metal,
+      emissive: em, emissiveIntensity: ei, flatShading: !!flat
     });
-    if (opts.flat) m.flatShading = true;
+    m.userData.shared = true; // disposeTree must not kill shared mats
+    _matCache[key] = m;
     return m;
   }
 
@@ -1207,9 +1253,18 @@ function stopMusic() {
       renderer.setPixelRatio(PERF.ratio);
       renderer.setSize(window.innerWidth, window.innerHeight);
       renderer.setClearColor(0x070708, 1);
+    try {
+      renderer.domElement.style.background = '#070708';
+      renderer.domElement.style.opacity = '1';
+      // warm first frame so the browser never shows an empty black buffer flash
+      renderer.clear();
+      if (scene && camera) renderer.render(scene, camera);
+    } catch (eWarm) {}
       renderer.shadowMap.enabled = PERF.shadows;
       renderer.shadowMap.type = PERF.tier === 'high' ? (THREE.PCFSoftShadowMap || THREE.PCFShadowMap) : THREE.PCFShadowMap;
-      renderer.shadowMap.autoUpdate = true;
+      // Static-ish scene: let us drive shadow updates so we can skip frames on low tier
+      renderer.shadowMap.autoUpdate = false;
+      renderer.shadowMap.needsUpdate = true;
       if ('outputEncoding' in renderer) renderer.outputEncoding = THREE.sRGBEncoding;
       renderer.toneMapping = THREE.ACESFilmicToneMapping;
       renderer.toneMappingExposure = 1.02;
@@ -3445,6 +3500,12 @@ function stopMusic() {
     patternStreak = 0;
     gameOver = false;
     running = true;
+    // kill any residual i-frames / roof state that could phase through the opening pack
+    invuln = 0; onRoof = false; roofGrace = 0; roofContact = false; monkeyTimer = 0;
+    PERF.bootLockMs = 5500;
+    PERF.coolMs = Math.max(PERF.coolMs || 0, 2500);
+    try { freezeStaticScenery(); } catch (eFz) {}
+    try { primeSfx(); } catch (ePrime) {}
 
     gleb.position.set(laneX, 0, 2);
     gleb.scale.set(1, 1, 1);
@@ -5181,14 +5242,17 @@ function onKeyUp(e) {
   }
 
   function isFrontalObstacle(o) {
-    // Frontal = still overlapping the front 2/3 of the volume (side = already past center)
+    // Solid trains: any overlap in-lane is a body hit (SS kills on train sides too
+    // when you're fully committed to the lane). Side-bump only for soft props.
+    if (o && o.userData && (o.userData.solidRoof || ((o.userData.kind || '').indexOf('train') === 0 && !o.userData.roof)))
+      return true;
     var depth = (o.userData && o.userData.depth != null)
       ? o.userData.depth
       : (occDepth(o.userData && o.userData.kind) || 1.2);
     var half = Math.max(0.4, depth * 0.5);
     var localZ = gleb.position.z - o.position.z;
     // past the rear third → side clip, not a lethal face-plant
-    return localZ > -half * 0.55;
+    return localZ > -half * 0.65;
   }
 
   function sideBumpFrom(o) {
@@ -5234,11 +5298,10 @@ function onKeyUp(e) {
       return true;
     }
 
-    // FIX: ground props (bars, fences, boxes...) can never hit a player who is
-    // standing on / running along a train roof or ramp. Roof height (~1.73) used
-    // to sit just under the bar top (~1.75-1.79), so an "invisible" bar inside the
-    // train killed you on the roof.
-    if (onRoof || roofGrace > 0 || roofContact || y >= H_ROOF - 0.25) return false;
+    // Ground props never hit a player who is actually roof-running.
+    // Do NOT use raw y-height: normal jump peaks above H_ROOF-0.25 and that
+    // used to make every prop phase-through mid-air / on the ground after a hop.
+    if (onRoof || roofGrace > 0.05 || roofContact) return false;
 
     // Overhead bar / fence: slide under OR jump clear of the bar top
     if (o.userData.slideOk || o.userData.lowOnly) {
@@ -5645,7 +5708,8 @@ function onKeyUp(e) {
         if (!sliding || slideT < 0.12) doJump();
       }
     }
-    if (invuln > 0) invuln -= gdt;
+    if (invuln > 0) invuln = Math.min(invuln, 4.0) - gdt;
+    if (invuln < 0) invuln = 0;
     if (beatBonusCd > 0) beatBonusCd -= gdt;
     if (nearMissCd > 0) nearMissCd -= gdt;
 
@@ -5934,14 +5998,17 @@ function onKeyUp(e) {
       }
     }
     // buddy eyes pulse when close
-    if (buddy.userData.eyes) {
+    if (buddy.userData.eyes && (performance.now() * 0.06 | 0) % (PERF.low ? 2 : 1) === 0) {
       var pulse = 1.2 + threat * 1.5 + Math.sin(performance.now() * 0.01) * 0.3;
-      buddy.userData.eyes.forEach(function (m) {
-        if (m.material && m.material.emissiveIntensity != null) m.material.emissiveIntensity = pulse;
-      });
+      for (var ei = 0; ei < buddy.userData.eyes.length; ei++) {
+        var em = buddy.userData.eyes[ei];
+        if (em.material && em.material.emissiveIntensity != null) em.material.emissiveIntensity = pulse;
+      }
     }
 
     var dz = speed * gdt;
+    // cheap frame parity for particle / shadow work
+    var _frameN = (update._fn = (update._fn || 0) + 1);
 
     // scroll the ground texture so the (otherwise static) floor reads as
     // moving at the same rate as obstacles — cheap, big win for speed feel
@@ -5958,7 +6025,7 @@ function onKeyUp(e) {
     }
 
     // drift the ambient dust field forward and recycle it out of view
-    if (dustPoints) {
+    if (dustPoints && (!PERF.low || (_frameN & 1))) {
       var dpos = dustPoints.geometry.attributes.position.array;
       for (var di = 0; di < dustCount; di++) {
         var idx = di * 3;
@@ -6079,7 +6146,7 @@ function onKeyUp(e) {
       }
       if (pwr.jet <= 0 && inLaneX(o.userData.lane, laneX) && sweptHit) {
         // FIX: a ground prop buried inside / on a train on this lane is not a real obstacle
-        if (PROP_KINDS_NO_TRAIN[o.userData.kind] && (onRoof || roofGrace > 0 || y >= H_ROOF - 0.25)) continue;
+        if (PROP_KINDS_NO_TRAIN[o.userData.kind] && (onRoof || roofGrace > 0.05 || roofContact)) continue;
         if (o.userData.roof) {
           // sliding into a climbable car: stand up and board instead of dying
           if (sliding) {
@@ -6217,6 +6284,11 @@ function onKeyUp(e) {
       roofGrace = 0.15;
     } else if (onRoof) {
       roofGrace -= gdt;
+    } else if (y <= 0.05 && vy <= 0) {
+      // Standing on the ground, not on a roof: drop any leftover grace. It used to stay frozen
+      // after leaving a roof, so ground obstacles (bushes, bars, boxes...) never killed again.
+      // NOT decayed while airborne: a jump off a roof must keep its grace until it lands.
+      roofGrace = 0;
     }
     if (onRoof && !wasOnRoof) sfxRoof();
     wasOnRoof = onRoof;
@@ -6405,7 +6477,7 @@ function onKeyUp(e) {
     }
 
     visualTime += dt;
-    if (rainPoints) {
+    if (rainPoints && (!PERF.low || !(_frameN & 1))) {
       var rp = rainPoints.geometry.attributes.position.array;
       for (var ri = 0; ri < rainCount; ri++) {
         var idx = ri * 6;
@@ -6440,6 +6512,11 @@ function onKeyUp(e) {
       gleb.scale.set(1.2, 0.4, 1.2);
     }
     updateHud();
+    if (PERF.shadows && renderer.shadowMap) {
+      // Airborne / first seconds: update every frame to avoid a dark flash from a stale map
+      var every = (y > 0.12 || wasAirborne || (PERF.bootLockMs > 0)) ? 1 : (PERF.low ? 3 : 2);
+      if ((_frameN || 0) % every === 0) renderer.shadowMap.needsUpdate = true;
+    }
     renderer.render(scene, camera);
   }
 
