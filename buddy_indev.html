@@ -44,7 +44,7 @@ main{width:min(1380px,94vw);margin:auto}.ticker{margin:0 -3vw;border-top:1px sol
 .achievement-head{display:grid;grid-template-columns:1fr auto;gap:14px;align-items:stretch;margin-bottom:14px}.profile-card{padding:18px 20px;position:relative;overflow:hidden}.profile-card:after{content:"SYNCED";position:absolute;right:16px;top:16px;font:8px monospace;color:#7cff8a;border:1px solid #285c33;padding:5px 7px;letter-spacing:.12em}.profile-label{font:8px monospace;color:#66716a;letter-spacing:.16em}.profile-name{font:700 23px Arial;margin:5px 0 11px;letter-spacing:-.02em}.profile-sub{font:10px monospace;color:#7a847e}.achievement-count{min-width:190px;padding:18px 20px;text-align:right}.achievement-count b{display:block;font:700 30px monospace;color:var(--green)}.achievement-count span{font:8px monospace;color:#66716a;letter-spacing:.13em}.ach-layout{display:grid;grid-template-columns:1fr .36fr;gap:14px}.ach-filter{display:flex;gap:8px;margin-bottom:10px}.ach-filter-btn{border:1px solid #2d352f;background:#080b08;color:#8d9991;padding:7px 12px;font:8px monospace;letter-spacing:.1em;cursor:pointer}.ach-filter-btn:hover,.ach-filter-btn.active{border-color:#5c8064;color:#b8ffc0;background:#0c130e}.ach-list{display:grid;grid-template-columns:repeat(2,1fr);gap:9px}.ach-list.filter-unlocked .ach:not(.unlocked){display:none}.ach-list.filter-locked .ach.unlocked{display:none}.ach{border:1px solid #222822;background:#090b09;padding:13px 14px;display:grid;grid-template-columns:42px 1fr auto;gap:11px;align-items:center;min-height:88px;position:relative;overflow:hidden;transition:.2s}.ach.unlocked{border-color:#315d39;background:linear-gradient(180deg,#0c130e,#090c09)}.ach.unlocked:before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(105,255,124,.04),transparent 50%);pointer-events:none}.ach-icon{width:38px;height:38px;border:1px solid #2b322d;display:grid;place-items:center;font:16px monospace;color:#565f59}.ach.unlocked .ach-icon{border-color:#39734a;color:var(--green);box-shadow:0 0 16px rgba(79,220,114,.08)}.ach-title{font:700 11px Arial;text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px}.ach-desc{font:9px monospace;color:#68736c;line-height:1.45}.ach-meta{font:8px monospace;letter-spacing:.1em;text-align:right;color:#4f5852}.ach.unlocked .ach-meta{color:#75c982}.ach-ghost{display:block;margin-top:2px;color:#4a534d}.ach.unlocked .ach-ghost{display:none}.ach-side{padding:18px}.side-title{font:9px monospace;color:#707a73;letter-spacing:.14em;margin-bottom:14px}.progressbar{height:7px;background:#171b18;border:1px solid #232923}.progressbar i{display:block;height:100%;width:0%;background:linear-gradient(90deg,#5adc73,#c5ffc8);box-shadow:0 0 10px rgba(80,220,115,.16);transition:.4s}.progress-num{display:flex;justify-content:space-between;margin-top:8px;font:9px monospace;color:#5d6760}.sync-log{margin-top:18px;border-top:1px solid var(--line);padding-top:15px;font:9px/1.8 monospace;color:#5f6862}.sync-log strong{color:#9fa8a2;font-weight:400}.mini-stat{padding:11px 0;border-bottom:1px solid #1d231e;display:flex;justify-content:space-between;font:9px monospace}.mini-stat:last-child{border-bottom:0}.mini-stat span{color:#626c65}.mini-stat b{font-weight:400;color:#aab1ac}
 /* studio/reviews */
 .review-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}.review{padding:18px;min-height:160px}.stars{color:#e4ca75;letter-spacing:2px;font-size:11px}.review p{font-size:12px;color:#8a938d;line-height:1.7}.review small{font:8px monospace;color:#5f6862;letter-spacing:.12em}.studio{padding:22px}.studio-grid{display:grid;grid-template-columns:1fr .75fr;gap:14px}.team-row{display:grid;grid-template-columns:48px 1fr auto;gap:12px;align-items:center;padding:14px 0;border-bottom:1px solid #1f241f}.avatar{width:38px;height:38px;border:1px solid #38403a;display:grid;place-items:center;color:#8ba492;font:11px monospace}.team-row strong{font:700 11px Arial}.team-row small{display:block;color:#646e67;font:8px monospace;margin-top:4px}.team-row em{font:8px monospace;color:#6c766f;font-style:normal}.changelog{padding:6px 18px}.change{padding:15px 0;border-bottom:1px solid #1f241f}.change:last-child{border-bottom:0}.change b{color:#aeb7b0;font:10px monospace}.change span{display:block;color:#68726b;font-size:11px;line-height:1.55;margin-top:5px}
-.footer{padding:30px 0 55px;border-top:1px solid var(--line);display:flex;justify-content:space-between;color:#59615c;font:9px monospace;letter-spacing:.12em}.footer strong{color:#8b938d;font-weight:400}.footer a{color:inherit;text-decoration:none}.footer a:hover{color:var(--green)}
+.footer{padding:30px 0 12px;border-top:1px solid var(--line);display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px 24px;align-items:center;color:#59615c;font:9px monospace;letter-spacing:.12em}.footer strong{color:#8b938d;font-weight:400}.footer a{color:inherit;text-decoration:none}.footer a:hover{color:var(--green)}
 /* modal + achievement toast */
 .modal{position:fixed;inset:0;background:rgba(0,0,0,.78);backdrop-filter:blur(10px);display:none;align-items:center;justify-content:center;padding:24px;z-index:70}.modal.open{display:flex}.modal-box{width:min(1100px,95vw);background:#090b09;border:1px solid #4a514c;box-shadow:0 40px 150px rgba(0,0,0,.8)}.modal-top{height:45px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;padding:0 14px;font:9px monospace;color:#7a837e;letter-spacing:.14em}.modal-stage{padding:14px;position:relative}.modal-stage img{display:block;width:100%;max-height:72vh;object-fit:contain;background:#000}.modal-nav{position:absolute;top:50%;transform:translateY(-50%);width:38px;height:38px;border:1px solid #3a413c;background:rgba(8,11,8,.72);color:#c3c8c4;font:20px Arial;line-height:1;cursor:pointer;display:grid;place-items:center;z-index:2}.modal-nav:hover{border-color:#8aff97;color:var(--green)}.modal-prev{left:24px}.modal-next{right:24px}.modal-nav:disabled{opacity:.25;cursor:default}.modal-nav:disabled:hover{border-color:#3a413c;color:#c3c8c4}.close{background:transparent;border:1px solid #303630;color:#b9bfbb;padding:6px 9px;cursor:pointer}.hint{padding:0 14px 12px;color:#5f6762;font:9px monospace}
 .locker-doc{padding:22px 26px;max-height:72vh;overflow:auto;background:#07090701;color:#c4cac5;font:12px/1.75 monospace}.locker-doc h5{margin:0 0 14px;font:700 15px Arial;letter-spacing:.04em;color:#9fe7a8}.locker-doc p{margin:0 0 12px}.locker-doc .redact{background:#0d0b0b;border:1px solid #392321;color:#a56a65;padding:10px 12px;margin:14px 0;font:10px/1.6 monospace}.locker-doc .stamp{color:#5f6862;font:9px monospace;letter-spacing:.12em;margin-top:18px;border-top:1px solid #1d231e;padding-top:12px}
@@ -78,6 +78,57 @@ main{width:min(1380px,94vw);margin:auto}.ticker{margin:0 -3vw;border-top:1px sol
    ========================================================= */
 body.locked{overflow:hidden}
 /* ===== BOOT SEQUENCE (every page load) ===== */
+
+/* 18+ content markers */
+.age-badge{
+  display:inline-flex;align-items:center;justify-content:center;
+  min-width:42px;height:28px;padding:0 8px;
+  border:2px solid #ff3a3a;background:#1a0505;color:#ff5d59;
+  font:800 13px/1 monospace;letter-spacing:.06em;
+  box-shadow:0 0 0 1px rgba(255,60,60,.25),0 0 18px rgba(255,40,40,.18);
+  vertical-align:middle;user-select:none;
+}
+.age-badge.sm{min-width:34px;height:22px;font-size:11px;padding:0 6px;border-width:1.5px}
+.age-disclaimer{
+  margin-top:14px;padding:11px 12px;
+  border:1px solid #4a2220;background:rgba(40,8,8,.55);
+  color:#c9a8a6;font:10px/1.55 monospace;letter-spacing:.04em;
+}
+.age-disclaimer b{color:#ff6e6a;font-weight:700}
+.age-disclaimer .age-badge{margin-right:8px;float:left}
+#bbhBootAge{
+  margin-top:16px;max-width:520px;
+  padding:10px 12px;border:1px solid #4a2220;background:rgba(30,6,6,.72);
+  color:#c4a09e;font:10px/1.55 monospace;letter-spacing:.04em;
+  opacity:0;transform:translateY(6px);transition:opacity .45s ease,transform .45s ease;
+}
+#bbhBootAge.on{opacity:1;transform:none}
+#bbhBootAge .row{display:flex;gap:10px;align-items:flex-start}
+#bbhBootAge b{color:#ff6e6a}
+
+
+
+.joke-disclaimer,.satire-note{
+  margin-top:10px;padding:10px 12px;
+  border:1px solid #3a3a28;background:rgba(28,28,12,.45);
+  color:#a8a890;font:9px/1.55 monospace;letter-spacing:.04em;
+}
+.joke-disclaimer b,.satire-note b{color:#d9bd73;font-weight:700}
+#bbhBootAge .satire{margin-top:8px;padding-top:8px;border-top:1px solid rgba(100,90,50,.35);color:#9a9678;font-size:9px;line-height:1.5}
+#bbhBootAge .satire b{color:#d9bd73}
+.footer{flex-wrap:wrap;gap:12px 24px;align-items:center}
+.footer-legal{
+  width:min(1380px,94vw);margin:0 auto 48px;padding:14px 0 8px;
+  border-top:1px solid var(--line);
+  display:flex;flex-direction:column;gap:8px;
+  color:#6a5555;font:9px/1.55 monospace;letter-spacing:.08em;
+}
+.footer-legal .row{display:flex;align-items:flex-start;gap:10px;flex-wrap:wrap}
+.footer-legal .age-badge{flex-shrink:0;margin-top:1px}
+.footer-legal .satire{color:#7a7868;padding:8px 10px;border:1px solid #2e2e22;background:rgba(12,12,8,.55)}
+.footer-legal .satire b{color:#c4b87a;font-weight:700}
+
+
 body.booting{overflow:hidden}
 #bbhBootOverlay{
   position:fixed;inset:0;z-index:1200;
@@ -205,7 +256,7 @@ body.booting{overflow:hidden}
   font:inherit;opacity:.7;margin-left:4px;
 }
 @media(prefers-reduced-motion:reduce){
-  #bbhBootOverlay,#bbhBootBrand,#bbhBootHeadline,#bbhBootSub,#bbhBootLog,#bbhBootFoot,#bbhBootLog .line{transition:none}
+  #bbhBootOverlay,#bbhBootBrand,#bbhBootHeadline,#bbhBootSub,#bbhBootAge,#bbhBootLog,#bbhBootFoot,#bbhBootLog .line{transition:none}
   #bbhBootLog .cursor{animation:none}
 }
 .gate{position:fixed;inset:0;z-index:1000;background:#020302;display:grid;place-items:center;padding:20px}.gate.hidden{display:none}.gate:before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 50% 42%,rgba(120,255,145,.06),transparent 32%),repeating-linear-gradient(0deg,transparent 0 4px,rgba(255,255,255,.035) 5px);pointer-events:none}.gate-card{position:relative;width:min(640px,94vw);border:1px solid #303830;background:linear-gradient(180deg,#0d110e,#060806);box-shadow:0 35px 120px #000;padding:34px}.gate-top{display:flex;justify-content:space-between;gap:20px;border-bottom:1px solid #222822;padding-bottom:15px;margin-bottom:28px;font:9px monospace;letter-spacing:.15em;color:#687169}.gate-brand{color:var(--green)}.gate-card h2{font:800 clamp(34px,7vw,66px)/.9 Arial;letter-spacing:-.06em;margin:0 0 14px;text-transform:uppercase}.gate-card h2 span{color:var(--green)}.gate-card p{color:#808983;font-size:12px;line-height:1.7;max-width:520px}.gate-form{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:24px}.field{display:flex;flex-direction:column;gap:7px}.field.full{grid-column:1/-1}.field label{font:8px monospace;letter-spacing:.13em;color:#626b65}.field input{width:100%;background:#070907;border:1px solid #313831;color:#d6dbd7;padding:13px;font:12px monospace;outline:none}.field input:focus{border-color:#6c9272;box-shadow:0 0 0 2px rgba(116,255,137,.05)}.gate-error{min-height:18px;margin-top:12px;color:#ff6662;font:9px monospace;letter-spacing:.1em}.enter-btn{width:100%;margin-top:3px;padding:14px;border:1px solid #4a654f;background:#0b140d;color:#aaffb5;font:700 10px monospace;letter-spacing:.18em;cursor:pointer}.enter-btn:disabled{opacity:.3;cursor:not-allowed}.gate-fine{margin-top:15px;color:#4f5952;font:8px/1.6 monospace}.cookie{position:fixed;z-index:900;left:18px;bottom:18px;width:min(430px,calc(100vw - 36px));border:1px solid #39413b;background:#090c09;box-shadow:0 20px 70px #000;padding:17px}.cookie.hidden{display:none}.cookie b{font:10px monospace;letter-spacing:.12em;color:#bfc6c1}.cookie p{font:10px/1.6 Arial;color:#727b75;margin:8px 0 13px}.cookie-actions{display:flex;gap:8px}.cookie-actions button{flex:1}.promo-ad{position:relative;overflow:hidden;border:1px dashed #343b36;background:linear-gradient(135deg,#090c09,#0e120f);padding:17px;min-height:125px}.promo-ad:before{content:"ADVERTISEMENT";position:absolute;right:10px;top:8px;font:7px monospace;letter-spacing:.12em;color:#454d47}.promo-ad .ad-kicker{font:8px monospace;letter-spacing:.18em;color:#69736c}.promo-ad h4{margin:10px 0 5px;font:800 19px Arial;letter-spacing:-.03em}.promo-ad p{margin:0;color:#6f7872;font:10px/1.55 Arial;max-width:370px}.promo-ad .ad-btn{display:inline-block;margin-top:12px;border:1px solid #3d473f;padding:6px 8px;color:#a6afa9;font:8px monospace;letter-spacing:.12em}.ad-glitch{animation:adglitch 8s infinite}@keyframes adglitch{0%,92%,100%{transform:none;filter:none}94%{transform:skewX(-1deg);filter:brightness(1.4)}96%{transform:translateX(2px);filter:contrast(1.4)}}
@@ -239,6 +290,14 @@ body.booting{overflow:hidden}
     </div>
     <h1 id="bbhBootHeadline">Cold start<br><em>night archive</em></h1>
     <p id="bbhBootSub">LOCAL CLIENT · NO OUTBOUND TELEMETRY · ACCESS NODE WARMING UP</p>
+    <div id="bbhBootAge">
+      <div class="row">
+        <span class="age-badge" title="18+">18+</span>
+        <div><b>CONTENT NOTICE · 18+</b><br>This archive contains mature horror material, disturbing imagery, strong language and intense themes. Intended for adults only. By continuing you confirm you are of legal age in your region.
+          <div class="satire"><b>SATIRE.</b> Offensive or tasteless bits are dark comedy only and do not reflect the author's views.</div>
+        </div>
+      </div>
+    </div>
     <div id="bbhBootLog" aria-hidden="true"></div>
     <div id="bbhBootFoot">
       <div id="bbhBootBarWrap"><div id="bbhBootBar"></div></div>
@@ -378,6 +437,8 @@ body.booting{overflow:hidden}
     if (brand) brand.classList.add('on');
     if (head) head.classList.add('on');
     if (sub) sub.classList.add('on');
+    var ageN = document.getElementById('bbhBootAge');
+    if (ageN) ageN.classList.add('on');
     if (log) log.classList.add('on');
     if (foot) foot.classList.add('on');
   });
@@ -388,9 +449,11 @@ body.booting{overflow:hidden}
 <!-- First-visit access gate: 18+ night archive -->
 <div class="gate" id="accessGate">
   <div class="gate-card">
-    <div class="gate-top"><span class="gate-brand">BUDDY HORROR // ACCESS NODE 01</span><span>AGE VERIFICATION</span></div>
+    <div class="gate-top"><span class="gate-brand">BUDDY HORROR // ACCESS NODE 01</span><span style="display:flex;align-items:center;gap:10px"><span class="age-badge sm">18+</span> AGE VERIFICATION</span></div>
     <h2>ENTER THE<br><span>NIGHT ARCHIVE</span></h2>
     <p>This archive contains horror material, disturbing imagery and sealed incident records. Confirm your date of birth and choose an operator name to open a local profile.</p>
+    <div class="age-disclaimer"><span class="age-badge sm">18+</span><b>ADULT CONTENT.</b> Strong violence, psychological horror and mature themes. Access is restricted to operators 18 years of age or older. A false date of birth is a local terminal fault — not a bypass.</div>
+    <div class="joke-disclaimer"><b>SATIRE.</b> Dark and tasteless jokes here are fiction and do not represent the author's beliefs.</div>
     <form class="gate-form" id="gateForm">
       <div class="field"><label>DATE OF BIRTH</label><input id="birthDate" type="date" required></div>
       <div class="field"><label>OPERATOR NAME</label><input id="operatorName" type="text" maxlength="24" placeholder="ENTER NAME" autocomplete="off" required></div>
@@ -466,6 +529,10 @@ window.__bbhVerifyGate=function(){
 <section id="about" class="section"><div class="section-title"><h3>16 // INCIDENT REPORT</h3><span>DECLASSIFIED / PARTIAL</span></div><div class="about-grid"><div class="panel note"><p><em>Объект:</em> ночной терминал наблюдения.</p><p><em>Задача:</em> пережить смену и не дать системе перейти в аварийный режим.</p><p><em>Примечание:</em> часть сведений намеренно оставлена пустой. Некоторые события должны быть обнаружены непосредственно во время прохождения.</p><div class="meter"><i></i></div><div class="log">[00:00:01] <span class="ok">SIGNAL ACQUIRED</span><br>[00:00:04] CAMERA NETWORK CONNECTED<br>[00:00:08] <span class="warn">UNLISTED PROCESS FOUND</span><br>[00:00:13] NIGHT CYCLE ARMED<br>[00:00:17] <span class="bad">DO NOT LEAVE TERMINAL</span></div></div><div class="panel note"><div class="log">ARCHIVE INDEX<br><br><span class="ok">✓</span> playable build<br><span class="ok">✓</span> character records<br><span class="ok">✓</span> achievement service<br><span class="ok">✓</span> local save monitor<br><span class="warn">?</span> missing camera feed<br><span class="warn">?</span> night five report<br><span class="bad">!</span> source integrity compromised<br><br>LAST SYNCHRONIZATION<br><strong id="lastSync" style="color:#cbd0cc">SCANNING</strong></div></div></div></section>
 
 <div class="footer"><span>BUDDY HORROR ARCHIVE · <strong>PRIVATE DISTRIBUTION BUILD</strong></span><span><a href="#game">RETURN TO TERMINAL ↑</a> &nbsp;·&nbsp; SAVE LINK / ACTIVE &nbsp;·&nbsp; © 2026</span><span style="color:#040504;user-select:text;" aria-hidden="true">Если ты выделил этот текст, чтобы прочитать его — она делала то же самое.</span></div>
+<div class="footer-legal">
+  <div class="row"><span class="age-badge sm">18+</span><span>ADULT CONTENT · HORROR / DISTURBING MATERIAL · FOR OPERATORS 18+ ONLY</span></div>
+  <div class="satire"><b>SATIRE.</b> Jokes on this site are dark comedy only and do not represent the author's views.</div>
+</div>
 </main>
 <div class="modal" id="modal"><div class="modal-box"><div class="modal-top"><span>ARCHIVE VIEWER // <span id="modalName">FRAME</span></span><button class="close" id="close">CLOSE ×</button></div><div class="modal-stage"><button class="modal-nav modal-prev" id="modalPrev" type="button" aria-label="Предыдущий кадр">‹</button><img id="modalImg" src="" alt="Просмотр архивного кадра"><button class="modal-nav modal-next" id="modalNext" type="button" aria-label="Следующий кадр">›</button></div><div class="hint">← / → TO BROWSE · CLICK OUTSIDE TO RETURN · IMAGE IS PART OF THE LOCAL BUILD ARCHIVE</div></div></div>
 <div class="modal" id="lockerModal"><div class="modal-box"><div class="modal-top"><span>ARCHIVE VIEWER // <span id="lockerModalName">FILE</span></span><button class="close" id="lockerModalClose">CLOSE ×</button></div><div class="modal-stage locker-doc" id="lockerModalBody"></div><div class="hint">CLICK OUTSIDE TO RETURN · DOCUMENT IS PART OF THE LOCAL BUILD ARCHIVE</div></div></div>
