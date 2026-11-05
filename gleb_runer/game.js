@@ -87,11 +87,12 @@
   function disposeTree(root) {
     if (!root) return;
     root.traverse(function (n) {
-      if (n.geometry && n.geometry.dispose) n.geometry.dispose();
+      if (n.geometry && n.geometry.dispose && !(n.geometry.userData && n.geometry.userData.shared)) n.geometry.dispose();
       var m = n.material;
       if (m) {
         var list = Array.isArray(m) ? m : [m];
         for (var i = 0; i < list.length; i++) {
+          if (list[i].userData && list[i].userData.shared) continue;
           if (list[i].map && list[i].map.dispose) list[i].map.dispose();
           if (list[i].dispose) list[i].dispose();
         }
@@ -102,6 +103,155 @@
   var dustPoints, dustCount = 64;
   var rainPoints, rainCount = 150;
   var fovCur = 65;
+
+  // ===== PERFORMANCE: quality tier + adaptive resolution =====================
+  // tier: 'low' (weak phones/laptops) | 'mid' (typical phones) | 'high' (desktop).
+  // Override with ?quality=low|mid|high. The tier is also learned: if a device
+  // can't hold the frame rate even at minimum resolution, 'low' is remembered.
+  var LS_QUALITY = 'gleb_run_quality_v1';
+  var PERF = (function () {
+    var tier = null;
+    try {
+      var m = /[?&]quality=(low|mid|high)\b/.exec(location.search);
+      if (m) tier = m[1];
+    } catch (e0) {}
+    if (!tier) {
+      try { if (localStorage.getItem(LS_QUALITY) === 'low') tier = 'low'; } catch (e1) {}
+    }
+    if (!tier) {
+      var touch = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
+      var cores = navigator.hardwareConcurrency || 8;
+      var mem = navigator.deviceMemory || 8;
+      var weak = cores <= 2 || mem <= 2 || (touch && (cores <= 4 || mem <= 3));
+      tier = weak ? 'low' : (touch ? 'mid' : 'high');
+    }
+    var caps = {
+      low:  { max: 1.0,  min: 0.6,  aa: false, shadows: false, shadowSize: 512 },
+      mid:  { max: 1.25, min: 0.65, aa: true,  shadows: true,  shadowSize: 512 },
+      high: { max: 1.5,  min: 0.75, aa: true,  shadows: true,  shadowSize: 768 }
+    }[tier];
+    return {
+      tier: tier, low: tier === 'low', max: caps.max, min: caps.min, aa: caps.aa,
+      shadows: caps.shadows, shadowSize: caps.shadowSize,
+      ratio: 1, ema: 16.7, slowMs: 0, fastMs: 0, coolMs: 3000, raiseBlockMs: 0,
+      floorMs: 0, floorSaved: false
+    };
+  })();
+  PERF.ratio = Math.min(window.devicePixelRatio || 1, PERF.max);
+
+  // Low tier: swap the PBR material for Lambert (per-vertex lighting) — much
+  // cheaper on weak GPUs. Must run before any mesh is built.
+  function useLambertMaterials() {
+    var Std = THREE.MeshStandardMaterial;
+    if (!Std || Std.__lambertSwap) return;
+    var Lam = THREE.MeshLambertMaterial;
+    var swapped = function (params) {
+      var p = {};
+      if (params) {
+        for (var k in params) {
+          if (k === 'roughness' || k === 'metalness' || k === 'envMapIntensity' || k === 'flatShading') continue;
+          p[k] = params[k];
+        }
+      }
+      return new Lam(p);
+    };
+    swapped.__lambertSwap = true;
+    THREE.MeshStandardMaterial = swapped;
+  }
+
+  // Scenery pieces only ever move as a whole (position.z of the piece / top-level
+  // child). Their inner meshes never change, so stop recomputing their local
+  // matrices every frame — thousands of compose() calls per frame on the CPU.
+  function freezeStaticScenery() {
+    if (!sceneryPieces || !sceneryPieces.length) return;
+    var movers = new Set(sceneryPieces);
+    function freezeNode(n) {
+      if (movers.has(n)) return;
+      n.updateMatrix();
+      n.matrixAutoUpdate = false;
+    }
+    for (var i = 0; i < sceneryPieces.length; i++) {
+      var scp = sceneryPieces[i];
+      if (!scp) continue;
+      var tops = scp.children;
+      for (var j = 0; j < tops.length; j++) {
+        var top = tops[j];
+        if (scp.userData && scp.userData.segmentedScenery) {
+          // top-level children get position.z written each frame: keep them live
+          for (var k = 0; k < top.children.length; k++) top.children[k].traverse(freezeNode);
+        } else {
+          top.traverse(freezeNode);
+        }
+      }
+    }
+  }
+
+  function applyRenderRatio(r) {
+    PERF.ratio = r;
+    renderer.setPixelRatio(r);
+    renderer.setSize(window.innerWidth, window.innerHeight);
+  }
+
+  function dropShadowsNow() {
+    if (!renderer || !renderer.shadowMap.enabled) return;
+    renderer.shadowMap.enabled = false;
+    if (scene && scene.userData.dir) scene.userData.dir.castShadow = false;
+  }
+
+  // Dynamic resolution: called once per real frame with the raw frame time (ms).
+  function adaptQuality(rawMs) {
+    if (!renderer || rawMs > 250 || !running || paused || dying) return;
+    PERF.ema += (rawMs - PERF.ema) * 0.08;
+    if (PERF.raiseBlockMs > 0) PERF.raiseBlockMs -= rawMs;
+    if (PERF.coolMs > 0) { PERF.coolMs -= rawMs; return; }
+    if (PERF.ema > 24) {                       // below ~42 fps
+      PERF.fastMs = 0;
+      PERF.slowMs += rawMs;
+      if (PERF.slowMs > 1200) {
+        PERF.slowMs = 0;
+        if (PERF.ratio > PERF.min + 0.01) {
+          // if we just raised and it got slow again, stop trying to go that high
+          if (PERF.justRaised) { PERF.max = Math.max(PERF.min, PERF.ratio - 0.1); PERF.justRaised = false; }
+          applyRenderRatio(Math.max(PERF.min, PERF.ratio - 0.15));
+          PERF.raiseBlockMs = 15000;
+          PERF.coolMs = 1500;
+        } else {
+          // already at the floor and still slow: cut shadows, remember 'low'
+          PERF.floorMs += 1200;
+          if (PERF.floorMs >= 3600) {
+            dropShadowsNow();
+            if (!PERF.floorSaved) {
+              PERF.floorSaved = true;
+              try { localStorage.setItem(LS_QUALITY, 'low'); } catch (e2) {}
+            }
+          }
+        }
+      }
+    } else if (PERF.ema < 17.8 && PERF.ratio < PERF.max - 0.01 && PERF.raiseBlockMs <= 0) {
+      PERF.slowMs = 0; PERF.floorMs = 0;
+      PERF.fastMs += rawMs;
+      if (PERF.fastMs > 6000) {
+        PERF.fastMs = 0;
+        PERF.justRaised = true;
+        applyRenderRatio(Math.min(PERF.max, PERF.ratio + 0.1));
+        PERF.coolMs = 1500;
+      }
+    } else {
+      PERF.slowMs = Math.max(0, PERF.slowMs - rawMs);
+      PERF.fastMs = 0;
+      if (PERF.ema < 20) PERF.floorMs = 0;
+    }
+  }
+
+  // HUD / meter DOM writes only when the value actually changed
+  var _hudCache = { score: -1, combo: -1, dist: -1, stage: -1, prog: '', warn: '' };
+  var _meterCache = { h: -1, ready: null, dis: null, txt: '' };
+  function resetUiCaches() {
+    _hudCache.score = _hudCache.combo = _hudCache.dist = _hudCache.stage = -1;
+    _hudCache.prog = ''; _hudCache.warn = '';
+    _closeCallPrev = null;
+    _meterCache.h = -1; _meterCache.ready = null; _meterCache.dis = null; _meterCache.txt = '';
+  }
 
   // ----- tiny pooled particle bursts (coin sparkle, landing dust) -----
   var fxPool = [];
@@ -1049,17 +1199,20 @@ function stopMusic() {
   function init() {
     if (isArchiveSealed()) { sealForever(); return; }
     try {
-      renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true, powerPreference: 'high-performance' });
-      renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, ('ontouchstart' in window) ? 1.35 : 1.75));
+      if (PERF.low) useLambertMaterials();
+      renderer = new THREE.WebGLRenderer({
+        canvas: canvas, antialias: PERF.aa, stencil: false, alpha: false,
+        powerPreference: 'high-performance'
+      });
+      renderer.setPixelRatio(PERF.ratio);
       renderer.setSize(window.innerWidth, window.innerHeight);
       renderer.setClearColor(0x070708, 1);
-      renderer.shadowMap.enabled = true;
-      renderer.shadowMap.type = THREE.PCFSoftShadowMap || THREE.PCFShadowMap;
+      renderer.shadowMap.enabled = PERF.shadows;
+      renderer.shadowMap.type = PERF.tier === 'high' ? (THREE.PCFSoftShadowMap || THREE.PCFShadowMap) : THREE.PCFShadowMap;
       renderer.shadowMap.autoUpdate = true;
       if ('outputEncoding' in renderer) renderer.outputEncoding = THREE.sRGBEncoding;
       renderer.toneMapping = THREE.ACESFilmicToneMapping;
       renderer.toneMappingExposure = 1.02;
-      renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, ('ontouchstart' in window) ? 1.35 : 1.75));
       // NOTE: keep this OFF. With physically-correct (inverse-square) falloff,
       // any mesh sitting a few cm from a PointLight (e.g. the lamp bulbs below,
       // which are ~0.06 units from their own light) gets blown out to solid
@@ -1069,7 +1222,8 @@ function stopMusic() {
       scene = new THREE.Scene();
       scene.fog = new THREE.Fog(0x080c16, 20, 105);
 
-      camera = new THREE.PerspectiveCamera(65, window.innerWidth / window.innerHeight, 0.08, 130);
+      // far=112: fog is fully opaque by ~105, anything beyond is wasted draw work
+      camera = new THREE.PerspectiveCamera(65, window.innerWidth / window.innerHeight, 0.1, 112);
       camera.position.set(0, 5.2, 9);
 
       // soft gradient fill (sky-ish top / ground-ish bottom) instead of flat ambient
@@ -1081,8 +1235,8 @@ function stopMusic() {
       scene.userData.amb = amb;
       var dir = new THREE.DirectionalLight(0xffd6b0, 1.30);
       dir.position.set(4, 12, 6);
-      dir.castShadow = true;
-      dir.shadow.mapSize.set(768, 768);
+      dir.castShadow = PERF.shadows;
+      dir.shadow.mapSize.set(PERF.shadowSize, PERF.shadowSize);
       dir.shadow.camera.near = 1;
       dir.shadow.camera.far = 40;
       scene.add(dir);
@@ -1097,10 +1251,13 @@ function stopMusic() {
       scene.add(red);
       scene.userData.chaseLight = red;
       // soft fill only — not a path lantern
-      var green = new THREE.PointLight(0x274a55, 0.05, 18);
-      green.position.set(0, 5.5, 6);
-      scene.add(green);
-      scene.userData.fillGreen = green;
+      // (skipped on the low tier: every extra light costs every lit pixel)
+      if (!PERF.low) {
+        var green = new THREE.PointLight(0x274a55, 0.05, 18);
+        green.position.set(0, 5.5, 6);
+        scene.add(green);
+        scene.userData.fillGreen = green;
+      }
 
       buildSky();
 
@@ -1130,6 +1287,7 @@ function stopMusic() {
       buildPremiumEnvironment();
       // Performance: scenery is decorative; don't spend shadow-map passes on dozens of props.
       sceneryGroup.traverse(function(n){ if(n && n.isMesh){ n.castShadow=false; n.receiveShadow=false; } });
+      freezeStaticScenery();
       buildTrackHeroDetails();
       buildVisualPolish();
       buildDust();
@@ -2158,18 +2316,20 @@ function stopMusic() {
       var hip = new THREE.Group();
       hip.position.set(side * 0.14, 0, 0);
       hip.add(new THREE.Mesh(new THREE.SphereGeometry(0.1, 8, 8), black));
-      var thigh = new THREE.Mesh(new THREE.BoxGeometry(0.16, 0.4, 0.16), black);
-      thigh.position.y = -0.2;
+      // leg = 0.44 thigh + 0.46 shin/foot so the soles actually reach the floor
+      // (hip is 0.92 up; the old 0.4+0.44 left the feet hovering ~8 cm above ground)
+      var thigh = new THREE.Mesh(new THREE.BoxGeometry(0.16, 0.44, 0.16), black);
+      thigh.position.y = -0.22;
       hip.add(thigh);
       var knee = new THREE.Group();
-      knee.position.y = -0.4;
+      knee.position.y = -0.44;
       hip.add(knee);
       knee.add(new THREE.Mesh(new THREE.SphereGeometry(0.08, 8, 8), black));
-      var shin = new THREE.Mesh(new THREE.BoxGeometry(0.14, 0.38, 0.14), black);
-      shin.position.y = -0.19;
+      var shin = new THREE.Mesh(new THREE.BoxGeometry(0.14, 0.4, 0.14), black);
+      shin.position.y = -0.2;
       knee.add(shin);
       var foot = new THREE.Mesh(new THREE.BoxGeometry(0.16, 0.08, 0.26), white);
-      foot.position.set(0, -0.4, 0.06);
+      foot.position.set(0, -0.42, 0.06);
       knee.add(foot);
       return { hip: hip, knee: knee };
     }
@@ -2221,9 +2381,20 @@ function stopMusic() {
     var face = new THREE.Mesh(new THREE.CylinderGeometry(0.44, 0.44, 0.12, 24), white);
     face.rotation.x = Math.PI / 2;
     head.add(face);
+    // Front face bulge. The sphere cap has its pole on +Y, so it must be turned to
+    // point along +Z (the face direction) — unrotated it stuck out of the top/back
+    // of the head and left the mouth + teeth floating in mid-air.
     var dome = new THREE.Mesh(new THREE.SphereGeometry(0.4, 16, 12, 0, Math.PI * 2, 0, Math.PI * 0.55), white);
+    dome.rotation.x = Math.PI / 2;
     dome.position.z = 0.02;
     head.add(dome);
+    // Back of the head (the camera only ever sees this side while running):
+    // a shallow rear dome so the head isn't a paper-thin disc from behind.
+    var rearDome = new THREE.Mesh(new THREE.SphereGeometry(0.42, 16, 10, 0, Math.PI * 2, 0, Math.PI * 0.5), white);
+    rearDome.rotation.x = -Math.PI / 2;
+    rearDome.scale.set(1, 0.7, 1);
+    rearDome.position.z = -0.06;
+    head.add(rearDome);
     [-0.14, 0.14].forEach(function (x) {
       var eo = new THREE.Mesh(new THREE.BoxGeometry(0.16, 0.2, 0.05), black);
       eo.position.set(x, 0.08, 0.42); head.add(eo);
@@ -2970,10 +3141,14 @@ function stopMusic() {
     // no new coins only during monkey rampage (green pad boost is fine)
     if (monkeyTimer > 0.05) return null;
     if (yOff == null) yOff = 0.9;
-    var mesh = new THREE.Mesh(
-      new THREE.CylinderGeometry(0.28, 0.28, 0.08, 12),
-      mat(0xd4b84a, { metalness: 0.6, roughness: 0.3, emissive: 0x6a5010, ei: 0.35 })
-    );
+    // one geometry + material for every coin (they used to be rebuilt and disposed per spawn)
+    if (!_coinGeo) {
+      _coinGeo = new THREE.CylinderGeometry(0.28, 0.28, 0.08, PERF.low ? 8 : 12);
+      _coinGeo.userData.shared = true;
+      _coinMat = mat(0xd4b84a, { metalness: 0.6, roughness: 0.3, emissive: 0x6a5010, ei: 0.35 });
+      _coinMat.userData.shared = true;
+    }
+    var mesh = new THREE.Mesh(_coinGeo, _coinMat);
     mesh.rotation.x = Math.PI / 2;
     mesh.position.set(LANES[laneIdx], yOff, z);
     mesh.userData = { lane: laneIdx, z: z, taken: false };
@@ -3044,19 +3219,28 @@ function stopMusic() {
 
   function updateMeterUI() {
     if (!el.coinMeter) return;
-    var pct = Math.max(0, Math.min(100, coinMeter));
-    el.coinMeter.style.height = pct + '%';
-    el.coinMeter.style.width = ''; // only bottom→top, never left→right
+    // only touch the DOM when something visible changed (this runs every frame)
+    var pct = Math.round(Math.max(0, Math.min(100, coinMeter)) * 2) / 2;
+    if (pct !== _meterCache.h) {
+      _meterCache.h = pct;
+      el.coinMeter.style.height = pct + '%';
+      el.coinMeter.style.width = ''; // only bottom→top, never left→right
+    }
     monkeyReady = coinMeter >= METER_MAX - 0.5 && monkeyTimer <= 0 && monkeyCooldown <= 0 && dist >= MONKEY_MIN_DIST;
-    el.coinMeter.classList.toggle('ready', monkeyReady);
+    if (monkeyReady !== _meterCache.ready) {
+      _meterCache.ready = monkeyReady;
+      el.coinMeter.classList.toggle('ready', monkeyReady);
+      if (el.btnMonkey) el.btnMonkey.classList.toggle('ready', monkeyReady);
+    }
     if (el.btnMonkey) {
-      el.btnMonkey.disabled = !monkeyReady;
-      el.btnMonkey.classList.toggle('ready', monkeyReady);
-      if (monkeyTimer > 0) el.btnMonkey.textContent = 'РЕЙД ' + Math.ceil(monkeyTimer) + 'с';
-      else if (monkeyCooldown > 0) el.btnMonkey.textContent = 'ОТДЫХ ' + Math.ceil(monkeyCooldown) + 'с';
-      else if (dist < MONKEY_MIN_DIST) el.btnMonkey.textContent = Math.floor(coinMeter) + '% · ' + Math.max(0, Math.ceil(MONKEY_MIN_DIST - dist)) + 'м';
-      else if (monkeyReady) el.btnMonkey.textContent = 'ВКЛЮЧИТЬ (E)';
-      else el.btnMonkey.textContent = Math.floor(coinMeter) + '%';
+      if (_meterCache.dis !== !monkeyReady) { _meterCache.dis = !monkeyReady; el.btnMonkey.disabled = !monkeyReady; }
+      var txt;
+      if (monkeyTimer > 0) txt = 'РЕЙД ' + Math.ceil(monkeyTimer) + 'с';
+      else if (monkeyCooldown > 0) txt = 'ОТДЫХ ' + Math.ceil(monkeyCooldown) + 'с';
+      else if (dist < MONKEY_MIN_DIST) txt = Math.floor(coinMeter) + '% · ' + Math.max(0, Math.ceil(MONKEY_MIN_DIST - dist)) + 'м';
+      else if (monkeyReady) txt = 'ВКЛЮЧИТЬ (E)';
+      else txt = Math.floor(coinMeter) + '%';
+      if (txt !== _meterCache.txt) { _meterCache.txt = txt; el.btnMonkey.textContent = txt; }
     }
   }
 
@@ -3154,6 +3338,7 @@ function stopMusic() {
       // facade panels vanished the moment the game began.
       buildVisualPolish();
       sceneryGroup.traverse(function(n){ if(n && n.isMesh){ n.castShadow=false; n.receiveShadow=false; } });
+      freezeStaticScenery();
     }
     // re-dress the track corridor (rails/ties) if track group is sparse
     if (trackGroup && trackGroup.children.length < 8) {
@@ -3272,6 +3457,7 @@ function stopMusic() {
     el.warn.classList.add('hidden');
     if (el.powers) el.powers.classList.remove('hidden');
     if (el.meterWrap) el.meterWrap.classList.remove('hidden');
+    resetUiCaches();
     renderPowers();
     updateMeterUI();
     updateHud();
@@ -3364,28 +3550,47 @@ function stopMusic() {
 
   
   
+  // Gas / poop puffs are pooled: they used to allocate a new geometry + material
+  // per particle (and passed a bogus `depth` option → a console warning each time),
+  // which meant GC hitches every few frames while playing as Minder.
+  var _fxSphereGeo = null;
+  var minderPool = { gas: [], poop: [] };
+  function releaseMinderFx(p) {
+    var m = p.mesh;
+    if (!m) return;
+    if (m.parent) m.parent.remove(m);
+    m.visible = false;
+    var pool = minderPool[p.kind === 'gas' ? 'gas' : 'poop'];
+    if (pool.length < 48) pool.push(m);
+    else { m.material.dispose(); }
+  }
   function clearMinderFx() {
-    for (var i = 0; i < minderFx.length; i++) {
-      if (minderFx[i].mesh && minderFx[i].mesh.parent) minderFx[i].mesh.parent.remove(minderFx[i].mesh);
-      disposeTree(minderFx[i].mesh);
-    }
+    for (var i = 0; i < minderFx.length; i++) releaseMinderFx(minderFx[i]);
     minderFx = [];
   }
 
   function spawnMinderGas(burst) {
     if (!gleb || !gleb.userData || !gleb.userData.isMinder) return;
-    if (minderFx.length > 40) return;
+    var fxCap = PERF.low ? 16 : 40;
+    if (minderFx.length > fxCap) return;
     var n = burst || 3;
+    if (PERF.low) n = Math.max(1, (n + 1) >> 1);
+    if (!_fxSphereGeo) _fxSphereGeo = new THREE.SphereGeometry(1, 6, 5);
     var bx = gleb.position.x;
     var by = gleb.position.y + 0.85;
     var bz = gleb.position.z + 0.35; // behind relative to facing -Z... root faces Math.PI so +Z is back
     // character faces -Z (rotation.y = PI), butt is local -Z → world +Z
     for (var i = 0; i < n; i++) {
       var col = Math.random() > 0.4 ? 0x66ff44 : 0x44cc33;
-      var mesh = new THREE.Mesh(
-        new THREE.SphereGeometry(0.12 + Math.random() * 0.18, 6, 6),
-        new THREE.MeshBasicMaterial({ color: col, transparent: true, opacity: 0.55, depth: true })
-      );
+      var gr = 0.12 + Math.random() * 0.18;
+      var mesh = minderPool.gas.pop();
+      if (!mesh) {
+        mesh = new THREE.Mesh(_fxSphereGeo, new THREE.MeshBasicMaterial({ color: col, transparent: true, opacity: 0.55, depthWrite: false }));
+      }
+      mesh.material.color.setHex(col);
+      mesh.material.opacity = 0.55;
+      mesh.scale.setScalar(gr);
+      mesh.visible = true;
       mesh.position.set(
         bx + (Math.random() - 0.5) * 0.35,
         by + Math.random() * 0.15,
@@ -3395,6 +3600,7 @@ function stopMusic() {
       minderFx.push({
         mesh: mesh,
         kind: 'gas',
+        r: gr,
         life: 0.45 + Math.random() * 0.35,
         max: 0.8,
         vx: (Math.random() - 0.5) * 1.2,
@@ -3406,18 +3612,24 @@ function stopMusic() {
 
   function spawnMinderPoop(heavy) {
     if (!gleb || !gleb.userData || !gleb.userData.isMinder) return;
-    if (minderFx.length > 40) return;
+    var fxCapP = PERF.low ? 16 : 40;
+    if (minderFx.length > fxCapP) return;
     var n = heavy ? 3 : 2;
+    if (PERF.low) n = 1;
+    if (!_fxSphereGeo) _fxSphereGeo = new THREE.SphereGeometry(1, 6, 5);
     var bx = gleb.position.x;
     var by = gleb.position.y + 0.75;
     var bz = gleb.position.z + 0.4;
     for (var i = 0; i < n; i++) {
       var s = 0.08 + Math.random() * (heavy ? 0.12 : 0.08);
-      var mesh = new THREE.Mesh(
-        new THREE.SphereGeometry(s, 6, 5),
-        new THREE.MeshStandardMaterial({ color: 0x5c3018, roughness: 0.95, transparent: true, opacity: 0.55, depth: true })
-      );
-      mesh.scale.y = 0.7 + Math.random() * 0.5;
+      var mesh = minderPool.poop.pop();
+      if (!mesh) {
+        mesh = new THREE.Mesh(_fxSphereGeo, new THREE.MeshStandardMaterial({ color: 0x5c3018, roughness: 0.95, transparent: true, opacity: 0.55 }));
+      }
+      var sy = 0.7 + Math.random() * 0.5;
+      mesh.scale.set(s, s * sy, s);
+      mesh.rotation.set(0, 0, 0);
+      mesh.visible = true;
       mesh.position.set(
         bx + (Math.random() - 0.5) * 0.5,
         by,
@@ -3521,8 +3733,7 @@ function stopMusic() {
       var p = minderFx[i];
       p.life -= dt;
       if (p.life <= 0) {
-        if (p.mesh.parent) p.mesh.parent.remove(p.mesh);
-        disposeTree(p.mesh);
+        releaseMinderFx(p);
         minderFx.splice(i, 1);
         continue;
       }
@@ -3532,7 +3743,7 @@ function stopMusic() {
       p.mesh.position.z += p.vz * dt;
       if (p.kind === 'gas') {
         var t = 1 - p.life / p.max;
-        p.mesh.scale.setScalar(1 + t * 2.2);
+        p.mesh.scale.setScalar(p.r * (1 + t * 2.2));
         p.mesh.material.opacity = 0.55 * (p.life / p.max);
       } else {
         p.mesh.rotation.x += p.spin * dt;
@@ -3564,35 +3775,44 @@ function stopMusic() {
       gleb.scale.set(1.2, 0.4, 1.2);
     } else {
       gleb.rotation.set(0, Math.PI, 0);
+      if (pwr.jet > 0) {
+        // jetpack: lean into the flight (this used to be erased every frame)
+        gleb.rotation.x = -0.28;
+        gleb.rotation.z = Math.sin(performance.now() * 0.0022) * 0.14;
+      }
       gleb.scale.set(1, 1, 1);
     }
+    if (!(monkeyTimer > 0)) ud.ballSpin = 0;
 
-    // Bind positions — monkey: compact ball near origin so spin stays on the ground
+    // Bind positions — monkey: compact ball CENTRED on the root origin so the roll
+    // spins about its own centre (root is lifted by ballLift in update()).
+    // Slide: the root is squashed (see above), so the limbs keep a normal standing
+    // layout — lowering them as well squashed the figure twice and tore it apart.
     if (ud.pelvis) {
       if (monkeyTimer > 0 && !dying) {
-        ud.pelvis.position.set(0, 0.5, 0);
+        ud.pelvis.position.set(0, -0.3, 0);
         ud.pelvis.rotation.set(-0.4, 0, 0);
       } else {
-        ud.pelvis.position.set(0, sliding ? 0.55 : 0.92, 0);
-        ud.pelvis.rotation.set(sliding ? 0.35 : 0, 0, 0);
+        ud.pelvis.position.set(0, 0.92, 0);
+        ud.pelvis.rotation.set(sliding ? 0.15 : 0, 0, 0);
       }
     }
     if (ud.head) {
       if (monkeyTimer > 0 && !dying) {
-        ud.head.position.set(0, 0.95, 0.35);
+        ud.head.position.set(0, 0.15, 0.35);
         ud.head.rotation.set(0.6, 0, 0);
       } else {
-        ud.head.position.set(0, sliding ? 1.15 : 1.88, sliding ? 0.15 : 0);
-        ud.head.rotation.set(sliding ? 0.35 : Math.sin(legPhase * 2) * 0.04, 0, 0);
+        ud.head.position.set(0, 1.88, sliding ? 0.1 : 0);
+        ud.head.rotation.set(sliding ? 0.25 : Math.sin(legPhase * 2) * 0.04, 0, 0);
       }
     }
     if (ud.torso) {
       if (monkeyTimer > 0 && !dying) {
-        ud.torso.position.set(0, 0.72, 0.05);
+        ud.torso.position.set(0, -0.08, 0.05);
         ud.torso.rotation.x = 0.5;
       } else {
-        ud.torso.position.set(0, sliding ? 0.85 : 1.28, 0);
-        ud.torso.rotation.x = sliding ? 0.4 : Math.sin(legPhase * 2) * 0.05;
+        ud.torso.position.set(0, 1.28, 0);
+        ud.torso.rotation.x = sliding ? 0.3 : (jumping ? -0.2 : Math.sin(legPhase * 2) * 0.05);
       }
     }
 
@@ -3607,8 +3827,8 @@ function stopMusic() {
           L.hip.rotation.x = 1.35;
           L.knee.rotation.x = 1.55;
         } else if (sliding) {
-          L.hip.rotation.x = 1.1;
-          L.knee.rotation.x = 1.0;
+          L.hip.rotation.x = 0.9;
+          L.knee.rotation.x = 0.5;
         } else if (jumping) {
           L.hip.rotation.x = -0.55;
           L.knee.rotation.x = 0.75;
@@ -4649,6 +4869,8 @@ function beginDeath(reason) {
   }
 
   function exitToMenu() {
+    levelBannerT = 0;
+    if (el.levelBanner) { el.levelBanner.classList.remove('show'); el.levelBanner.classList.add('hidden'); }
     refreshMenuLocks();
     paused = false;
     running = false;
@@ -5068,12 +5290,19 @@ function onKeyUp(e) {
   function levelFromScore(s) {
     return 1 + Math.floor(Math.max(0, s) / LEVEL_SCORE);
   }
+  // localStorage reads are synchronous (slow on phones) and this runs from the
+  // per-frame HUD update, so keep a 1-second in-memory copy.
+  var _unlockVal = 1, _unlockAt = -1e9;
   function getUnlocks() {
+    var nowT = performance.now();
+    if (nowT - _unlockAt < 1000) return _unlockVal;
+    _unlockAt = nowT;
     try {
       var raw = localStorage.getItem(LS_UNLOCK);
       var n = raw ? parseInt(raw, 10) : 1;
-      return isNaN(n) ? 1 : Math.max(1, Math.min(3, n));
-    } catch (e) { return 1; }
+      _unlockVal = isNaN(n) ? 1 : Math.max(1, Math.min(3, n));
+    } catch (e) { _unlockVal = 1; }
+    return _unlockVal;
   }
   function isUnlocked(stage) {
     return getUnlocks() >= stage;
@@ -5082,6 +5311,7 @@ function onKeyUp(e) {
     var cur = getUnlocks();
     if (stage <= cur) return;
     try { localStorage.setItem(LS_UNLOCK, String(stage)); } catch (e) {}
+    _unlockAt = -1e9;
     if (stage === 3) {
       if (el.levelBannerText) el.levelBannerText.textContent = 'ТАЙНА';
       if (el.levelBannerSub) el.levelBannerSub.textContent = 'ДОСТУП РАЗРЕШЁН';
@@ -5154,28 +5384,39 @@ function onKeyUp(e) {
   }
 
   function updateHud() {
-    el.score.textContent = String(Math.floor(score));
-    if (el.combo) el.combo.textContent = 'x' + Math.floor(combo);
-    el.dist.textContent = Math.floor(dist) + 'm';
+    // DOM is only touched when a displayed value really changes
+    var sc = Math.floor(score);
+    if (sc !== _hudCache.score) { _hudCache.score = sc; el.score.textContent = String(sc); }
+    var cb = Math.floor(combo);
+    if (el.combo && cb !== _hudCache.combo) { _hudCache.combo = cb; el.combo.textContent = 'x' + cb; }
+    var ds = Math.floor(dist);
+    if (ds !== _hudCache.dist) { _hudCache.dist = ds; el.dist.textContent = ds + 'm'; }
 
     // Stage stays fixed for the whole run (track/BPM never switches mid-run).
-    if (el.levelNum) el.levelNum.textContent = String(activeStage);
+    if (el.levelNum && _hudCache.stage !== activeStage) {
+      _hudCache.stage = activeStage;
+      el.levelNum.textContent = String(activeStage);
+    }
     if (el.levelProg) {
       // progress toward unlock challenge on stage 1
+      var w;
       if (activeStage === 1 && !isUnlocked(2)) {
-        var pct = Math.max(0, Math.min(100, (score / UNLOCK_SCORE_2) * 100));
-        el.levelProg.style.width = pct + '%';
+        w = Math.round(Math.max(0, Math.min(100, (score / UNLOCK_SCORE_2) * 100)) * 2) / 2 + '%';
         if (score >= UNLOCK_SCORE_2) unlockStage(2);
       } else if (activeStage === 2 && !isUnlocked(3)) {
-        var pct2 = Math.max(0, Math.min(100, (score / UNLOCK_SCORE_SECRET) * 100));
-        el.levelProg.style.width = pct2 + '%';
+        w = Math.round(Math.max(0, Math.min(100, (score / UNLOCK_SCORE_SECRET) * 100)) * 2) / 2 + '%';
         if (score >= UNLOCK_SCORE_SECRET) unlockStage(3);
       } else {
-        el.levelProg.style.width = '100%';
+        w = '100%';
       }
+      if (w !== _hudCache.prog) { _hudCache.prog = w; el.levelProg.style.width = w; }
     }
   }
 
+  var menuSkip = false;
+  var _coinGeo = null, _coinMat = null;
+  var _tipPos = null;
+  var _closeCallPrev = null;
   function update(dt) {
     dt = Math.min(dt, 0.05);
     if (paused) return;
@@ -5185,6 +5426,9 @@ function onKeyUp(e) {
       return;
     }
     if (!running) {
+      // menu / game-over backdrop: nothing fast moves, 30 fps is plenty (saves battery + heat)
+      menuSkip = !menuSkip;
+      if (menuSkip) return;
       var t = performance.now() * 0.001;
       camera.position.x = Math.sin(t * 0.4) * 0.3;
       camera.position.y = 5.2 + Math.sin(t * 0.5) * 0.1;
@@ -5404,13 +5648,6 @@ function onKeyUp(e) {
     if (invuln > 0) invuln -= gdt;
     if (beatBonusCd > 0) beatBonusCd -= gdt;
     if (nearMissCd > 0) nearMissCd -= gdt;
-    if (levelBannerT > 0) {
-      levelBannerT -= gdt;
-      if (levelBannerT <= 0 && el.levelBanner) {
-        el.levelBanner.classList.remove('show');
-        el.levelBanner.classList.add('hidden');
-      }
-    }
 
     gleb.position.x = laneX;
     // hoverboard: visible board + slight float when active (SS board read)
@@ -5419,7 +5656,7 @@ function onKeyUp(e) {
     // monkey ball: enough lift so X-spin around feet doesn't sink through floor
     var ballLift = 0;
     if (monkeyTimer > 0 && !dying) {
-      ballLift = (gleb.userData && gleb.userData.isMinder) ? 0.55 : 1.4;
+      ballLift = (gleb.userData && gleb.userData.isMinder) ? 0.8 : 1.4;
     }
     gleb.position.y = y + boardFloat + ballLift;
     updatePowerAnims(gdt, boardActive);
@@ -5512,7 +5749,7 @@ function onKeyUp(e) {
         gleb.userData.junkRoot.position.set(0, 0.32, 0.3);
         gleb.userData.junkRoot.rotation.x = 0.3;
       }
-    } else if (jumping && !dying) {
+    } else if (jumping && !dying && !(gleb.userData && gleb.userData.isMinder)) {
       gleb.scale.set(1, 1, 1);
       gleb.rotation.x = 0;
       gleb.rotation.z = 0;
@@ -5580,7 +5817,11 @@ function onKeyUp(e) {
       if (gleb.userData.isMinder && gleb.userData.head) {
         gleb.userData.head.rotation.z = Math.sin((gleb.userData.ballSpin || 0) * 2) * 0.15;
       }
-    } else if (!dying) {
+    } else if (!dying && !(gleb.userData && gleb.userData.isMinder)) {
+      // Gleb-only default pose. For Minder this block used to run too and every
+      // frame reset his legs (+0.38 up, ±0.2 apart), torso and head to Gleb's
+      // numbers, cancel the monkey roll and the slide pose — that is what tore the
+      // body apart. Minder's pose is owned entirely by animateMinder().
       gleb.scale.set(1, 1, 1);
       gleb.rotation.x = 0;
       gleb.rotation.z = 0;
@@ -5635,7 +5876,7 @@ function onKeyUp(e) {
       // hard floor clamp on tip (world Y)
       if (gleb.userData.shaftTip) {
         gleb.updateMatrixWorld(true);
-        var tipPos = new THREE.Vector3();
+        var tipPos = _tipPos || (_tipPos = new THREE.Vector3());
         gleb.userData.shaftTip.getWorldPosition(tipPos);
         if (tipPos.y < 0.06) {
           // pull last bone up a bit so tip sits on floor
@@ -5660,8 +5901,9 @@ function onKeyUp(e) {
         bones[bi].rotation.y = w * 0.08 * bi;
       }
     }
-    // arms cascade: opposite phase to legs, lag down the chain
-    if (gleb.userData.arms) {
+    // arms cascade: opposite phase to legs, lag down the chain (Gleb only —
+    // Minder's arms are posed in animateMinder and share one joint for fore/paw)
+    if (gleb.userData.arms && !(gleb.userData && gleb.userData.isMinder)) {
       for (var ai = 0; ai < 2; ai++) {
         var arm = gleb.userData.arms[ai];
         var side = ai === 0 ? -1 : 1;
@@ -5735,7 +5977,7 @@ function onKeyUp(e) {
     // Re-scrub a few times per second so no hidden prop ever lives inside a hull.
     propScrubT = (typeof propScrubT === 'number' ? propScrubT : 0) - dt;
     if (propScrubT <= 0) {
-      propScrubT = 0.12;
+      propScrubT = 0.25;
       try { scrubPropsInsideTrains(0.6); } catch (eScrub) {}
     }
 
@@ -6130,11 +6372,15 @@ function onKeyUp(e) {
     }
     // warn only when actually dangerous
     var closeCall = gap <= 3.5 && !gameOver && dist > 100;
-    el.warn.classList.toggle('hidden', !closeCall);
-    if (el.warn && closeCall) {
-      el.warn.textContent = gap <= 2.2 ? 'ОН ХВАТАЕТ!' : 'ОН БЛИЗКО';
+    if (closeCall !== _closeCallPrev) {
+      _closeCallPrev = closeCall;
+      el.warn.classList.toggle('hidden', !closeCall);
+      document.body.classList.toggle('danger-close', closeCall);
     }
-    document.body.classList.toggle('danger-close', closeCall);
+    if (el.warn && closeCall) {
+      var warnTxt = gap <= 2.2 ? 'ОН ХВАТАЕТ!' : 'ОН БЛИЗКО';
+      if (warnTxt !== _hudCache.warn) { _hudCache.warn = warnTxt; el.warn.textContent = warnTxt; }
+    }
 
     // SS-like chase cam: lower, closer, follows lane
     shake = Math.max(0, shake - dt * 1.2);
@@ -6623,9 +6869,20 @@ function onKeyUp(e) {
 
   function loop(now) {
     requestAnimationFrame(loop);
-    var dt = Math.min(0.05, (now - lastT) / 1000);
+    var rawMs = now - lastT;
+    var dt = Math.min(0.05, rawMs / 1000);
     lastT = now;
+    // Banner timer runs in REAL time from the render loop. It used to be counted inside
+    // the running-game update, so it froze on pause / death / menu and "ТАЙНА" stayed forever.
+    if (levelBannerT > 0) {
+      levelBannerT -= dt;
+      if (levelBannerT <= 0 && el.levelBanner) {
+        el.levelBanner.classList.remove('show');
+        el.levelBanner.classList.add('hidden');
+      }
+    }
     update(dt);
+    adaptQuality(rawMs);
   }
 
   if (document.readyState === 'loading') {

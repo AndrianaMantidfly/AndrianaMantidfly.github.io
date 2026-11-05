@@ -190,7 +190,9 @@ kbd {
   0%,100% { box-shadow: 0 0 0 rgba(255,140,0,0); }
   50% { box-shadow: 0 0 14px rgba(255,140,0,.45); }
 }
-body.monkey-mode #c { filter: saturate(1.25) contrast(1.05); }
+/* perf: was `filter: saturate() contrast()` on the WebGL canvas — a full-frame filter pass every
+   frame, very costly on weak GPUs. A warm vignette gives the same "raid mode" feel for free. */
+body.monkey-mode #vignette { background: radial-gradient(ellipse at center, rgba(255,150,40,0) 48%, rgba(255,120,20,.22) 100%); }
 
 #vignette {
   position: fixed; inset: 0; z-index: 3; pointer-events: none;
@@ -570,3 +572,23 @@ body.game-sealed #broken { display: flex !important; }
 .bill-scene.rage .bill-vig { background: radial-gradient(ellipse at center, rgba(60,0,0,0) 30%, rgba(90,0,0,.55) 70%, rgba(0,0,0,.95) 100%); }
 .broken-screen { animation: brokenIn .9s ease-out both; }
 @keyframes brokenIn { from { opacity: 0; filter: blur(6px); } to { opacity: 1; filter: none; } }
+
+
+/* ================= PERFORMANCE PASS ================= */
+/* Menu panels sit over a live WebGL canvas: backdrop-filter re-blurred the whole
+   backdrop every frame. The panel background is already ~93% opaque, so drop it. */
+.panel { backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
+/* per-frame filters on the HUD columns re-rasterised them whenever a number changed */
+.hud-left, .hud-mid, .hud-right { filter: none !important; }
+/* three full-screen translucent layers (#vignette, body::after, #ui::after) were stacked
+   over the canvas; keep only #vignette — the others were ~invisible (11% / 12% alpha) */
+body::after, #ui::after { content: none !important; display: none !important; }
+/* endless text-shadow animation repaints the title every frame while the menu is open */
+.panel h1 em { animation: none !important; text-shadow: 0 0 30px rgba(125,255,154,.6); }
+/* tell the browser these layers are independent so HUD number updates don't relayout the page */
+#hud, .powers, .meter-wrap, #beatFx, #warn { contain: layout style; }
+#c { will-change: transform; transform: translateZ(0); }
+/* reduced-motion / battery: calm the remaining decorative loops */
+@media (prefers-reduced-motion: reduce) {
+  .btn-secret, .btn-monkey.ready, #warn { animation: none !important; }
+}
