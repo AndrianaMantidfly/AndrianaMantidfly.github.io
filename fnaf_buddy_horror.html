@@ -6634,6 +6634,23 @@ function updateAmbientFX(dt) {
   }
 }
 
+// Сдвиг горизонтальной полосы кадра (глитч) БЕЗ чтения пикселей.
+// ВАЖНО: getImageData/putImageData на главном canvas заставляли Chrome после
+// нескольких чтений навсегда перевести canvas на CPU-рендер (без GPU) —
+// после первого скримера вся игра начинала лагать до перезагрузки страницы.
+// drawImage(canvas → canvas) остаётся на GPU.
+function bbhShiftStrip(x, y, w, h, dx) {
+  x = x | 0; y = y | 0; w = w | 0; h = h | 0; dx = Math.round(dx) | 0;
+  if (w <= 0 || h <= 0 || dx === 0) return;
+  ctx.save();
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
+  ctx.globalAlpha = 1;
+  ctx.globalCompositeOperation = 'source-over';
+  ctx.imageSmoothingEnabled = false;
+  ctx.drawImage(canvas, x, y, w, h, x + dx, y, w, h);
+  ctx.restore();
+}
+
 let glitchCooldown = 0.4;
 function maybeGlitchTear(danger) {
   if (danger < 0.45) return;
@@ -6644,9 +6661,8 @@ function maybeGlitchTear(danger) {
   try {
     const stripH = 3 + Math.floor(Math.random() * 9);
     const y = Math.max(0, Math.min(H - stripH, Math.floor(Math.random() * H)));
-    const img = ctx.getImageData(0, y, W, stripH);
     const offset = Math.round((Math.random() - 0.5) * 44 * danger);
-    ctx.putImageData(img, offset, y);
+    bbhShiftStrip(0, y, W, stripH, offset);
   } catch (e) {}
 }
 
@@ -8409,7 +8425,7 @@ function startN5PhaseMusic(phase) {
           g.gain.linearRampToValueAtTime(0, t0 + 2.8);
           o.connect(g); g.connect(musicBusGain || master);
           o.start(t0); o.stop(t0 + 2.9);
-          nodes.push(o);
+          nodes.push(o); o.onended = () => { const i = nodes.indexOf(o); if (i >= 0) nodes.splice(i, 1); }; // короткая нота: не копим ноды всю ночь
           ni++;
         } catch (e) {}
       };
@@ -8428,7 +8444,7 @@ function startN5PhaseMusic(phase) {
           g.gain.exponentialRampToValueAtTime(0.001, t0 + 2.2);
           o.connect(g); g.connect(musicBusGain || master);
           o.start(t0); o.stop(t0 + 2.3);
-          nodes.push(o);
+          nodes.push(o); o.onended = () => { const i = nodes.indexOf(o); if (i >= 0) nodes.splice(i, 1); }; // короткая нота: не копим ноды всю ночь
         } catch (e) {}
       }, 12000);
       n5PhaseMusic.iv = iv;
@@ -8456,7 +8472,7 @@ function startN5PhaseMusic(phase) {
           g.gain.linearRampToValueAtTime(0, t0 + 2.4);
           o.connect(g); g.connect(musicBusGain || master);
           o.start(t0); o.stop(t0 + 2.5);
-          nodes.push(o);
+          nodes.push(o); o.onended = () => { const i = nodes.indexOf(o); if (i >= 0) nodes.splice(i, 1); }; // короткая нота: не копим ноды всю ночь
           ni++;
         } catch (e) {}
       };
@@ -8475,7 +8491,7 @@ function startN5PhaseMusic(phase) {
           g.gain.exponentialRampToValueAtTime(0.001, t0 + 0.35);
           o.connect(g); g.connect(musicBusGain || master);
           o.start(t0); o.stop(t0 + 0.4);
-          nodes.push(o);
+          nodes.push(o); o.onended = () => { const i = nodes.indexOf(o); if (i >= 0) nodes.splice(i, 1); }; // короткая нота: не копим ноды всю ночь
         } catch (e) {}
       }, 1800);
       n5PhaseMusic.iv = iv;
@@ -8503,7 +8519,7 @@ function startN5PhaseMusic(phase) {
           g.gain.exponentialRampToValueAtTime(0.001, t0 + 0.28);
           o.connect(g); g.connect(musicBusGain || master);
           o.start(t0); o.stop(t0 + 0.3);
-          nodes.push(o);
+          nodes.push(o); o.onended = () => { const i = nodes.indexOf(o); if (i >= 0) nodes.splice(i, 1); }; // короткая нота: не копим ноды всю ночь
           ni++;
         } catch (e) {}
       };
@@ -8522,7 +8538,7 @@ function startN5PhaseMusic(phase) {
           g.gain.exponentialRampToValueAtTime(0.001, t0 + 0.45);
           o.connect(g); g.connect(musicBusGain || master);
           o.start(t0); o.stop(t0 + 0.5);
-          nodes.push(o);
+          nodes.push(o); o.onended = () => { const i = nodes.indexOf(o); if (i >= 0) nodes.splice(i, 1); }; // короткая нота: не копим ноды всю ночь
         } catch (e) {}
       }, 1280);
       // редкий «смешок» диссонанс
@@ -8540,7 +8556,7 @@ function startN5PhaseMusic(phase) {
           g.gain.linearRampToValueAtTime(0, t0 + 0.7);
           o.connect(g); g.connect(musicBusGain || master);
           o.start(t0); o.stop(t0 + 0.75);
-          nodes.push(o);
+          nodes.push(o); o.onended = () => { const i = nodes.indexOf(o); if (i >= 0) nodes.splice(i, 1); }; // короткая нота: не копим ноды всю ночь
         } catch (e) {}
       }, 5000);
       n5PhaseMusic.iv = iv;
@@ -14904,6 +14920,9 @@ function runPreloadQueue(tasks) {
         const id = task && task.id;
         const el = id ? document.getElementById(id) : null;
         if (!el) { bump(); return; }
+        // уже загружен (повторный заход / «ЕЩЁ РАЗ») — не дёргать el.load():
+        // он заново парсит и декодирует base64-аудио на каждом рестарте
+        if (el.readyState >= 3 && !el.error) { bump(); return; }
         let finished = false;
         const onReady = () => {
           if (finished) return;
@@ -15417,7 +15436,8 @@ function startNight(night) {
     initNight3();
     ['audGlebN3Step1','audGlebN3Step2','audGlebN3Step3','audGlebN3Leave','audGlebN3Notice'].forEach(id => {
       const el = document.getElementById(id);
-      if (el) { try { el.load(); } catch (e) {} }
+      // повторный load() на каждом рестарте = повторное декодирование base64
+      if (el && (el.readyState < 3 || el.error)) { try { el.load(); } catch (e) {} }
     });
   } else if (currentNight === 4) {
     camBtnEl.style.display = 'block';
@@ -16035,14 +16055,18 @@ if (_soundBtnEl) _soundBtnEl.onclick = () => {
       if (d <= GLEB_SOUND_RANGE) {
         n4Enemy.lureCam = currentCam | 0;
         n4Enemy.lureTimer = 8;
+        n4Enemy.lureBait = false; // игрок сам перебил приманку звуком
         n4Enemy.atHall = false;
         n4Enemy.hallTimer = 0;
         n4Enemy.recent = [];
         showMessage('Глеб пошёл на звук → CAM ' + currentCam + ' (−1%)', 70);
       } else {
-        // явно НЕ привлекаем
-        n4Enemy.lureCam = 0;
-        n4Enemy.lureTimer = 0;
+        // явно НЕ привлекаем. Но приманку терминала НЕ сбрасываем:
+        // раньше любой «далёкий» звук обнулял её — Глеб разворачивался к офису
+        if (!n4Enemy.lureBait) {
+          n4Enemy.lureCam = 0;
+          n4Enemy.lureTimer = 0;
+        }
         showMessage('Глеб слишком далеко (нужно ≤' + GLEB_SOUND_RANGE + ' кам.) (−1%)', 60);
       }
     }
@@ -22200,8 +22224,7 @@ function drawNight4Systems() {
       const sh = 2 + Math.random() * 10;
       const sx = (Math.random() - 0.5) * (6 + t * 14);
       try {
-        const img = ctx.getImageData(px, sy, pw, sh);
-        ctx.putImageData(img, px + sx, sy);
+        bbhShiftStrip(px, sy, pw, sh, sx);
       } catch (e) {
         ctx.fillStyle = `rgba(100, 180, 255, ${0.04 + strength * 0.08})`;
         ctx.fillRect(px, sy, pw, sh);
@@ -23268,6 +23291,9 @@ function draw() {
     ctx.fillRect(0, 0, W, H);
     return;
   }
+  // экран «ТЕБЯ УБИЛИ»: скример закончился, canvas скрыт — не рисуем всю ночь
+  // 60 раз в секунду впустую, пока игрок смотрит на геймовер
+  if (state === 'dead' && !jumpscare) return;
 
     if (currentNight === 6 && (state === 'playing' || state === 'dead')) {
     if (state === 'dead' && jumpscare) {
@@ -25305,8 +25331,7 @@ function drawJumpscare(name) {
     try {
       const stripH = 4 + Math.floor(Math.random() * 14);
       const y = Math.floor(Math.random() * (H - stripH));
-      const img = ctx.getImageData(0, y, W, stripH);
-      ctx.putImageData(img, Math.round((Math.random() - 0.5) * 60), y);
+      bbhShiftStrip(0, y, W, stripH, (Math.random() - 0.5) * 60);
     } catch (e) {}
   }
 
@@ -25710,8 +25735,9 @@ function beginPhoneCall(night) {
         } catch (e0) {}
       }
     };
-    el.addEventListener('loadedmetadata', applyDur);
-    el.addEventListener('durationchange', applyDur);
+    // свойства, а не addEventListener — иначе на каждом звонке копились обработчики
+    el.onloadedmetadata = applyDur;
+    el.ondurationchange = applyDur;
     try { el.currentTime = 0; } catch (e0) {}
     // громкость через игровую шину
     // звонки тише базово (как в 1–6 ночах)
@@ -46144,6 +46170,8 @@ function n4StepGleb(e) {
   if (e.lureTimer > 0 && e.lureCam) {
     const target = e.lureCam;
     if (e.cam === target) {
+      // приманка терминала: стоит у неё весь lureTimer, никуда не ныряет
+      if (e.lureBait) return;
       // постоял у звука — снова к офису, но не по прямой если нас видят
       e.lureTimer = Math.min(e.lureTimer, 0.8);
       if (playerWatching && Math.random() < 0.55) {
@@ -47267,7 +47295,7 @@ function n4EvStartTerminal() {
 function n4EvOptInfo(id) {
   if (id === 'gen') return { title: 'РЕЗЕРВНЫЙ ГЕНЕРАТОР', gain: '+28% энергии', cost: 'гул 25с — Глеб ходит быстрее' };
   if (id === 'reboot') return { title: 'ПЕРЕЗАГРУЗКА СИСТЕМ', gain: 'камеры / вент / свет → 100%', cost: 'слепота 9с: всё выключено' };
-  return { title: 'ГЛУШИТЕЛЬ-ПРИМАНКА', gain: 'уводит Глеба прочь на 14с', cost: '−10% энергии' };
+  return { title: 'ГЛУШИТЕЛЬ-ПРИМАНКА', gain: 'Глеб уходит на CAM 1 и ждёт 14с', cost: '−10% энергии' };
 }
 
 function n4EvChoose(id) {
@@ -47298,7 +47326,9 @@ function n4EvChoose(id) {
     }
     if (n4Enemy) {
       n4Enemy.lureCam = best;
-      n4Enemy.lureTimer = 14;
+      n4Enemy.lureTimer = 14;     // сколько стоит У приманки (тикает только на месте)
+      n4Enemy.lureBait = true;    // приманка терминала ≠ обычный звук
+      n4Enemy.lureTravel = 14;    // страховка: максимум на дорогу до приманки
       n4Enemy.atHall = false;
       n4Enemy.hallTimer = 0;
       n4Enemy.recent = [];
@@ -48839,7 +48869,19 @@ function updateNight4(dt) {
 
   const e = n4Enemy;
   if (e) {
-    if (e.lureTimer > 0) e.lureTimer -= dt;
+    if (e.lureTimer > 0) {
+      if (e.lureBait && e.cam !== e.lureCam) {
+        // приманка терминала: 14с отсчитываются только когда Глеб дошёл,
+        // а не пока он идёт (раньше он едва доходил и сразу разворачивался)
+        e.lureTravel = (e.lureTravel || 0) - dt;
+        if (e.lureTravel <= 0) e.lureTimer = 0;
+      } else {
+        e.lureTimer -= dt;
+      }
+      if (e.lureTimer <= 0) { e.lureTimer = 0; e.lureBait = false; }
+    } else if (e.lureBait) {
+      e.lureBait = false;
+    }
     // у прохода: свет Глеба НЕ пугает (свет — для другого врага).
     // Глеб как Спрингтрап: дошёл = короткое окно и смерть. Гоняй звуком по камерам.
     if (e.atHall) {
