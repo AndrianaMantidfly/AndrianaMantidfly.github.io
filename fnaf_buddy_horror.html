@@ -10911,6 +10911,20 @@ html.psx-on #argGambleScreen .arg-cell.spinning { filter: none !important; backg
 html.psx-on #argGambleScreen .arg-cell span.psx-ico { width: 1.3em; height: 1.3em; vertical-align: middle; }
 html.psx-on #argReelGrid { border-radius: 0 !important; gap: 6px !important; }
 html.psx-on #argSpinBtn, html.psx-on #argGambleBtn, html.psx-on #extraInfiniteGambleBtn { border-radius: 0 !important; box-shadow: 4px 4px 0 #000 !important; text-shadow: 2px 2px 0 #000 !important; }
+/* Экстра в PS1: без скруглённой рамки со свечением и без размытых градиентных пятен — плоский фон + сканлайны */
+html.psx-on #extraScreen {
+  background: repeating-linear-gradient(0deg, rgba(255,255,255,0.022) 0 1px, rgba(0,0,0,0) 1px 4px), #060507 !important;
+  background-size: auto !important;
+}
+html.psx-on #extraScreen::after {
+  border-radius: 0 !important; box-shadow: none !important;
+  border: 2px solid #3a1418 !important; border-right-color: #12060a !important; border-bottom-color: #0a0306 !important;
+}
+html.psx-on #extraGamble {
+  border-radius: 0 !important; box-shadow: 4px 4px 0 #000 !important;
+  background: repeating-linear-gradient(0deg, rgba(255,255,255,0.03) 0 1px, rgba(0,0,0,0) 1px 3px), #0e0609 !important;
+  border: 2px solid !important; border-top-color: #7a5a30 !important; border-left-color: #604620 !important; border-right-color: #241608 !important; border-bottom-color: #140c04 !important;
+}
 /* Гембл (BIG BON CASINO) в PS1: квадратные плашки, скошенные рамки, жёсткие тени вместо свечения */
 html.psx-on #argGambleScreen .arg-g-title {
   font-family: 'PSX Start', 'Tiny5', monospace !important; font-size: 15px !important; letter-spacing: 2px !important;
