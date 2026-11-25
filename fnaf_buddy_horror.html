@@ -10334,7 +10334,8 @@
           wake();
           var id = k;
           if (k === 'jumpscare') { try { if (A.items.n4_phantom_scare && ((typeof n4AnyPhantomScare === 'function' && n4AnyPhantomScare()) || (window.extraScarePlaying !== false && /^phantom/.test(String(window._extraScareType || '')) && document.getElementById('extraScares') && document.getElementById('extraScares').classList.contains('active')))) id = 'n4_phantom_scare'; } catch (e4) {} }   // every Night 4 phantom has the same scare
-          if (shot(id, k === 'rushStage' ? { rate: 1 - (a | 0) * 0.07, vol: 0.6 + (a | 0) * 0.2 } : null)) return;
+          // rushRun (Рушанчик бежит) в PS1 был слишком громким — играем в 5 раз тише
+          if (shot(id, k === 'rushStage' ? { rate: 1 - (a | 0) * 0.07, vol: 0.6 + (a | 0) * 0.2 } : k === 'rushRun' ? { vol: 0.2 } : null)) return;
         }
         return o.apply(this, arguments);
       };
