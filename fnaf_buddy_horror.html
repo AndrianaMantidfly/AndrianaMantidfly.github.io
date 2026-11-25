@@ -10393,7 +10393,9 @@
       if (use) {
         try {
           var s = c.createBufferSource(), g = c.createGain(); s.buffer = e.b; s.loop = !!A.items[use].loop;
-          g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(e.g, t + (s.loop ? 0.6 : 0.03));
+          // трек меню в PS1 был громковат — вдвое тише
+          var mvol = e.g * (use === 'm_menu' ? 0.5 : 1);
+          g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(mvol, t + (s.loop ? 0.6 : 0.03));
           s.connect(g); g.connect(musicBusGain); s.start(); MU.src = s; MU.g = g;
         } catch (err) { MU.key = ''; use = ''; }
       }
@@ -25626,7 +25628,139 @@ function tickN3Cats(dt) {
   if (n3LampFlash > 0) n3LampFlash = Math.max(0, n3LampFlash - dt * 2.5);
 }
 
+// ===== PS1: плавное появление / уход фигур (Ночь 3 и Ночь 4) =====
+// Только в PS1-графике. Состояние на ключ: a — видимость 0..1, dt — шаг кадра.
+// Если ключ не трогали >0.5с (сменилась сцена / ночь) — начинаем с нуля, т.е. снова плавно.
+function bbhPsxFxOn() {
+  try { return !!(window.PSX && PSX.S && PSX.S.fx && PSX.figDoor); } catch (e) { return false; }
+}
+const _bbhFx = {};
+function bbhFxGet(key) {
+  const now = performance.now();
+  let e = _bbhFx[key];
+  if (!e || now - e.t > 500) e = _bbhFx[key] = { a: 0, t: now, dk: 0, leave: 0, seen: false, s: 0, p: null };
+  e.dt = Math.min(0.1, Math.max(0, (now - e.t) / 1000));
+  e.t = now;
+  return e;
+}
+function bbhFxStep(e, present, inSec, outSec) {
+  if (present) e.a = Math.min(1, e.a + e.dt / inSec);
+  else e.a = Math.max(0, e.a - e.dt / outSec);
+  return e.a;
+}
+function bbhEaseIO(x) { x = Math.max(0, Math.min(1, x)); return x * x * (3 - 2 * x); }
+
+// Ночь 3, PS1: фигуры в проходах. Вызывается для каждой двери из drawNight3Room.
+// doorVis — проход не закрыт дверью (как в оригинальном условии), oHere — в нём стоит Ослан.
+function bbhN3PsxDoorFigs(d, focused, doorVis, oHere) {
+  const cx = d.x + d.w / 2;
+  const foot = d.y + d.h - 6;
+  // --- Джон / Глеб / Мастурбек: «услышали» → плавно проявились; отпустили СЛУШАТЬ → стоят, но темнее;
+  //     ушли (дверь подержали) → уходят вдаль и тают ---
+  const trio = [
+    { key: 'n3john', name: 'Джон Джурик', h: 232, depth: 0.5, opt: {},
+      here: !!(john && john.stage >= 3), door: john && john.door, needListen: true },
+    { key: 'n3gleb', name: 'Глеб', h: 214, depth: 0.5, opt: {},
+      here: !!(n3Gleb && n3Gleb.active && n3Gleb.cooldown <= 0 && n3Gleb.stage >= 3), door: n3Gleb && n3Gleb.door, needListen: true },
+    { key: 'n3mast', name: 'Мастурбек Залупджон', h: 236, depth: 0.45, opt: { open: 0.6 },
+      here: !!(masturbek && masturbek.cooldown <= 0 && masturbek.stage >= 3), door: masturbek && masturbek.door, needListen: false }
+  ];
+  for (const f of trio) {
+    const e0 = _bbhFx[f.key];
+    const atThis = f.here && f.door === d.id;
+    const leavingHere = e0 && e0.door === d.id && (e0.leave > 0 || e0.wasVis);
+    if (!atThis && !leavingHere) continue;
+    const e = bbhFxGet(f.key);
+    if (atThis) {
+      if (e.door !== d.id) { e.leave = 0; e.seen = false; e.a = 0; }
+      e.door = d.id;
+      e.leave = 0;
+      const heard = focused && (!f.needListen || n3Listening);
+      if (heard) e.seen = true;
+      const show = e.seen && focused && doorVis && !oHere;
+      bbhFxStep(e, show, 0.55, 0.25);
+      // темнеет, когда перестали слушать (но он всё ещё там)
+      const dkT = (e.seen && !heard) ? 1 : 0;
+      e.dk += (dkT - e.dk) * Math.min(1, e.dt * 4);
+      e.wasVis = e.a > 0.05;
+    }
+    if (!atThis) {
+      // ушёл: анимация «уходит вдаль» — идёт, пока проход открыт; спустя 5с забываем
+      e.leave += e.dt / (doorVis ? 2.0 : 5);
+      if (e.leave >= 1 || !e.wasVis) { e.leave = 0; e.seen = false; e.a = 0; e.wasVis = false; e.door = null; continue; }
+      if (!doorVis || !focused) continue;
+    }
+    const lv = bbhEaseIO(e.leave);
+    const alpha = atThis ? e.a : (1 - lv);
+    if (alpha <= 0.01) continue;
+    const amb = 0.7 - 0.32 * Math.max(e.dk, atThis ? 0 : 1);
+    const o = Object.assign({ solid: 1, unlit: 0.3 - 0.15 * e.dk, amb: amb, alpha: alpha, mask: atThis ? undefined : false }, f.opt);
+    if (!atThis) o.open = 0;
+    PSX.figDoor(f.name, cx, f.depth + lv * 1.7 + (atThis ? (1 - e.a) * 0.35 : 0), o, cx, foot - lv * 40, f.h * (1 - lv * 0.55));
+  }
+  // --- Писмилях (шкаф, жрёт энергию): идёт из глубины, стадии сменяются плавно, уходит обратно вглубь ---
+  if (d.id === 'closet') {
+    const e = bbhFxGet('n3pismi');
+    const pismiVisHour = (challengeMode && challengeMode.allActiveFromStart) ? 0 : 3;
+    const pHere = !!(pismiks && Math.floor(time / 60) >= pismiVisHour && pismiks.cooldown <= 0 && pismiks.stage > 0);
+    const target = pHere ? pismiks.stage : 0;
+    const rate = target > e.s ? 0.7 : 1.1;            // приходит медленнее, чем уходит
+    if (e.s < target) e.s = Math.min(target, e.s + e.dt * rate);
+    else if (e.s > target) e.s = Math.max(target, e.s - e.dt * rate);
+    const s = e.s;
+    if (s > 0.02 && !oHere && doorVis) {
+      const near = s >= 2.6;
+      const far = Math.max(0, 1 - s);                  // до 1-й стадии — ещё «издалека»
+      const alpha = Math.min(1, s / 0.7);
+      const o = near ? { open: 0.5, reach: 0.4, solid: 1, alpha: alpha } : { solid: 1, unlit: 0.35, amb: 0.75, alpha: alpha };
+      PSX.figDoor('Писмилях', cx, 0.98 - s * 0.24 + far * 0.9, o, cx, d.y + d.h - 30 - s * 14, 150 + s * 30);
+    }
+    if (pHere && pismiks.stage >= 3 && focused) {
+      const tp = Math.min(1, pismiks.atDoorTimer / 8);
+      ctx.fillStyle = '#333';
+      ctx.fillRect(d.x + 20, d.y + 12, d.w - 40, 8);
+      ctx.fillStyle = '#2c8';
+      ctx.fillRect(d.x + 20, d.y + 12, (d.w - 40) * tp, 8);
+    }
+  }
+}
+
+// Ночь 3, PS1: котейки проявляются (и исчезают от лампы) с прозрачностью, плавно расходятся по местам
+const _n3CatFx = {};
+function bbhN3PsxCats() {
+  const now = performance.now();
+  const baseX = W / 2, baseY = H * 0.72;
+  const n = n3CatsPresent.length;
+  const ids = {};
+  n3CatsPresent.forEach(function(idx) { ids[idx] = 1; });
+  Object.keys(_n3CatFx).forEach(function(k) { ids[k] = 1; });
+  Object.keys(ids).forEach(function(k) {
+    const idx = +k;
+    const pos = n3CatsPresent.indexOf(idx);
+    const present = pos >= 0;
+    let e = _n3CatFx[idx];
+    if (!e || now - e.t > 500) e = _n3CatFx[idx] = { a: 0, x: null, t: now };
+    const dt = Math.min(0.1, Math.max(0, (now - e.t) / 1000)); e.t = now;
+    const tx = present ? baseX + (pos - (n - 1) / 2) * 70 : e.x;
+    if (e.x === null) e.x = tx;
+    e.x += (tx - e.x) * Math.min(1, dt * 5);
+    e.a = present ? Math.min(1, e.a + dt / 1.4) : Math.max(0, e.a - dt / 0.35);
+    if (!present && e.a <= 0) { delete _n3CatFx[idx]; return; }
+    const cat = N3_CATS[idx];
+    const y = baseY + Math.sin(frame * 0.05 + idx) * 4;
+    // проявляются как призраки: сначала полупрозрачные, потом плотнее
+    const alpha = bbhEaseIO(e.a) * (0.85 + Math.sin(frame * 0.08 + idx) * 0.15);
+    ctx.save();
+    ctx.translate(e.x, y);
+    ctx.globalAlpha = 1;
+    if (PSX.figFloor) PSX.figFloor(cat.name, 4, 22, 176, { scale: 0.62, solid: 1, alpha: alpha });
+    else PSX.fig(cat.name, 4, 20, 176, { alpha: alpha });
+    ctx.restore();
+  });
+}
+
 function drawN3Cats() {
+  if (bbhPsxFxOn()) { bbhN3PsxCats(); return; }
   if (!n3CatsPresent.length) return;
   // мировые координаты: центр комнаты (не привязаны к скроллу камеры)
   const baseX = W / 2;
@@ -26511,7 +26645,10 @@ function drawNight3Room() {
       const cx = d.x + d.w / 2;
       const cy = d.y + d.h * 0.42 + bob;
       ctx.save();
-      if (window.PSX && PSX.figDoor && PSX.figDoor('Ослан Ебаев', cx, 0.32, { st: focused ? 'charge' : undefined, solid: 1 }, cx, d.y + d.h - 8 + bob * 0.3, 232)) { ctx.restore(); ctx.save(); ctx.globalAlpha = 0; }
+      // PS1: при переходе в новый проход проявляется плавно и подходит из глубины
+      let __oslA = 1;
+      if (bbhPsxFxOn()) { const eO = bbhFxGet('n3oslan'); if (eO.door !== d.id) { eO.door = d.id; eO.a = 0; } __oslA = bbhEaseIO(bbhFxStep(eO, true, 0.6, 0.3)); }
+      if (window.PSX && PSX.figDoor && PSX.figDoor('Ослан Ебаев', cx, 0.32 + (1 - __oslA) * 0.8, { st: focused ? 'charge' : undefined, solid: 1, alpha: __oslA }, cx, d.y + d.h - 8 + bob * 0.3, 232)) { ctx.restore(); ctx.save(); ctx.globalAlpha = 0; }
       // свечение
       ctx.fillStyle = 'rgba(200, 160, 40, 0.25)';
       ctx.beginPath();
@@ -26547,7 +26684,11 @@ function drawNight3Room() {
     }
 
     // силуэты: дверь почти открыта; Писмилях — ещё и когда смотрим на шкаф (иначе «есть, но не видно»)
-    if (!oHere && (((n3DoorAnim && n3DoorAnim[d.id]) || 0) < 0.7 || (d.id === 'closet' && n3Focus === 'closet'))) {
+    const __n3DoorVis = (((n3DoorAnim && n3DoorAnim[d.id]) || 0) < 0.7 || (d.id === 'closet' && n3Focus === 'closet'));
+    const __n3Fx = bbhPsxFxOn();
+    // PS1: плавные появления / затемнение / уход вдаль (см. bbhN3PsxDoorFigs)
+    if (__n3Fx) { try { bbhN3PsxDoorFigs(d, focused, __n3DoorVis, oHere); } catch (eFx3) {} }
+    if (!__n3Fx && !oHere && __n3DoorVis) {
       const johnHeard = johnHere && stage >= 3 && n3Focus === d.id && n3Listening;
       const glebHere = n3Gleb && n3Gleb.active && n3Gleb.cooldown <= 0 && n3Gleb.door === d.id;
       const glebHeard = glebHere && n3Gleb.stage >= 3 && n3Focus === d.id && n3Listening;
@@ -28518,8 +28659,27 @@ function drawNight4Office() {
     } // end eyes visible
   }
 
+  // PS1: Наталья проявляется из темноты и, когда пропадает, растворяется уходя вглубь
+  let __n4NatFx = false;
+  if (bbhPsxFxOn()) {
+    const eN = bbhFxGet('n4nat');
+    const here = !!(n4Natalya && n4Natalya.active && n4NatalyaScare <= 0 && !(n4Taras && n4Taras.active));
+    if (n4NatalyaScare > 0) eN.a = 0;                   // скример — сразу прячем
+    if (here) eN.p = Math.min(1, (n4Natalya.timer || 0) / Math.max(0.5, n4Natalya.life || 8));
+    bbhFxStep(eN, here, 0.8, 0.7);
+    if (eN.a > 0.01) {
+      const t = eN.p || 0, k = bbhEaseIO(eN.a);
+      const laN = n4HallLightAnim || 0;
+      ctx.save();
+      ctx.globalAlpha = laN > 0.3 ? 0.75 : (0.4 + t * 0.35);
+      const nx = W / 2;
+      __n4NatFx = !!PSX.figDoor('Фантомная Наталья', nx, 1.6 - t * 1.0 + (here ? 0 : (1 - k) * 1.2), { open: laN > 0.3 ? 0.5 : 0, reach: laN > 0.3 ? 0.45 : 0, unlit: 0.8, alpha: k }, nx, hy + hh * 0.95, (176 + t * 34) * (here ? 1 : 0.6 + 0.4 * k));
+      ctx.restore();
+    }
+    if (!here) __n4NatFx = true;
+  }
   // Фантомная Наталья — силуэт в тёмном коридоре (без Тараса)
-  if (n4Natalya && n4Natalya.active && n4NatalyaScare <= 0 && !(n4Taras && n4Taras.active)) {
+  if (!__n4NatFx && n4Natalya && n4Natalya.active && n4NatalyaScare <= 0 && !(n4Taras && n4Taras.active)) {
     const t = Math.min(1, (n4Natalya.timer || 0) / Math.max(0.5, n4Natalya.life || 8));
     const la = n4HallLightAnim || 0;
     ctx.save();
@@ -28542,7 +28702,21 @@ function drawNight4Office() {
     ctx.restore();
   }
 
-  if (n4Enemy && n4Enemy.atHall) {
+  // PS1: Глеб подходит по проходу из глубины и так же уходит обратно, с прозрачностью
+  let __n4GlebFx = false;
+  if (bbhPsxFxOn()) {
+    const eG = bbhFxGet('n4gleb');
+    const here = !!(n4Enemy && n4Enemy.atHall);
+    bbhFxStep(eG, here, 0.9, 1.1);
+    if (eG.a > 0.01) {
+      const k = bbhEaseIO(eG.a);
+      const depth = 1.1 + (1 - k) * 1.8;
+      const o = la > 0.18 ? { open: 0.2, reach: 0.08, solid: 1, alpha: k } : { sil: [14, 24, 17], solid: 1, mask: false, alpha: k };
+      __n4GlebFx = !!PSX.figDoor('Глеб', W / 2, depth, o, W / 2, hy + hh * 0.55 + 50 - (1 - k) * 40, 158 * (0.5 + 0.5 * k));
+    }
+    if (!here) __n4GlebFx = true;   // ушёл — оригинальный силуэт не рисуем
+  }
+  if (!__n4GlebFx && n4Enemy && n4Enemy.atHall) {
     if (la > 0.18) {
       n4DrawGlebFigure(W / 2, hy + hh * 0.55, 1.15, false);
     } else if (window.PSX && PSX.figDoor && PSX.figDoor('Глеб', W / 2, 1.1, { sil: [14, 24, 17], solid: 1, mask: false }, W / 2, hy + hh * 0.55 + 50, 158)) {
@@ -28553,8 +28727,35 @@ function drawNight4Office() {
   }
   ctx.restore();
 
+  // PS1: Фантомный Джон выходит сбоку с прозрачностью и так же уходит в сторону
+  let __n4JohnFx = false;
+  if (bbhPsxFxOn()) {
+    const eJ = bbhFxGet('n4john');
+    const here = !!(n4John && n4John.active && n4JohnScare <= 0);
+    if (n4JohnScare > 0) eJ.a = 0;
+    if (here) eJ.p = { side: n4John.side, thr: n4John.threat || 0 };
+    bbhFxStep(eJ, here, 0.8, 0.6);
+    if (eJ.a > 0.01 && eJ.p) {
+      const side = eJ.p.side, thr = eJ.p.thr, k = bbhEaseIO(eJ.a);
+      const jx = (side < 0 ? W * 0.14 : W * 0.86) + (side < 0 ? -1 : 1) * (1 - k) * 90;
+      const jy = H * 0.52;
+      ctx.save();
+      ctx.globalAlpha = 0.55 + thr * 0.45;
+      __n4JohnFx = !!PSX.figFloor('Фантомный Джон Джурик', jx, jy + 150, 240 + thr * 46, { open: thr > 0.6 ? 0.5 : 0, reach: thr > 0.75 ? 0.4 : 0, flip: side > 0, unlit: 0.8, scale: 1 + thr * 0.12, alpha: k });
+      if (__n4JohnFx && here && thr > 0.4) {
+        ctx.globalAlpha = (thr - 0.4) * 0.5 * k;
+        const vg = ctx.createRadialGradient(jx, jy, 20, jx, jy, 160);
+        vg.addColorStop(0, 'rgba(40,60,100,0.3)');
+        vg.addColorStop(1, 'rgba(0,0,0,0)');
+        ctx.fillStyle = vg;
+        ctx.fillRect(jx - 160, jy - 160, 320, 320);
+      }
+      ctx.restore();
+    }
+    if (!here) __n4JohnFx = true;
+  }
   // Фантомный Джон Джурик — силуэт в офисе
-  if (n4John && n4John.active && n4JohnScare <= 0) {
+  if (!__n4JohnFx && n4John && n4John.active && n4JohnScare <= 0) {
     const side = n4John.side;
     const jx = side < 0 ? W * 0.14 : W * 0.86;
     const jy = H * 0.52;
@@ -28717,7 +28918,17 @@ function drawNight4Office() {
   if (bbhHintsOn() && !(typeof isPhoneCallActive === 'function' && isPhoneCallActive())) ctx.fillText('Ночь 4  •  Глеба гоняй 🔊  •  CAM15 → офис  •  свет ≠ Глеб  •  чини вентиляцию', 10, H - 12);
 
   // Фантомный Могз в офисе (блок монитора)
-  if (n4Mogz && n4Mogz.active && n4Mogz.phase === 'office') {
+  if (bbhPsxFxOn()) {
+    // PS1: Могз наваливается на офис плавно и так же отпускает
+    const eM = bbhFxGet('n4mogz');
+    bbhFxStep(eM, !!(n4Mogz && n4Mogz.active && n4Mogz.phase === 'office'), 0.7, 0.6);
+    if (eM.a > 0.01 && n4Mogz) {
+      ctx.save();
+      ctx.globalAlpha *= bbhEaseIO(eM.a);
+      n4DrawPhantomMogz(W * 0.5, H * 0.42 + (1 - eM.a) * 30, W * 0.55, H * 0.85, 'office');
+      ctx.restore();
+    }
+  } else if (n4Mogz && n4Mogz.active && n4Mogz.phase === 'office') {
     n4DrawPhantomMogz(W * 0.5, H * 0.42, W * 0.55, H * 0.85, 'office');
   }
 
