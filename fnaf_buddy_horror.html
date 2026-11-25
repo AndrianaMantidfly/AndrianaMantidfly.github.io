@@ -10911,6 +10911,52 @@ html.psx-on #argGambleScreen .arg-cell.spinning { filter: none !important; backg
 html.psx-on #argGambleScreen .arg-cell span.psx-ico { width: 1.3em; height: 1.3em; vertical-align: middle; }
 html.psx-on #argReelGrid { border-radius: 0 !important; gap: 6px !important; }
 html.psx-on #argSpinBtn, html.psx-on #argGambleBtn, html.psx-on #extraInfiniteGambleBtn { border-radius: 0 !important; box-shadow: 4px 4px 0 #000 !important; text-shadow: 2px 2px 0 #000 !important; }
+/* Гембл (BIG BON CASINO) в PS1: квадратные плашки, скошенные рамки, жёсткие тени вместо свечения */
+html.psx-on #argGambleScreen .arg-g-title {
+  font-family: 'PSX Start', 'Tiny5', monospace !important; font-size: 15px !important; letter-spacing: 2px !important;
+  color: #ffd860 !important; text-shadow: 2px 2px 0 #6a2a00, 4px 4px 0 #000 !important; animation: none !important; filter: none !important;
+}
+html.psx-on #argGambleScreen .arg-g-home, html.psx-on #argGambleScreen .arg-g-helpbtn {
+  border-radius: 0 !important; background: #1b0d12 !important;
+  background-image: repeating-linear-gradient(to bottom, rgba(255,255,255,0.05) 0 1px, rgba(0,0,0,0) 1px 3px) !important;
+  border: 2px solid !important; border-top-color: #d8606c !important; border-left-color: #b84854 !important; border-right-color: #3c0c14 !important; border-bottom-color: #24060a !important;
+  box-shadow: 3px 3px 0 #000 !important; filter: none !important; transition: none !important; color: #f0e6e6 !important;
+}
+html.psx-on #argGambleScreen .arg-g-home::after, html.psx-on #argGambleScreen .arg-g-helpbtn::after, html.psx-on #argSpinBtn::after { display: none !important; }
+html.psx-on #argGambleScreen .arg-g-home:hover, html.psx-on #argGambleScreen .arg-g-helpbtn:hover {
+  background-color: #a01018 !important; transform: translate(-1px, -1px) !important; box-shadow: 4px 4px 0 #000 !important;
+}
+html.psx-on #argGambleScreen .arg-g-home:active, html.psx-on #argGambleScreen .arg-g-helpbtn:active { transform: translate(2px, 2px) !important; box-shadow: 1px 1px 0 #000 !important; }
+html.psx-on #argGambleScreen .arg-g-wallet span {
+  border-radius: 0 !important; background: #0b0c12 !important;
+  border: 2px solid #8f95a6 !important; border-right-color: #262830 !important; border-bottom-color: #15161c !important;
+  box-shadow: 3px 3px 0 #000 !important; color: #c8c0b0 !important;
+}
+html.psx-on #argGambleScreen .arg-g-wallet b { color: #ffd860 !important; text-shadow: 1px 1px 0 #000 !important; }
+html.psx-on #argGambleScreen .arg-reel {
+  border-radius: 0 !important; background: #080406 !important;
+  border: 3px solid !important; border-top-color: #ffc860 !important; border-left-color: #e0a040 !important; border-right-color: #6a3a10 !important; border-bottom-color: #3a1e06 !important;
+  box-shadow: 0 0 0 3px #000, 6px 6px 0 #000 !important;
+}
+html.psx-on #argGambleScreen .arg-reel::before { display: none !important; }
+html.psx-on #argGambleScreen .arg-cell.win {
+  border-color: #ffd24a !important; background: #4a3010 !important;
+  box-shadow: inset 3px 3px 0 rgba(255,240,180,0.35), inset -3px -3px 0 rgba(0,0,0,0.55) !important;
+  animation: psxArgWin 0.5s steps(2) infinite !important;
+}
+@keyframes psxArgWin { from { background: #3a2408; } to { background: #6a4814; } }
+html.psx-on #argGambleScreen .arg-cell.arg-land { animation: psxArgLand 0.3s steps(3) !important; }
+@keyframes psxArgLand { 0% { transform: translateY(-9px); } 60% { transform: translateY(3px); } 100% { transform: none; } }
+html.psx-on #argSpinBtn {
+  background: #3a1e08 !important;
+  background-image: repeating-linear-gradient(to bottom, rgba(255,255,255,0.05) 0 1px, rgba(0,0,0,0) 1px 3px) !important;
+  border: 2px solid !important; border-top-color: #ffc860 !important; border-left-color: #e0a040 !important; border-right-color: #5a2e08 !important; border-bottom-color: #2e1604 !important;
+  color: #ffe9a0 !important; filter: none !important; transition: none !important;
+}
+html.psx-on #argSpinBtn:hover:not(:disabled) { background-color: #7a4010 !important; color: #fff !important; transform: translate(-1px, -1px) !important; box-shadow: 5px 5px 0 #000 !important; filter: none !important; }
+html.psx-on #argSpinBtn:active:not(:disabled) { transform: translate(2px, 2px) !important; box-shadow: 1px 1px 0 #000 !important; }
+html.psx-on #argSpinBtn:disabled { opacity: 0.5 !important; filter: none !important; }
+html.psx-on #argGambleScreen .arg-g-msg { color: #e8b8c8 !important; text-shadow: 2px 2px 0 #000 !important; }
 html.psx-on #argGambleScreen h2, html.psx-on #argGambleScreen h3 { font-family: 'PSX Start', 'Tiny5', monospace !important; text-shadow: 3px 3px 0 #000 !important; letter-spacing: 0.04em !important; }
 html.psx-on #extraTrans, html.psx-on #bbhExtraTrans { background: #000 !important; }
 
