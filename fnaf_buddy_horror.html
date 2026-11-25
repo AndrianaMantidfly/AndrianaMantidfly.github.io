@@ -10354,12 +10354,14 @@
   /* ---- music ---- */
   PSX.synthBus = function (c) {
     try {
-      if (MU.bus) return MU.bus;
+      if (MU.bus) { PSX._musNow && PSX._musNow(); return MU.bus; }
       c = c || ctxOf(); if (!c || typeof musicBusGain === 'undefined' || !musicBusGain) return null;
       MU.bus = c.createGain(); MU.bus.connect(musicBusGain);
+      PSX._musNow && PSX._musNow();
       return MU.bus;
     } catch (e) { return null; }
   };
+  PSX._musNow = function () { try { if (A.items && ctxOf() && MU.bus) { var k = active() ? wantKey() : ''; if (k && A.items[k]) { if (!A.buf[k]) need(k); if (A.buf[k] ? (k !== MU.key || MU.sg !== 0) : true) musTick(); } } } catch (e) {} };
   function wantKey() {
     try {
       if (typeof pauseMusicActive !== 'undefined' && pauseMusicActive) return 'm_pause';
@@ -10384,12 +10386,12 @@
   function musTick() {
     var c = ctxOf(); if (!c) return;
     loadPack(); wrapAll();
-    if (A.items && !A.pre) { A.pre = true; for (var id in A.items) if (A.items[id].kind !== 'music') need(id); }
+    if (A.items && !A.pre) { A.pre = true; for (var id in A.items) if (A.items[id].kind !== 'music' || (id === 'm_win' || id === 'm_lose' || id === 'm_menu' || id === 'm_pause')) need(id); }
     if (!MU.bus) return;
     var key = active() ? wantKey() : '', e = key ? need(key) : null, use = e ? key : '', t = c.currentTime;
     if (use !== MU.key) {
       musStop(c); MU.prev = MU.key; MU.key = use;
-      for (var mk in A.buf) if (A.items[mk] && A.items[mk].kind === 'music' && mk !== use && mk !== MU.prev && mk !== key) { delete A.buf[mk]; delete A.pend[mk]; }   // decoded music is big: keep only the current and the last track
+      for (var mk in A.buf) if (A.items[mk] && A.items[mk].kind === 'music' && mk !== use && mk !== MU.prev && mk !== key && mk !== 'm_win' && mk !== 'm_lose' && mk !== 'm_menu' && mk !== 'm_pause') { delete A.buf[mk]; delete A.pend[mk]; }   // decoded music is big: keep only the current and the last track
       if (use) {
         try {
           var s = c.createBufferSource(), g = c.createGain(); s.buffer = e.b; s.loop = !!A.items[use].loop;
@@ -10400,8 +10402,8 @@
         } catch (err) { MU.key = ''; use = ''; }
       }
     }
-    var sg = use ? 0 : 1;
-    if (MU.sg !== sg) { MU.sg = sg; try { MU.bus.gain.setTargetAtTime(sg, t, 0.08); } catch (e3) { MU.bus.gain.value = sg; } }
+    var sg = (use || (key && A.items[key] && A.pend[key] !== 2)) ? 0 : 1;
+    if (MU.sg !== sg) { MU.sg = sg; try { if (sg === 0) { MU.bus.gain.cancelScheduledValues(t); MU.bus.gain.setValueAtTime(0, t); } else MU.bus.gain.setTargetAtTime(sg, t, 0.08); } catch (e3) { MU.bus.gain.value = sg; } }
   }
   setInterval(musTick, 120);
   /* ---- the synth calls scattered through the game: build.py turns every  playTone(  into  (window.__pss?__pss('site',playTone):playTone)(
@@ -10703,10 +10705,11 @@
     try {
       var wa = document.getElementById('winAnimScreen'), ws = document.getElementById('winScreen'), host = null;
       if (wa && wa.style.display !== 'none' && wa.offsetParent !== null) host = wa; else if (ws && ws.style.display !== 'none' && ws.offsetParent !== null) host = ws;
-      if (!host || !S.fx) { if (dawn.cv) dawn.cv.style.display = 'none'; dawn.host = null; var r0 = document.getElementById('psxRoll'); if (r0) r0.style.display = 'none'; return; }
+      if (!host || !S.fx) { if (dawn.cv) dawn.cv.style.display = 'none'; dawn.host = null; return; }
       var cv = dawn.cv; if (!cv) { cv = dawn.cv = document.createElement('canvas'); cv.id = 'psxDawn'; cv.width = 160; cv.height = 104; }
       if (dawn.host !== host) {
         host.insertBefore(cv, host.firstChild);
+        cv.classList.toggle('psx-fadein', host === wa);                              // the result screen must not fade again
         if (!(dawn.host && host === ws)) dawn.t0 = performance.now();            // the result screen continues the same morning
         dawn.host = host;
         if (host === wa) roll(host);
@@ -10734,16 +10737,25 @@
   }
   function roll(host) {
     try {
-      var h1 = document.getElementById('winAnimText'); if (!h1) return;
-      var txt = h1.textContent || '6:00 AM', hour = parseInt(txt, 10) || 6, r = document.getElementById('psxRoll');
-      if (!r) { r = document.createElement('div'); r.id = 'psxRoll'; }
-      host.insertBefore(r, h1);
-      r.innerHTML = '<span class="pr-col"><span class="pr-strip"><b>' + (hour - 1) + '</b><b>' + hour + '</b></span></span><span>:</span><span class="pr-col"><span class="pr-strip"><b>5</b><b>0</b></span></span><span class="pr-col"><span class="pr-strip"><b>9</b><b>0</b></span></span><span class="pr-am">AM</span>';
-      r.style.display = 'flex'; r.className = ''; void r.offsetWidth; r.className = 'go';
-      h1.classList.add('psx-wait');
-      setTimeout(function () { r.style.display = 'none'; h1.classList.remove('psx-wait'); }, 1700);
+      var h1 = document.getElementById('winAnimText'); if (!h1 || h1.querySelector('.psx-roll')) return;
+      var hour = parseInt(h1.textContent || '6:00 AM', 10) || 6;
+      // the clock rolls over INSIDE the title itself: same font, size and spacing as the final "6:00 AM",
+      // so there is nothing to swap or re-centre when the roll ends
+      h1.innerHTML = '<span class="psx-roll"><span class="pr-col"><span class="pr-strip"><b>' + (hour - 1) + '</b><b>' + hour + '</b></span></span>:<span class="pr-col"><span class="pr-strip"><b>5</b><b>0</b></span></span><span class="pr-col"><span class="pr-strip"><b>9</b><b>0</b></span></span>&nbsp;AM</span>';
     } catch (e) {}
   }
+  // build the PS1 dawn in the SAME task that shows the screen (a MutationObserver callback runs before the next paint),
+  // instead of waiting for the 110 ms poll — the poll is what let the plain vector "6:00 AM" show for a moment
+  // NOTE: this script runs BEFORE the #winAnimScreen / #winScreen markup is parsed, so the observer has to be attached
+  // after DOMContentLoaded (before, getElementById returned null and nothing was ever observed -> only the 110 ms poll ran)
+  function hookDawn() {
+    try {
+      var dawnMO = new MutationObserver(function () { dawnDraw(); });
+      ['winAnimScreen', 'winScreen'].forEach(function (id) { var el = document.getElementById(id); if (el) dawnMO.observe(el, { attributes: true, attributeFilter: ['style', 'class'] }); });
+    } catch (eMO) {}
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', hookDawn); else hookDawn();
+  window.__psxDawnNow = dawnDraw;      // winGame() calls this synchronously, right after it shows the screen
   setInterval(dawnDraw, 110);
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', fillAll); else fillAll();
@@ -11037,16 +11049,15 @@ html.psx-on #argBetVal, html.psx-on #argBigBonVal { font-size: 16px !important; 
 html.psx-on #winAnimScreen, html.psx-on #winScreen { background: #05060e !important; background-image: none !important; }
 html.psx-on #winAnimScreen::before, html.psx-on #winScreen::before { display: none !important; }
 html.psx-on #winAnimScreen h1, html.psx-on #winScreen h1 { color: #fff4c8 !important; font-size: 56px !important; letter-spacing: 0.12em !important; text-shadow: 4px 4px 0 #b0401c, 8px 8px 0 #000 !important; margin-top: -8% !important; }
-html.psx-on #winAnimScreen h1.psx-wait { visibility: hidden !important; }
 html.psx-on #winAnimScreen h1.win-final { color: #ffffff !important; animation: psxWinPop .5s steps(5) both !important; }
+#psxDawn.psx-fadein { animation: psxDawnIn .6s steps(6) both; }
+@keyframes psxDawnIn { from { opacity: 0; } to { opacity: 1; } }
 @keyframes psxWinPop { 0% { transform: scale(0.4); } 60% { transform: scale(1.3); } 100% { transform: scale(1.15); } }
-#psxRoll { display: none; position: relative; z-index: 2; align-items: center; justify-content: center; gap: 4px; font-family: "PSX Start", "Tiny5", monospace; font-size: 56px; line-height: 64px; height: 64px; color: #fff4c8; text-shadow: 4px 4px 0 #b0401c, 8px 8px 0 #000; margin-top: -8%; letter-spacing: 0.04em; }
-#psxRoll .pr-col { display: inline-block; height: 64px; overflow: hidden; }
-#psxRoll .pr-strip { display: block; }
-#psxRoll .pr-strip b { display: block; height: 64px; font-weight: 400; }
-#psxRoll.go .pr-strip { animation: psxRollUp .7s steps(8) .55s both; }
-#psxRoll .pr-am { margin-left: 18px; font-size: 40px; }
-@keyframes psxRollUp { from { transform: translateY(0); } to { transform: translateY(-64px); } }
+#winAnimText .psx-roll { display: inline-flex; vertical-align: top; align-items: flex-start; height: 1.5em; white-space: pre; }
+#winAnimText .pr-col { display: block; height: 1.5em; overflow: hidden; }
+#winAnimText .pr-strip { display: block; animation: psxRollUp .7s steps(8) .55s both; }
+#winAnimText .pr-strip b { display: block; height: 1.5em; line-height: 1.5; font-weight: inherit; }
+@keyframes psxRollUp { from { transform: translateY(0); } to { transform: translateY(-1.5em); } }
 html.psx-on #winScreen p, html.psx-on #winAnimScreen p { color: #ffe9c0 !important; }
 
 /* main menu: one wide primary button, the rest in two tidy columns, so nothing has to scroll (both graphics modes) */
@@ -11095,7 +11106,6 @@ html.psx-on:not(#_x):not(#_y) * { scrollbar-color: auto !important; scrollbar-wi
 #gameContainer:fullscreen #gameOverScreen button.big, #gameContainer:fullscreen #winScreen button.big { min-width: min(420px, 30vw) !important; white-space: nowrap !important; }
 #gameContainer:-webkit-full-screen #gameOverScreen button.big, #gameContainer:-webkit-full-screen #winScreen button.big { min-width: min(420px, 30vw) !important; white-space: nowrap !important; }
 #gameContainer:fullscreen #psxKiller, #gameContainer:-webkit-full-screen #psxKiller { width: clamp(144px, 16vh, 240px) !important; height: clamp(144px, 16vh, 240px) !important; }
-#gameContainer:fullscreen #psxRoll, #gameContainer:-webkit-full-screen #psxRoll { transform: scale(1.6); }
 html.psx-on #mainMenu .menu-btns .bbh-version-switch-wrap > button { font-size: 13px !important; white-space: nowrap !important; letter-spacing: 0 !important; }
 /* original graphics: the lever button keeps one line like its neighbours */
 html:not(.psx-on) #mainMenu .menu-btns .bbh-version-switch-wrap > button { font-size: 11px !important; white-space: nowrap !important; letter-spacing: 0.04em !important; gap: 8px !important; padding: 0 8px !important; }
@@ -13800,6 +13810,7 @@ function startPauseMusic() {
     if (!ac) return;
     try { if (ac.state === 'suspended') ac.resume(); } catch (e0) {}
     try { ensureAudioBus(ac); } catch (e1) {}
+    pauseMusicActive = true;   // PS1: the sample must know about the pause track before the synth touches its bus
     const dest = (typeof musicBusGain !== 'undefined' && musicBusGain) ? ((window.PSX && PSX.synthBus && PSX.synthBus()) || musicBusGain)
       : ((typeof masterGain !== 'undefined' && masterGain) ? masterGain : ac.destination);
     const master = ac.createGain();
@@ -16002,7 +16013,7 @@ function drawN6EndingFrame(){
     }
 
     // титр
-    if (ease > 0.35) {
+    if (ease > 0.35 && !(window.PSX && PSX.isOn && PSX.isOn())) {   // PS1: the 7:00 AM dawn screen right after is the title, no separate vector one
       ctx.save();
       ctx.globalAlpha = Math.min(1, (ease - 0.35) / 0.4);
       ctx.fillStyle = '#ddd';
@@ -23455,6 +23466,7 @@ function winGame() {
     }
   } catch (eHumW) {}
   try { text.classList.remove('win-final'); } catch (eW0) {}
+  try { if (window.__psxDawnNow) window.__psxDawnNow(); } catch (ePsxDawn) {}   // PS1: dawn + rolling clock exist before the first paint
   text.style.color = '';
   text.style.transform = '';
   text.style.opacity = '1';
