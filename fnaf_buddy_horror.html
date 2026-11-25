@@ -10984,7 +10984,13 @@ html.psx-on #winScreen p, html.psx-on #winAnimScreen p { color: #ffe9c0 !importa
 #mainMenu .menu-btns > button:not(#newGameBtn) { min-height: 40px !important; height: 40px !important; padding-top: 0 !important; padding-bottom: 0 !important; white-space: nowrap !important; overflow: hidden !important; display: flex !important; align-items: center !important; justify-content: center !important; gap: 8px !important; }
 #mainMenu .menu-btns > button[style*="display:none"], #mainMenu .menu-btns > button[style*="display: none"] { display: none !important; }
 #mainMenu .menu-btns .bbh-version-switch-wrap { display: block !important; }
-#mainMenu .menu-btns .bbh-version-switch-wrap > button { width: 100% !important; max-width: none !important; margin: 0 !important; box-sizing: border-box !important; }
+/* закрытые СЛОЖНАЯ НОЧЬ / ЭКСТРА — тот же вид, что «ПРОДОЛЖИТЬ (пусто)», в обоих режимах графики */
+#mainMenu .menu-btns > button.bbh-locked,
+html.psx-on #mainMenu .menu-btns > button.bbh-locked {
+  opacity: .55 !important; color: #f0e6e6 !important; text-shadow: none !important;
+  border-color: rgba(255,80,100,.45) !important; box-shadow: none !important;
+  cursor: default !important; transform: none !important;
+}#mainMenu .menu-btns .bbh-version-switch-wrap > button { width: 100% !important; max-width: none !important; margin: 0 !important; box-sizing: border-box !important; }
 #mainMenu .menu-btns > button:not(#newGameBtn) { font-size: clamp(11px, 1.05vw, 14px) !important; }
 html.psx-on #mainMenu .menu-btns > button:not(#newGameBtn), html.psx-on #mainMenu .menu-btns .bbh-version-switch-wrap > button { font-size: 16px !important; letter-spacing: 0.04em !important; }
 
@@ -14549,10 +14555,7 @@ function showMainMenu() {
       : ('ПРОДОЛЖИТЬ — Ночь ' + shown);
   }
   resetNewGameArm();
-  const hard = document.getElementById('hardNightBtn');
-  if (hard) hard.style.display = maxUnlockedNight >= 6 ? 'block' : 'none';
-  const extra = document.getElementById('extraBtn');
-  if (extra) extra.style.display = extraUnlocked() ? 'block' : 'none';
+  bbhApplyMenuLocks();
   updateAudioSettingsUI();
   {
     // boot critical CSS больше не нужен
@@ -14586,6 +14589,25 @@ function showMainMenu() {
   try { bbhMenuTrollApply(); } catch (eMT) {}
 }
 
+// СЛОЖНАЯ НОЧЬ / ЭКСТРА: пока не открыты — видны, но помечены как «ПРОДОЛЖИТЬ (пусто)»
+function bbhApplyMenuLocks() {
+  const rows = [
+    ['hardNightBtn', '☠ СЛОЖНАЯ НОЧЬ', maxUnlockedNight >= 6],
+    ['extraBtn', '★ ЭКСТРА', extraUnlocked()]
+  ];
+  rows.forEach(function(r) {
+    const el = document.getElementById(r[0]);
+    if (!el) return;
+    const open = !!r[2];
+    el.style.display = 'flex';
+    el.classList.toggle('bbh-locked', !open);
+    el.setAttribute('aria-disabled', open ? 'false' : 'true');
+    el.title = open ? '' : 'Ещё не открыто';
+    el.textContent = open ? r[1] : (r[1] + ' (закрыто)');
+    delete el.dataset.bbhApplied;
+  });
+}
+
 function bbhMenuTrollApply() {
   const on = typeof bbhHintsOn === 'function' && bbhHintsOn();
   const map = [
@@ -14598,8 +14620,8 @@ function bbhMenuTrollApply() {
   const fn = {
     newGameBtn: function(b) { return window._bbhNewGameArm ? b : 'НОВАЯ ИГРА (С 💡)'; },
     continueBtn: function(b) { return b.replace(/^ПРОДОЛЖИТЬ/, 'ПРОДОЛЖИТЬ СТЫД'); },
-    hardNightBtn: function() { return '☠ СЛОЖНАЯ НОЧЬ ДЛЯ НОВИЧКОВ'; },
-    extraBtn: function() { return 'ЭКСТРА 💩'; }
+    hardNightBtn: function(b) { return '☠ СЛОЖНАЯ НОЧЬ ДЛЯ НОВИЧКОВ' + (/\(закрыто\)$/.test(b) ? ' (закрыто)' : ''); },
+    extraBtn: function(b) { return 'ЭКСТРА 💩' + (/\(закрыто\)$/.test(b) ? ' (закрыто)' : ''); }
   };
   map.forEach(function(row) {
     const el = document.getElementById(row[0]);
@@ -14700,10 +14722,7 @@ function startNewGame() {
     }
     clearProgress();
     try {
-      const hard = document.getElementById('hardNightBtn');
-      if (hard) hard.style.display = 'none';
-      const extra = document.getElementById('extraBtn');
-      if (extra) extra.style.display = 'none';
+      bbhApplyMenuLocks();
       const info = document.getElementById('menuNightInfo');
       if (info) info.textContent = '';
     } catch (e) {}
