@@ -18420,7 +18420,7 @@ function n5DrawBoss() {
       ctx.font = '15px Courier New';
       ctx.textAlign = 'left';
       const isMed = it.id === 'med' || def.use;
-      ctx.fillText((sel ? '♥ ' : '  ') + (def.name || it.id) + (isMed ? (' x' + it.left) : ''), 64, y + 23);
+      ctx.fillText((sel ? ((window.PSX && PSX.S && PSX.S.fx) ? '> ' : '♥ ') : '  ') + (def.name || it.id) + (isMed ? (' x' + it.left) : ''), 64, y + 23);
       b._menuHit.push({ id: 'itemRow', x: 52, y: y, w: W - 104, h: 40, idx: i });
     });
     const cur = b.inv[b.itemIdx || 0];
@@ -18506,7 +18506,7 @@ function n5DrawBoss() {
       ctx.fillStyle = lb.ok ? '#ffa039' : '#555';
       ctx.font = 'bold 13px Courier New';
       ctx.textAlign = 'center';
-      ctx.fillText((sel ? '♥ ' : '') + lb.t, x + bw / 2, y0 + 25);
+      ctx.fillText((sel ? ((window.PSX && PSX.S && PSX.S.fx) ? '> ' : '♥ ') : '') + lb.t, x + bw / 2, y0 + 25);
       b._menuHit.push({ id: lb.id, x, y: y0, w: bw, h: bh, ok: lb.ok });
     });
     // player HP bar
@@ -38725,7 +38725,7 @@ function n7ItemPool() {
     { id: 'swiftness', name: 'УСКОРЕНИЕ', price: 6, desc: 'Скорость бега + (не навык Рывок)', apply: function(){
         n7.moveSpeed=Math.min(280,(n7.moveSpeed||150)+22); n7.items.swiftness=(n7.items.swiftness||0)+1;
       } },
-    { id: 'heart', name: 'ЖИЗНЬ', price: 9, desc: 'Макс HP +1♥ и полное +1♥ сейчас', apply: function(){
+    { id: 'heart', name: 'ЖИЗНЬ', price: 9, desc: 'Макс HP +1 и сразу лечит +1 HP', apply: function(){
         n7.maxHp+=2; n7.hp=Math.min(n7.maxHp,n7.hp+2); n7.items.heart=(n7.items.heart||0)+1;
       } },
     { id: 'pierce', name: 'ИГЛА', price: 7, desc: 'Пробитие +1', apply: function(){ n7.pierce++; n7.items.pierce=(n7.items.pierce||0)+1; } },
@@ -38743,7 +38743,7 @@ function n7ItemPool() {
         n7.echo=(n7.echo||0)+1; n7.items.echo=(n7.items.echo||0)+1;
       } },
     // ----- с минусом -----
-    { id: 'berserk', name: 'БЕРСЕРК', price: 8, desc: 'Урон +2, но −1♥ макс HP', apply: function(){
+    { id: 'berserk', name: 'БЕРСЕРК', price: 8, desc: 'Урон +2, но −1 макс HP', apply: function(){
         n7.damage+=2; n7.maxHp=Math.max(2,n7.maxHp-2); n7.hp=Math.min(n7.hp,n7.maxHp);
         n7.items.berserk=(n7.items.berserk||0)+1;
       } },
@@ -38932,6 +38932,58 @@ function n7StatLines() {
   if ((n7.items && n7.items.berserk)|0) lines.push({ name: 'Берсерк', value: String(n7.items.berserk), text: '×' + n7.items.berserk, delta: 1 });
   return lines;
 }
+// ===== Подгонка текста под плашку (canvas) =====
+// Реальная ширина текста текущим ctx.font. В PS1 слой PSX подменяет шрифт на Tiny5 (8/16 px или
+// крупный «битмап» с клеткой 3px) — меряем так же, как он рисует, иначе текст вылезает за плашку.
+let _n7MeasCtx = null;
+function n7TextW(text) {
+  const native = ctx.measureText(text).width;
+  try {
+    const P = window.PSX;
+    if (!P || !P.S || !P.S.fx || !P.S.fontOK) return native;
+    const m = P._matrix ? P._matrix() : [1, 0, 0, 1, 0, 0];
+    const s = Math.sqrt(Math.abs(m[0] * m[3] - m[1] * m[2])) || 1;
+    const fm = /(\d+(?:\.\d+)?)px/.exec(ctx.font), D = (fm ? parseFloat(fm[1]) : 10) * s;
+    if (D < 6.5) return native;
+    if (!_n7MeasCtx) _n7MeasCtx = document.createElement('canvas').getContext('2d');
+    const mt = function(px) { _n7MeasCtx.font = px + 'px Tiny5,"Courier New",monospace'; return _n7MeasCtx.measureText(text).width; };
+    let w;
+    if (D < 8.2) w = mt(8);
+    else if (D < 17.5) w = mt(16);   // PSX может «сжать» до native*1.16, но сжатый текст слипается — считаем полную ширину
+    else { const k = Math.max(1, Math.floor((D + 0.5) / 17)); w = mt(8 * k) * 3; }
+    return Math.max(native, w / s);
+  } catch (e) { return native; }
+}
+// Ставит шрифт, уменьшая px (до minPx), пока text не влезет в maxW. Возвращает итоговый px.
+function n7FitFont(text, maxW, px, minPx, weight) {
+  const w = weight ? weight + ' ' : '';
+  let p = px;
+  ctx.font = w + p + 'px Courier New';
+  while (p > minPx && n7TextW(text) > maxW) { p -= 0.5; ctx.font = w + p + 'px Courier New'; }
+  return p;
+}
+// Обрезает строку с «…», если даже на текущем шрифте не влезает.
+function n7Ellipsize(text, maxW) {
+  if (n7TextW(text) <= maxW) return text;
+  let s = text;
+  while (s.length > 1 && n7TextW(s + '…') > maxW) s = s.slice(0, -1);
+  return s.replace(/\s+$/, '') + '…';
+}
+// Разбивает текст на строки по словам под maxW (текущим шрифтом). Не больше maxLines; последняя — с «…».
+function n7WrapLines(text, maxW, maxLines) {
+  const words = String(text || '').split(/\s+/).filter(Boolean);
+  const lines = [];
+  let cur = '';
+  for (let i = 0; i < words.length; i++) {
+    const tryS = cur ? cur + ' ' + words[i] : words[i];
+    if (!cur || n7TextW(tryS) <= maxW) { cur = tryS; continue; }
+    lines.push(cur); cur = words[i];
+    if (lines.length === maxLines - 1) { cur = words.slice(i).join(' '); break; }
+  }
+  if (cur) lines.push(cur);
+  return lines.map(function(l) { return n7Ellipsize(l, maxW); });
+}
+
 function n7DrawStatSheet(topY) {
   if (!n7) return;
   const lines = n7StatLines();
@@ -38969,7 +39021,7 @@ function n7DrawStatSheet(topY) {
     } else if (delta < 0 && L.text) {
       suffix = '  (' + L.text + ')';
     }
-    ctx.fillText(L.name + ': ' + L.value + suffix, x, y);
+    ctx.fillText(n7Ellipsize(L.name + ': ' + L.value + suffix, W * 0.36), x, y);
   }
 }
 
@@ -39391,7 +39443,7 @@ function n7RandomShopItem(slotIndex) {
   if (!cand.length) cand = pool.slice();
   if (!cand.length) {
     return {
-      id: 'heart', name: 'ЖИЗНЬ', price: 9, desc: 'Макс HP +1♥ и полное +1♥ сейчас',
+      id: 'heart', name: 'ЖИЗНЬ', price: 9, desc: 'Макс HP +1 и сразу лечит +1 HP',
       apply: function(){ n7.maxHp+=2; n7.hp=Math.min(n7.maxHp,n7.hp+2); n7.items.heart=(n7.items.heart||0)+1; }
     };
   }
@@ -41167,7 +41219,7 @@ function n7UpdateArena(dt) {
         const amt = (ht.amount != null ? ht.amount : 1);
         n7.hp = Math.min(n7.maxHp, n7.hp + amt);
         n7.hearts.splice(hi, 1);
-        n7.msg = amt >= 2 ? '♥ +1' : '♥ +½'; n7.msgT = 0.7;
+        n7.msg = amt >= 2 ? '+1 HP' : '+½ HP'; n7.msgT = 0.7;
         try { (window.__pss?__pss('n7UpdateArena:8',playTone):playTone)(480, 'sine', 0.1, 0.05, 620); } catch (e) {}
         continue;
       }
@@ -42323,7 +42375,7 @@ function n7UpdateArena(dt) {
         if (n7.hp < n7.maxHp) {
           const amt = (d.amount != null ? d.amount : 1);
           n7.hp = Math.min(n7.maxHp, n7.hp + amt);
-          n7.msg = amt >= 2 ? '+1♥' : '+½♥'; n7.msgT = 0.8;
+          n7.msg = amt >= 2 ? '+1 HP' : '+½ HP'; n7.msgT = 0.8;
         }
         try { if (typeof playTone === 'function') (window.__pss?__pss('n7UpdateArena:40',playTone):playTone)(520, 'sine', 0.08, 0.04); } catch (eH) {}
         continue;
@@ -45619,9 +45671,9 @@ function n7DrawArena() {
         ctx.restore();
       }
       ctx.fillStyle = hovered ? '#fff' : '#ffe';
-      ctx.font = 'bold 14px Courier New';
+      n7FitFont(c.name, bw - 20, 14, 9, 'bold');
       ctx.textAlign = 'center';
-      ctx.fillText(c.name, W / 2, by + bh * 0.63);
+      ctx.fillText(n7Ellipsize(c.name, bw - 20), W / 2, by + bh * 0.63);
     });
     const urCost = Math.max(5, n7.upgradeRerollCost | 0);
     const canUR = (n7.wallet || 0) >= urCost;
@@ -45705,7 +45757,7 @@ function n7DrawArena() {
       } else {
         invLine += '—';
       }
-      ctx.fillText(invLine, W * 0.1, invY + 18);
+      ctx.fillText(n7Ellipsize(invLine, W * 0.8), W * 0.1, invY + 18);
       ctx.textAlign = 'center';
     }
     n7._shopUi = { slotStartY: slotStartY };
@@ -45759,13 +45811,35 @@ function n7DrawArena() {
       ctx.restore();
       ctx.textAlign = 'center';
       try { n7DrawItemGlyph(c.id, W * 0.26, y + 24, affordable); } catch (eG) {}
-      ctx.fillStyle = affordable ? '#eff' : '#a88'; ctx.font = 'bold 14px Courier New';
+      // текст — строго внутри плашки: правее иконки и не дальше правого края
+      const txC = W * 0.52;
+      const txHalf = Math.max(40, Math.min(txC - (W * 0.26 + 22), (sx + sw - 10) - txC));
+      const txW = txHalf * 2;
+      const nameS = c.name + (stack ? ('  ×' + stack) : '');
+      const descS = c.desc || '';
       ctx.textAlign = 'center';
-      ctx.fillText(c.name + (stack ? ('  ×' + stack) : ''), W * 0.52, y + 18);
-      ctx.fillStyle = affordable ? '#9ab' : '#765'; ctx.font = '10px Courier New';
-      ctx.fillText(c.desc || '', W * 0.52, y + 32);
-      ctx.fillStyle = affordable ? '#fc3' : '#c55'; ctx.font = 'bold 12px Courier New';
-      ctx.fillText('$' + cost + (stack ? '  (стек +' + (3) + ')' : ''), W * 0.52, y + 46);
+      ctx.font = '10px Courier New';
+      const descOne = n7TextW(descS) <= txW;
+      let descLines;
+      if (descOne) descLines = [descS];
+      else {
+        // в PS1 всё от 8.2 до 17.5px рисуется 16px-шрифтом — для двух строк берём его мелкий 8px вариант
+        const psxTxt = !!(window.PSX && PSX.S && PSX.S.fx && PSX.S.fontOK);
+        if (psxTxt) ctx.font = '8px Courier New'; else n7FitFont(descS, txW * 2, 9, 7.5, '');
+        descLines = n7WrapLines(descS, txW, 2);
+      }
+      const descFont = ctx.font;
+      const two = descLines.length > 1;
+      ctx.fillStyle = affordable ? '#eff' : '#a88';
+      n7FitFont(nameS, txW, two ? 12 : 14, 9, 'bold');
+      ctx.fillText(n7Ellipsize(nameS, txW), txC, y + (two ? 13 : 18));
+      ctx.fillStyle = affordable ? '#9ab' : '#765'; ctx.font = descFont;
+      if (two) { ctx.fillText(descLines[0], txC, y + 24); ctx.fillText(descLines[1], txC, y + 34); }
+      else ctx.fillText(descLines[0], txC, y + 32);
+      ctx.fillStyle = affordable ? '#fc3' : '#c55';
+      const priceS = '$' + cost + (stack ? '  (стек +' + (3) + ')' : '');
+      n7FitFont(priceS, txW, two ? 11 : 12, 9, 'bold');
+      ctx.fillText(priceS, txC, y + 46);
     }
 
     const btnY = slotStartY + 3 * 58 + 10;
