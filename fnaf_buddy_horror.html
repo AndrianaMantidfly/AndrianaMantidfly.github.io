@@ -10406,6 +10406,11 @@
   setInterval(musTick, 120);
   /* ---- the synth calls scattered through the game: build.py turns every  playTone(  into  (window.__pss?__pss('site',playTone):playTone)(
           so here each call site decides at call time: its event's sample, silence (the rest of an event already playing), or the synth ---- */
+  // усиление отдельных мест вызова (громкость сэмпла ×N): шаги Джона в Ночи 3 были почти не слышны
+  var SITE_BOOST = {
+    'n3PlayLocalSounds:1': 3, 'n3PlayLocalSounds:2': 3, 'n3PlayLocalSounds:3': 3,
+    'n3PlayLocalSounds:4': 3, 'n3PlayLocalSounds:5': 3, 'n3PlayLocalSounds:6': 3
+  };
   window.__pss = function (site, fn) {
     try {
       if (!active()) return fn;
@@ -10419,6 +10424,7 @@
         if (t - (LAST[id] || -1e9) < w) return;                       // the same event is already sounding
         var ref = o.ref || it.ref, vol = 1;
         if (ref) { var v = (fn === window.playNoise) ? a[1] : a[3]; if (v > 0) vol = Math.max(0.15, Math.min(2.5, v / ref)); }
+        if (SITE_BOOST[site]) vol *= SITE_BOOST[site];
         wake();
         if (shot(id, { vol: vol })) return;
         return fn.apply(this, a);
