@@ -10819,6 +10819,13 @@ html.psx-on .cs-box, html.psx-on .audio-settings, html.psx-on #confirmModal .box
   backdrop-filter: none !important;
 }
 html.psx-on .cs-box { background: #07080d !important; }
+/* Экстра-тетрис: окно «ВЫ ПРОИГРАЛИ» — квадратная PS1-плашка, как #message */
+html.psx-on #extraTetrisLose {
+  border-radius: 0 !important; background: #08080c !important;
+  border: 3px solid #d01818 !important; box-shadow: 4px 4px 0 #000, inset 0 0 0 2px #300 !important;
+  backdrop-filter: none !important; filter: none !important;
+}
+html.psx-on #extraTetrisLose > div { text-shadow: 2px 2px 0 #400 !important; letter-spacing: 0.05em; }
 html.psx-on #csText { font-size: 20px !important; line-height: 1.25 !important; }
 html.psx-on .cs-name { font-size: 18px !important; letter-spacing: 0.08em; }
 html.psx-on #menuScanFX { opacity: 0.55; }
